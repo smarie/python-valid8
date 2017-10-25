@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="20" time="0.752"><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="7" name="test_first_example_enforce" time="0.006531953811645508"><system-out>you did it !
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="20" time="0.575"><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="7" name="test_first_example_enforce" time="0.005848407745361328"><system-out>you did it !
 you did it !
-</system-out></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="41" name="test_first_example_pytypes" time="0.011741161346435547"><failure message="pytypes.exceptions.InputTypeError: 
-  test_readme.build_house
+</system-out></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="41" name="test_first_example_pytypes" time="0.013444185256958008"><failure message="pytypes.exceptions.InputTypeError: 
+  valid8.tests.test_readme.build_house
   called with incompatible types:
 Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
 Received: Tuple[str, int, int, int]">def test_first_example_pytypes():
@@ -33,11 +33,11 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-msg = &apos;\n  test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&apos;
+msg = &apos;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&apos;
 is_return = False, value = (&apos;test&apos;, 12, 2, 1)
 received_type = typing.Tuple[str, int, int, int]
 expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]
-func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7fba84a98a60&gt;
+func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7f9a0d80f950&gt;
 
     def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,
                 expected_type=None, func=None):
@@ -58,29 +58,29 @@ func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7
             else:
 &gt;               raise pytypes.InputTypeError(msg)
 E               pytypes.exceptions.InputTypeError: 
-E                 test_readme.build_house
+E                 valid8.tests.test_readme.build_house
 E                 called with incompatible types:
 E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
 E               Received: Tuple[str, int, int, int]
 
-../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError</failure></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="73" name="test_custom_validators" time="0.0022656917572021484"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="328" name="test_decorate_manually" time="0.0015001296997070312"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="238" name="test_validate_and" time="0.0019044876098632812"><system-out>hello
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError</failure></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="73" name="test_custom_validators" time="0.0026369094848632812"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="328" name="test_decorate_manually" time="0.0020186901092529297"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="238" name="test_validate_and" time="0.002808809280395508"><system-out>hello
 hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="48" name="test_validate_custom" time="0.001865386962890625"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="41" name="test_validate_empty" time="0.0009548664093017578"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="88" name="test_validate_enforce" time="0.0027375221252441406"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="273" name="test_validate_is_in" time="0.0015826225280761719"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="126" name="test_validate_name_error" time="0.0014984607696533203"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="133" name="test_validate_none_is_allowed" time="0.0014872550964355469"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="48" name="test_validate_custom" time="0.0023696422576904297"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="41" name="test_validate_empty" time="0.001329660415649414"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="88" name="test_validate_enforce" time="0.0026760101318359375"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="273" name="test_validate_is_in" time="0.0014598369598388672"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="126" name="test_validate_name_error" time="0.0012793540954589844"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="133" name="test_validate_none_is_allowed" time="0.0017824172973632812"><system-out>hello
 hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="142" name="test_validate_not_not_all" time="0.002824068069458008"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="308" name="test_validate_on_all" time="0.003773212432861328"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="318" name="test_validate_on_each" time="0.0025789737701416016"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="171" name="test_validate_or" time="0.002668142318725586"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="142" name="test_validate_not_not_all" time="0.0032958984375"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="308" name="test_validate_on_all" time="0.0014581680297851562"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="318" name="test_validate_on_each" time="0.0025315284729003906"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="171" name="test_validate_or" time="0.0022897720336914062"><system-out>hello
 hello
 hello
 hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="107" name="test_validate_pytypes" time="0.007357597351074219"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="11" name="test_validate_simple" time="0.0016336441040039062"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="285" name="test_validate_subset_superset" time="0.001959562301635742"><system-out>hello
-</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="34" name="test_validate_wrong_notnone" time="0.0012328624725341797"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="205" name="test_validate_xor" time="0.0030379295349121094"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="107" name="test_validate_pytypes" time="0.0063495635986328125"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="11" name="test_validate_simple" time="0.002619504928588867"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="285" name="test_validate_subset_superset" time="0.0022516250610351562"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="34" name="test_validate_wrong_notnone" time="0.0016796588897705078"></testcase><testcase classname="valid8.tests.test_validate.TestValidate" file="valid8/tests/test_validate.py" line="205" name="test_validate_xor" time="0.002310514450073242"><system-out>hello
 hello
 hello
 </system-out></testcase></testsuite>
