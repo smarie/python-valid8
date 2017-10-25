@@ -1,6 +1,6 @@
-site_name: autoclass
+site_name: valid8
 # site_description: 'A short description of my project'
-repo_url: https://github.com/smarie/python-autoclass
+repo_url: https://github.com/smarie/python-valid8
 pages:
     - Home: index.md
     - Why validation: why_validation.md

@@ -1,0 +1,5 @@
+# requirements needed to run the tests
+enforce
+pytypes
+pytest
+pytest-logging
