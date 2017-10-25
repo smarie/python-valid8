@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 25-Oct-2017 at 18:14:26 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 25-Oct-2017 at 18:14:36 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,25 +239,25 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
+        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;py&apos;: &apos;1.4.34&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;}</td></tr>
+        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>1.0.0</td></tr>
+        <td>master</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>292753406</td></tr>
+        <td>292753401</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>3</td></tr>
+        <td>2</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>9ab19451123f80a317de8af46f8bc45ffe682963</td></tr>
@@ -265,14 +265,17 @@ function filter_table(elem) {
         <td>TRAVIS_COMMIT_MESSAGE</td>
         <td>Fixing coverage calculation error</td></tr>
       <tr>
+        <td>TRAVIS_COMMIT_RANGE</td>
+        <td>68b6d7d45a1f...9ab19451123f</td></tr>
+      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>292753408</td></tr>
+        <td>292753402</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>3.1</td></tr>
+        <td>2.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -284,12 +287,9 @@ function filter_table(elem) {
         <td>smarie/python-valid8</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr>
-      <tr>
-        <td>TRAVIS_TAG</td>
-        <td>1.0.0</td></tr></table>
+        <td>true</td></tr></table>
     <h2>Summary</h2>
-    <p>20 tests ran in 0.58 seconds. </p>
+    <p>20 tests ran in 0.56 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">19 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -313,7 +313,7 @@ function filter_table(elem) {
           <td><a href="https://codecov.io/gh/smarie/python-valid8/src/9ab19451123f80a317de8af46f8bc45ffe682963/valid8/tests/test_readme.py#L41">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_first_example_pytypes():<br/>        # for type checking<br/>        from valid8 import Boolean<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>        from pytypes import typechecked<br/>    <br/>        # for value checking<br/>        from valid8 import validate, minlens, gt<br/>    <br/>        @typechecked<br/>        @validate(name=minlens(0),<br/>                  surface=gt(0))<br/>        def build_house(name: str,<br/>                        surface: Real,<br/>                        nb_floors: Optional[Integral] = 1,<br/>                        with_windows: Boolean = False):<br/>            print(&#x27;you did it !&#x27;)<br/>    <br/>&gt;       build_house(&#x27;test&#x27;, 12, 2)  # validation OK<br/><br/>valid8/tests/test_readme.py:61: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]<br/>func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7f9a0d80f950&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 valid8.tests.test_readme.build_house</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
+            <div class="log">def test_first_example_pytypes():<br/>        # for type checking<br/>        from valid8 import Boolean<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>        from pytypes import typechecked<br/>    <br/>        # for value checking<br/>        from valid8 import validate, minlens, gt<br/>    <br/>        @typechecked<br/>        @validate(name=minlens(0),<br/>                  surface=gt(0))<br/>        def build_house(name: str,<br/>                        surface: Real,<br/>                        nb_floors: Optional[Integral] = 1,<br/>                        with_windows: Boolean = False):<br/>            print(&#x27;you did it !&#x27;)<br/>    <br/>&gt;       build_house(&#x27;test&#x27;, 12, 2)  # validation OK<br/><br/>valid8/tests/test_readme.py:61: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]<br/>func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7ff2081f0950&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 valid8.tests.test_readme.build_house</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -439,7 +439,7 @@ hello
           <th>valid8/tests/test_validate.py</th>
           <td>TestValidate::test_validate_not_not_all</td>
           <td> Test for the not_ and not_all validators </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-valid8/src/9ab19451123f80a317de8af46f8bc45ffe682963/valid8/tests/test_validate.py#L142">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
