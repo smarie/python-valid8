@@ -4,7 +4,7 @@ from unittest import TestCase
 import pytest
 
 from valid8 import validate, ValidationError, is_even, gt, not_none, not_, is_mod, or_, xor_, is_subset, and_, \
-    is_superset, is_in, validate_decorate, on_all_, on_each_, lt
+    is_superset, is_in, validate_decorate, on_all_, on_each_, lt, not_all
 
 
 class TestValidate(TestCase):
@@ -140,13 +140,13 @@ class TestValidate(TestCase):
         myfunc(84, 82)
         myfunc(None, 0)
 
-    def test_validate_not(self):
-        """ Test for the not_ validator """
+    def test_validate_not_not_all(self):
+        """ Test for the not_ and not_all validators """
 
         def gtcustom(x):
             assert x < 10
 
-        @validate(a=not_(is_even), b=not_([is_even, is_mod(3)]), c=not_(gtcustom, catch_all=True),
+        @validate(a=not_(is_even), b=not_all([is_even, is_mod(3)]), c=not_(gtcustom, catch_all=True),
                   d=not_(gtcustom))
         def myfunc(a, b, c, d):
             print('hello')
@@ -168,7 +168,6 @@ class TestValidate(TestCase):
 
         with pytest.raises(AssertionError):
             myfunc(11, 11, 11, 11)  # d is valid but the not_ operator does not catch the exception so we get the error
-
 
     def test_validate_or(self):
         """ Test for the or_ validator, also in combination with not_"""
