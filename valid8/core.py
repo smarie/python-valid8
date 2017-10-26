@@ -182,7 +182,7 @@ def _validate(value_to_validate, validator_func, func, att_name):
         raise ValidationError.create(func, att_name, validator_func, value_to_validate)
 
 
-class ValidationError(Exception):
+class ValidationError(ValueError):
     """
     Exception raised whenever validation fails. It may be directly triggered by Validators, or it is raised if 
     validator returns false
