@@ -19,5 +19,5 @@ def is_mod(ref):
         if x % ref == 0:
             return True
         else:
-            raise ValidationError('is_mod: x % ' + str(ref) + ' == 0 does not hold for x=' + str(x))
+            raise ValidationError.create('is_mod', 'x % ' + str(ref) + ' == 0', x)
     return is_mod

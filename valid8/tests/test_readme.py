@@ -108,9 +108,7 @@ def test_custom_validators():
         myfunc(4, 21)  # ValidationError: a is not a multiple of 3
     with pytest.raises(ValidationError):
         myfunc(15, 1)  # ValidationError: b is not a multiple of 5
-
-    # TODO should it raise AssertionError or ValidationError ? we should maybe always catch AssertionError as a ValidationError
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValidationError):
         myfunc(1, 0)  # AssertionError: a is not >= 2
     with pytest.raises(ValidationError):
         myfunc(0, 0)  # ValidationError: a is not >= 1

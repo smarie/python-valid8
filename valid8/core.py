@@ -85,9 +85,9 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
     # -- new:
     # we now use 'decorate' at the end of this code to have a wrapper that has the same signature, see below
     def wrapper(func, *args, **kwargs):
-        # apply _validate on all received arguments
+        # apply _validate_function_inputs on all received arguments
         apply_on_func_args(func, args, kwargs, signature_attrs, signature_defaults, signature_varargs, signature_varkw,
-                           _validate, validators)
+                           _validate_function_inputs, validators)
 
         # finally execute the method
         return func(*args, **kwargs)
@@ -149,80 +149,183 @@ def _not_none_checker(validator, ignore_none_silently: bool = True):
     :return:
     """
     if ignore_none_silently:
-        def drop_none_silently(x):
-            if not_none(x):
+        # def drop_none_silently(x):
+        #     if x is not None:
+        #         return validator(x)
+        #     else:
+        #         # value is None: skip validation (users should explicitly include 'not_none' as the first validator to
+        #         # change this behaviour)
+        #         return True
+
+        def drop_none_silently_wrapper(validator, x):
+            if x is not None:
                 return validator(x)
             else:
                 # value is None : skip validation (users should explicitly include 'not_none' as the first validator to
                 # change this behaviour)
                 return True
+
+        # use this helper method to preserve name and signature
+        drop_none_silently = decorate(validator, drop_none_silently_wrapper)
         return drop_none_silently
     else:
         def check_not_none(x):
+            # not_none will perform the Exception raising
             if not_none(x):
                 return validator(x)
             else:
-                return False
+                # this should never happen, except if not_none changed behaviour and we forgot to align everything..
+                raise Exception('Internal error - please create an issue on the project page')
         return check_not_none
 
 
-def _validate(value_to_validate, validator_func, func, att_name):
+def _validate_function_inputs(input_value_to_validate, validator_func, validated_func, input_name):
     """
-    Subroutine that actually executes validation
+    Subroutine of the @validate function annotation that actually performs validation, by executing
 
-    :param value_to_validate: the value to validate
-    :param validator_func: the validator function that will be applied on value_to_validate
-    :param func: the method for which this validation is performed. This is used just for errors
-    :param att_name: the name of the attribute that is being validated
-    :return:
+        `validator_func(input_value_to_validate)`
+
+    The statement should return `True` or `None` for the validation to be considered valid. Note that this is
+    quite different from the standard python truth value test (where None is equivalent to False), but it seems
+    more adapted to an intuitive usage, where a function that returns silently without any output means a
+    successful validation. The checking is done using helper function `result_is_success` across the board, so as to
+    ensure a consistent behaviour if this changes in the future.
+
+    This function is often the only one to know the context (func, input_name), and therefore is also the only one able
+    to raise the top-level ValidationError using ValidationError.create. The top-level however
+    does not now anything about the validators' structure, because we do not want to maintain a reflective structure
+    about validators, while good exceptions may do the job nicely.
+
+    Therefore validators (and validator logic operators) are responsible to raise explicit exception messages
+    (ValidationError may be used but is not mandatory). The only exception (haha) to that rule is when a single custom
+    validator is used and returns False (or not True, not None). That case is properly handled here.
+
+    :param input_value_to_validate: the value to validate
+    :param validator_func: the validator function that will be applied on input_value_to_validate
+    :param validated_func: the method for which this validation is performed. This is used just for errors
+    :param input_name: the name of the function input that is being validated
+    :return: Nothing
     """
-    # new: validator_func should always be a single element here
-    res = validator_func(value_to_validate)
-    if res not in {None, True}:
-        raise ValidationError.create(func, att_name, validator_func, value_to_validate)
+    try:
+        # perform validation
+        res = validator_func(input_value_to_validate)
+
+    except Exception as e:
+        # caught inner ValidationError: treat as other errors
+        # caught other error
+        raise InputValidationError.create(validated_func, input_name, input_value_to_validate,
+                                          exc=e)
+
+    if not result_is_success(res):
+        # failure without explicit exception ! special handling
+        extra = ' custom validation function [' + (validator_func.__name__ or str(validator_func)) \
+                + '] returned [' + str(res) + '] that is not ' + SUCCESS_CONDITIONS
+        raise InputValidationError.create(validated_func, input_name, input_value_to_validate,
+                                          extra_msg=extra)
 
 
 class ValidationError(ValueError):
     """
-    Exception raised whenever validation fails. It may be directly triggered by Validators, or it is raised if 
-    validator returns false
+    An Exception raised whenever validation fails. It is typically raised by Validators themselves. It is recommended
+    that validators subclass this exception type in order to provide a unique exception identifier for each validation
+    error type.
+
+    `InputValidationError` is a special subclass raised by function input validator (i.e. the @validate annotation)
     """
 
     def __init__(self, contents):
         """
         We actually can't put more than 1 argument in the constructor, it creates a bug in Nose tests
-        https://github.com/nose-devs/nose/issues/725
-        
-        Please use ValidationError.create() instead
+        https://github.com/nose-devs/nose/issues/725. Please use ValidationError.create() instead
+
+        TODO: at some point we should maybe remove this behaviour since we dont use Nose anymore :)
 
         :param contents:
         """
         super(ValidationError, self).__init__(contents)
 
     @staticmethod
-    def create(func, att_name, validator_func, item, extra_msg: str = None):
+    def create(validator_name, validation_formula, input_value, input_name: str = None,
+               extra_msg: str = None):
         """
-        
-        :param func:
-        :param att_name:
-        :param validator_func: 
-        :param item: 
-        :param extra_msg
-        :return: 
+        Creates a simple standard Validation Error such as:
+
+        'is_mod: y % 3 == 0 does not hold for y=5. <extra details>'
+
+        Where
+        * validator_name = 'is_mod'
+        * validation_formula = 'y % 3 == 0'
+        * input_value = 5
+        * var_name = 'y' (default is 'x')
+        * extra_msg = '<extra details>' (default is '')
+
+        :param validator_name:
+        :param validation_formula:
+        :param input_value:
+        :param input_name: to change the variable name ('x' by default)
+        :param extra_msg:
+        :return:
         """
-        return ValidationError('Error validating input ' + str(att_name) + '=\'' + str(item) + '\' for function \''
-                               + str(func) + '\' with validator ' + (validator_func.__name__ or str(validator_func))
-                               + (('.\n  ' + extra_msg) if extra_msg else ''))
+        return ValidationError(validator_name + ': ' + validation_formula + ' does not hold for input '
+                               + (input_name or 'x') + '=' + str(input_value)
+                               + (('. ' + extra_msg) if extra_msg else '.'))
+
+
+class InputValidationError(ValidationError):
+    """
+    Exception raised whenever function input validation fails. It is not meant to be subclassed by users, please rather
+    subclass ValidationError directly.
+    """
+
+    def __init__(self, contents):
+        """
+        We actually can't put more than 1 argument in the constructor, it creates a bug in Nose tests
+        https://github.com/nose-devs/nose/issues/725. Please use InputValidationError.create() instead
+
+        TODO: at some point we should maybe remove this behaviour since we dont use Nose anymore :)
+
+        :param contents:
+        """
+        super(InputValidationError, self).__init__(contents)
+
+    @staticmethod
+    def create(validated_function, input_name, input_value, extra_msg: str = None,
+               exc: Exception = None):
+        """
+        Internal utility method called by the @validate annotation to produce the top-level error message, containing
+        the validated function and the input name. The top-level however does not now anything about the validators'
+        structure. Therefore validators (and validator logic operators) are responsible to raise explicit exception
+        messages. The only exception is when a single custom validator is used and returns False (or not True, not None)
+        That case is properly handled in _validate_function_inputs.
+
+        :param validated_function:
+        :param input_name:
+        :param input_value:
+        :param extra_msg:
+        :param exc: a caught inner exception, if any
+        :return:
+        """
+        common_text = 'Error validating input [' + str(input_name) + '=' + str(input_value) \
+                      + '] for function [' + (validated_function.__name__ or str(validated_function)) + ']' \
+                      + ((': ' + extra_msg) if extra_msg else '')
+        if exc is not None:
+            return InputValidationError(common_text + '.\n  Caught error: ' + str(exc))\
+                .with_traceback(exc.__traceback__)
+        else:
+            return InputValidationError(common_text)
 
 
 def get_names(validators):
     return ', '.join([val.__name__ for val in validators])
 
 
-# this validators is too tight to the above to be moved elsewhere
+# this validator is too tied to the above to be moved elsewhere
 def not_none(x: Any):
     """ 'Is not None' validator """
-    return x is not None
+    if x is None:
+        raise ValidationError('not_none: failure, x is None')
+    else:
+        return True
 
 
 def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
@@ -280,10 +383,11 @@ def and_(validators):
         def and_v_(x):
             for validator in validators:
                 res = validator(x)
-                if res not in {None, True}:
+                if not result_is_success(res):
                     # one validator was unhappy > raise
-                    raise ValidationError('and(' + get_names(validators) + '): Validator ' + str(validator)
-                                          + ' failed validation for input ' + str(x))
+                    raise ValidationError('and(' + get_names(validators) + '): validator '
+                                          + (validator.__name__ or str(validator)) + ' failed validation for input '
+                                          + str(x))
             return True
 
         return and_v_
@@ -309,7 +413,7 @@ def or_(validators):
             for validator in validators:
                 try:
                     res = validator(x)
-                    if res in {None, True}:
+                    if result_is_success(res):
                         # we can return : one validator was happy
                         return True
                 except Exception as e:
@@ -347,8 +451,9 @@ def xor_(validators):
             for validator in validators:
                 try:
                     res = validator(x)
-                    if res in {None, True}:
+                    if result_is_success(res):
                         if ok_validator is not None:
+                            # we found the second validator happy
                             sec_validator = validator
                         else:
                             # we found the first one happy
@@ -402,7 +507,7 @@ def not_(validator, catch_all: bool = False):
         if catch_all:
             try:
                 res = validator(x)
-                if res not in {None, True}:  # inverse the result
+                if not result_is_success(res):  # inverse the result
                     return True
             except:
                 return True  # caught exception: return True
@@ -413,7 +518,7 @@ def not_(validator, catch_all: bool = False):
         else:
             try:
                 res = validator(x)
-                if res not in {None, True}:  # inverse the result
+                if not result_is_success(res):  # inverse the result
                     return True
             except ValidationError:
                 return True  # caught exception: return True
@@ -438,3 +543,21 @@ def not_all(validators, catch_all: bool = False):
     # in case this is a validator list, create a 'and_' around it (otherwise this returns the validator)
     validators = and_(validators)
     return not_(validators, catch_all=catch_all)
+
+
+SUCCESS_CONDITIONS = 'in {None, True}'  # used in some error messages
+
+
+def result_is_success(validation_result):
+    """
+    Helper function to check if some results returned by a validation function mean success or failure.
+
+    The result should be True or None for a validation to be considered valid. Note that this is
+    quite different from the standard python truth value test (where None is equivalent to False), but it seems
+    more adapted to an intuitive usage, where a function that returns silently without any output means a
+    successful validation.
+
+    :param validation_result:
+    :return:
+    """
+    return validation_result in {None, True}
