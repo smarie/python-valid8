@@ -4,6 +4,7 @@ from typing import Callable, Dict, Any, Set, List, Tuple, Union, Iterable, Conta
 
 from decorator import decorate
 
+from valid8.mini_lambda import _InputEvaluator
 from valid8.utils_decoration import _create_function_decorator__robust_to_args, apply_on_func_args
 
 
@@ -149,25 +150,27 @@ def _not_none_checker(validator, ignore_none_silently: bool = True):
     :return:
     """
     if ignore_none_silently:
-        # def drop_none_silently(x):
-        #     if x is not None:
-        #         return validator(x)
-        #     else:
-        #         # value is None: skip validation (users should explicitly include 'not_none' as the first validator to
-        #         # change this behaviour)
-        #         return True
-
-        def drop_none_silently_wrapper(validator, x):
+        def drop_none_silently(x):
             if x is not None:
                 return validator(x)
             else:
-                # value is None : skip validation (users should explicitly include 'not_none' as the first validator to
+                # value is None: skip validation (users should explicitly include 'not_none' as the first validator to
                 # change this behaviour)
                 return True
-
-        # use this helper method to preserve name and signature
-        drop_none_silently = decorate(validator, drop_none_silently_wrapper)
         return drop_none_silently
+
+        # use the `decorate` helper method to preserve name and signature of the inner object
+        # ==> NO, we want to support also non-function callable objects
+        # def drop_none_silently_wrapper(validator, x):
+        #     if x is not None:
+        #         return validator(x)
+        #     else:
+        #         # value is None : skip validation (users should explicitly include 'not_none' as the first validator to
+        #         # change this behaviour)
+        #         return True
+        # drop_none_silently = decorate(validator, drop_none_silently_wrapper)
+        # return drop_none_silently
+
     else:
         def check_not_none(x):
             # not_none will perform the Exception raising
@@ -245,7 +248,7 @@ class ValidationError(ValueError):
         super(ValidationError, self).__init__(contents)
 
     @staticmethod
-    def create(validator_name, validation_formula, input_value, input_name: str = None,
+    def create(validator_name, validation_formula, var_value, var_name: str = None,
                extra_msg: str = None):
         """
         Creates a simple standard Validation Error such as:
@@ -261,14 +264,13 @@ class ValidationError(ValueError):
 
         :param validator_name:
         :param validation_formula:
-        :param input_value:
-        :param input_name: to change the variable name ('x' by default)
+        :param var_value:
+        :param var_name: to change the variable name ('x' by default)
         :param extra_msg:
         :return:
         """
-        return ValidationError(validator_name + ': ' + validation_formula + ' does not hold for input '
-                               + (input_name or 'x') + '=' + str(input_value)
-                               + (('. ' + extra_msg) if extra_msg else '.'))
+        return ValidationError(validator_name + ': ' + validation_formula + ' does not hold for variable '
+                               + (var_name or 'x') + '=' + str(var_value) + (('. ' + extra_msg) if extra_msg else '.'))
 
 
 class InputValidationError(ValidationError):
@@ -289,7 +291,7 @@ class InputValidationError(ValidationError):
         super(InputValidationError, self).__init__(contents)
 
     @staticmethod
-    def create(validated_function, input_name, input_value, extra_msg: str = None,
+    def create(validated_function, var_name, var_value, extra_msg: str = None,
                exc: Exception = None):
         """
         Internal utility method called by the @validate annotation to produce the top-level error message, containing
@@ -299,13 +301,13 @@ class InputValidationError(ValidationError):
         That case is properly handled in _validate_function_inputs.
 
         :param validated_function:
-        :param input_name:
-        :param input_value:
+        :param var_name:
+        :param var_value:
         :param extra_msg:
         :param exc: a caught inner exception, if any
         :return:
         """
-        common_text = 'Error validating input [' + str(input_name) + '=' + str(input_value) \
+        common_text = 'Error validating input [' + str(var_name) + '=' + str(var_value) \
                       + '] for function [' + (validated_function.__name__ or str(validated_function)) + ']' \
                       + ((': ' + extra_msg) if extra_msg else '')
         if exc is not None:
@@ -341,14 +343,18 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
     :return:
     """
     i = -1
-    try:
-        i = validators.index(not_none)
-    except ValueError:
-        # not_none not found in validators list : ok
-        pass
-    except AttributeError:
-        # validators is not a list (no attribute 'index'): turn it into a list
-        validators = [validators]
+    if isinstance(validators, _InputEvaluator):
+        # special case of an _InputEvaluator: convert to a function
+        validators = [validators.as_function()]
+    else:
+        try:
+            i = validators.index(not_none)
+        except ValueError:
+            # not_none not found in validators list : ok
+            pass
+        except AttributeError:
+            # validators is not a list (no attribute 'index'): turn it into a list
+            validators = [validators]
 
     # not_none ?
     # obviously this does not prevent users to embed a not_none inside an 'and_' or something else... but we cant
