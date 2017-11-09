@@ -5,7 +5,7 @@ import pytest
 import sys
 
 from valid8 import validate, InputVar, Len, Str, Int, Repr, Bytes, Getsizeof, Hash, Bool, Complex_, Float, Oct, Iter, \
-    Any, All, _, Slice, Get
+    Any, All, _, Slice, Get, Not
 from math import sin
 from numbers import Real
 
@@ -226,7 +226,7 @@ def test_evaluator_hashable():
 # Truth-testable Object: .__bool__ >> Bool
 def test_evaluator_truth_testable():
     """ Truth-Testable Object : tests that bool() raises the correct error message and that the equivalent Bool()
-    works """
+    works. """
 
     x = InputVar(float)
 
@@ -239,6 +239,21 @@ def test_evaluator_truth_testable():
     assert h(5.2)
     assert not h(0)
 
+
+def test_evaluator_truth_testable_not():
+    """ Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.nnot()
+    works. """
+
+    x = InputVar(float)
+
+    with pytest.raises(NotImplementedError):
+        not x
+
+    h = Not(x)
+    h = h.as_function()
+
+    assert h(0)
+    assert not h(5.2)
 
 # Object: .__getattr__
 def test_evaluator_attribute():
