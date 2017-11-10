@@ -3,3 +3,5 @@ pytest-runner
 setuptools_scm
 pandoc
 pypandoc
+ordered-set
+mako

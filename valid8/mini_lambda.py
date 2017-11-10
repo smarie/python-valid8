@@ -259,12 +259,6 @@ class _InputEvaluator(_InputEvaluatorGenerated):
             return item in x
         return self.add_unbound_method_to_stack(item_in)
 
-    # Not-so-special case but the code generator does not support it right now (magic method needs to be mapped to the
-    # non-magic one)
-    def __getattr__(self, item):
-        """ Returns a new _InputEvaluator performing 'getattr(x, item)' on the result of this evaluator's evaluation """
-        return self.add_unbound_method_to_stack(getattr, item)
-
 
 def Not(evaluator: _InputEvaluator):
     """

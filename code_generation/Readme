@@ -1,0 +1,2 @@
+The .mako file is a mako template. You might wish to associate this file extension with the python source file type,
+if your IDE does not support mako (like me), so that at least you get some syntax highlighting.

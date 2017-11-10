@@ -4,9 +4,9 @@ from typing import Iterator
 import pytest
 import sys
 
-from valid8 import validate, InputVar, Len, Str, Int, Repr, Bytes, Getsizeof, Hash, Bool, Complex_, Float, Oct, Iter, \
+from valid8 import validate, InputVar, Len, Str, Int, Repr, Bytes, Sizeof, Hash, Bool, Complex, Float, Oct, Iter, \
     Any, All, _, Slice, Get, Not
-from math import sin
+from math import sin, pi, cos
 from numbers import Real
 
 
@@ -180,7 +180,7 @@ def test_evaluator_sizeof():
         sys.getsizeof(s)
 
     # so we provide this equivalent
-    reasonable_string = Getsizeof(s)
+    reasonable_string = Sizeof(s)
     reasonable_string = reasonable_string.as_function()
 
     assert reasonable_string('r') == sys.getsizeof('r')
@@ -205,6 +205,30 @@ def test_evaluator_comparable():
     assert is_very_special(3.4)
     assert not is_very_special(-1.1)
     assert not is_very_special(4)
+
+
+def test_evaluator_comparable_normal_function_first():
+    """ Tests that the comparison operators works between a function and an evaluator """
+
+    x = InputVar(Real)
+
+    hard_validation = cos > x
+    hard_validation = hard_validation.as_function()
+
+    assert hard_validation(0.1)
+    assert not hard_validation(2)
+
+
+def test_evaluator_comparable_both_evaluators():
+    """ Tests that it works when the first function is not a function converted to valid8 """
+
+    x = InputVar(Real)
+
+    hard_validation = +x > x ** 2
+    hard_validation = hard_validation.as_function()
+
+    assert hard_validation(0.01)
+    assert not hard_validation(1)
 
 
 # Hashable Object: .__hash__
@@ -526,7 +550,7 @@ def test_evaluator_complex_convertible():
     with pytest.raises(NotImplementedError):
         complex(s)
 
-    to_cpx = Complex_(s)
+    to_cpx = Complex(s)
     to_cpx = to_cpx.as_function()
 
     assert to_cpx(5) == 5+0j
@@ -570,44 +594,3 @@ def test_evaluator_index_slice():
     slice_view = slice_view.as_function()
 
     assert slice_view(3) == [1,2]
-
-
-def test_new_operators():
-    s = InputVar(str)
-    x = InputVar(int)
-
-    @validate(name=(0 < Len(s)) & (Len(s) <= 10),
-              age=(x > 0) & (Int(x) == x))
-    def hello_world(name: str, age: float):
-        print('Hello, ' + name + ' your age is ' + str(age))
-
-    hello_world('john', 20)
-
-
-def test_normal_function_first():
-    """ Tests that it works when the first function is not a function converted to valid8 """
-
-    x = InputVar(Real)
-
-    @validate(number=(sin > x) & (x > x ** 2))
-    def hard_validation(number: float):
-        print('Your input number ' + str(number) + ' is correct, congrats !')
-
-    hard_validation(0.01)
-
-
-# def test_normal_function_first_second():
-#     """ Tests that it works when the first and second functions are not functions converted to valid8 """
-#
-#     x = InputVar(Real)
-#
-#     @validate(number=sin >= sin > x > x ** 2)
-#     def hard_validation(number: float):
-#         print('Your input number ' + str(number) + ' is correct, congrats !')
-#
-#     hard_validation(0.01)
-
-
-def test_retrofit():
-    """ Tests that a retrofited function behaves in a standard way """
-    pass
