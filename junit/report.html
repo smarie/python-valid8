@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 10-Nov-2017 at 14:59:33 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 10-Nov-2017 at 17:24:07 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,13 +239,13 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;py&apos;: &apos;1.4.34&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
+        <td>{&apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
+        <td>{&apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
@@ -254,28 +254,31 @@ function filter_table(elem) {
         <td>master</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>300203664</td></tr>
+        <td>300272600</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>7</td></tr>
+        <td>8</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
-        <td>2c222b9e2b404a5659d91eadef14ffda6749d76d</td></tr>
+        <td>a03d722a04962beabaa03953b78a814074612003</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_MESSAGE</td>
-        <td>Added the generated file for reference</td></tr>
+        <td>New version of the mini-lambda expressions feature, based on code generation using mako.
+ * code generation for &apos;normal&apos; magic methods is now simpler to debug (less nested function levels) and also allows most magic methods to be re-routed to their non-magic equivalent so as to be more robust whatever the input. For example self.__getattr__ is mapped to getattr(self.evaluate(input)).
+ * now enforcing the fact that InputEvaluators are only for a single input variable currently.
+ * fixed an issue when using a pairwise operator such as &apos;&lt;&apos; between two InputEvaluators or between an InputEvaluator and a function. Added the corresponding tests.</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_RANGE</td>
-        <td>7e4272653955...2c222b9e2b40</td></tr>
+        <td>2c222b9e2b40...a03d722a0496</td></tr>
       <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>300203665</td></tr>
+        <td>300272601</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>7.1</td></tr>
+        <td>8.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -289,8 +292,8 @@ function filter_table(elem) {
         <td>TRAVIS_SUDO</td>
         <td>true</td></tr></table>
     <h2>Summary</h2>
-    <p>53 tests ran in 0.92 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">51 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>52 tests ran in 1.01 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">50 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -311,21 +314,21 @@ function filter_table(elem) {
           <td> Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L489">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L513">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_evaluator_long_convertible():<br/>        &quot;&quot;&quot; Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()<br/>        works &quot;&quot;&quot;<br/>    <br/>        s = InputVar(float)<br/>    <br/>        # with pytest.raises(NotImplementedError):<br/>        #     int(s)<br/>    <br/>&gt;       to_long = long(s)<br/><span class="error">E       NameError: name &#x27;long&#x27; is not defined</span><br/><br/>valid8/tests/test_mini_lambda.py:499: NameError<br/></div></td></tr></tbody>
+            <div class="log">def test_evaluator_long_convertible():<br/>        &quot;&quot;&quot; Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()<br/>        works &quot;&quot;&quot;<br/>    <br/>        s = InputVar(float)<br/>    <br/>        # with pytest.raises(NotImplementedError):<br/>        #     int(s)<br/>    <br/>&gt;       to_long = long(s)<br/><span class="error">E       NameError: name &#x27;long&#x27; is not defined</span><br/><br/>valid8/tests/test_mini_lambda.py:523: NameError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <th>valid8/tests/test_readme.py</th>
           <td>test_first_example_pytypes</td>
           <td>None</td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_readme.py#L41">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_readme.py#L41">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_first_example_pytypes():<br/>        # for type checking<br/>        from valid8 import Boolean<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>        from pytypes import typechecked<br/>    <br/>        # for value checking<br/>        from valid8 import validate, minlens, gt<br/>    <br/>        @typechecked<br/>        @validate(name=minlens(0),<br/>                  surface=gt(0))<br/>        def build_house(name: str,<br/>                        surface: Real,<br/>                        nb_floors: Optional[Integral] = 1,<br/>                        with_windows: Boolean = False):<br/>            print(&#x27;you did it !&#x27;)<br/>    <br/>&gt;       build_house(&#x27;test&#x27;, 12, 2)  # validation OK<br/><br/>valid8/tests/test_readme.py:61: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]<br/>func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7fe4856ae400&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 valid8.tests.test_readme.build_house</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
+            <div class="log">def test_first_example_pytypes():<br/>        # for type checking<br/>        from valid8 import Boolean<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>        from pytypes import typechecked<br/>    <br/>        # for value checking<br/>        from valid8 import validate, minlens, gt<br/>    <br/>        @typechecked<br/>        @validate(name=minlens(0),<br/>                  surface=gt(0))<br/>        def build_house(name: str,<br/>                        surface: Real,<br/>                        nb_floors: Optional[Integral] = 1,<br/>                        with_windows: Boolean = False):<br/>            print(&#x27;you did it !&#x27;)<br/>    <br/>&gt;       build_house(&#x27;test&#x27;, 12, 2)  # validation OK<br/><br/>valid8/tests/test_readme.py:61: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]<br/>func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7f5eee257510&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 valid8.tests.test_readme.build_house</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -333,7 +336,7 @@ function filter_table(elem) {
           <td>test_validate_nominal_builtins</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L8">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L8">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -345,7 +348,7 @@ function filter_table(elem) {
           <td>test_validate_nominal_custom_3_styles</td>
           <td> Simple test of the @validate annotation, with custom validators of several styles</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L32">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L32">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -357,7 +360,7 @@ function filter_table(elem) {
           <td>test_validate_empty</td>
           <td> Validates that an empty list of validators leads to a ValueError </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L73">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L73">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -369,7 +372,7 @@ function filter_table(elem) {
           <td> Validates that a ValueError is raised if not_none is used in an incorrect manner, i.e. not first in the list
     of validators</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L82">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L82">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -380,7 +383,7 @@ function filter_table(elem) {
           <td>test_validate_none_enforce</td>
           <td> Tests that a None will be catched by enforce: no need for not_none validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L92">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L92">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -392,7 +395,7 @@ function filter_table(elem) {
           <td>test_validate_none_pytypes</td>
           <td> Tests that a None will be catched by pytypes: no need for not_none validator </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L113">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L113">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -404,7 +407,7 @@ function filter_table(elem) {
           <td>test_validate_none_is_allowed</td>
           <td> Tests that a None input is allowed by default and that in this case the validators are not executed </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L134">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L134">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -417,7 +420,7 @@ hello
           <td>test_validate_name_error</td>
           <td> Checks that wrong attribute names cant be provided to @validate</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L146">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L146">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -428,7 +431,7 @@ hello
           <td>test_validate_not_not_all</td>
           <td> Test for the not_ and not_all validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L155">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L155">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -440,7 +443,7 @@ hello
           <td>test_validate_or</td>
           <td> Test for the or_ validator, also in combination with not_</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L185">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L185">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -455,7 +458,7 @@ hello
           <td>test_validate_xor</td>
           <td> Test for the xor_ validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L220">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L220">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -469,7 +472,7 @@ hello
           <td>test_validate_and</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L254">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L254">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -482,7 +485,7 @@ hello
           <td>test_decorate_manually</td>
           <td> Tests that the manual decorator works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_core.py#L290">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_core.py#L290">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -493,7 +496,7 @@ hello
           <td>test_evaluator_iterable</td>
           <td> Iterable: tests that `Iter(li)` leads to a valid evaluator and `iter(li)` raises an exception</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L13">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L13">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -504,7 +507,7 @@ hello
           <td>test_evaluator_iterator</td>
           <td> Iterator/Generator: tests that `next()` leads to a valid evaluator</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L28">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L28">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -515,7 +518,7 @@ hello
           <td>test_evaluator_iterator_iterable</td>
           <td> Iterable + Iterator: tests that `next(Iter(li))` leads to a valid evaluator</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L49">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L49">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -526,7 +529,7 @@ hello
           <td>test_evaluator_iterable_iterator_and_comparison</td>
           <td> Iterable + Iterator + Comparable : A complex case where the evaluator is `next(Iter(li)) &gt; 0` </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L60">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L60">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -537,7 +540,7 @@ hello
           <td>test_evaluator_comprehension</td>
           <td> List Comprehension : tests that `[i for i in li]` is forbidden and raises the appropriate exception </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L72">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L72">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -549,7 +552,7 @@ hello
           <td> Iterable + any operator: Checks that the any operator  raises an exception but that the Any replacement function
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L81">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L81">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -561,7 +564,7 @@ hello
           <td> Iterable + all operator: Checks that the all operator  raises an exception but that the All replacement function
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L95">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L95">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -573,7 +576,7 @@ hello
           <td> Representable Object : tests that repr() raises the correct error message and that the equivalent Repr()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L110">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L110">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -584,7 +587,7 @@ hello
           <td>test_evaluator_complex_1</td>
           <td> A complex case with a combination of Repr, Len, and comparisons </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L127">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L127">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -595,7 +598,7 @@ hello
           <td>test_evaluator_str</td>
           <td> Representable Object : tests that str() raises the correct error message and that the equivalent Str() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L138">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L138">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -607,7 +610,7 @@ hello
           <td> Representable Object : tests that bytes() raises the correct error message and that the equivalent Bytes()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L154">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L154">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -619,7 +622,7 @@ hello
           <td> Object : tests that sys.getsizeof() raises the correct error message and that the equivalent Getsizeof()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L171">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L171">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -630,7 +633,29 @@ hello
           <td>test_evaluator_comparable</td>
           <td> Comparable Object : tests that lt, le, eq, ne, gt, and ge are correctly supported </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L189">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L189">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>valid8/tests/test_mini_lambda.py</th>
+          <td>test_evaluator_comparable_normal_function_first</td>
+          <td> Tests that the comparison operators works between a function and an evaluator </td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L209">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>valid8/tests/test_mini_lambda.py</th>
+          <td>test_evaluator_comparable_both_evaluators</td>
+          <td> Tests that it works when the first function is not a function converted to valid8 </td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L221">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -641,7 +666,7 @@ hello
           <td>test_evaluator_hashable</td>
           <td> Hashable Object : tests that hash() raises the correct error message and that the equivalent Hash() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L210">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L234">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -653,7 +678,7 @@ hello
           <td> Truth-Testable Object : tests that bool() raises the correct error message and that the equivalent Bool()
     works. </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L226">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L250">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -665,7 +690,7 @@ hello
           <td> Truth-Testable Object : tests that not x raises the correct error message and that the equivalent x.nnot()
     works. </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L242">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L266">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -676,7 +701,7 @@ hello
           <td>test_evaluator_attribute</td>
           <td> Object: Tests that obj.foo_field works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L258">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L282">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -688,7 +713,7 @@ hello
           <td> Object: Tests that a valid evaluator accessing a nonexistent attribute will behave as expected and raise the
     appropriate exception when evaluated </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L277">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L301">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -700,7 +725,7 @@ hello
           <td> Container Object : tests that `1 in x` raises the correct error message and that the equivalent x.contains()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L328">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L352">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -711,7 +736,7 @@ hello
           <td>test_evaluator_sized</td>
           <td> Sized Container Object: tests that len() raises the appropriate error but that the equivalent Len() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L345">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L369">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -722,7 +747,7 @@ hello
           <td>test_evaluator_sized_compared</td>
           <td> Tests that Len(s) &gt; 2 works as well as (2 &lt;= Len(s)) &amp; (Len(s) &lt; 3)</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L359">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L383">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -733,7 +758,7 @@ hello
           <td>test_evaluator_reversible</td>
           <td> Reversible Container Object : tests that `reversed(x)` works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L382">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L406">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -744,7 +769,7 @@ hello
           <td>test_evaluator_mapping</td>
           <td> Mapping Container Object : tests that `x[i]` works</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L394">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L418">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -755,7 +780,7 @@ hello
           <td>test_evaluator_numeric</td>
           <td> Numeric-like Object : tests that +,-,*,/,%,divmod(),pow(),**,@,//,&lt;&lt;,&gt;&gt;,-,+,abs,~ work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L420">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L444">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -766,7 +791,7 @@ hello
           <td>test_evaluator_int_convertible</td>
           <td> Int convertible Object : tests that `int` raises the appropriate exception and that equivalent Int() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L475">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L499">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -778,7 +803,7 @@ hello
           <td> Float convertible Object : tests that `float` raises the appropriate exception and that equivalent Float()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L504">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L528">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -790,7 +815,7 @@ hello
           <td> Complex convertible Object : tests that `complex` raises the appropriate exception and that equivalent
     Complex_() works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L519">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L543">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -802,7 +827,7 @@ hello
           <td> oct convertible Object : tests that `oct` raises the appropriate exception and that equivalent Oct()
     works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L535">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L559">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -814,42 +839,7 @@ hello
           <td> Object is used as an index : tests that `__index__` raises the appropriate exception and that equivalent Get()
     works, and also that Slice works and not slice() </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L550">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <th>valid8/tests/test_mini_lambda.py</th>
-          <td>test_new_operators</td>
-          <td>None</td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L574">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Hello, john your age is 20
-</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <th>valid8/tests/test_mini_lambda.py</th>
-          <td>test_normal_function_first</td>
-          <td> Tests that it works when the first function is not a function converted to valid8 </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L586">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Your input number 0.01 is correct, congrats !
-</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <th>valid8/tests/test_mini_lambda.py</th>
-          <td>test_retrofit</td>
-          <td> Tests that a retrofited function behaves in a standard way </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_mini_lambda.py#L610">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_mini_lambda.py#L574">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -860,7 +850,7 @@ hello
           <td>test_first_example_enforce</td>
           <td>None</td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_readme.py#L7">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_readme.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>you did it !
@@ -873,7 +863,7 @@ you did it !
           <td>test_custom_validators</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_readme.py#L73">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_readme.py#L73">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -884,7 +874,7 @@ you did it !
           <td>test_validate_is_in</td>
           <td> Test for the subset and superset validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_validators_collections.py#L7">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_validators_collections.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -896,7 +886,7 @@ you did it !
           <td>test_validate_subset_superset</td>
           <td> Test for the subset and superset validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_validators_collections.py#L20">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_validators_collections.py#L20">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -908,7 +898,7 @@ you did it !
           <td>test_validate_on_all</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_validators_collections.py#L44">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_validators_collections.py#L44">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -920,7 +910,7 @@ you did it !
           <td>test_validate_on_each</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/2c222b9e2b404a5659d91eadef14ffda6749d76d/valid8/tests/test_validators_collections.py#L55">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/a03d722a04962beabaa03953b78a814074612003/valid8/tests/test_validators_collections.py#L55">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
