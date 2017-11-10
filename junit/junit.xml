@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="2" name="pytest" skips="0" tests="53" time="0.919"><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="8" name="test_validate_nominal_builtins" time="0.002465963363647461"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="32" name="test_validate_nominal_custom_3_styles" time="0.0050923824310302734"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="73" name="test_validate_empty" time="0.003038167953491211"></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="82" name="test_validate_none_wrong_notnone" time="0.0013475418090820312"></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="92" name="test_validate_none_enforce" time="0.0033462047576904297"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="113" name="test_validate_none_pytypes" time="0.013874530792236328"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="134" name="test_validate_none_is_allowed" time="0.001608133316040039"><system-out>hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="146" name="test_validate_name_error" time="0.0013065338134765625"></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="155" name="test_validate_not_not_all" time="0.003380298614501953"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="185" name="test_validate_or" time="0.0028183460235595703"><system-out>hello
+hello
+hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="220" name="test_validate_xor" time="0.002896547317504883"><system-out>hello
+hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="254" name="test_validate_and" time="0.0032486915588378906"><system-out>hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_core" file="valid8/tests/test_core.py" line="290" name="test_decorate_manually" time="0.0017390251159667969"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="13" name="test_evaluator_iterable" time="0.0011339187622070312"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="28" name="test_evaluator_iterator" time="0.001077413558959961"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="49" name="test_evaluator_iterator_iterable" time="0.0009768009185791016"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="60" name="test_evaluator_iterable_iterator_and_comparison" time="0.0009129047393798828"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="72" name="test_evaluator_comprehension" time="0.0012564659118652344"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="81" name="test_evaluator_iterable_any" time="0.0013360977172851562"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="95" name="test_evaluator_iterable_all" time="0.00115203857421875"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="110" name="test_evaluator_repr" time="0.0008711814880371094"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="127" name="test_evaluator_complex_1" time="0.0011780261993408203"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="138" name="test_evaluator_str" time="0.001234292984008789"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="154" name="test_evaluator_bytes" time="0.0009405612945556641"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="171" name="test_evaluator_sizeof" time="0.0010371208190917969"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="189" name="test_evaluator_comparable" time="0.0009379386901855469"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="210" name="test_evaluator_hashable" time="0.0009124279022216797"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="226" name="test_evaluator_truth_testable" time="0.0012221336364746094"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="242" name="test_evaluator_truth_testable_not" time="0.0009770393371582031"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="258" name="test_evaluator_attribute" time="0.0009429454803466797"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="277" name="test_evaluator_nonexistent_attribute_2" time="0.0008537769317626953"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="328" name="test_evaluator_container" time="0.0013947486877441406"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="345" name="test_evaluator_sized" time="0.0008981227874755859"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="359" name="test_evaluator_sized_compared" time="0.0010197162628173828"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="382" name="test_evaluator_reversible" time="0.0008192062377929688"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="394" name="test_evaluator_mapping" time="0.0008993148803710938"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="420" name="test_evaluator_numeric" time="0.0016453266143798828"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="475" name="test_evaluator_int_convertible" time="0.001440286636352539"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="489" name="test_evaluator_long_convertible" time="0.0008280277252197266"><failure message="NameError: name &apos;long&apos; is not defined">def test_evaluator_long_convertible():
+        &quot;&quot;&quot; Long convertible Object : tests that `long` raises the appropriate exception and that equivalent Long()
+        works &quot;&quot;&quot;
+    
+        s = InputVar(float)
+    
+        # with pytest.raises(NotImplementedError):
+        #     int(s)
+    
+&gt;       to_long = long(s)
+E       NameError: name &apos;long&apos; is not defined
+
+valid8/tests/test_mini_lambda.py:499: NameError</failure></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="504" name="test_evaluator_float_convertible" time="0.001291513442993164"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="519" name="test_evaluator_complex_convertible" time="0.001005411148071289"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="535" name="test_evaluator_oct_convertible" time="0.0009675025939941406"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="550" name="test_evaluator_index_slice" time="0.0009205341339111328"></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="574" name="test_new_operators" time="0.0021605491638183594"><system-out>Hello, john your age is 20
+</system-out></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="586" name="test_normal_function_first" time="0.0017809867858886719"><system-out>Your input number 0.01 is correct, congrats !
+</system-out></testcase><testcase classname="valid8.tests.test_mini_lambda" file="valid8/tests/test_mini_lambda.py" line="610" name="test_retrofit" time="0.0010585784912109375"></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="7" name="test_first_example_enforce" time="0.007370710372924805"><system-out>you did it !
+you did it !
+</system-out></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="41" name="test_first_example_pytypes" time="0.0056781768798828125"><failure message="pytypes.exceptions.InputTypeError: 
+  valid8.tests.test_readme.build_house
+  called with incompatible types:
+Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
+Received: Tuple[str, int, int, int]">def test_first_example_pytypes():
+        # for type checking
+        from valid8 import Boolean
+        from numbers import Real, Integral
+        from typing import Optional
+        from pytypes import typechecked
+    
+        # for value checking
+        from valid8 import validate, minlens, gt
+    
+        @typechecked
+        @validate(name=minlens(0),
+                  surface=gt(0))
+        def build_house(name: str,
+                        surface: Real,
+                        nb_floors: Optional[Integral] = 1,
+                        with_windows: Boolean = False):
+            print(&apos;you did it !&apos;)
+    
+&gt;       build_house(&apos;test&apos;, 12, 2)  # validation OK
+
+valid8/tests/test_readme.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp
+    prop_getter or auto_prop_getter, specs)
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype
+    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+msg = &apos;\n  valid8.tests.test_readme.build_house\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&apos;
+is_return = False, value = (&apos;test&apos;, 12, 2, 1)
+received_type = typing.Tuple[str, int, int, int]
+expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], valid8.utils_typing.Boolean]
+func = &lt;function test_first_example_pytypes.&lt;locals&gt;.build_house at 0x7fe4856ae400&gt;
+
+    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,
+                expected_type=None, func=None):
+        if pytypes.warning_mode:
+            import traceback
+            tb = traceback.extract_stack()
+            off = util._calc_traceback_list_offset(tb)
+            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning
+            warn_explicit(msg, cat, tb[off][0], tb[off][1])
+    # 		if not func is None:
+    # 			warn_explicit(msg, cat, func.__code__.co_filename,
+    # 					func.__code__.co_firstlineno, func.__module__)
+    # 		else:
+    # 			warn(msg, pytypes.ReturnTypeWarning)
+        else:
+            if is_return:
+                raise pytypes.ReturnTypeError(msg)
+            else:
+&gt;               raise pytypes.InputTypeError(msg)
+E               pytypes.exceptions.InputTypeError: 
+E                 valid8.tests.test_readme.build_house
+E                 called with incompatible types:
+E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
+E               Received: Tuple[str, int, int, int]
+
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError</failure></testcase><testcase classname="valid8.tests.test_readme" file="valid8/tests/test_readme.py" line="73" name="test_custom_validators" time="0.003107786178588867"></testcase><testcase classname="valid8.tests.test_validators_collections" file="valid8/tests/test_validators_collections.py" line="7" name="test_validate_is_in" time="0.002656698226928711"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validators_collections" file="valid8/tests/test_validators_collections.py" line="20" name="test_validate_subset_superset" time="0.002595663070678711"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validators_collections" file="valid8/tests/test_validators_collections.py" line="44" name="test_validate_on_all" time="0.0021278858184814453"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_validators_collections" file="valid8/tests/test_validators_collections.py" line="55" name="test_validate_on_each" time="0.0025129318237304688"><system-out>hello
+</system-out></testcase></testsuite>
