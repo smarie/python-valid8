@@ -4,7 +4,7 @@ from typing import Callable, Dict, Any, Set, List, Tuple, Union, Iterable, Conta
 
 from decorator import decorate
 
-from valid8.mini_lambda import _InputEvaluator
+from mini_lambda.main import _LambdaExpression
 from valid8.utils_decoration import _create_function_decorator__robust_to_args, apply_on_func_args
 
 
@@ -343,8 +343,8 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
     :return:
     """
     i = -1
-    if isinstance(validators, _InputEvaluator):
-        # special case of an _InputEvaluator: convert to a function
+    if isinstance(validators, _LambdaExpression):
+        # special case of a _LambdaExpression: convert to a function
         validators = [validators.as_function()]
     else:
         try:
