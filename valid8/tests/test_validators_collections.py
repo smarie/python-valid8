@@ -4,6 +4,8 @@ import pytest
 
 from valid8 import validate, ValidationError, on_each_, is_even, lt, on_all_, is_subset, is_superset, is_in
 
+# TODO add tests without the @validate wrapping, catching raw Failure, not ValidationError
+
 
 def test_validate_is_in():
     """ Test for the subset and superset validators """

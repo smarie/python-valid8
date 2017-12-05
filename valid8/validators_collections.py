@@ -1,7 +1,7 @@
 from numbers import Integral
 from typing import Set, Tuple
 
-from valid8.core import ValidationError, create_main_validation_function
+from valid8.core import Failure, _create_main_validation_function
 
 
 def minlen(min_length: Integral, strict: bool = False):
@@ -19,13 +19,15 @@ def minlen(min_length: Integral, strict: bool = False):
             if len(x) > min_length:
                 return True
             else:
-                raise ValidationError('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
+                raise Failure('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
     else:
         def minlen(x):
             if len(x) >= min_length:
                 return True
             else:
-                raise ValidationError('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
+                raise Failure('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
+
+    minlen.__name__ = 'length_{}greater_than_{}'.format('strictly_' if strict else '', min_length)
     return minlen
 
 
@@ -49,19 +51,62 @@ def maxlen(max_length: Integral, strict: bool = False):
             if len(x) < max_length:
                 return True
             else:
-                raise ValidationError('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
+                raise Failure('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
     else:
         def maxlen(x):
             if len(x) <= max_length:
                 return True
             else:
-                raise ValidationError('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
+                raise Failure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
+
+    maxlen.__name__ = 'length_{}lesser_than_{}'.format('strictly_' if strict else '', max_length)
     return maxlen
 
 
 def maxlens(max_length_strict: Integral):
     """ Alias for 'Maximum length' validator generator in strict mode """
     return maxlen(max_length_strict, True)
+
+
+def length_between(min_len, max_len, open_left: bool = False, open_right: bool = False):
+    """
+    'Is length between' validator generator.
+    Returns a validator to check that min_len <= len(x) <= max_len (default). open_right and open_left flags allow to
+    transform each side into strict mode. For example setting open_left=True will enforce min_len < len(x) <= max_len
+
+    :param min_len: minimum length for x
+    :param max_len: maximum length for x
+    :param open_left: Boolean flag to turn the left inequality to strict mode
+    :param open_right: Boolean flag to turn the right inequality to strict mode
+    :return:
+    """
+    if open_left and open_right:
+        def length_between(x):
+            if (min_len < len(x)) and (len(x) < max_len):
+                return True
+            else:
+                raise Failure('length between: {} < len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
+    elif open_left:
+        def length_between(x):
+            if (min_len < len(x)) and (len(x) <= max_len):
+                return True
+            else:
+                raise Failure('length between: {} < len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
+    elif open_right:
+        def length_between(x):
+            if (min_len <= len(x)) and (len(x) < max_len):
+                return True
+            else:
+                raise Failure('length between: {} <= len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
+    else:
+        def length_between(x):
+            if (min_len <= len(x)) and (len(x) <= max_len):
+                return True
+            else:
+                raise Failure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
+
+    length_between.__name__ = 'length_between_{}_and_{}'.format(min_len, max_len)
+    return length_between
 
 
 def is_in(allowed_values: Set):
@@ -72,12 +117,13 @@ def is_in(allowed_values: Set):
     :param allowed_values: a set of allowed values
     :return:
     """
-    def valin(x):
+    def is_in_allowed_values(x):
         if x in allowed_values:
             return True
         else:
-            raise ValidationError('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
-    return valin
+            raise Failure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
+
+    return is_in_allowed_values
 
 
 def is_subset(reference_set: Set):
@@ -88,15 +134,15 @@ def is_subset(reference_set: Set):
     :param reference_set: the reference set
     :return:
     """
-    def is_subset(x):
+    def is_subset_of(x):
         missing = x - reference_set
         if len(missing) == 0:
             return True
         else:
-            raise ValidationError('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
-                                  + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
+            raise Failure('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
+                          + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
                                   'elements ' + str(missing))
-    return is_subset
+    return is_subset_of
 
 
 def is_superset(reference_set: Set):
@@ -107,15 +153,15 @@ def is_superset(reference_set: Set):
     :param reference_set: the reference set
     :return:
     """
-    def is_superset(x):
+    def is_superset_of(x):
         missing = reference_set - x
         if len(missing) == 0:
             return True
         else:
-            raise ValidationError('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
-                                  + ' and reference_set=' + str(reference_set) + '. x does not contain required '
+            raise Failure('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
+                          + ' and reference_set=' + str(reference_set) + '. x does not contain required '
                                   'elements ' + str(missing))
-    return is_superset
+    return is_superset_of
 
 
 # TODO rename 'all_on_each'
@@ -130,7 +176,7 @@ def on_all_(*validators_for_all_elts):
     :return:
     """
     # create the validation function
-    validator_funcs = create_main_validation_function(validators_for_all_elts, allow_not_none=True)
+    validator_funcs = _create_main_validation_function(validators_for_all_elts, allow_not_none=True)
 
     def on_all_val(x):
         # validate all elements in x in turn
@@ -140,7 +186,7 @@ def on_all_(*validators_for_all_elts):
             res = validator_funcs(x_elt)
             if res not in {None, True}:
                 # one element of x was not valid > raise
-                raise ValidationError('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
+                raise Failure('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
                                       'element [' + str(idx) + ']: ' + str(x_elt))
         return True
 
@@ -160,13 +206,13 @@ def on_each_(*validators_collection):
     :return:
     """
     # create a tuple of validation functions.
-    validator_funcs = tuple(create_main_validation_function(validators, allow_not_none=True)
+    validator_funcs = tuple(_create_main_validation_function(validators, allow_not_none=True)
                             for validators in validators_collection)
 
     # generate a validation function based on the tuple of validators lists
     def on_each_val(x: Tuple):
         if len(validator_funcs) != len(x):
-            raise ValidationError('on_each_: x does not have the same number of elements than validators_collection.')
+            raise Failure('on_each_: x does not have the same number of elements than validators_collection.')
         else:
             # apply each validator on the input with the same position in the collection
             idx = -1
@@ -175,8 +221,8 @@ def on_each_(*validators_collection):
                 res = validator_func(elt)
                 if res not in {None, True}:
                     # one validator was unhappy > raise
-                    raise ValidationError('on_each_(' + str(validators_collection) + '): Validator [' + str(idx)
-                                          + '] (' + str(validators_collection[idx]) + ') failed validation for '
+                    raise Failure('on_each_(' + str(validators_collection) + '): _validator [' + str(idx)
+                                  + '] (' + str(validators_collection[idx]) + ') failed validation for '
                                           'input ' + str(x[idx]))
             return True
 

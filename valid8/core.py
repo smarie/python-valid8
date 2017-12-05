@@ -1,105 +1,10 @@
-from inspect import getfullargspec
-from numbers import Integral
-from typing import Callable, Dict, Any, Set, List, Tuple, Union, Iterable, Container
-
-from decorator import decorate
+from abc import abstractmethod
+from typing import Callable, Any
 
 from mini_lambda.main import _LambdaExpression
-from valid8.utils_decoration import _create_function_decorator__robust_to_args, apply_on_func_args
 
 
-def validate(**validators: Dict[str, Callable[[Any], bool]]):
-    """
-    Defines a decorator with parameters, that will execute the provided input validators PRIOR to executing the 
-    function. Specific entry 'returns' may contain validators executed AFTER executing the function.
-    
-    ```
-    def is_even(x):
-        return x % 2 == 0
-    
-    def gt(a):
-        def gt(x):
-            return x >= a
-        return gt
-    
-    @validate(a=[is_even, gt(1)], b=is_even)
-    def myfunc(a, b):
-        print('hello')
-    ```
-    
-    will generate the equivalent of :
-    
-    ```
-    def myfunc(a, b):
-        gt1 = gt(1)
-        if is_even(a) and gt1(a) and is_even(b):
-            print('hello')
-        else:
-            raise ValidationError(...)
-    ```
-    
-    :param validators: 
-    :return: 
-    """
-    return _create_function_decorator__robust_to_args(validate_decorate, **validators)
-
-
-alidate = validate  # a alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...)
-
-
-def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bool]]) -> Callable:
-    """
-    Defines a decorator with parameters, that will execute the provided input validators PRIOR to executing the 
-    function. Specific entry 'returns' may contain validators executed AFTER executing the function.
-    
-    :param func: 
-    :param include: 
-    :param exclude: 
-    :return: 
-    """
-    # (1) retrieve function signature
-    # attrs, varargs, varkw, defaults = getargspec(func)
-    signature_attrs, signature_varargs, signature_varkw, signature_defaults, signature_kwonlyargs, \
-    signature_kwonlydefaults, signature_annotations = getfullargspec(func)
-    # TODO better use signature(func) ? but that would be less compliant with python 2
-
-    # (2) check that provided validators dont contain names that are incorrect
-    if validators is not None:
-        incorrect = set(validators.keys()) - set(signature_attrs)
-        if len(incorrect) > 0:
-            raise ValueError('@validate definition exception: validators are defined for \'' + str(incorrect) + '\' '
-                             'that is/are not part of signature for ' + str(func))
-    # for att_name, att_validators in validators.items():
-    #     i = att_validators.index(not_none)
-    #     if i > 0:
-    #         raise ValueError('not_none is a special validator that can only be provided at the beginning of the'
-    #                          ' validators list')
-
-    # replace validators lists with explicit and_ if needed
-    for att_name, att_validators in validators.items():
-        validators[att_name] = create_main_validation_function(att_validators, allow_not_none=True)
-
-    # (3) create a wrapper around the function to add validation
-    # -- old:
-    # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
-    # def wrapper(self, *args, **kwargs):
-    # -- new:
-    # we now use 'decorate' at the end of this code to have a wrapper that has the same signature, see below
-    def wrapper(func, *args, **kwargs):
-        # apply _validate_function_inputs on all received arguments
-        apply_on_func_args(func, args, kwargs, signature_attrs, signature_defaults, signature_varargs, signature_varkw,
-                           _validate_function_inputs, validators)
-
-        # finally execute the method
-        return func(*args, **kwargs)
-
-    a = decorate(func, wrapper)
-    # save the validators somewhere for reference. This is useful for other decorators example for autoclass/autoprops
-    a.__validators__ = validators
-    return a
-
-
-def create_main_validation_function(att_validators, allow_not_none: bool):
+def _create_main_validation_function(att_validators, allow_not_none: bool):
     """
     Creates the main validation function to be used for a specific input.
     * if att_validators is not a list, it transforms it into a list
@@ -129,6 +34,7 @@ def create_main_validation_function(att_validators, allow_not_none: bool):
         main_validation_function = _not_none_checker(and_(remaining_validators),
                                                      ignore_none_silently=ignore_nones_silently)
     else:
+        # there is only one validator here
         if ignore_nones_silently:
             main_validation_function = _not_none_checker(remaining_validators[0],
                                                          ignore_none_silently=ignore_nones_silently)
@@ -137,6 +43,16 @@ def create_main_validation_function(att_validators, allow_not_none: bool):
             main_validation_function = not_none
 
     return main_validation_function
+
+
+def get_validator_display_name(validator: Callable):
+    """
+    Used internally to get the name to display concerning a validator, in error messages for example.
+
+    :param validator:
+    :return:
+    """
+    return validator.__name__ if hasattr(validator, '__name__') else str(validator)
 
 
 def _not_none_checker(validator, ignore_none_silently: bool = True):
@@ -157,6 +73,9 @@ def _not_none_checker(validator, ignore_none_silently: bool = True):
                 # value is None: skip validation (users should explicitly include 'not_none' as the first validator to
                 # change this behaviour)
                 return True
+
+        # set a name so that the error messages are correct
+        drop_none_silently.__name__ = get_validator_display_name(validator)
         return drop_none_silently
 
         # use the `decorate` helper method to preserve name and signature of the inner object
@@ -182,150 +101,57 @@ def _not_none_checker(validator, ignore_none_silently: bool = True):
         return check_not_none
 
 
-def _validate_function_inputs(input_value_to_validate, validator_func, validated_func, input_name):
+class Failure(ValueError):
     """
-    Subroutine of the @validate function annotation that actually performs validation, by executing
-
-        `validator_func(input_value_to_validate)`
-
-    The statement should return `True` or `None` for the validation to be considered valid. Note that this is
-    quite different from the standard python truth value test (where None is equivalent to False), but it seems
-    more adapted to an intuitive usage, where a function that returns silently without any output means a
-    successful validation. The checking is done using helper function `result_is_success` across the board, so as to
-    ensure a consistent behaviour if this changes in the future.
-
-    This function is often the only one to know the context (func, input_name), and therefore is also the only one able
-    to raise the top-level ValidationError using ValidationError.create. The top-level however
-    does not now anything about the validators' structure, because we do not want to maintain a reflective structure
-    about validators, while good exceptions may do the job nicely.
-
-    Therefore validators (and validator logic operators) are responsible to raise explicit exception messages
-    (ValidationError may be used but is not mandatory). The only exception (haha) to that rule is when a single custom
-    validator is used and returns False (or not True, not None). That case is properly handled here.
-
-    :param input_value_to_validate: the value to validate
-    :param validator_func: the validator function that will be applied on input_value_to_validate
-    :param validated_func: the method for which this validation is performed. This is used just for errors
-    :param input_name: the name of the function input that is being validated
-    :return: Nothing
+    A utility class to represent base validation functions failures. It is a subclass of ValueError for consistency with
+    python best practices. It is recommended that base validation functions subclass this exception type in order to
+    provide a unique exception identifier for each base validation failure.
     """
-    try:
-        # perform validation
-        res = validator_func(input_value_to_validate)
-
-    except Exception as e:
-        # caught inner ValidationError: treat as other errors
-        # caught other error
-        raise InputValidationError.create(validated_func, input_name, input_value_to_validate,
-                                          exc=e)
-
-    if not result_is_success(res):
-        # failure without explicit exception ! special handling
-        extra = ' custom validation function [' + (validator_func.__name__ or str(validator_func)) \
-                + '] returned [' + str(res) + '] that is not ' + SUCCESS_CONDITIONS
-        raise InputValidationError.create(validated_func, input_name, input_value_to_validate,
-                                          extra_msg=extra)
+    pass
 
 
-class ValidationError(ValueError):
-    """
-    An Exception raised whenever validation fails. It is typically raised by Validators themselves. It is recommended
-    that validators subclass this exception type in order to provide a unique exception identifier for each validation
-    error type.
+class WrappedFailure(Failure):
+    """ Represents a validation failure due to another base validation function """
 
-    `InputValidationError` is a special subclass raised by function input validator (i.e. the @validate annotation)
-    """
-
-    def __init__(self, contents):
+    def __init__(self, failing_base_validation_func, var_value, validation_outcome: Any = None):
         """
-        We actually can't put more than 1 argument in the constructor, it creates a bug in Nose tests
-        https://github.com/nose-devs/nose/issues/725. Please use ValidationError.create() instead
+        Creates a validation Failure associated with validation of var_value using `base_validation_func`.
+        Additional details about the validation_outcome (result or exception) can be provided
 
-        TODO: at some point we should maybe remove this behaviour since we dont use Nose anymore :)
-
-        :param contents:
-        """
-        super(ValidationError, self).__init__(contents)
-
-    @staticmethod
-    def create(validator_name, validation_formula, var_value, var_name: str = None,
-               extra_msg: str = None):
-        """
-        Creates a simple standard Validation Error such as:
-
-        'is_mod: y % 3 == 0 does not hold for y=5. <extra details>'
-
-        Where
-        * validator_name = 'is_mod'
-        * validation_formula = 'y % 3 == 0'
-        * input_value = 5
-        * var_name = 'y' (default is 'x')
-        * extra_msg = '<extra details>' (default is '')
-
-        :param validator_name:
-        :param validation_formula:
+        :param failing_base_validation_func:
         :param var_value:
-        :param var_name: to change the variable name ('x' by default)
-        :param extra_msg:
-        :return:
+        :param validation_outcome:
         """
-        return ValidationError(validator_name + ': ' + validation_formula + ' does not hold for variable '
-                               + (var_name or 'x') + '=' + str(var_value) + (('. ' + extra_msg) if extra_msg else '.'))
 
+        # store details in the object for future access if needed
+        self.failing_base_validation_func = failing_base_validation_func
+        self.var_value = var_value
+        self.validation_outcome = validation_outcome
 
-class InputValidationError(ValidationError):
-    """
-    Exception raised whenever function input validation fails. It is not meant to be subclassed by users, please rather
-    subclass ValidationError directly.
-    """
-
-    def __init__(self, contents):
-        """
-        We actually can't put more than 1 argument in the constructor, it creates a bug in Nose tests
-        https://github.com/nose-devs/nose/issues/725. Please use InputValidationError.create() instead
-
-        TODO: at some point we should maybe remove this behaviour since we dont use Nose anymore :)
-
-        :param contents:
-        """
-        super(InputValidationError, self).__init__(contents)
-
-    @staticmethod
-    def create(validated_function, var_name, var_value, extra_msg: str = None,
-               exc: Exception = None):
-        """
-        Internal utility method called by the @validate annotation to produce the top-level error message, containing
-        the validated function and the input name. The top-level however does not now anything about the validators'
-        structure. Therefore validators (and validator logic operators) are responsible to raise explicit exception
-        messages. The only exception is when a single custom validator is used and returns False (or not True, not None)
-        That case is properly handled in _validate_function_inputs.
-
-        :param validated_function:
-        :param var_name:
-        :param var_value:
-        :param extra_msg:
-        :param exc: a caught inner exception, if any
-        :return:
-        """
-        common_text = 'Error validating input [' + str(var_name) + '=' + str(var_value) \
-                      + '] for function [' + (validated_function.__name__ or str(validated_function)) + ']' \
-                      + ((': ' + extra_msg) if extra_msg else '')
-        if exc is not None:
-            return InputValidationError(common_text + '.\n  Caught error: ' + str(exc))\
-                .with_traceback(exc.__traceback__)
+        # create the exception main message according to the type of result
+        if isinstance(validation_outcome, Exception):
+            contents = 'base validator [{val}] raised [{exc}: {det}]' \
+                       ''.format(val=get_validator_display_name(failing_base_validation_func),
+                                 exc=type(validation_outcome).__name__, det=validation_outcome)
+            # exception: also link the traceback
+            self.__traceback__ = validation_outcome.__traceback__
         else:
-            return InputValidationError(common_text)
+            contents = 'base validator [{val}] returned [{res}].' \
+                       ''.format(val=get_validator_display_name(failing_base_validation_func), res=validation_outcome)
+
+        # call super constructor with the message
+        super(Failure, self).__init__(contents)
 
 
 def get_names(validators):
-    return ', '.join([val.__name__ for val in validators])
+    return ', '.join([get_validator_display_name(val) for val in validators])
 
 
 # this validator is too tied to the above to be moved elsewhere
 def not_none(x: Any):
     """ 'Is not None' validator """
     if x is None:
-        raise ValidationError('not_none: failure, x is None')
+        raise Failure('not_none: failure, x is None')
     else:
         return True
 
@@ -337,6 +163,7 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
      * If validators contains not_none and allow_not_none is set to True, asserts that not_none is first in the list
      * If validators contains not_none and allow_not_none is set to False, asserts that not_none is not present at all
      in the list
+     * all validators that are instances of _LambdaExpression are transformed to functions automatically
 
     :param validators:
     :param allow_not_none:
@@ -344,16 +171,23 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
     """
     i = -1
     if isinstance(validators, _LambdaExpression):
-        # special case of a _LambdaExpression: convert to a function
+        # special case of a _LambdaExpression: automatically convert to a function here,
+        # Indeed the try/except below wont work because .index() will always return something (a new _LambdaExpression).
         validators = [validators.as_function()]
     else:
         try:
+            # special case of a _LambdaExpression: automatically convert to a function
+            # note: we have to do it before even performing the .index() below otherwise we get failures
+            validators = [v.as_function() if isinstance(v, _LambdaExpression) else v for v in validators]
+
+            # find 'not_none' in the list?
             i = validators.index(not_none)
+
         except ValueError:
             # not_none not found in validators list : ok
             pass
-        except AttributeError:
-            # validators is not a list (no attribute 'index'): turn it into a list
+        except (AttributeError, TypeError):
+            # validators is not a list (not iterable, no attribute 'index'): turn it into a list
             validators = [validators]
 
     # not_none ?
@@ -369,122 +203,19 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
     return validators
 
 
-# ----------- composition : we cant move these away since and_() is quite tight to the core
-def and_(validators):
-    """
-    An 'and' validator: it returns `True` if all of the provided validators return `True`, or raises a
-    `ValidationException` on the first `False` received or `Exception` caught.
+# ----------- negation
+class DidNotFail(Failure):
+    """ Raised by the not_ operator when the inner validator did not fail."""
+    def __init__(self, validator, value):
+        """
+        Constructor from the inner validator name and the value that caused validation
 
-    Note that an implicit `and_` is performed if you provide a list of validators to `@validate`.
-
-    :param validators:
-    :return:
-    """
-
-    validators = _assert_list_and_protect_not_none(validators)
-
-    if len(validators) == 1:
-        return validators[0]  # simplification for single validator case
-    else:
-        def and_v_(x):
-            for validator in validators:
-                res = validator(x)
-                if not result_is_success(res):
-                    # one validator was unhappy > raise
-                    raise ValidationError('and(' + get_names(validators) + '): validator '
-                                          + (validator.__name__ or str(validator)) + ' failed validation for input '
-                                          + str(x))
-            return True
-
-        return and_v_
-
-
-def or_(validators):
-    """
-    An 'or' validator: returns `True` if at least one of the provided validators returns `True`. All exceptions will be
-    silently caught. In case of failure, a global `ValidationException` will be raised, together with the first caught
-    exception's message if any.
-
-    :param validators:
-    :return:
-    """
-
-    validators = _assert_list_and_protect_not_none(validators)
-
-    if len(validators) == 1:
-        return validators[0]  # simplification for single validator case
-    else:
-        def or_v_(x):
-            err = None
-            for validator in validators:
-                try:
-                    res = validator(x)
-                    if result_is_success(res):
-                        # we can return : one validator was happy
-                        return True
-                except Exception as e:
-                    if err is None:
-                        err = e  # remember the first exception
-
-            # no validator accepted: raise
-            msg = 'or(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
-            if err is not None:
-                msg += 'First exception caught was: \'' + str(err) + '\''
-            raise ValidationError(msg)
-
-        return or_v_
-
-
-def xor_(validators):
-    """
-    A 'xor' validator: returns `True` if exactly one of the provided validators returns `True`. All exceptions will be
-    silently caught. In case of failure, a global `ValidationException` will be raised, together with the first caught
-    exception's message if any.
-
-    :param validators:
-    :return:
-    """
-
-    validators = _assert_list_and_protect_not_none(validators)
-
-    if len(validators) == 1:
-        return validators[0]  # simplification for single validator case
-    else:
-        def xor_v_(x):
-            ok_validator = None
-            sec_validator = None
-            err = None
-            for validator in validators:
-                try:
-                    res = validator(x)
-                    if result_is_success(res):
-                        if ok_validator is not None:
-                            # we found the second validator happy
-                            sec_validator = validator
-                        else:
-                            # we found the first one happy
-                            ok_validator = validator
-                except Exception as e:
-                    if err is None:
-                        err = e  # remember the first exception
-
-            # return if were happy or not
-            if ok_validator is not None:
-                if sec_validator is None:
-                    # one unique validator happy: success
-                    return True
-                else:
-                    # second validator happy : fail, too many validators happy
-                    raise ValidationError('xor(' + get_names(validators) + ') : Too many validators succeeded : '
-                                          + str(ok_validator) + ' + ' + str(sec_validator))
-            else:
-                # no validator happy
-                msg = 'xor(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
-                if err is not None:
-                    msg += 'First exception caught was: \'' + str(err) + '\''
-                raise ValidationError(msg)
-
-        return xor_v_
+        :param validator:
+        :param value:
+        """
+        msg = '{validator} validated value {value} with success, therefore the not() is a failure' \
+              ''.format(validator=get_validator_display_name(validator), value=value)
+        super(DidNotFail, self).__init__(msg)
 
 
 def not_(validator, catch_all: bool = False):
@@ -510,29 +241,202 @@ def not_(validator, catch_all: bool = False):
     # validator = and_(validator)
 
     def not_v_(x):
-        if catch_all:
-            try:
-                res = validator(x)
-                if not result_is_success(res):  # inverse the result
-                    return True
-            except:
+        try:
+            res = validator(x)
+            if not result_is_success(res):  # inverse the result
+                return True
+
+        except Failure:
+            return True  # caught exception: return True
+
+        except Exception as e:
+            if not catch_all:
+                raise e
+            else:
                 return True  # caught exception: return True
 
-            # if we're here that's a failure
-            raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
-                                  'therefore the not() is a failure')
-        else:
-            try:
-                res = validator(x)
-                if not result_is_success(res):  # inverse the result
-                    return True
-            except ValidationError:
-                return True  # caught exception: return True
+        # if we're here that's a failure
+        raise DidNotFail(validator, x)
 
-            # if we're here that's a failure
-            raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
-                                  'therefore the not() is a failure')
+    not_v_.__name__ = 'not({})'.format(get_validator_display_name(validator))
     return not_v_
+
+
+# ----------- composition (we cant move these in another file since and_() is quite tight to the core)
+class CompositionFailure(Failure):
+    """ Root failure of all composition operators """
+
+    def __init__(self, validators, value):
+        """
+        Constructor from a list of validators and a value.
+        The constructor will replay the validation process in order to get all the results and attach them in
+        the message
+
+        :param validators:
+        :param value:
+        """
+        successes = list()
+        failures = dict()
+        failures_for_print = dict()
+
+        for validator in validators:
+            name = get_validator_display_name(validator)
+            try:
+                res = validator(value)
+                if result_is_success(res):
+                    successes.append(name)
+                else:
+                    failures[validator] = res
+                    failures_for_print[name] = str(res)
+
+            except Exception as exc:
+                failures[validator] = exc
+                failures_for_print[name] = '[{exc_type}] {msg}'.format(exc_type=type(exc).__name__, msg=str(exc))
+
+        msg = '{what} validation for value [{val}]. Successes: {succ} / Failures: {fails} ' \
+              ''.format(what=self.get_what(), val=value, succ=successes, fails=failures_for_print)
+
+        super(CompositionFailure, self).__init__(msg)
+
+        # additional information
+        self.validators = validators
+        self.value = value
+        self.success = successes
+        self.failures = failures
+
+    @abstractmethod
+    def get_what(self):
+        pass
+
+
+class AtLeastOneFailed(CompositionFailure):
+    """ Raised by the and_ operator when at least one of the inner validators failed validation """
+
+    def get_what(self):
+        return 'At least one validator failed'
+
+
+def and_(validators):
+    """
+    An 'and' validator: it returns `True` if all of the provided validators return `True`, or raises a
+    `ValidationException` on the first `False` received or `Exception` caught.
+
+    Note that an implicit `and_` is performed if you provide a list of validators to `@validate`.
+
+    :param validators:
+    :return:
+    """
+
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def and_v_(x):
+            for validator in validators:
+                try:
+                    res = validator(x)
+                    if not result_is_success(res):
+                        # one validator was unhappy > raise
+                        raise AtLeastOneFailed(validators, x)
+
+                except Exception as e:
+                    # one validator was unhappy > raise
+                    raise AtLeastOneFailed(validators, x).with_traceback(e.__traceback__)
+
+            return True
+
+        and_v_.__name__ = 'and({})'.format(get_names(validators))
+        return and_v_
+
+
+class AllValidatorsFailed(Failure):
+    """ Raised by the or_ and xor_ operator when all inner validators failed validation """
+
+    def get_what(self):
+        return 'No validator succeeded'
+
+
+def or_(validators):
+    """
+    An 'or' validator: returns `True` if at least one of the provided validators returns `True`. All exceptions will be
+    silently caught. In case of failure, a global `ValidationException` will be raised, together with the first caught
+    exception's message if any.
+
+    :param validators:
+    :return:
+    """
+
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def or_v_(x):
+            for validator in validators:
+                try:
+                    res = validator(x)
+                    if result_is_success(res):
+                        # we can return : one validator was happy
+                        return True
+                except Exception:
+                    # catch all silently
+                    pass
+
+            # no validator accepted: gather details and raise
+            raise AllValidatorsFailed(validators, x)
+
+        or_v_.__name__ = 'or({})'.format(get_names(validators))
+        return or_v_
+
+
+class XorTooManySuccess(Failure):
+    """ Raised by the xor_ operator when more than one validator succeeded """
+
+    def get_what(self):
+        return 'Too many validators (more than 1) succeeded'
+
+
+def xor_(validators):
+    """
+    A 'xor' validator: returns `True` if exactly one of the provided validators returns `True`. All exceptions will be
+    silently caught. In case of failure, a global `ValidationException` will be raised, together with the first caught
+    exception's message if any.
+
+    :param validators:
+    :return:
+    """
+
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def xor_v_(x):
+            ok_validators = []
+            for validator in validators:
+                try:
+                    res = validator(x)
+                    if result_is_success(res):
+                        ok_validators.append(validator)
+                except Exception:
+                    pass
+
+            # return if were happy or not
+            if len(ok_validators) == 1:
+                # one unique validator happy: success
+                return True
+
+            elif len(ok_validators) > 1:
+                # several validators happy : fail
+                raise XorTooManySuccess(validators, x)
+
+            else:
+                # no validator happy, fail
+                raise AllValidatorsFailed(validators, x)
+
+        xor_v_.__name__ = 'xor({})'.format(get_names(validators))
+        return xor_v_
 
 
 def not_all(validators, catch_all: bool = False):

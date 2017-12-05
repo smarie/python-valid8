@@ -1,6 +1,6 @@
 from typing import Any
 
-from valid8.core import ValidationError
+from valid8.core import Failure
 
 
 def gt(min_value: Any, strict: bool = False):
@@ -17,13 +17,15 @@ def gt(min_value: Any, strict: bool = False):
             if x > min_value:
                 return True
             else:
-                raise ValidationError('gt: x > ' + str(min_value) + ' does not hold for x=' + str(x))
+                raise Failure('gt: x > ' + str(min_value) + ' does not hold for x=' + str(x))
     else:
         def gt(x):
             if x >= min_value:
                 return True
             else:
-                raise ValidationError('gt: x >= ' + str(min_value) + ' does not hold for x=' + str(x))
+                raise Failure('gt: x >= ' + str(min_value) + ' does not hold for x=' + str(x))
+
+    gt.__name__ = '{}greater_than_{}'.format('strictly_' if strict else '', min_value)
     return gt
 
 
@@ -46,13 +48,15 @@ def lt(max_value: Any, strict: bool = False):
             if x < max_value:
                 return True
             else:
-                raise ValidationError('lt: x < ' + str(max_value) + ' does not hold for x=' + str(x))
+                raise Failure('lt: x < ' + str(max_value) + ' does not hold for x=' + str(x))
     else:
         def lt(x):
             if x <= max_value:
                 return True
             else:
-                raise ValidationError('lt: x <= ' + str(max_value) + ' does not hold for x=' + str(x))
+                raise Failure('lt: x <= ' + str(max_value) + ' does not hold for x=' + str(x))
+
+    lt.__name__ = '{}lesser_than_{}'.format('strictly_' if strict else '', max_value)
     return lt
 
 
@@ -78,27 +82,25 @@ def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: boo
             if (min_val < x) and (x < max_val):
                 return True
             else:
-                raise ValidationError('between: ' + str(min_val) + ' < x < ' + str(max_val) + ' does not hold for x='
-                                      + str(x))
+                raise Failure('between: {} < x < {} does not hold for x={}'.format(min_val, max_val, x))
     elif open_left:
         def between(x):
             if (min_val < x) and (x <= max_val):
                 return True
             else:
-                raise ValidationError('between: ' + str(min_val) + ' < x <= ' + str(max_val) + ' does not hold for x='
-                                      + str(x))
+                raise Failure('between: {} < x <= {} does not hold for x={}'.format(min_val, max_val, x))
     elif open_right:
         def between(x):
             if (min_val <= x) and (x < max_val):
                 return True
             else:
-                raise ValidationError('between: ' + str(min_val) + ' <= x < ' + str(max_val) + ' does not hold for x='
-                                      + str(x))
+                raise Failure('between: {} <= x < {} does not hold for x={}'.format(min_val, max_val, x))
     else:
         def between(x):
             if (min_val <= x) and (x <= max_val):
                 return True
             else:
-                raise ValidationError('between: ' + str(min_val) + ' <= x <= ' + str(max_val) + ' does not hold for x='
-                                      + str(x))
+                raise Failure('between: {} <= x <= {} does not hold for x={}'.format(min_val, max_val, x))
+
+    between.__name__ = 'between_{}_and_{}'.format(min_val, max_val)
     return between

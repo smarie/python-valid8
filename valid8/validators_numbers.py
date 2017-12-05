@@ -1,6 +1,6 @@
 from numbers import Integral
 
-from valid8.core import ValidationError
+from valid8.core import Failure
 
 
 def is_even(x: Integral):
@@ -19,5 +19,7 @@ def is_mod(ref):
         if x % ref == 0:
             return True
         else:
-            raise ValidationError.create('is_mod', 'x % ' + str(ref) + ' == 0', x)
+            raise Failure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
+
+    is_mod.__name__ = 'is_mod_{}'.format(ref)
     return is_mod

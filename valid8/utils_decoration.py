@@ -6,7 +6,7 @@ class DecorationException(Exception):
     pass
 
 
-def _check_known_decorators(typ, calling_decorator: str) -> bool:
+def check_known_decorators(typ, calling_decorator: str) -> bool:
     """
     Checks that a given type is not already decorated by known decorators that may cause trouble.
     If so, it raises an Exception
@@ -20,7 +20,7 @@ def _check_known_decorators(typ, calling_decorator: str) -> bool:
                                                'of the decorators on <' + str(typ) + '>')
 
 
-def _call_decorator_with_or_without_args(decorator_function_impl: Callable, objectIsFunction: bool, *args, **kwargs):
+def call_decorator_with_or_without_args(decorator_function_impl: Callable, objectIsFunction: bool, *args, **kwargs):
     """
     Utility function for all decorators: handles the fact that 
     * if the decorator has been called with arguments, then we have to return a decorator factory
@@ -42,7 +42,7 @@ def _call_decorator_with_or_without_args(decorator_function_impl: Callable, obje
         return f
 
 
-def _create_function_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
+def create_function_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
     """
     Utility method to implement a decorator for functions based on the provided implementation and arguments
     
@@ -51,10 +51,10 @@ def _create_function_decorator__robust_to_args(decorator_impl: Callable, *args, 
     :param kwargs: 
     :return: 
     """
-    return _call_decorator_with_or_without_args(decorator_impl, True, *args, **kwargs)
+    return call_decorator_with_or_without_args(decorator_impl, True, *args, **kwargs)
 
 
-def _create_class_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
+def create_class_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
     """
     Utility method to create a decorator for classes based on the provided implementation and arguments
     
@@ -63,12 +63,12 @@ def _create_class_decorator__robust_to_args(decorator_impl: Callable, *args, **k
     :param kwargs: 
     :return: 
     """
-    return _call_decorator_with_or_without_args(decorator_impl, False, *args, **kwargs)
+    return call_decorator_with_or_without_args(decorator_impl, False, *args, **kwargs)
 
 
-def apply_on_func_args(func, cur_args, cur_kwargs,
-                       signature_attrs, signature_defaults, signature_varargs, signature_varkw,
-                       func_to_apply, func_to_apply_paramers_dict):
+def apply_on_each_func_args(func, cur_args, cur_kwargs,
+                            signature_attrs, signature_defaults, signature_varargs, signature_varkw,
+                            func_to_apply, func_to_apply_paramers_dict):
     """
     Applies func_to_apply on each argument of func according to what's received in current call (cur_args, cur_kwargs).
     For each argument of func named 'att' in its signature, the following method is called:
