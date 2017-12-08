@@ -58,7 +58,7 @@ Validates that x is even (`x % 2 == 0`)
 
 Validates that x is odd (`x % 2 != 0`)
 
-#### is_mod(ref)
+#### is_multiple_of(ref)
 
 Validates that x is a multiple of the reference (`x % ref == 0`)
 
