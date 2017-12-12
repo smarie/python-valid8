@@ -1,7 +1,7 @@
 from numbers import Integral
 from typing import Set, Tuple
 
-from valid8.core import Failure, _create_main_validation_function
+from valid8.core import BasicFailure, _create_main_validation_function
 
 
 def minlen(min_length: Integral, strict: bool = False):
@@ -19,13 +19,13 @@ def minlen(min_length: Integral, strict: bool = False):
             if len(x) > min_length:
                 return True
             else:
-                raise Failure('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
+                raise BasicFailure('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
     else:
         def minlen(x):
             if len(x) >= min_length:
                 return True
             else:
-                raise Failure('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
+                raise BasicFailure('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
 
     minlen.__name__ = 'length_{}greater_than_{}'.format('strictly_' if strict else '', min_length)
     return minlen
@@ -51,13 +51,13 @@ def maxlen(max_length: Integral, strict: bool = False):
             if len(x) < max_length:
                 return True
             else:
-                raise Failure('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
+                raise BasicFailure('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
     else:
         def maxlen(x):
             if len(x) <= max_length:
                 return True
             else:
-                raise Failure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
+                raise BasicFailure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
 
     maxlen.__name__ = 'length_{}lesser_than_{}'.format('strictly_' if strict else '', max_length)
     return maxlen
@@ -85,25 +85,25 @@ def length_between(min_len, max_len, open_left: bool = False, open_right: bool =
             if (min_len < len(x)) and (len(x) < max_len):
                 return True
             else:
-                raise Failure('length between: {} < len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
+                raise BasicFailure('length between: {} < len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
     elif open_left:
         def length_between(x):
             if (min_len < len(x)) and (len(x) <= max_len):
                 return True
             else:
-                raise Failure('length between: {} < len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
+                raise BasicFailure('length between: {} < len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
     elif open_right:
         def length_between(x):
             if (min_len <= len(x)) and (len(x) < max_len):
                 return True
             else:
-                raise Failure('length between: {} <= len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
+                raise BasicFailure('length between: {} <= len(x) < {} does not hold for x={}'.format(min_len, max_len, x))
     else:
         def length_between(x):
             if (min_len <= len(x)) and (len(x) <= max_len):
                 return True
             else:
-                raise Failure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
+                raise BasicFailure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len, max_len, x))
 
     length_between.__name__ = 'length_between_{}_and_{}'.format(min_len, max_len)
     return length_between
@@ -121,7 +121,7 @@ def is_in(allowed_values: Set):
         if x in allowed_values:
             return True
         else:
-            raise Failure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
+            raise BasicFailure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
 
     return is_in_allowed_values
 
@@ -139,8 +139,8 @@ def is_subset(reference_set: Set):
         if len(missing) == 0:
             return True
         else:
-            raise Failure('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
-                          + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
+            raise BasicFailure('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
+                               + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
                                   'elements ' + str(missing))
     return is_subset_of
 
@@ -158,8 +158,8 @@ def is_superset(reference_set: Set):
         if len(missing) == 0:
             return True
         else:
-            raise Failure('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
-                          + ' and reference_set=' + str(reference_set) + '. x does not contain required '
+            raise BasicFailure('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
+                               + ' and reference_set=' + str(reference_set) + '. x does not contain required '
                                   'elements ' + str(missing))
     return is_superset_of
 
@@ -176,7 +176,7 @@ def on_all_(*validators_for_all_elts):
     :return:
     """
     # create the validation function
-    validator_funcs = _create_main_validation_function(validators_for_all_elts, allow_not_none=True)
+    validator_funcs = _create_main_validation_function(list(validators_for_all_elts), allow_not_none=True)
 
     def on_all_val(x):
         # validate all elements in x in turn
@@ -186,7 +186,7 @@ def on_all_(*validators_for_all_elts):
             res = validator_funcs(x_elt)
             if res not in {None, True}:
                 # one element of x was not valid > raise
-                raise Failure('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
+                raise BasicFailure('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
                                       'element [' + str(idx) + ']: ' + str(x_elt))
         return True
 
@@ -212,7 +212,7 @@ def on_each_(*validators_collection):
     # generate a validation function based on the tuple of validators lists
     def on_each_val(x: Tuple):
         if len(validator_funcs) != len(x):
-            raise Failure('on_each_: x does not have the same number of elements than validators_collection.')
+            raise BasicFailure('on_each_: x does not have the same number of elements than validators_collection.')
         else:
             # apply each validator on the input with the same position in the collection
             idx = -1
@@ -221,8 +221,8 @@ def on_each_(*validators_collection):
                 res = validator_func(elt)
                 if res not in {None, True}:
                     # one validator was unhappy > raise
-                    raise Failure('on_each_(' + str(validators_collection) + '): _validator [' + str(idx)
-                                  + '] (' + str(validators_collection[idx]) + ') failed validation for '
+                    raise BasicFailure('on_each_(' + str(validators_collection) + '): _validator [' + str(idx)
+                                       + '] (' + str(validators_collection[idx]) + ') failed validation for '
                                           'input ' + str(x[idx]))
             return True
 

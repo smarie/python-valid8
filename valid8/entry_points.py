@@ -3,7 +3,7 @@ from typing import Callable, Dict, Any, List, Union, Type
 
 from decorator import decorate
 
-from valid8.core import _create_main_validation_function, result_is_success, get_validator_display_name
+from valid8.core import _create_main_validation_function, result_is_success, get_validator_display_name, BaseValidators
 from valid8.utils_decoration import create_function_decorator__robust_to_args, apply_on_each_func_args
 
 
@@ -13,12 +13,12 @@ class ValidationError(ValueError):
     in the validation functions, or of something else (for example validation functions returned False).
 
     Note that custom base validation functions should not raise this kind of exception - this is reserved to global
-    Validator objects. Instead you might wish to raise (a subclass of) valid8.Failure
+    Validator objects. Instead you might wish to raise (a subclass of) valid8.BasicFailure or valid8.Failure
     """
 
     def __init__(self, validator, var_value, var_name: str = None, validation_outcome: Any = None):
         """
-        Creates a ValidationError associated with validation of var_value using validator. Additional details
+        Creates a ValidationError associated with validation of validated_value using validator. Additional details
         about the variable name and validation_outcome (result or exception) can be provided
 
         :param validator:
@@ -77,7 +77,7 @@ class Validator:
 
     __slots__ = ['validator_func_main', 'exc_type']
 
-    def __init__(self, base_validator_s: Union[Callable, List[Callable]], exc_type: Type[ValidationError] = None):
+    def __init__(self, base_validator_s: BaseValidators, exc_type: Type[ValidationError] = None):
         """
         Creates a validator from a (possibly list of) base validation functions. A list will be converted to an
         implicit 'and_'. A base validation function should return `True` or `None` for the validation to be a success.
@@ -233,12 +233,12 @@ def is_valid(validator_func: Union[Callable, List[Callable]], value) -> bool:
 class InputValidationError(ValidationError):
     """
     Exception raised whenever function input validation fails. It is not meant to be subclassed by users, please rather
-    subclass Failure.
+    subclass BasicFailure.
     """
 
     def __init__(self, validator, var_value, var_name: str = None, validation_outcome: Any = None):
         """
-        Creates a ValidationError associated with validation of var_value as part of function input validation.
+        Creates a ValidationError associated with validation of validated_value as part of function input validation.
         validator is therefore assumed to be a subclass of InputValidator
 
         :param validator: an InputValidator
@@ -260,7 +260,7 @@ class InputValidator(Validator):
 
     __slots__ = ['validated_func']
 
-    def __init__(self, validated_func, base_validator_s: Union[Callable, List[Callable]]):
+    def __init__(self, validated_func, base_validator_s: BaseValidators):
         super(InputValidator, self).__init__(base_validator_s=base_validator_s)
         self.validated_func = validated_func
 
@@ -349,7 +349,7 @@ alidate = validate
 """ an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
 
 
-def validate_arg(arg_name, base_validator_s: Union[Callable, List[Callable]]):
+def validate_arg(arg_name, base_validator_s: BaseValidators) -> Callable:
     """
     A decorator to apply function input validation for the given argument name, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -358,16 +358,17 @@ def validate_arg(arg_name, base_validator_s: Union[Callable, List[Callable]]):
     :param arg_name:
     :param base_validator_s: the validator function or list of validator functions to use. A list will be considered an
     implicit `and_`. If present, `not_none` should be alone or first in the list
-    :return: the decorated function, that will perform input validation before executing the function's code everytime
-    it is executed.
+
+    :return: a function decorator, able to transform a function into a function that will perform input validation
+    before executing the function's code everytime it is executed.
     """
     # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
     # this is really not needed in our case since @validate will bever be used as is (without a call), but it does not
     # cost much and may be of interest in the future
-    return create_function_decorator__robust_to_args(decorate_with_validation, **{arg_name: base_validator_s})
+    return create_function_decorator__robust_to_args(decorate_with_validation, **{arg_name: (base_validator_s)})
 
 
-def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Callable, List[Callable]]]) -> Callable:
+def decorate_with_validation(func: Callable, **validators: Dict[str, BaseValidators]) -> Callable:
     """
     This method is equivalent to decorating a function with the `@validate` decorator, but can be used a posteriori.
 
@@ -379,11 +380,12 @@ def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Calla
     executing the function's code everytime it is executed.
     """
 
+    # TODO better do this once and for all and store the result as an attribute of the function?
     # (1) retrieve target function signature
     # attrs, varargs, varkw, defaults = getargspec(func)
     sig_attrs, sig_varargs, sig_varkw, sig_defaults, signature_kwonlyargs, \
     signature_kwonlydefaults, signature_annotations = getfullargspec(func)
-    # TODO better use signature(func) ? but that would be less compliant with python 2
+    # TODO better use signature(func) ? but that would be less compliant with python 2 if one day we want compliance
 
     # (2) check that provided validators don't contain function input names that are incorrect
     incorrect = set(validators.keys()) - set(sig_attrs)
@@ -393,9 +395,9 @@ def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Calla
 
     # (3) create or update a wrapper around the function to add validation
     if hasattr(func, '__wrapped__') and hasattr(func.__wrapped__, '__validators__'):
-        # This function is already wrapped by the validator.
+        # ---- This function is already wrapped by our validator. ----
         # First check that the new validators are for inputs that did not have some already
-        incorrect = set(validators.keys()) - set(func.__wrapped__.__validators__.keys())
+        incorrect = set(validators.keys()).intersection(set(func.__wrapped__.__validators__.keys()))
         if len(incorrect) > 0:
             raise ValueError('@validate[...] definition exception: validators are already defined for function input(s)'
                              ' \'' + str(incorrect) + '\', you can not define them twice.')
@@ -403,7 +405,11 @@ def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Calla
         for att_name, att_validators in validators.items():
             func.__wrapped__.__validators__[att_name] = InputValidator(func.__wrapped__, att_validators)
 
+        # return the function, no need to wrap it further (it is already wrapped)
+        return func
+
     else:
+        # ---- This function is not yet wrapped by our validator. ----
         # create the validators
         for att_name, att_validators in validators.items():
             validators[att_name] = InputValidator(func, att_validators)
@@ -414,7 +420,7 @@ def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Calla
                              'decorators can not be applied on it')
         func.__validators__ = validators
 
-        # we used @functools.wraps(func), we now use 'decorate()' to have a wrapper that has the same signature
+        # we used @functools.wraps(), but we now use 'decorate()' to have a wrapper that has the same signature
         def validating_wrapper(func, *args, **kwargs):
             """ This is the wrapper that will be called everytime the function is called """
 
@@ -433,11 +439,12 @@ def decorate_with_validation(func: Callable, **validators: Dict[str, Union[Calla
 def _assert_input_is_valid(input_value: Any, validator: InputValidator,
                            validated_func: Callable, input_name: str):
     """
-    Called for each function input before executing the function. It simply delegates to the validator.
-    The signature of this function is hardcoded in `apply_on_each_func_args` and should not be changed.
+    Called by the `validating_wrapper` in the first step (a) `apply_on_each_func_args` for each function input before
+    executing the function. It simply delegates to the validator. The signature of this function is hardcoded to
+    correspond to `apply_on_each_func_args`'s behaviour and should therefore not be changed.
     
     :param input_value: the value to validate
-    :param validator_func: the validator function that will be applied on input_value_to_validate
+    :param validator: the validator function that will be applied on input_value_to_validate
     :param validated_func: the method for which this validation is performed. This is used just for errors
     :param input_name: the name of the function input that is being validated
     :return: Nothing

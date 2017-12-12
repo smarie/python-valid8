@@ -16,11 +16,22 @@ def test_index_enforce_mini_lambda():
 
     # Imports - for value validation
     from mini_lambda import s, x, Len
-    from valid8 import validate
+    from valid8 import validate_arg, is_multiple_of, Failure
+
+    # Example of unique error type for easier handling at app-level
+    class EmptyNameString(Failure):
+        help_msg = 'Name should be a non-empty string'
+
+    class SurfaceOutOfRange(Failure):
+        help_msg = 'Surface should be comprised between 0 and 10000 m²'
+
+    class SurfaceNotMultipleOf100(Failure):
+        help_msg = 'Surface should be a multiple of 100'
 
     @runtime_validation
-    @validate(name=Len(s) > 0,
-              surface=x >= 0)
+    @validate_arg('name',    (Len(s) > 0,              EmptyNameString))
+    @validate_arg('surface', [((x >= 0) & (x < 10000), SurfaceOutOfRange),
+                              (is_multiple_of(100),    SurfaceNotMultipleOf100)])
     def build_house(name: str,
                     surface: Real,
                     nb_floors: Integral = None,
@@ -28,18 +39,21 @@ def test_index_enforce_mini_lambda():
         print('Building house...')
         print('DONE !')
 
-    build_house('test', 12, 2)  # validation OK
+    build_house('test', 100, 2)  # validation OK
 
     with pytest.raises(RuntimeTypeError):
-        build_house('test', 12, 2.2)  # Type: @runtime_validation raises a InputTypeError
+        build_house('test', 100, 2.2)  # Type: @runtime_validation raises a InputTypeError
 
-    build_house('test', 12, None)  # Declared 'Optional' with PEP484, no error
+    build_house('test', 100, None)  # Declared 'Optional' with PEP484, no error
 
-    with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a Failure
+    with pytest.raises(InputValidationError):
+        build_house('', 12, 2)  # Value: @validate raises a EmptyNameString
 
-    with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value: @validate raises a Failure
+    with pytest.raises(InputValidationError):
+        build_house('test', -1, 2)  # Value: @validate raises a SurfaceOutOfRange
+
+    with pytest.raises(InputValidationError):
+        build_house('test', -1, 2)  # Value: @validate raises a SurfaceNotMultipleOf100
 
 
 def test_index_enforce_old_style():
@@ -72,10 +86,10 @@ def test_index_enforce_old_style():
     build_house('test', 12, None)  # Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a Failure
+        build_house('test', -1, 2)  # Value: @validate raises a BasicFailure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value: @validate raises a Failure
+        build_house('', 12, 2)  # Value: @validate raises a BasicFailure
 
 
 @pytest.mark.skip(reason="waiting for the next version of pytypes")
@@ -108,10 +122,10 @@ def test_index_pytypes():
     build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate raises a Failure
+        build_house('test', -1, 2)  # Value validation: @validate raises a BasicFailure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate raises a Failure
+        build_house('', 12, 2)  # Value validation: @validate raises a BasicFailure
 
 
 def test_tutorial():
@@ -149,7 +163,7 @@ def test_tutorial():
         assert str(e) == "Error validating [age=152]. " \
                          "Root validator [and(isfinite, between_0_and_150)] raised [AtLeastOneFailed: " \
                          "At least one validator failed validation for value [152]. Successes: ['isfinite'] / " \
-                         "Failures: {'between_0_and_150': '[Failure] between: 0 <= x <= 150 does not hold for x=152'} ]"
+                         "Failures: {'between_0_and_150': '[BasicFailure] between: 0 <= x <= 150 does not hold for x=152'} ]"
 
     # v3: age is an integer
     # https://stackoverflow.com/questions/3501382/checking-whether-a-variable-is-an-integer-or-not
@@ -336,7 +350,7 @@ def test_usage_validators():
     try:
         validate_is_greater_than_1(val=0.2)
     except ValidationError as e:
-        assert str(e) == "Error validating [val=0.2]. Root validator [gt_1] raised [Failure: x is not greater than 1, x=0.2]"
+        assert str(e) == "Error validating [val=0.2]. Root validator [gt_1] raised [BasicFailure: x is not greater than 1, x=0.2]"
     validate_is_greater_than_2(val=2)
     try:
         validate_is_greater_than_2(val=0.2)
@@ -396,7 +410,7 @@ def create_base_functions():
 
 
 def create_base_functions_2():
-    from valid8 import Failure
+    from valid8 import BasicFailure
 
     # (recommended) raising an exception
     def gt_0(x):
@@ -404,7 +418,7 @@ def create_base_functions_2():
             raise ValueError('x is not greater than 0, x={}'.format(x))
     def gt_1(x):
         if x < 1:
-            raise Failure('x is not greater than 1, x={}'.format(x))
+            raise BasicFailure('x is not greater than 1, x={}'.format(x))
 
     # (not recommended) relying on assert, only valid in 'debug' mode
     def gt_2(x):
@@ -438,7 +452,7 @@ def test_usage_validate_annotation():
 def test_usage_custom_validators():
     """ """
 
-    from valid8 import validate, ValidationError, Failure
+    from valid8 import validate, ValidationError, BasicFailure
 
     def is_mod_3(x):
         """ A simple validator with no parameters """
@@ -457,7 +471,7 @@ def test_usage_custom_validators():
         if x >= 1:
             return True
         else:
-            raise Failure('x >= 1 does not hold for x={}'.format(x))
+            raise BasicFailure('x >= 1 does not hold for x={}'.format(x))
 
     def gt_assert2(x):
         """(not recommended) relying on assert, only valid in 'debug' mode"""
@@ -471,10 +485,10 @@ def test_usage_custom_validators():
     # -- check that the validation works
     myfunc(21, 15)  # ok
     with pytest.raises(ValidationError):
-        myfunc(4, 21)  # inner Failure: a is not a multiple of 3
+        myfunc(4, 21)  # inner BasicFailure: a is not a multiple of 3
     with pytest.raises(ValidationError):
-        myfunc(15, 1)  # inner Failure: b is not a multiple of 5
+        myfunc(15, 1)  # inner BasicFailure: b is not a multiple of 5
     with pytest.raises(ValidationError):
         myfunc(1, 0)  # inner AssertionError: a is not >= 2
     with pytest.raises(ValidationError):
-        myfunc(0, 0)  # inner Failure: a is not >= 1
+        myfunc(0, 0)  # inner BasicFailure: a is not >= 1

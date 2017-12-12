@@ -2,65 +2,54 @@ from typing import Tuple
 
 import pytest
 
-from valid8 import validate, ValidationError, on_each_, is_even, lt, on_all_, is_subset, is_superset, is_in
-
-# TODO add tests without the @validate wrapping, catching raw Failure, not ValidationError
-
-
-def test_validate_is_in():
-    """ Test for the subset and superset validators """
-
-    @validate(a=is_in({'+', '-'}))
-    def myfunc(a):
-        print('hello')
-
-    # -- check that the validation works
-    myfunc('+')
-    with pytest.raises(ValidationError):
-        myfunc('*')
+from mini_lambda import make_lambda_friendly_method, _, x
+from valid8 import validate, ValidationError, on_each_, is_even, lt, on_all_, is_subset, is_superset, is_in, BasicFailure
 
 
-def test_validate_subset_superset():
-    """ Test for the subset and superset validators """
+def test_is_in():
+    """ Checks that is_in works """
 
-    @validate(a=is_subset({'+', '-'}), b=is_superset({'+', '-'}),
-              c=[is_subset({'+', '-'}), is_superset({'+', '-'})])
-    def myfunc(a, b, c):
-        print('hello')
-
-    # -- check that the validation works
-    myfunc({'+'},{'+', '-', '*'}, {'+', '-'})
-
-    with pytest.raises(ValidationError):
-        myfunc({'+', '-', '*'}, None, None)
-
-    with pytest.raises(ValidationError):
-        myfunc(None, {'+'}, None)
-
-    with pytest.raises(ValidationError):
-        myfunc(None, None, {'+', '-', '*'})
-
-    with pytest.raises(ValidationError):
-        myfunc(None, None, {'+'})
+    is_in({'+', '-'})('+')
+    with pytest.raises(BasicFailure):
+        is_in({'+', '-'})('*')
 
 
-def test_validate_on_all():
-    @validate(a=on_all_(is_even, lt(0)))
-    def myfunc(a: Tuple):
-        print('hello')
+def test_is_subset_is_superset():
+    """ Checks that is_subset and is_superset work """
 
-    myfunc((0, -10, -2))
+    a = is_subset({'+', '-'})
+    a({'+'})
+    with pytest.raises(BasicFailure):
+        a({'+', '-', '*'})
 
-    with pytest.raises(ValidationError):
-        myfunc((0, -10, -1))
+    b = is_superset({'+', '-'})
+    b({'+', '-', '*'})
+    with pytest.raises(BasicFailure):
+        b({'+'})
+
+    Is_subset = make_lambda_friendly_method(is_subset)
+    Is_superset = make_lambda_friendly_method(is_superset)
+    c = _(Is_subset({'+', '-'})(x) & Is_superset({'+', '-'})(x))
+    c({'+', '-'})
+    with pytest.raises(BasicFailure):
+        c({'+', '-', '*'})
+    with pytest.raises(BasicFailure):
+        c({'+'})
 
 
-def test_validate_on_each():
-    @validate(a=on_each_(is_even, lt(0)))
-    def myfunc(a: Tuple[int, int]):
-        print('hello')
+def test_on_all():
+    """ Checks that on_all works """
 
-    myfunc((0, -1))
+    a = on_all_(is_even, lt(0))
+    a((0, -10, -2))
+    with pytest.raises(BasicFailure):
+        a((0, -10, -1))
 
-    with pytest.raises(ValidationError):
-        myfunc((0, 2))
+
+def test_on_each():
+    """ Checks that on_each works """
+
+    a = on_each_(is_even, lt(0))
+    a((0, -1))
+    with pytest.raises(BasicFailure):
+        a((0, 2))
