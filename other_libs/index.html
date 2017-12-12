@@ -1,0 +1,637 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
+    
+    
+      
+        <title>Other validation libs - valid8</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="valid8" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                valid8
+              </span>
+              <span class="md-header-nav__topic">
+                Other validation libs
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </span>
+    valid8
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../why_validation/" title="Why validation" class="md-nav__link">
+      Why validation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../usage/" title="Usage details" class="md-nav__link">
+      Usage details
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../validation_fun/" title="Built-in validation functions" class="md-nav__link">
+      Built-in validation functions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Other validation libs
+      </label>
+    
+    <a href="./" title="Other validation libs" class="md-nav__link md-nav__link--active">
+      Other validation libs
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
+    PEP484 type checkers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typevalue-validation" title="Type+Value validation" class="md-nav__link">
+    Type+Value validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#value-validation" title="Value validation" class="md-nav__link">
+    Value validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mostly-type-validation" title="Mostly Type validation" class="md-nav__link">
+    Mostly Type validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-based-validation" title="Schema-based validation" class="md-nav__link">
+    Schema-based validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
+    Validation of data 'at the entry point'
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-forms" title="from Forms" class="md-nav__link">
+    from Forms
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-cli" title="from CLI" class="md-nav__link">
+    from CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Domain-specific validators / validators for specific data types / validators without framework" class="md-nav__link">
+    Domain-specific validators / validators for specific data types / validators without framework
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-resources-concerning-validation-frameworks" title="Other resources concerning validation frameworks:" class="md-nav__link">
+    Other resources concerning validation frameworks:
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../changelog/" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
+    PEP484 type checkers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typevalue-validation" title="Type+Value validation" class="md-nav__link">
+    Type+Value validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#value-validation" title="Value validation" class="md-nav__link">
+    Value validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mostly-type-validation" title="Mostly Type validation" class="md-nav__link">
+    Mostly Type validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-based-validation" title="Schema-based validation" class="md-nav__link">
+    Schema-based validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
+    Validation of data 'at the entry point'
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-forms" title="from Forms" class="md-nav__link">
+    from Forms
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-cli" title="from CLI" class="md-nav__link">
+    from CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Domain-specific validators / validators for specific data types / validators without framework" class="md-nav__link">
+    Domain-specific validators / validators for specific data types / validators without framework
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-resources-concerning-validation-frameworks" title="Other resources concerning validation frameworks:" class="md-nav__link">
+    Other resources concerning validation frameworks:
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/other_libs.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="other-validation-libraries">Other Validation libraries<a class="headerlink" href="#other-validation-libraries" title="Permanent link">&para;</a></h1>
+<p>Many validation libraries are available on <a href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=valid&amp;submit=search">PyPI</a> already. The following list is by far not exhaustive, but gives an overview. Do not hesitate to contribute to this list with a pull request! For each library, the date provided is that of the last commit at the time of writing (10/2017). </p>
+<p><em>Note to the authors: due to the large number of libraries below there <strong>must</strong> have been errors in my analysis. Please let me know if I wrote something wrong, the intent is really not to criticize your library but rather to better understand the various mechanisms available out there for reuse.</em></p>
+<h2 id="pep484-type-checkers">PEP484 type checkers<a class="headerlink" href="#pep484-type-checkers" title="Permanent link">&para;</a></h2>
+<p>The following libraries use your PEP484 type and optionality/mandatoryness annotations to check the function inputs and sometimes outputs.</p>
+<ul>
+<li><a href="https://github.com/RussBaz/enforce">enforce</a></li>
+<li><a href="https://github.com/Stewori/pytypes">pytypes</a></li>
+<li><a href="https://github.com/agronholm/typeguard">typeguard</a></li>
+<li><a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a></li>
+</ul>
+<h2 id="typevalue-validation">Type+Value validation<a class="headerlink" href="#typevalue-validation" title="Permanent link">&para;</a></h2>
+<p>The following frameworks provide both type and value validation, and for most of them it would be quite irrelevant to separate value validation from type validation.</p>
+<ul>
+<li><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a>: (2017) Annotation. Parsing-based (the contract is a string when it comes to value validation). Ability to disable through a function call. Validators are functions or specific predefined grammar elements. Logical operations on validators are supported.</li>
+<li><a href="https://github.com/hhuuggoo/thedoctor">thedoctor</a>: (2015) Annotation. Ability to disable with an environment variable. Dictionary validation. Helper <code>true</code> to support lambdas while throwing validation exceptions. A few validators. Validators are functions. No logical operations on validators.</li>
+<li><a href="https://github.com/AkiraKito/fivalid">fivalid</a> :(2012) number, iterable, basic min/max, many text validators : free text with forbidden sentences, regexp, split on parts, All/Any/Not validator logic, a validator is an object</li>
+<li><a href="http://www.voidspace.org.uk/python/validate.html">validate</a>: (2009) quite old, a few basic validators (str/list length, int min/max values, ip_addr) mixed with type validation. Validators are functions.</li>
+</ul>
+<h2 id="value-validation">Value validation<a class="headerlink" href="#value-validation" title="Permanent link">&para;</a></h2>
+<p>I recently found these two elegant frameworks:
+ * <a href="https://expects.readthedocs.io/en/stable/">expects</a>
+ * <a href="http://grappa.readthedocs.io/en/latest/">grappa</a></p>
+<h2 id="mostly-type-validation">Mostly Type validation<a class="headerlink" href="#mostly-type-validation" title="Permanent link">&para;</a></h2>
+<p>These packages seem to mostly have been developed for type validation, not much for value validation:</p>
+<ul>
+<li><a href="https://github.com/gfyoung/py-validate">py-validate</a>: (2017) a few non-type validators even, odd, number. Validators ('shortcuts') are functions.</li>
+<li><a href="http://uzumaxy.github.io/pyvalid/">pyvalid</a>: (2017) mostly type validation except for value equality or size. Object fields validation. A validator is an object, collection of smaller checkers (StringValidator has min_len checker, max_len_checker, etc.)</li>
+</ul>
+<h2 id="schema-based-validation">Schema-based validation<a class="headerlink" href="#schema-based-validation" title="Permanent link">&para;</a></h2>
+<p>These libraries check that data is valid with respect to a <strong>schema</strong>. </p>
+<ul>
+<li><a href="https://github.com/keleshev/schema">schema</a> (2017) </li>
+<li><a href="https://github.com/devdoomari/pyvalidator">pyvalidator</a> (2015) a modified fork of <a href="https://github.com/keleshev/schema">schema</a></li>
+<li><a href="https://github.com/guyskk/validr">validr</a> (2017) "10X faster than jsonschema, 40X faster than schematics". Based on <a href="https://github.com/guyskk/validr/blob/master/Isomorph-JSON-Schema.md">Isomorph-JSON-Schema</a></li>
+<li><a href="https://docs.pylonsproject.org/projects/colander/en/latest/">colander</a> (2017). A framework for serialization+deserialization including schema validation. With validators for strings, mappings, and lists</li>
+<li><a href="https://github.com/cwacek/python-jsonschema-objects">python-jsonschema-objects</a> (2017). Automatic Python binding generation from JSON Schemas </li>
+<li><a href="http://clivern.github.io/PyValitron/">PyValitron</a> (2016) separation of the concepts of validators / sanitizers (for text: lower case, strip, etc.). Quite a number of validators.</li>
+<li><a href="https://github.com/wilhelm-murdoch/validator">validator</a> (2014) A few built-in validators. validator are objects (Rule)</li>
+</ul>
+<h2 id="validation-of-data-at-the-entry-point">Validation of data 'at the entry point'<a class="headerlink" href="#validation-of-data-at-the-entry-point" title="Permanent link">&para;</a></h2>
+<h3 id="from-forms">from Forms<a class="headerlink" href="#from-forms" title="Permanent link">&para;</a></h3>
+<p>Data from forms sometimes requires validation to follow some kind of process with several steps, where a validation context (permissions) may need to be maintained.</p>
+<ul>
+<li><a href="http://www.formencode.org/en/latest/">formencode</a>: (2017) a complete framework to validate and convert data entered in forms. Includes a number of domain-specific validators</li>
+<li><a href="https://github.com/doncatnip/kanone">kanone</a> (2013) validation and conversion of data entered in forms. Notion of context. validator logic + composition (to reuse while parametrizing)</li>
+<li><a href="https://docs.djangoproject.com/search/?q=forms">django forms</a>: (2017) provides a number of built-in Field classes</li>
+</ul>
+<h3 id="from-cli">from CLI<a class="headerlink" href="#from-cli" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="http://click.pocoo.org">click</a> (2017) integrates a number of built-in validators for arguments and options (file paths, etc.)</li>
+<li><a href="https://github.com/docopt/docopt/commits/master">docopt</a> (2016) delegates to <a href="https://github.com/keleshev/schema">schema</a> for validation</li>
+</ul>
+<h2 id="domain-specific-validators-validators-for-specific-data-types-validators-without-framework">Domain-specific validators / validators for specific data types / validators without framework<a class="headerlink" href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Permanent link">&para;</a></h2>
+<p>These packages provide validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with <code>valid8</code>.</p>
+<ul>
+<li><a href="http://pandas-validation.readthedocs.io/en/latest/">pandas-validation</a>: (2017) pandas dataframes</li>
+<li><a href="https://github.com/c-data/pandas-validator">pandas-validator</a>: (2017) pandas dataframes</li>
+<li><a href="https://validators.readthedocs.io/en/latest/">validators</a>: (2017) email, iban, ip, slug, truthy, url, uuid, finnish business id...</li>
+<li><a href="https://github.com/ish/validatish">validatish</a> (2011): a few validation functions for integers, strings, required/optional, etc.</li>
+<li><a href="https://github.com/daviddrysdale/python-phonenumbers">python-phonenumbers</a> (2017): guess what?</li>
+<li><a href="https://pypi.python.org/pypi/validate-email-address">validate-email-address</a> (2016): guess what ? It is a fork of <a href="https://github.com/syrusakbary/validate_email/commits/master">validate_email</a> (2015).</li>
+<li>...</li>
+</ul>
+<h2 id="other-resources-concerning-validation-frameworks">Other resources concerning validation frameworks:<a class="headerlink" href="#other-resources-concerning-validation-frameworks" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A <a href="https://opensourcehacker.com/2011/07/07/generic-python-validation-frameworks/">discussion</a> about the various frameworks out there</li>
+<li>The <a href="http://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/package-summary.html#package_description">apache commons lib for validation</a></li>
+</ul>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../validation_fun/" title="Built-in validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Built-in validation functions
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../changelog/" title="Changelog" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Changelog
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
+      
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

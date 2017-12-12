@@ -28,15 +28,15 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
-        <title>Validators list - valid8</title>
+        <title>Built-in validation functions - valid8</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.41c6761c.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
@@ -88,7 +88,7 @@
                 valid8
               </span>
               <span class="md-header-nav__topic">
-                Validators list
+                Built-in validation functions
               </span>
             
           
@@ -246,11 +246,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Validators list
+        Built-in validation functions
       </label>
     
-    <a href="./" title="Validators list" class="md-nav__link md-nav__link--active">
-      Validators list
+    <a href="./" title="Built-in validation functions" class="md-nav__link md-nav__link--active">
+      Built-in validation functions
     </a>
     
       
@@ -360,8 +360,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#is_modref" title="is_mod(ref)" class="md-nav__link">
-    is_mod(ref)
+  <a href="#is_multiple_ofref" title="is_multiple_of(ref)" class="md-nav__link">
+    is_multiple_of(ref)
   </a>
   
 </li>
@@ -458,6 +458,18 @@
   
 </nav>
     
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../other_libs/" title="Other validation libs" class="md-nav__link">
+      Other validation libs
+    </a>
   </li>
 
     
@@ -590,8 +602,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#is_modref" title="is_mod(ref)" class="md-nav__link">
-    is_mod(ref)
+  <a href="#is_multiple_ofref" title="is_multiple_of(ref)" class="md-nav__link">
+    is_multiple_of(ref)
   </a>
   
 </li>
@@ -696,10 +708,10 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validators.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_fun.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Validators list</h1>
+                  <h1>Built-in validation functions</h1>
                 
                 <h2 id="validators-list">Validators list<a class="headerlink" href="#validators-list" title="Permanent link">&para;</a></h2>
 <p>Several validators are bundled in the package to be used with <code>@validate</code>. Don't hesitate to propose new ones !</p>
@@ -738,7 +750,7 @@
 <p>Validates that x is even (<code>x % 2 == 0</code>)</p>
 <h4 id="is_odd">is_odd<a class="headerlink" href="#is_odd" title="Permanent link">&para;</a></h4>
 <p>Validates that x is odd (<code>x % 2 != 0</code>)</p>
-<h4 id="is_modref">is_mod(ref)<a class="headerlink" href="#is_modref" title="Permanent link">&para;</a></h4>
+<h4 id="is_multiple_ofref">is_multiple_of(ref)<a class="headerlink" href="#is_multiple_ofref" title="Permanent link">&para;</a></h4>
 <p>Validates that x is a multiple of the reference (<code>x % ref == 0</code>)</p>
 <h3 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h3>
 <h4 id="minlenmin_length-strict-bool-false">minlen(min_length, strict: bool = False)<a class="headerlink" href="#minlenmin_length-strict-bool-false" title="Permanent link">&para;</a></h4>
@@ -794,13 +806,13 @@
           </a>
         
         
-          <a href="../changelog/" title="Changelog" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../other_libs/" title="Other validation libs" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Changelog
+                Other validation libs
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

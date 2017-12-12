@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,7 +36,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.41c6761c.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
@@ -270,8 +270,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cli-schema-and-forms" title="Cli, Schema and Forms" class="md-nav__link">
-    Cli, Schema and Forms
+  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
+    Note on entry-point validation: Cli, Schema and Forms
   </a>
   
 </li>
@@ -303,8 +303,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../validators/" title="Validators list" class="md-nav__link">
-      Validators list
+    <a href="../validation_fun/" title="Built-in validation functions" class="md-nav__link">
+      Built-in validation functions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../other_libs/" title="Other validation libs" class="md-nav__link">
+      Other validation libs
     </a>
   </li>
 
@@ -370,8 +382,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cli-schema-and-forms" title="Cli, Schema and Forms" class="md-nav__link">
-    Cli, Schema and Forms
+  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
+    Note on entry-point validation: Cli, Schema and Forms
   </a>
   
 </li>
@@ -418,7 +430,7 @@
 
 
 <ul>
-<li>'traditional' way:</li>
+<li>'traditional' way. In this case note that if the <code>&lt;validate&gt;</code> function itself may raise Exceptions, you can end up with two kind of exceptions raised.</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="o">&lt;</span><span class="n">validate</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -430,10 +442,8 @@
 
 
 <ul>
-<li>'assert' way. Note that this has a special behaviour since the statement won't be executed if the code is executed in optimized mode, as explained in the <a href="https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement">documentation</a>. To quote <a href="https://mail.python.org/pipermail/python-list/2013-November/660568.html">this source</a> <em>"Many people use asserts as a quick and easy way to raise an exception if 
-an argument is given the wrong value. But this is wrong, dangerously wrong, for two reasons. The first is that AssertionError is usually the wrong error to give when testing function arguments. But, and more dangerously, there's a twist with assert: it can be 
-compiled away and never executed, if you run Python with the -O or -OO 
-optimization flags [...]"</em></li>
+<li>'assert' way. Note that this has a special behaviour since the statement won't be executed if the code is executed in optimized mode, as explained in the <a href="https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement">documentation</a>. To quote <a href="https://mail.python.org/pipermail/python-list/2013-November/660568.html">this source</a> <em>"Many people use asserts as a quick and easy way to raise an exception if an argument is given the wrong value. But this is wrong, dangerously wrong, for two reasons. The first is that AssertionError is usually the wrong error to give when testing function arguments. But, and more dangerously, there's a twist with assert: it can be compiled away and never executed, if you run Python with the -O or -OO 
+optimization flags [...]"</em>. In addition here again, note that if the <code>&lt;validate&gt;</code> function itself may raise Exceptions, you can end up with two kind of exceptions raised. </li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">function_with_assert</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
@@ -450,20 +460,21 @@ optimization flags [...]"</em></li>
 <p>The purpose may vary, but it is often one of these (please feel free to suggest other benefits here):</p>
 <ul>
 <li>let users get <strong>explicit error messages</strong> when they did not input correct data (in the function, or indirectly in web forms, web service inputs, cli, etc.)</li>
-<li><strong>defensive programming</strong>: do not let the code get an opportunity to fall into a harder-to-detect bug.</li>
-<li><strong>avoid performing a computationally expensive task</strong> if it is to discover at the very end of the execution that one of the inputs was incorrect</li>
+<li><strong>defensive programming</strong>: do not let the code get an opportunity to fall into a harder-to-detect bug. This is also called <a href="https://en.wikipedia.org/wiki/Offensive_programming">offensive programming</a>.</li>
+<li><strong>avoid performing a computationally expensive task</strong> if it is to discover at the very end of the execution that one of the inputs was a known incorrect situation.</li>
 </ul>
 <h2 id="consistency">Consistency<a class="headerlink" href="#consistency" title="Permanent link">&para;</a></h2>
 <p>So you implement validation in your code. However there are many choices left in the implementation, that make your code rapidly lack consistency, except for highly skilled coders:</p>
 <ul>
 <li>validation <strong>exception types</strong> are not standard across developers and even inside a code base. You <em>should</em> use <a href="https://docs.python.org/3/library/exceptions.html#TypeError"><code>TypeError</code></a> for type validation and <a href="https://docs.python.org/3/library/exceptions.html#ValueError"><code>ValueError</code></a> for value validation, or any subclass of those, but when under pressure for delivery, we all end up from time to time raising plain old <code>Exception</code>... </li>
-<li>validation exceptions can not easily be associated with <strong>error codes</strong> when exchanged with the rest of the application (web front-end, etc.). This makes internationalization of errors difficult</li>
-<li>even in plain english, validation <strong>messages</strong> are not always user-friendly: the user of your function may struggle some time to understand why the value he entered was not correct.</li>
+<li>validation exceptions can not easily be associated with <strong>error codes</strong> when exchanged with the rest of the application (web front-end, etc.). This makes <strong>internationalization (i18n)</strong> of errors difficult. Note that the best practice in python to do that would be to create one exception class per type of error, so that an exception class = an error code.</li>
+<li>even in plain english, validation <strong>messages</strong> are not always user-friendly: the user of your function may struggle some time to understand why the value he entered was not correct. Of course if you have some error code handling at the top of your application this is ok since you probably re-write the appropriate internationalized message before sending it back to the user.</li>
 </ul>
 <h2 id="reuse">Reuse<a class="headerlink" href="#reuse" title="Permanent link">&para;</a></h2>
 <p>At some point you want to reuse validation functions. For example to validate that a dataframe has certain column names, or that a text string follows a certain regex.</p>
-<h2 id="cli-schema-and-forms">Cli, Schema and Forms<a class="headerlink" href="#cli-schema-and-forms" title="Permanent link">&para;</a></h2>
-<p>One validation strategy if you are sure that nobody will access your code directly (e.g. you do not share it as a library), is to perform value validation directly at the entry point, whether it is a command line interface, a web form or a soap/rest webservice in json or xml. However as soon as you wish to also share your code as a library, you end up needing to maintain two validation frameworks: one for the entry points, and one for the library. There is no easy solution to solve this problem:</p>
+<h2 id="note-on-entry-point-validation-cli-schema-and-forms">Note on entry-point validation: Cli, Schema and Forms<a class="headerlink" href="#note-on-entry-point-validation-cli-schema-and-forms" title="Permanent link">&para;</a></h2>
+<p>If you are sure that nobody will access your code directly (e.g. you do not share it as a library), you may wish to only perform value validation directly at the entry point, whether it is a command line interface, a web form or a soap/rest webservice in json or xml. This is perfectly fine and libraries providing the entry-point often come with validators bundled inside, such as in <a href="http://click.pocoo.org">click</a> or <a href="https://docs.djangoproject.com/search/?q=forms">django</a>. See <a href="../other_libs#validation-of-data-at-the-entry-point">here</a>.</p>
+<p>However as soon as you wish to also share your code as a library, you end up needing to maintain two validation frameworks: one for the entry points, and one for the library. There is no easy solution to solve this problem:</p>
 <ul>
 <li>you may wish to only perform validation in you core library functions, or core library's API. This can be enhanced by the creation of 'validated objects' for example using <a href="https://smarie.github.io/python-autoclass/">autoclass</a>, so that you do not re-validate in every function the object contents once it has been created</li>
 <li>you may need to still perform entry point-validation, may it only for the reason that you share a schema as a contract with your customers (through <a href="https://swagger.io/">swagger</a> or equivalent).</li>

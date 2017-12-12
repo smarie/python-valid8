@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="./assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,7 +36,7 @@
       
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application.41c6761c.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application.7a4cdee3.css">
       
     
     
@@ -244,8 +244,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-usage-in-combination-with-pep484-based-type-validation" title="Example usage in combination with PEP484-based type validation" class="md-nav__link">
-    Example usage in combination with PEP484-based type validation
+  <a href="#example-usage-in-combination-with-type-validation" title="Example usage in combination with type validation" class="md-nav__link">
+    Example usage in combination with type validation
   </a>
   
 </li>
@@ -269,86 +269,11 @@
     Other Validation libraries
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
-    PEP484 type checkers
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#typevalue-validation" title="Type+Value validation" class="md-nav__link">
-    Type+Value validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mostly-type-validation" title="Mostly Type validation" class="md-nav__link">
-    Mostly Type validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#schema-based-validation" title="Schema-based validation" class="md-nav__link">
-    Schema-based validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
-    Validation of data 'at the entry point'
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#from-forms" title="from Forms" class="md-nav__link">
-    from Forms
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-cli" title="from CLI" class="md-nav__link">
-    from CLI
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Domain-specific validators / validators for specific data types / validators without framework" class="md-nav__link">
-    Domain-specific validators / validators for specific data types / validators without framework
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#other-resources-concerning-validation-frameworks" title="Other resources concerning validation frameworks:" class="md-nav__link">
-    Other resources concerning validation frameworks:
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also-other" title="See Also - Other" class="md-nav__link">
-    See Also - Other
+  <a href="#see-also" title="See Also" class="md-nav__link">
+    See Also
   </a>
   
 </li>
@@ -399,8 +324,20 @@
 
 
   <li class="md-nav__item">
-    <a href="validators/" title="Validators list" class="md-nav__link">
-      Validators list
+    <a href="validation_fun/" title="Built-in validation functions" class="md-nav__link">
+      Built-in validation functions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="other_libs/" title="Other validation libs" class="md-nav__link">
+      Other validation libs
     </a>
   </li>
 
@@ -452,8 +389,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-usage-in-combination-with-pep484-based-type-validation" title="Example usage in combination with PEP484-based type validation" class="md-nav__link">
-    Example usage in combination with PEP484-based type validation
+  <a href="#example-usage-in-combination-with-type-validation" title="Example usage in combination with type validation" class="md-nav__link">
+    Example usage in combination with type validation
   </a>
   
 </li>
@@ -477,86 +414,11 @@
     Other Validation libraries
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
-    PEP484 type checkers
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#typevalue-validation" title="Type+Value validation" class="md-nav__link">
-    Type+Value validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mostly-type-validation" title="Mostly Type validation" class="md-nav__link">
-    Mostly Type validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#schema-based-validation" title="Schema-based validation" class="md-nav__link">
-    Schema-based validation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
-    Validation of data 'at the entry point'
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#from-forms" title="from Forms" class="md-nav__link">
-    from Forms
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-cli" title="from CLI" class="md-nav__link">
-    from CLI
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Domain-specific validators / validators for specific data types / validators without framework" class="md-nav__link">
-    Domain-specific validators / validators for specific data types / validators without framework
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#other-resources-concerning-validation-frameworks" title="Other resources concerning validation frameworks:" class="md-nav__link">
-    Other resources concerning validation frameworks:
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also-other" title="See Also - Other" class="md-nav__link">
-    See Also - Other
+  <a href="#see-also" title="See Also" class="md-nav__link">
+    See Also
   </a>
   
 </li>
@@ -587,75 +449,94 @@
                 
                 <h1 id="python-validate-valid8">python-validate (valid8)<a class="headerlink" href="#python-validate-valid8" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-valid8"><img alt="Build Status" src="https://travis-ci.org/smarie/python-valid8.svg?branch=master" /></a> <a href="https://smarie.github.io/python-valid8/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-valid8/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-valid8"><img alt="codecov" src="https://codecov.io/gh/smarie/python-valid8/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-valid8/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/valid8/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-valid8-blue.svg" /></a></p>
-<p>As always unfortunately it starts with <em>"I could not find a validation library out there fitting my needs so I built my own"</em>. </p>
-<p>To be a little bit more precise, when it all started, I was just looking for a library providing a <code>@validate</code> annotation with a basic library of validators and some logic to associate them, so as to complete <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. The idea was to show that with <code>autoclass</code>, if you annotate the <code>__init__</code> constructor with <code>@validate</code>, then the validator would be automatically applied to the generated property setters. I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>. However none of them was really a good fit for <code>autoclass</code>, for diverse reasons:</p>
+<p><em>"valid8ing is not a crime" ;-)</em></p>
+<p>As always unfortunately it starts with <em>"I could not find a validation library out there fitting my needs so I built my own"</em>. Almost. To be a little bit more precise, when it all started, I was just looking for a library providing a <code>@validate</code> annotation with a basic library of validators and some logic to associate them, so as to complete <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. The idea was to show that with <code>autoclass</code>, if you annotate the <code>__init__</code> constructor with <code>@validate</code>, then the validator would be automatically applied to the generated property setters. I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>. However none of them was really a good fit for <code>autoclass</code>, for diverse reasons:</p>
 <ul>
 <li>only a few of them were available as decorators</li>
 <li>many of them were mixing type validation and value validation, which is not necessary anymore thanks to PEP484. This was making the <code>autoclass</code> examples more confusing</li>
 <li>only a few of them were providing a simple yet consistent and reusable framework to deal with validators, combine them, etc.</li>
 <li>and what's more important, none of them was really encouraging the community to collaborate by displaying a catalog of validators per data type, open to contributions.</li>
 </ul>
-<p>So I first created the <code>@validate</code> goodie in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. When the project became more mature, I decided to extract it and make it independent, so that maybe the community will find it interesting and will wish to collectively contribute to a catalog of validators.</p>
+<p>So I first created the <code>@validate</code> goodie in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. When the project became more mature, I decided to extract it and make it independent, so that maybe the community will find it interesting.</p>
 <h2 id="why-would-i-need-a-validation-library">Why would I need a validation library ?<a class="headerlink" href="#why-would-i-need-a-validation-library" title="Permanent link">&para;</a></h2>
-<p>Good question, thanks for asking. Having a common understanding of this is key, otherwise this library will miss its target. We try to dig the topic <a href="./why_validation">here</a></p>
+<p>Defensive programming, user-friendly error messages, app-wide consistency of error types, i18n... We try to dig the topic <a href="./why_validation">here</a></p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install valid8
 </pre></div>
 
 
 <p>Since <code>valid8</code> solely focuses on <em>value</em> validation, it is recommended to also install a PEP484 <em>type</em> checker such as <a href="https://github.com/RussBaz/enforce">enforce</a> of <a href="https://github.com/Stewori/pytypes">pytypes</a>.</p>
-<p>Finally if you wish to create highly compact object classes with field type+value validation, have a look at <a href="https://smarie.github.io/python-autoclass/">autoclass</a> which is where this project actually comes from.</p>
-<h2 id="example-usage-in-combination-with-pep484-based-type-validation">Example usage in combination with PEP484-based type validation<a class="headerlink" href="#example-usage-in-combination-with-pep484-based-type-validation" title="Permanent link">&para;</a></h2>
-<p>The following snippet shows a <code>build_house</code> function with four inputs. </p>
+<p>In addition, if you wish to create highly compact object classes with field type+value validation, have a look at <a href="https://smarie.github.io/python-autoclass/">autoclass</a> which is where this project actually comes from.</p>
+<h2 id="example-usage-in-combination-with-type-validation">Example usage in combination with type validation<a class="headerlink" href="#example-usage-in-combination-with-type-validation" title="Permanent link">&para;</a></h2>
+<p>The following snippet shows a <code>build_house</code> function with four inputs <code>name</code>, <code>surface</code>, <code>nb_floors</code>, and <code>with_windows</code>, where:</p>
 <ul>
-<li>Each input is validated against the expected type thanks to the PEP484 type checking library (<code>enforce</code> in this example)</li>
-<li>the <code>name</code> and <code>surface</code> attribute are further value-validated with <code>valid8</code> (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>).</li>
+<li>Each input is validated against the expected type thanks to the PEP484 type checking library (<a href="https://github.com/RussBaz/enforce">enforce</a> in this example)</li>
+<li>the <code>name</code> and <code>surface</code> attribute are further value-validated with valid8 (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>), with the help of the <code>mini_lambda</code> syntax.</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="c1"># for type checking</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">Boolean</span>
+<div class="codehilite"><pre><span></span><span class="c1"># Imports - for type validation</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">Boolean</span>
 <span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
-<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># allow subclasses when validating types</span>
+<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># subclasses of required types are valid too</span>
 
-<span class="c1"># for value checking</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
+<span class="c1"># Imports - for value validation</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 
+<span class="c1"># Apply type+value validation to our function</span>
 <span class="nd">@runtime_validation</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">minlens</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-          <span class="n">surface</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="n">surface</span><span class="o">=</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                 <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
-                <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;you did it !&#39;</span><span class="p">)</span>
+                <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="n">with_</span><span class="o">=</span><span class="n">windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house...&#39;</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DONE !&#39;</span><span class="p">)</span>
 </pre></div>
 
 
 <p>We can test that validation works:</p>
 <div class="codehilite"><pre><span></span><span class="c1"># Test</span>
 <span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1"># validation OK</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">)</span>   <span class="c1"># Type validation: @typechecked raises a InputTypeError</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>  <span class="c1"># Mandatory/Optional validation: Declared &#39;Optional&#39; with PEP484, no error</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1"># Value validation: @validate raises a ValidationError</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>         <span class="c1"># Value validation: @validate raises a ValidationError</span>
+<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">)</span>   <span class="c1"># Type: @typechecked raises a InputTypeError</span>
+<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>  <span class="c1"># Declared &#39;Optional&#39; with PEP484, no error</span>
+<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1"># ValidationFailure</span>
+<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>         <span class="c1"># ValidationFailure</span>
 </pre></div>
 
 
-<p>Note that the <code>Real</code> and <code>Integral</code> types come from the <a href="https://docs.python.org/3.6/library/numbers.html"><code>numbers</code></a> built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. Unfortunately the boolean types are not supported by this module, so in this library we provide an additional <code>Boolean</code> class to complete the picture.</p>
-<p>Check the <a href="./usage/">Usage</a> page for more details about the framework, and <a href="https://smarie.github.io/python-valid8/validators/">the validators list page</a> for a complete list of validators available.</p>
+<p><strong>Remarks concerning type validation</strong> </p>
+<p>The handy <code>Real</code> and <code>Integral</code> abstract numeric types are provided in the <a href="https://docs.python.org/3.6/library/numbers.html"><code>numbers</code></a> built-in module. They provide an easy way to support both python primitives AND others, e.g. numpy primitives. Unfortunately the boolean types are not supported by this module, so in this library we provide an additional <code>Boolean</code> class supporting numpy, to complete the picture.</p>
+<p><strong>Remarks concerning value validation</strong></p>
+<p>In the above example, <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> is used to create the validation functions. This compact lambda syntax engine has actually been first designed as part of this project, and has now become an independent library. However it is not mandatory to use it as alternate options are supported - check the <a href="./usage/">Usage</a> page for more details.</p>
 <h2 id="valid8-design-goals"><code>valid8</code> Design goals<a class="headerlink" href="#valid8-design-goals" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Separation of concerns: we want to separate <em>value</em> validation from <em>type</em> validation. The library is compliant with the use of an additional PEP484-based type validation library such as enforce and pytypes. Optionality/Mandatoryness is the only feature available on both sides, as it is sometimes not intuitive to do with PEP484.</li>
-<li>Validation should be available as a decorator, but also <strong>TODO</strong> inline anywhere in the code</li>
-<li>The validation decorator should be compliant with <code>autoclass</code>, to enable automatic creation of validated property setters</li>
-<li>python-first, not schema-first. Maybe it will be useful to provide bridges with json/xml/etc binding libraries later on, but for now we focus on small, simple, argument value validation</li>
-<li>Validators should be functions, lambdas, or objects (through the <strong>call</strong>magic method)</li>
-<li><strong>TODO</strong> There should be a way to retrofit an existing validation function into a <code>valid8</code>-compliant validator</li>
-<li>We should provide a logic for composition and reuse of validators</li>
+<li><strong>Separate <em>value</em> validation from <em>type</em> validation</strong> (Separation of concerns). The library is compliant with the use of an additional PEP484-based type validation library such as enforce and pytypes. Optionality/Mandatoriness is the only feature available on both sides, as it is sometimes not intuitive to do with PEP484.</li>
+<li><strong>Provide validation as a function decorator</strong> (<code>@validate</code>), and also inline anywhere in the code (<code>assert_valid</code> and <code>is_valid</code>). This <em>de facto</em> creates two distinct concepts: <em>basic validation</em> (inline) and <em>validation of function inputs</em> (the annotation). </li>
+<li>
+<p><strong>python-first, not schema-first</strong>. Maybe it will be useful to provide bridges with json/xml/etc binding libraries later on, but for now we focus on small, simple, value validation</p>
+</li>
+<li>
+<p>TODO...</p>
+</li>
+<li>
+<p>Validators should be functions, lambdas, or callable objects (through the <code>__call__</code> magic method)</p>
+</li>
+<li><strong>Provide the possibility to separate evaluation from validation</strong> (Separation of concerns). Evaluation means taking an input and computing some results. Validation means checking if the result is a success, and throwing a user-friendly error message.</li>
+<li>There should be a way to retrofit an existing validation function into a <code>valid8</code>-compliant validator</li>
+<li>Provide a logic for composition and reuse of validators</li>
 <li>Enforce explicit validation errors even for lambdas (provide a helper method)</li>
-<li>Ability to disable validation with no overhead </li>
+<li>Ability to disable validation with little or no overhead</li>
+<li>Try to not reinvent new language elements - reuse as much as possible the many great built-in python language capabilities </li>
 <li>Most important than everything, provide an easy way to list the available validators while developing : through the doc but also through python package organization</li>
+<li>
+<p>The <code>@validate</code> function decorator should stay compliant with <code>autoclass</code>, to enable automatic creation of validated property setters</p>
+</li>
+<li>
+<p>Exceptions should contain details so as to be processed/translated/etc.</p>
+</li>
 </ul>
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
@@ -666,77 +547,14 @@
 <p>Many validators are provided out of the box to use with <code>@validate</code>: <code>gt</code>, <code>between</code>, <code>is_in</code>, <code>maxlen</code>... check them out in <a href="https://smarie.github.io/python-valid8/validators/">the validators list page</a>. But you can of course use your own, too.</p>
 </li>
 <li>
-<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>validate_decorate(func, **validators)</code></p>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>decorate_with_validation(func, **validators)</code></p>
 </li>
 </ul>
 <h2 id="other-validation-libraries">Other Validation libraries<a class="headerlink" href="#other-validation-libraries" title="Permanent link">&para;</a></h2>
-<p>Many validation libraries are available on <a href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=valid&amp;submit=search">PyPi</a> already. The following list is by far not exhaustive, but gives an overview. Do not hesitate to contribute to this list with a pull request! For each library, the date provided is that of the last commit at the time of writing (10/2017). </p>
-<p><em>Note to the authors: due to the large number of libraries below there <strong>must</strong> have been errors in my analysis. Please let me know if I wrote something wrong, the intent is really not to criticize your library but rather to better understand the various mechanisms available out there for reuse.</em></p>
-<h3 id="pep484-type-checkers">PEP484 type checkers<a class="headerlink" href="#pep484-type-checkers" title="Permanent link">&para;</a></h3>
-<p>The following libraries use your PEP484 type and optionality/mandatoryness annotations to check the function inputs and sometimes outputs.</p>
+<p>Many validation libraries are available on <a href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=valid&amp;submit=search">PyPI</a> already. The following <a href="./other_libs">list</a> is by far not exhaustive, but gives an overview. Do not hesitate to contribute to this list with a pull request! </p>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://github.com/RussBaz/enforce">enforce</a></li>
-<li><a href="https://github.com/Stewori/pytypes">pytypes</a></li>
-<li><a href="https://github.com/agronholm/typeguard">typeguard</a></li>
-<li><a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a></li>
-</ul>
-<h3 id="typevalue-validation">Type+Value validation<a class="headerlink" href="#typevalue-validation" title="Permanent link">&para;</a></h3>
-<p>The following frameworks provide both type and value validation, and for most of them it would be quite irrelevant to separate value validation from type validation.</p>
-<ul>
-<li><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a>: (2017) Annotation. Parsing-based (the contract is a string when it comes to value validation). Ability to disable through a function call. Validators are functions or specific predefined grammar elements. Logical operations on validators are supported.</li>
-<li><a href="https://github.com/hhuuggoo/thedoctor">thedoctor</a>: (2015) Annotation. Ability to disable with an environment variable. Dictionary validation. Helper <code>true</code> to support lambdas while throwing validation exceptions. A few validators. Validators are functions. No logical operations on validators.</li>
-<li><a href="https://github.com/AkiraKito/fivalid">fivalid</a> :(2012) number, iterable, basic min/max, many text validators : free text with forbidden sentences, regexp, split on parts, All/Any/Not validator logic, a validator is an object</li>
-<li><a href="http://www.voidspace.org.uk/python/validate.html">validate</a>: (2009) quite old, a few basic validators (str/list length, int min/max values, ip_addr) mixed with type validation. Validators are functions.</li>
-</ul>
-<h3 id="mostly-type-validation">Mostly Type validation<a class="headerlink" href="#mostly-type-validation" title="Permanent link">&para;</a></h3>
-<p>These packages seem to mostly have been developed for type validation, not much for value validation:</p>
-<ul>
-<li><a href="https://github.com/gfyoung/py-validate">py-validate</a>: (2017) a few non-type validators even, odd, number. Validators ('shortcuts') are functions.</li>
-<li><a href="http://uzumaxy.github.io/pyvalid/">pyvalid</a>: (2017) mostly type validation except for value equality or size. Object fields validation. A validator is an object, collection of smaller checkers (StringValidator has min_len checker, max_len_checker, etc.)</li>
-</ul>
-<h3 id="schema-based-validation">Schema-based validation<a class="headerlink" href="#schema-based-validation" title="Permanent link">&para;</a></h3>
-<p>These libraries check that data is valid with respect to a <strong>schema</strong>. </p>
-<ul>
-<li><a href="https://github.com/keleshev/schema">schema</a> (2017) </li>
-<li><a href="https://github.com/guyskk/validr">validr</a> (2017) "10X faster than jsonschema, 40X faster than schematics". Based on <a href="https://github.com/guyskk/validr/blob/master/Isomorph-JSON-Schema.md">Isomorph-JSON-Schema</a></li>
-<li><a href="https://docs.pylonsproject.org/projects/colander/en/latest/">colander</a> (2017). A framework for serialization+deserialization including schema validation. With validators for strings, mappings, and lists</li>
-<li><a href="https://github.com/cwacek/python-jsonschema-objects">python-jsonschema-objects</a> (2017). Automatic Python binding generation from JSON Schemas </li>
-<li><a href="http://clivern.github.io/PyValitron/">PyValitron</a> (2016) separation of the concepts of validators / sanitizers (for text: lower case, strip, etc.). Quite a number of validators.</li>
-<li><a href="https://github.com/devdoomari/pyvalidator">pyvalidator</a> (2015)</li>
-<li><a href="https://github.com/wilhelm-murdoch/validator">validator</a> (2014) A few built-in validators. validator are objects (Rule)</li>
-</ul>
-<h3 id="validation-of-data-at-the-entry-point">Validation of data 'at the entry point'<a class="headerlink" href="#validation-of-data-at-the-entry-point" title="Permanent link">&para;</a></h3>
-<h4 id="from-forms">from Forms<a class="headerlink" href="#from-forms" title="Permanent link">&para;</a></h4>
-<p>Data from forms sometimes requires validation to follow some kind of process with several steps, where a validation context (permissions) may need to be maintained.</p>
-<ul>
-<li><a href="http://www.formencode.org/en/latest/">formencode</a>: (2017) a complete framework to validate and convert data entered in forms. Includes a number of domain-specific validators</li>
-<li><a href="https://github.com/doncatnip/kanone">kanone</a> (2013) validation and conversion of data entered in forms. Notion of context. validator logic + composition (to reuse while parametrizing)</li>
-<li><a href="https://docs.djangoproject.com/en/1.11/ref/forms/fields/">django forms</a>: (2017) provides a number of built-in Field classes</li>
-</ul>
-<h4 id="from-cli">from CLI<a class="headerlink" href="#from-cli" title="Permanent link">&para;</a></h4>
-<ul>
-<li><a href="http://click.pocoo.org/5/">click</a> (2017) integrates a number of built-in validators for arguments and options (file paths, etc.)</li>
-<li><a href="https://github.com/docopt/docopt/commits/master">docopt</a> (2016) delegates to <a href="https://github.com/keleshev/schema">schema</a> for validation</li>
-</ul>
-<h3 id="domain-specific-validators-validators-for-specific-data-types-validators-without-framework">Domain-specific validators / validators for specific data types / validators without framework<a class="headerlink" href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Permanent link">&para;</a></h3>
-<p>These packages provide validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with <code>valid8</code>.</p>
-<ul>
-<li><a href="http://pandas-validation.readthedocs.io/en/latest/">pandas-validation</a>: (2017) pandas dataframes</li>
-<li><a href="https://github.com/c-data/pandas-validator">pandas-validator</a>: (2017) pandas dataframes</li>
-<li><a href="https://validators.readthedocs.io/en/latest/">validators</a>: (2017) email, iban, ip, slug, truthy, url, uuid, finnish business id...</li>
-<li><a href="https://github.com/ish/validatish">validatish</a> (2011): a few validation functions for integers, strings, required/optional, etc.</li>
-<li><a href="https://github.com/daviddrysdale/python-phonenumbers">python-phonenumbers</a> (2017): guess what?</li>
-<li><a href="https://pypi.python.org/pypi/validate-email-address">validate-email-address</a> (2016): guess what ? It is a fork of <a href="https://github.com/syrusakbary/validate_email/commits/master">validate_email</a> (2015).</li>
-<li>...</li>
-</ul>
-<h3 id="other-resources-concerning-validation-frameworks">Other resources concerning validation frameworks:<a class="headerlink" href="#other-resources-concerning-validation-frameworks" title="Permanent link">&para;</a></h3>
-<ul>
-<li>A <a href="https://opensourcehacker.com/2011/07/07/generic-python-validation-frameworks/">discussion</a> about the various frameworks out there</li>
-<li>The <a href="http://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/package-summary.html#package_description">apache commons lib for validation</a></li>
-</ul>
-<h2 id="see-also-other">See Also - Other<a class="headerlink" href="#see-also-other" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="http://pythonhosted.org/decorator/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of wrapped methods.</li>
+<li><a href="http://decorator.readthedocs.io/en/stable/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of wrapped methods.</li>
 </ul>
 <p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
 <h2 id="want-to-contribute">Want to contribute ?<a class="headerlink" href="#want-to-contribute" title="Permanent link">&para;</a></h2>
