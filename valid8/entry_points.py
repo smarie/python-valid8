@@ -18,7 +18,7 @@ class ValidationError(ValueError):
 
     def __init__(self, validator, var_value, var_name: str = None, validation_outcome: Any = None):
         """
-        Creates a ValidationError associated with validation of validated_value using validator. Additional details
+        Creates a ValidationError associated with validation of var_value using validator. Additional details
         about the variable name and validation_outcome (result or exception) can be provided
 
         :param validator:
@@ -238,7 +238,7 @@ class InputValidationError(ValidationError):
 
     def __init__(self, validator, var_value, var_name: str = None, validation_outcome: Any = None):
         """
-        Creates a ValidationError associated with validation of validated_value as part of function input validation.
+        Creates a ValidationError associated with validation of var_value as part of function input validation.
         validator is therefore assumed to be a subclass of InputValidator
 
         :param validator: an InputValidator
