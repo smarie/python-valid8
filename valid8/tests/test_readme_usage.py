@@ -1,131 +1,6 @@
 import pytest
-from enforce.exceptions import RuntimeTypeError
-from pytypes import InputTypeError
 
 from valid8 import InputValidationError, ValidationError
-
-
-def test_index_enforce_mini_lambda():
-    """ Tests that the first example of the documentation works """
-
-    # Imports - for type validation
-    from numbers import Real, Integral
-    from valid8 import Boolean
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # subclasses of required types are valid too
-
-    # Imports - for value validation
-    from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of, Failure
-
-    # Example of unique error type for easier handling at app-level
-    class EmptyNameString(Failure):
-        help_msg = 'Name should be a non-empty string'
-
-    class SurfaceOutOfRange(Failure):
-        help_msg = 'Surface should be comprised between 0 and 10000 m²'
-
-    class SurfaceNotMultipleOf100(Failure):
-        help_msg = 'Surface should be a multiple of 100'
-
-    @runtime_validation
-    @validate_arg('name',    (Len(s) > 0,              EmptyNameString))
-    @validate_arg('surface', [((x >= 0) & (x < 10000), SurfaceOutOfRange),
-                              (is_multiple_of(100),    SurfaceNotMultipleOf100)])
-    def build_house(name: str,
-                    surface: Real,
-                    nb_floors: Integral = None,
-                    with_windows: Boolean = False):
-        print('Building house...')
-        print('DONE !')
-
-    build_house('test', 100, 2)  # validation OK
-
-    with pytest.raises(RuntimeTypeError):
-        build_house('test', 100, 2.2)  # Type: @runtime_validation raises a InputTypeError
-
-    build_house('test', 100, None)  # Declared 'Optional' with PEP484, no error
-
-    with pytest.raises(InputValidationError):
-        build_house('', 12, 2)  # Value: @validate raises a EmptyNameString
-
-    with pytest.raises(InputValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a SurfaceOutOfRange
-
-    with pytest.raises(InputValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a SurfaceNotMultipleOf100
-
-
-def test_index_enforce_old_style():
-    """ Tests that the first example of the documentation works """
-
-    # Imports - for type validation
-    from valid8 import Boolean
-    from numbers import Real, Integral
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # allow subclasses when validating types
-
-    # Imports - for value validation
-    from valid8 import validate, minlens, gt
-
-    # Usage
-    @runtime_validation
-    @validate(name=minlens(0),
-              surface=gt(0))
-    def build_house(name: str,
-                    surface: Real,
-                    nb_floors: Integral = None,
-                    with_windows: Boolean = False):
-        print('you did it !')
-
-    build_house('test', 12, 2)  # validation OK
-
-    with pytest.raises(RuntimeTypeError):
-        build_house('test', 12, 2.2)  # Type: @runtime_validation raises a InputTypeError
-
-    build_house('test', 12, None)  # Declared 'Optional' with PEP484, no error
-
-    with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a BasicFailure
-
-    with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value: @validate raises a BasicFailure
-
-
-@pytest.mark.skip(reason="waiting for the next version of pytypes")
-def test_index_pytypes():
-    """ Tests that the first example of the documentation would work if we switch to pytypes """
-
-    # for type checking
-    from valid8 import Boolean
-    from numbers import Real, Integral
-    from typing import Optional
-    from pytypes import typechecked
-
-    # for value checking
-    from valid8 import validate, minlens, gt
-
-    @typechecked
-    @validate(name=minlens(0),
-              surface=gt(0))
-    def build_house(name: str,
-                    surface: Real,
-                    nb_floors: Optional[Integral] = 1,
-                    with_windows: Boolean = False):
-        print('you did it !')
-
-    build_house('test', 12, 2)  # validation OK
-
-    with pytest.raises(InputTypeError):
-        build_house('test', 12, 2.2)  # Type validation: @typechecked raises a InputTypeError
-
-    build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
-
-    with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate raises a BasicFailure
-
-    with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate raises a BasicFailure
 
 
 def test_tutorial():
@@ -170,7 +45,7 @@ def test_tutorial():
     assert str(e) == "Error validating [age=152]. " \
                      "Root validator [and(isfinite, between_0_and_150)] raised [AtLeastOneFailed: " \
                      "At least one validator failed validation for value [152]. Successes: ['isfinite'] / " \
-                     "Failures: {'between_0_and_150': '[BasicFailure] between: 0 <= x <= 150 does not hold for x=152'} ]"
+                     "Failures: {'between_0_and_150': '[BasicFailure] between: 0 <= x <= 150 does not hold for x=152'}]"
 
     # v3: age is an integer
     # https://stackoverflow.com/questions/3501382/checking-whether-a-variable-is-an-integer-or-not
@@ -185,7 +60,7 @@ def test_tutorial():
     assert str(e) == "Error validating [age=12.5]. " \
                      "Root validator [and(isfinite, between_0_and_150, int(x) == x)] raised [AtLeastOneFailed: " \
                      "At least one validator failed validation for value [12.5]. " \
-                     "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'} ]"
+                     "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'}]"
     # TODO continue !
 
 
@@ -256,33 +131,33 @@ def test_usage_is_valid():
     from mini_lambda import s
 
     # (1) Existing function
-    assert is_valid(isfinite, 0) is True
-    assert is_valid(isfinite, inf) is False
+    assert is_valid(isfinite, value=0) is True
+    assert is_valid(isfinite, value=inf) is False
     # (2) Functools partial
-    assert is_valid(partial(issubclass, bool), int) is True
-    assert is_valid(partial(issubclass, bool), str) is False
+    assert is_valid(partial(issubclass, bool), value=int) is True
+    assert is_valid(partial(issubclass, bool), value=str) is False
     # (3) User-defined, standard
-    assert is_valid(is_multiple_of_3, 9) is True
-    assert is_valid(is_multiple_of_3, 1) is False
+    assert is_valid(is_multiple_of_3, value=9) is True
+    assert is_valid(is_multiple_of_3, value=1) is False
     # (4) User-defined, lambda
-    assert is_valid(lambda s: s.islower(), 'abc') is True
-    assert is_valid(lambda s: s.islower(), 'aBc') is False
+    assert is_valid(lambda s: s.islower(), value='abc') is True
+    assert is_valid(lambda s: s.islower(), value='aBc') is False
     # (5) User-defined, mini-lambda
-    assert is_valid(s.lower().startswith('a'), 'Abc') is True
-    assert is_valid(s.lower().startswith('a'), 'Bbc') is False
+    assert is_valid(s.lower().startswith('a'), value='Abc') is True
+    assert is_valid(s.lower().startswith('a'), value='Bbc') is False
     # (6) User-defined, factory
-    assert is_valid(is_multiple_of(5), 15) is True
-    assert is_valid(is_multiple_of(5), 1) is False
+    assert is_valid(is_multiple_of(5), value=15) is True
+    assert is_valid(is_multiple_of(5), value=1) is False
 
     gt_0, gt_1, gt_2, gt_3 = create_base_functions_2()
-    assert is_valid(gt_0, 0) is True
-    assert is_valid(gt_0, -0.2) is False
-    assert is_valid(gt_1, 1) is True
-    assert is_valid(gt_1, 0.2) is False
-    assert is_valid(gt_2, 2) is True
-    assert is_valid(gt_2, 0.2) is False
-    assert is_valid(gt_3, 3) is True
-    assert is_valid(gt_3, 0.2) is False
+    assert is_valid(gt_0, value=0) is True
+    assert is_valid(gt_0, value=-0.2) is False
+    assert is_valid(gt_1, value=1) is True
+    assert is_valid(gt_1, value=0.2) is False
+    assert is_valid(gt_2, value=2) is True
+    assert is_valid(gt_2, value=0.2) is False
+    assert is_valid(gt_3, value=3) is True
+    assert is_valid(gt_3, value=0.2) is False
 
 
 def test_usage_validators():

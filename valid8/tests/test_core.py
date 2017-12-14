@@ -1,10 +1,10 @@
 import pytest
 
-from core import _create_main_validation_function, NonePolicy
+from core import _process_validation_function_s
 
 
 def test_empty_validators_list():
     """ Validates that an empty list of validators leads to a ValueError """
 
     with pytest.raises(ValueError) as exc_info:
-        _create_main_validation_function([], none_policy=NonePolicy.VALIDATE)
+        _process_validation_function_s([])

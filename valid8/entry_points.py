@@ -4,11 +4,82 @@ from typing import Callable, Any, List, Union, Type
 
 from decorator import decorate
 
-import valid8.core as core
 from valid8.utils_typing import is_pep484_nonable
-from valid8.core import _create_main_validation_function, result_is_success, get_validation_function_name, \
-    ValidationFuncs, NonePolicy
+from valid8.core import result_is_success, get_validation_function_name, ValidationFuncs, Failure, \
+    _process_validation_function_s, _none_accepter, _none_rejecter
 from valid8.utils_decoration import create_function_decorator__robust_to_args, apply_on_each_func_args_sig
+
+
+class NonePolicy:
+    """ This enumeration describes the various validation policies concerning `None` values that may be used with all
+    validation entry points """
+
+    __slots__ = []
+
+    SKIP = 1
+    """ If this policy is selected, None values will aways be valid (validation routines will not be executed) """
+    FAIL = 2
+    """ If this policy is selected, None values will aways be invalid (validation routines will not be executed) """
+    VALIDATE = 3
+    """ If this policy is selected, None values will be treated exactly like other values and follow the same 
+    validation process."""
+
+
+class NoneArgPolicy(NonePolicy):
+    """ This enumeration extends `NonePolicy` to add policies specific to function input validation used in @validate
+    and @validate_arg """
+
+    __slots__ = []
+
+    SKIP_IF_NONABLE_ELSE_VALIDATE = 4
+    """ If this policy is selected, if an input argument appears as optional (default value of None or PEP484 type hint
+    Optional) then the policy for this argument is SKIP, otherwise the policy for this argument is VALIDATE """
+
+    SKIP_IF_NONABLE_ELSE_FAIL = 5
+    """ If this policy is selected, if an input argument appears as optional (default value of None or PEP484 type hint
+    Optional) then the policy for this argument is SKIP, otherwise the policy for this argument is FAIL """
+
+
+def get_none_policy_text(none_policy: NoneArgPolicy):
+    """
+    Returns a user-friendly description of a NonePolicy taking into account NoneArgPolicy
+
+    :param none_policy:
+    :return:
+    """
+    if none_policy is NonePolicy.SKIP:
+        return "accept None without performing validation"
+    elif none_policy is NonePolicy.FAIL:
+        return "fail on None without performing validation"
+    elif none_policy is NonePolicy.VALIDATE:
+        return "validate None as any other values"
+    elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_FAIL:
+        return "accept None witout validation if the argument is optional, otherwise fail on None"
+    elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE:
+        return "accept None witout validation if the argument is optional, otherwise validate None as any other values"
+    else:
+        raise ValueError('Invalid none_policy ' + str(none_policy))
+
+
+def _add_none_handler(validation_callable: Callable, none_policy: NonePolicy) -> Callable:
+    """
+    Adds a wrapper or nothing around the provided validation_callable, depending on the selected policy
+
+    :param validation_callable:
+    :param none_policy:
+    :return:
+    """
+    if none_policy is NonePolicy.SKIP:
+        return _none_accepter(validation_callable)  # accept all None values
+
+    elif none_policy is NonePolicy.FAIL:
+        return _none_rejecter(validation_callable)  # reject all None values
+
+    elif none_policy is NonePolicy.VALIDATE:
+        return validation_callable                  # do not handle None specifically, do not wrap
+
+    else:
+        raise ValueError('Invalid none_policy : ' + str(none_policy))  # invalid none_policy
 
 
 class ValidationError(ValueError):
@@ -84,8 +155,8 @@ class Validator:
 
     __slots__ = ['main_function', 'none_policy', 'exc_type']
 
-    def __init__(self, validation_func: ValidationFuncs, none_policy: NonePolicy = None,
-                 exc_type: Type[ValidationError] = None):
+    def __init__(self, *validation_func: ValidationFuncs, failure_type: Type[Failure] = None, help_msg: str = None,
+                 none_policy: NonePolicy = None, error_type: Type[ValidationError] = None):
         """
         Creates a validator from a (possibly list of) base validation functions. A list will be converted to an
         implicit 'and_'. A base validation function should return `True` or `None` for the validation to be a success.
@@ -101,16 +172,19 @@ class Validator:
         :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
         Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
         the same validation process.
-        :param exc_type:
+        :param error_type:
         """
         self.none_policy = none_policy or NonePolicy.VALIDATE
 
-        self.exc_type = exc_type or ValidationError
+        self.exc_type = error_type or ValidationError
         if not issubclass(self.exc_type, ValidationError):
-            raise ValueError('exc_type should be a subclass of ValidationError')
+            raise ValueError('error_type should be a subclass of ValidationError')
 
-        # replace validation_func lists with explicit 'and_' if needed, and check if not_none needs to be enforced
-        self.main_function = _create_main_validation_function(validation_func, none_policy=self.none_policy)
+        # replace validation_func lists with explicit 'and_' if needed, and tuples with _failure_raiser()
+        main_val_func = _process_validation_function_s(list(validation_func), failure_type=failure_type, help_msg=help_msg)
+
+        # finally wrap in a none handler according to the policy
+        self.main_function = _add_none_handler(main_val_func, none_policy=self.none_policy)
 
     def __repr__(self):
         return "{validator_type}<{main_val_function}, none_policy={none_policy}>" \
@@ -209,7 +283,8 @@ class Validator:
             return False
 
 
-def assert_valid(validation_func: ValidationFuncs, none_policy: NonePolicy = None, **named_values):
+def assert_valid(*validation_func: ValidationFuncs, none_policy: NonePolicy = None,
+                 failure_type: Type[Failure] = None, help_msg: str = None, **named_values):
     """
     Validates value `value` using validation function(s) `base_validator_s`.
     As opposed to `is_valid`, this function raises a `ValidationError` if validation fails.
@@ -232,13 +307,16 @@ def assert_valid(validation_func: ValidationFuncs, none_policy: NonePolicy = Non
     :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
     Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
     the same validation process.
+    :param failure_type: a type of failure to raise if ALL the provided
+    :param help_msg:
     :param named_values: the values to validate as named arguments. Currently this can only contain one a single entry.
     :return: nothing
     """
-    return Validator(validation_func, none_policy=none_policy)(**named_values)
+    return Validator(*validation_func, failure_type=failure_type, help_msg=help_msg,
+                     none_policy=none_policy)(**named_values)
 
 
-def is_valid(validation_func: Union[Callable, List[Callable]], value, none_policy: NonePolicy=None) -> bool:
+def is_valid(*validation_func: Union[Callable, List[Callable]], value, none_policy: NonePolicy=None) -> bool:
     """
     Validates value `value` using validation function(s) `validator_func`.
     As opposed to `assert_valid`, this function returns a boolean indicating if validation was a success or a failure.
@@ -265,38 +343,7 @@ def is_valid(validation_func: Union[Callable, List[Callable]], value, none_polic
     returned value of False
     :return: True if validation was a success, False otherwise
     """
-    return Validator(validation_func, none_policy=none_policy).is_valid(value)
-
-
-class NoneArgPolicy(NonePolicy):
-    """ This enumeration extends `NonePolicy` to handle optional function arguments automatic handling in @validate
-    and @validate_arg """
-
-    __slots__ = []
-
-    SKIP_IF_NONABLE_ELSE_VALIDATE = 4
-    """ If this policy is selected, if an input argument appears as optional (default value of None or PEP484 type hint
-    Optional) then the policy for this argument is SKIP, otherwise the policy for this argument is VALIDATE """
-
-    SKIP_IF_NONABLE_ELSE_FAIL = 5
-    """ If this policy is selected, if an input argument appears as optional (default value of None or PEP484 type hint
-    Optional) then the policy for this argument is SKIP, otherwise the policy for this argument is FAIL """
-
-
-def get_none_policy_text(none_policy: NonePolicy):
-    """
-    Returns a user-friendly description of a NonePolicy taking into account NoneArgPolicy
-
-    :param none_policy:
-    :return:
-    """
-    if none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_FAIL:
-        return "accept None witout validation if the argument is optional, otherwise fail on None"
-    elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE:
-        return "accept None witout validation if the argument is optional, otherwise validate None as any other values"
-    else:
-        # fallback on base none policies
-        return core.get_none_policy_text(none_policy)
+    return Validator(*validation_func, none_policy=none_policy).is_valid(value)
 
 
 class InputValidationError(ValidationError):
@@ -333,8 +380,8 @@ class InputValidator(Validator):
 
     __slots__ = ['validated_func']
 
-    def __init__(self, validated_func: Callable, validation_func: ValidationFuncs, none_policy: NonePolicy = None,
-                 exc_type: Type[InputValidationError] = None):
+    def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs, none_policy: NonePolicy = None,
+                 error_type: Type[InputValidationError] = None):
         """
 
         :param validated_func: the function whose input is being validated.
@@ -345,10 +392,10 @@ class InputValidator(Validator):
         of callables, they will be transformed to functions automatically.
         :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
         possibilities. Default is `NonePolicy.VALIDATE`.
-        :param exc_type:
+        :param error_type:
         """
-        super(InputValidator, self).__init__(validation_func=validation_func, none_policy=none_policy,
-                                             exc_type=exc_type or InputValidationError)
+        super(InputValidator, self).__init__(*validation_func, none_policy=none_policy,
+                                             error_type=error_type or InputValidationError)
 
         self.validated_func = validated_func
 
@@ -522,7 +569,8 @@ def decorate_with_validation(func: Callable, none_policy: NoneArgPolicy=None,
             # create the new validators as InputValidator objects according to the none_policy and function signature
             func.__wrapped__.__validators__[att_name] = _create_input_validator(func.__wrapped__,
                                                                                 s.parameters[att_name],
-                                                                                att_validators, none_policy)
+                                                                                att_validators,
+                                                                                none_policy=none_policy)
 
         # return the function, no need to wrap it further (it is already wrapped)
         return func
@@ -533,7 +581,7 @@ def decorate_with_validation(func: Callable, none_policy: NoneArgPolicy=None,
         # create the new validators as InputValidator objects according to the none_policy and function signature
         for att_name, att_validators in kw_validation_funcs.items():
             kw_validation_funcs[att_name] = _create_input_validator(func, s.parameters[att_name], att_validators,
-                                                                    none_policy)
+                                                                    none_policy=none_policy)
 
         # Store the dictionary of kw_validation_funcs as an attribute of the function
         if hasattr(func, '__validators__'):
