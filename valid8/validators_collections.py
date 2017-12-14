@@ -1,7 +1,7 @@
 from numbers import Integral
 from typing import Set, Tuple
 
-from valid8.core import BasicFailure, _create_main_validation_function
+from valid8.core import BasicFailure, _process_validation_function_s
 
 
 def minlen(min_length: Integral, strict: bool = False):
@@ -165,28 +165,32 @@ def is_superset(reference_set: Set):
 
 
 # TODO rename 'all_on_each'
-def on_all_(*validators_for_all_elts):
+def on_all_(*validation_func):
     """
     Generates a validator for collection inputs where each element of the input will be validated against the validators
     provided. For convenience, a list of validators can be provided and will be replaced with an 'and_'.
 
     Note that if you want to apply DIFFERENT validators for each element in the input, you should rather use on_each_.
 
-    :param validators_for_all_elts:
+    :param validation_func: the base validation function or list of base validation functions to use. A callable, a
+    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
+    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
+    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+    of callables, they will be transformed to functions automatically.
     :return:
     """
-    # create the validation function
-    validator_funcs = _create_main_validation_function(list(validators_for_all_elts), allow_not_none=True)
+    # create the validation functions
+    validator_func = _process_validation_function_s(list(validation_func))
 
     def on_all_val(x):
         # validate all elements in x in turn
         idx = -1
         for x_elt in x:
             idx += 1
-            res = validator_funcs(x_elt)
+            res = validator_func(x_elt)
             if res not in {None, True}:
                 # one element of x was not valid > raise
-                raise BasicFailure('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
+                raise BasicFailure('on_all_(' + str(validation_func) + '): failed validation for input '
                                       'element [' + str(idx) + ']: ' + str(x_elt))
         return True
 
@@ -202,12 +206,16 @@ def on_each_(*validators_collection):
 
     Note that if you want to apply the SAME validators to all elements in the input, you should rather use on_all_.
 
-    :param validators_collection:
+    :param validation_func: a sequence of (base validation function or list of base validation functions to use).
+    A base validation function may be a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or
+    a list of several such elements. Nested lists are supported and indicate an implicit `and_` (such as the main list).
+    Tuples indicate an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/)
+    expressions can be used instead of callables, they will be transformed to functions automatically.
     :return:
     """
     # create a tuple of validation functions.
-    validator_funcs = tuple(_create_main_validation_function(validators, allow_not_none=True)
-                            for validators in validators_collection)
+    validator_funcs = tuple(_process_validation_function_s(validation_func)
+                            for validation_func in validators_collection)
 
     # generate a validation function based on the tuple of validators lists
     def on_each_val(x: Tuple):

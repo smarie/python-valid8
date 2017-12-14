@@ -1,4 +1,4 @@
-from inspect import isclass
+from inspect import isclass, Parameter, Signature
 from typing import Callable
 
 
@@ -80,27 +80,27 @@ def apply_on_each_func_args(func, cur_args, cur_kwargs,
     :param cur_kwargs:
     :param signature_attrs:
     :param signature_defaults:
-    :param signature_varargs:
-    :param signature_varkw:
+    :param signature_varargs: variable length positional argument (name or none)
+    :param signature_varkw: variable length keyword argument (name or none)
     :param func_to_apply:
     :param func_to_apply_paramers_dict:
     :return:
     """
     # handle default values and kw arguments
-    for attr, val in zip(reversed(signature_attrs), reversed(signature_defaults or [])):
-        if attr in func_to_apply_paramers_dict.keys():
+    for attr_name, val in zip(reversed(signature_attrs), reversed(signature_defaults or [])):
+        if attr_name in func_to_apply_paramers_dict.keys():
             # set default or provided value
-            if attr in cur_kwargs.keys():
+            if attr_name in cur_kwargs.keys():
                 # provided: we never seem to enter here, why ? maybe depends on the version of python
-                func_to_apply(cur_kwargs[attr], func_to_apply_paramers_dict[attr], func, attr)
+                func_to_apply(cur_kwargs[attr_name], func_to_apply_paramers_dict[attr_name], func, attr_name)
             else:
                 # default
-                func_to_apply(val, func_to_apply_paramers_dict[attr], func, attr)
+                func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
 
     # handle positional arguments
-    for attr, val in zip(signature_attrs, cur_args):
-        if attr in func_to_apply_paramers_dict.keys():
-            func_to_apply(val, func_to_apply_paramers_dict[attr], func, attr)
+    for attr_name, val in zip(signature_attrs, cur_args):
+        if attr_name in func_to_apply_paramers_dict.keys():
+            func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
 
     # handle varargs : since we dont know their name, they can only be validated as a whole
     if signature_varargs:
@@ -116,6 +116,42 @@ def apply_on_each_func_args(func, cur_args, cur_kwargs,
             func_to_apply(cur_kwargs, func_to_apply_paramers_dict[signature_varkw], func, signature_varkw)
         else:
             # or each item is handled independently (if func signature contains the kw args names such as a, b)
-            for attr, val in cur_kwargs.items():
-                if attr in func_to_apply_paramers_dict.keys():
-                    func_to_apply(val, func_to_apply_paramers_dict[attr], func, attr)
+            for attr_name, val in cur_kwargs.items():
+                if attr_name in func_to_apply_paramers_dict.keys():
+                    func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
+
+
+def apply_on_each_func_args_sig(func, cur_args, cur_kwargs, sig: Signature,
+                                func_to_apply, func_to_apply_paramers_dict):
+    """
+    Applies func_to_apply on each argument of func according to what's received in current call (cur_args, cur_kwargs).
+    For each argument of func named 'att' in its signature, the following method is called:
+
+    `func_to_apply(cur_att_value, func_to_apply_paramers_dict[att], func, att_name)`
+
+    :param func:
+    :param cur_args:
+    :param cur_kwargs:
+    :param sig_params:
+    :param func_to_apply:
+    :param func_to_apply_paramers_dict:
+    :return:
+    """
+
+    # match the received arguments with the signature to know who is who
+    bound_values = sig.bind(*cur_args, **cur_kwargs)
+
+    # add the default values in here to get a full list
+    bound_values.apply_defaults()
+
+    for att_name, att_value in bound_values.arguments.items():
+        if att_name in func_to_apply_paramers_dict.keys():
+            # value = the cur_kwargs as a whole
+            func_to_apply(att_value, func_to_apply_paramers_dict[att_name], func, att_name)
+        else:
+            if sig.parameters[att_name].kind == Parameter.VAR_KEYWORD:
+                # if the attribute is variable-length keyword argument we can try to find a matching key inside it
+                # each item is handled independently (if func signature contains the kw args names such as a, b)
+                for att_name, att_value in att_value.items():
+                    if att_name in func_to_apply_paramers_dict.keys():
+                        func_to_apply(att_value, func_to_apply_paramers_dict[att_name], func, att_name)
