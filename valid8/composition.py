@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from typing import Callable, Union, List, Type, Tuple
+from typing import Callable, Union, List, Type, Tuple, Any
 
 from valid8.base import Failure, result_is_success, get_callable_names, get_callable_name, _failure_raiser, \
     WrappingFailure, _none_accepter, _none_rejecter, _LambdaExpression
@@ -235,19 +235,9 @@ def and_(*validation_func: ValidationFuncs) -> Callable:
         return and_v_
 
 
-class DidNotFail(Failure):
+class DidNotFail(WrappingFailure):
     """ Raised by the not_ operator when the inner validation function did not fail."""
-
-    def __init__(self, validation_callable, value):
-        """
-        Constructor from the inner validator name and the value that caused validation
-
-        :param validation_callable:
-        :param value:
-        """
-        msg = '{validator} validated value {value} with success, therefore the not() is a failure' \
-              ''.format(validator=get_callable_name(validation_callable), value=value)
-        super(DidNotFail, self).__init__(msg)
+    help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
 
 def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
@@ -289,7 +279,7 @@ def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
                 return True  # caught exception in 'catch_all' mode: return True
 
         # if we're here that's a failure
-        raise DidNotFail(validation_func, x)
+        raise DidNotFail(wrapped_func=validation_func, wrong_value=x, validation_outcome=res)
 
     not_v_.__name__ = 'not({})'.format(get_callable_name(validation_func))
     return not_v_
