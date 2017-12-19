@@ -1,9 +1,9 @@
 from copy import copy
 from typing import Callable, Any, List, Union, Type
 
-from base import RootException, HelpMsgMixIn
 from valid8.utils_string import end_with_dot
-from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter
+from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
+    HelpMsgMixIn
 from valid8.composition import ValidationFuncs, _process_validation_function_s
 
 

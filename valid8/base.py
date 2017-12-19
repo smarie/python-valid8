@@ -1,7 +1,7 @@
 from copy import copy
 from typing import Callable, Type, Sequence, Any
 
-from utils_string import end_with_dot_space
+from valid8.utils_string import end_with_dot_space
 
 try:
     # if mini_lambda is here, use this class
