@@ -244,6 +244,8 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
     
       <label class="md-nav__link md-nav__link--active" for="toc">
         Built-in validation functions
@@ -257,29 +259,30 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#validators-list" title="Validators list" class="md-nav__link">
-    Validators list
+  <a href="#types" title="Types" class="md-nav__link">
+    Types
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#all-objects" title="All objects" class="md-nav__link">
-    All objects
+  <a href="#instance_ofref_type" title="instance_of(ref_type)" class="md-nav__link">
+    instance_of(ref_type)
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#not_none" title="not_none" class="md-nav__link">
-    not_none
+  <a href="#subclass_ofref_type" title="subclass_of(ref_type)" class="md-nav__link">
+    subclass_of(ref_type)
   </a>
   
 </li>
@@ -288,8 +291,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#comparables" title="Comparables" class="md-nav__link">
     Comparables
   </a>
@@ -298,8 +301,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gtmin_value-strict-bool-false" title="gt(min_value, strict: bool = False)" class="md-nav__link">
-    gt(min_value, strict: bool = False)
+  <a href="#gtmin_value-strictboolfalse" title="gt(min_value, strict:bool=False)" class="md-nav__link">
+    gt(min_value, strict:bool=False)
   </a>
   
 </li>
@@ -312,8 +315,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ltmax_value-strict-bool-false" title="lt(max_value, strict: bool = False)" class="md-nav__link">
-    lt(max_value, strict: bool = False)
+  <a href="#ltmax_value-strictboolfalse" title="lt(max_value, strict:bool=False)" class="md-nav__link">
+    lt(max_value, strict:bool=False)
   </a>
   
 </li>
@@ -326,8 +329,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#betweenmin_value-max_value-open_left-bool-false-open_right-bool-false" title="between(min_value, max_value, open_left: bool = False, open_right: bool = False)" class="md-nav__link">
-    between(min_value, max_value, open_left: bool = False, open_right: bool = False)
+  <a href="#betweenmin_value-max_value-open_leftboolfalse-open_rightboolfalse" title="between(min_value, max_value, open_left:bool=False, open_right:bool=False)" class="md-nav__link">
+    between(min_value, max_value, open_left:bool=False, open_right:bool=False)
   </a>
   
 </li>
@@ -336,8 +339,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#numbers" title="Numbers" class="md-nav__link">
     Numbers
   </a>
@@ -370,8 +373,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#collections" title="Collections" class="md-nav__link">
     Collections
   </a>
@@ -380,8 +383,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#minlenmin_length-strict-bool-false" title="minlen(min_length, strict: bool = False)" class="md-nav__link">
-    minlen(min_length, strict: bool = False)
+  <a href="#minlenmin_length-strictboolfalse" title="minlen(min_length, strict:bool=False)" class="md-nav__link">
+    minlen(min_length, strict:bool=False)
   </a>
   
 </li>
@@ -394,8 +397,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#maxlenmax_length-strict-bool-false" title="maxlen(max_length, strict: bool = False)" class="md-nav__link">
-    maxlen(max_length, strict: bool = False)
+  <a href="#maxlenmax_length-strictboolfalse" title="maxlen(max_length, strict:bool=False)" class="md-nav__link">
+    maxlen(max_length, strict:bool=False)
   </a>
   
 </li>
@@ -403,6 +406,13 @@
           <li class="md-nav__item">
   <a href="#maxlensmax_length" title="maxlens(max_length)" class="md-nav__link">
     maxlens(max_length)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" title="length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)" class="md-nav__link">
+    length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
   </a>
   
 </li>
@@ -429,21 +439,16 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_all_validators_for_all_elts" title="on_all_(*validators_for_all_elts)" class="md-nav__link">
-    on_all_(*validators_for_all_elts)
+  <a href="#on_all_validation-functions_for_all_elts" title="on_all_(*validation functions_for_all_elts)" class="md-nav__link">
+    on_all_(*validation functions_for_all_elts)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_each_validators_collection" title="on_each_(*validators_collection)" class="md-nav__link">
-    on_each_(*validators_collection)
+  <a href="#on_each_validation-functions_collection" title="on_each_(*validation functions_collection)" class="md-nav__link">
+    on_each_(*validation functions_collection)
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -499,29 +504,30 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#validators-list" title="Validators list" class="md-nav__link">
-    Validators list
+  <a href="#types" title="Types" class="md-nav__link">
+    Types
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#all-objects" title="All objects" class="md-nav__link">
-    All objects
+  <a href="#instance_ofref_type" title="instance_of(ref_type)" class="md-nav__link">
+    instance_of(ref_type)
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#not_none" title="not_none" class="md-nav__link">
-    not_none
+  <a href="#subclass_ofref_type" title="subclass_of(ref_type)" class="md-nav__link">
+    subclass_of(ref_type)
   </a>
   
 </li>
@@ -530,8 +536,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#comparables" title="Comparables" class="md-nav__link">
     Comparables
   </a>
@@ -540,8 +546,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gtmin_value-strict-bool-false" title="gt(min_value, strict: bool = False)" class="md-nav__link">
-    gt(min_value, strict: bool = False)
+  <a href="#gtmin_value-strictboolfalse" title="gt(min_value, strict:bool=False)" class="md-nav__link">
+    gt(min_value, strict:bool=False)
   </a>
   
 </li>
@@ -554,8 +560,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ltmax_value-strict-bool-false" title="lt(max_value, strict: bool = False)" class="md-nav__link">
-    lt(max_value, strict: bool = False)
+  <a href="#ltmax_value-strictboolfalse" title="lt(max_value, strict:bool=False)" class="md-nav__link">
+    lt(max_value, strict:bool=False)
   </a>
   
 </li>
@@ -568,8 +574,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#betweenmin_value-max_value-open_left-bool-false-open_right-bool-false" title="between(min_value, max_value, open_left: bool = False, open_right: bool = False)" class="md-nav__link">
-    between(min_value, max_value, open_left: bool = False, open_right: bool = False)
+  <a href="#betweenmin_value-max_value-open_leftboolfalse-open_rightboolfalse" title="between(min_value, max_value, open_left:bool=False, open_right:bool=False)" class="md-nav__link">
+    between(min_value, max_value, open_left:bool=False, open_right:bool=False)
   </a>
   
 </li>
@@ -578,8 +584,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#numbers" title="Numbers" class="md-nav__link">
     Numbers
   </a>
@@ -612,8 +618,8 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#collections" title="Collections" class="md-nav__link">
     Collections
   </a>
@@ -622,8 +628,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#minlenmin_length-strict-bool-false" title="minlen(min_length, strict: bool = False)" class="md-nav__link">
-    minlen(min_length, strict: bool = False)
+  <a href="#minlenmin_length-strictboolfalse" title="minlen(min_length, strict:bool=False)" class="md-nav__link">
+    minlen(min_length, strict:bool=False)
   </a>
   
 </li>
@@ -636,8 +642,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#maxlenmax_length-strict-bool-false" title="maxlen(max_length, strict: bool = False)" class="md-nav__link">
-    maxlen(max_length, strict: bool = False)
+  <a href="#maxlenmax_length-strictboolfalse" title="maxlen(max_length, strict:bool=False)" class="md-nav__link">
+    maxlen(max_length, strict:bool=False)
   </a>
   
 </li>
@@ -645,6 +651,13 @@
           <li class="md-nav__item">
   <a href="#maxlensmax_length" title="maxlens(max_length)" class="md-nav__link">
     maxlens(max_length)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" title="length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)" class="md-nav__link">
+    length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
   </a>
   
 </li>
@@ -671,21 +684,16 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_all_validators_for_all_elts" title="on_all_(*validators_for_all_elts)" class="md-nav__link">
-    on_all_(*validators_for_all_elts)
+  <a href="#on_all_validation-functions_for_all_elts" title="on_all_(*validation functions_for_all_elts)" class="md-nav__link">
+    on_all_(*validation functions_for_all_elts)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_each_validators_collection" title="on_each_(*validators_collection)" class="md-nav__link">
-    on_each_(*validators_collection)
+  <a href="#on_each_validation-functions_collection" title="on_each_(*validation functions_collection)" class="md-nav__link">
+    on_each_(*validation functions_collection)
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -711,68 +719,77 @@
                   <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_fun.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Built-in validation functions</h1>
-                
-                <h2 id="validators-list">Validators list<a class="headerlink" href="#validators-list" title="Permanent link">&para;</a></h2>
-<p>Several validators are bundled in the package to be used with <code>@validate</code>. Don't hesitate to propose new ones !</p>
-<h3 id="all-objects">All objects<a class="headerlink" href="#all-objects" title="Permanent link">&para;</a></h3>
-<h4 id="not_none">not_none<a class="headerlink" href="#not_none" title="Permanent link">&para;</a></h4>
-<p>Checks that the input is not None. It should be first in the validators' list to apply. When it applies, the whole list of validators will be <strong>bypassed</strong> for <code>None</code> inputs. In other words when it applies, <code>None</code> inputs will always be accepted whatever the other validators present. </p>
-<p>Note that if you use <code>@validate</code> in combination with a PEP484 type checker such as enforce, you don't need to include the <code>not_none</code> validator. Indeed if an input is not explicitly declared with type <code>Optional[...]</code> or <code>Union[NoneType, ...]</code>, a good type checker should already raise an error:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
-<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span>
+                <h1 id="validation-library-reusable-base-validation-functions">Validation library - reusable base validation functions<a class="headerlink" href="#validation-library-reusable-base-validation-functions" title="Permanent link">&para;</a></h1>
+<p>Several base validation functions are bundled in the package. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="../usage">Usage</a> for details</p>
+<p>A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal</p>
+<div class="codehilite"><pre><span></span><span class="c1"># get the list of submodules containing base validation functions</span>
+<span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="p">)</span>
 
-<span class="nd">@runtime_validation</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">)],</span> <span class="n">b</span><span class="o">=</span><span class="n">is_even</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="c1"># get the list of base validation functions for each submodule</span>
+<span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="o">.</span><span class="n">numbers</span><span class="p">)</span>
 
-<span class="c1"># -- check that the validation works</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="c1"># OK because b has no type annotation nor not_none validator</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># RuntimeTypeError: a is None</span>
+<span class="c1"># help on a specific function</span>
+<span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="o">.</span><span class="n">numbers</span><span class="o">.</span><span class="n">is_multiple_of</span><span class="p">)</span>
 </pre></div>
 
 
-<h3 id="comparables">Comparables<a class="headerlink" href="#comparables" title="Permanent link">&para;</a></h3>
-<h4 id="gtmin_value-strict-bool-false">gt(min_value, strict: bool = False)<a class="headerlink" href="#gtmin_value-strict-bool-false" title="Permanent link">&para;</a></h4>
-<p>'Greater than' validator generator. Returns a validator to check that <code>x &gt;= min_value</code> (strict=False, default) or <code>x &gt; min_value</code> (strict=True)</p>
-<h4 id="gtsmin_value">gts(min_value)<a class="headerlink" href="#gtsmin_value" title="Permanent link">&para;</a></h4>
-<p>Alias for 'greater than' validator generator in strict mode</p>
-<h4 id="ltmax_value-strict-bool-false">lt(max_value, strict: bool = False)<a class="headerlink" href="#ltmax_value-strict-bool-false" title="Permanent link">&para;</a></h4>
-<p>'Lesser than' validator generator. Returns a validator to check that <code>x &lt;= max_value</code> (strict=False, default) or <code>x &lt; max_value</code> (strict=True)</p>
-<h4 id="ltsmax_value">lts(max_value)<a class="headerlink" href="#ltsmax_value" title="Permanent link">&para;</a></h4>
-<p>Alias for 'lesser than' validator generator in strict mode</p>
-<h4 id="betweenmin_value-max_value-open_left-bool-false-open_right-bool-false">between(min_value, max_value, open_left: bool = False, open_right: bool = False)<a class="headerlink" href="#betweenmin_value-max_value-open_left-bool-false-open_right-bool-false" title="Permanent link">&para;</a></h4>
-<p>'Is between' validator generator. Returns a validator to check that <code>min_val &lt;= x &lt;= max_val</code> (default). <code>open_right</code> and <code>open_left</code> flags allow to transform each side into strict mode. For example setting <code>open_left=True</code> will enforce <code>min_val &lt; x &lt;= max_val</code></p>
-<h3 id="numbers">Numbers<a class="headerlink" href="#numbers" title="Permanent link">&para;</a></h3>
-<h4 id="is_even">is_even<a class="headerlink" href="#is_even" title="Permanent link">&para;</a></h4>
-<p>Validates that x is even (<code>x % 2 == 0</code>)</p>
-<h4 id="is_odd">is_odd<a class="headerlink" href="#is_odd" title="Permanent link">&para;</a></h4>
-<p>Validates that x is odd (<code>x % 2 != 0</code>)</p>
-<h4 id="is_multiple_ofref">is_multiple_of(ref)<a class="headerlink" href="#is_multiple_ofref" title="Permanent link">&para;</a></h4>
-<p>Validates that x is a multiple of the reference (<code>x % ref == 0</code>)</p>
-<h3 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h3>
-<h4 id="minlenmin_length-strict-bool-false">minlen(min_length, strict: bool = False)<a class="headerlink" href="#minlenmin_length-strict-bool-false" title="Permanent link">&para;</a></h4>
-<p>'Minimum length' validator generator. Returns a validator to check that <code>len(x) &gt;= min_length</code> (strict=False, default) or <code>len(x) &gt; min_length</code> (strict=True)</p>
-<h4 id="minlensmin_length">minlens(min_length)<a class="headerlink" href="#minlensmin_length" title="Permanent link">&para;</a></h4>
-<p>Alias for minlen in strict mode</p>
-<h4 id="maxlenmax_length-strict-bool-false">maxlen(max_length, strict: bool = False)<a class="headerlink" href="#maxlenmax_length-strict-bool-false" title="Permanent link">&para;</a></h4>
-<p>'Maximum length' validator generator. Returns a validator to check that <code>len(x) &lt;= max_length</code> (strict=False, default) or <code>len(x) &lt; max_length</code> (strict=True)</p>
-<h4 id="maxlensmax_length">maxlens(max_length)<a class="headerlink" href="#maxlensmax_length" title="Permanent link">&para;</a></h4>
-<p>Alias for maxlen in strict mode</p>
-<h4 id="is_inallowed_values">is_in(allowed_values)<a class="headerlink" href="#is_inallowed_values" title="Permanent link">&para;</a></h4>
-<p>'Values in' validator generator. Returns a validator to check that x is in the provided set <code>allowed_values</code></p>
-<h4 id="is_subsetreference_set">is_subset(reference_set)<a class="headerlink" href="#is_subsetreference_set" title="Permanent link">&para;</a></h4>
-<p>'Is subset' validator generator. Returns a validator to check that <code>x</code> is a subset of <code>reference_set</code>. That is, <code>len(x - reference_set) == 0</code></p>
-<h4 id="is_supersetreference_set">is_superset(reference_set)<a class="headerlink" href="#is_supersetreference_set" title="Permanent link">&para;</a></h4>
-<p>'Is superset' validator generator. Returns a validator to check that <code>x</code> is a superset of <code>reference_set</code>. That is, <code>len(reference_set - x) == 0</code></p>
-<h4 id="on_all_validators_for_all_elts">on_all_(*validators_for_all_elts)<a class="headerlink" href="#on_all_validators_for_all_elts" title="Permanent link">&para;</a></h4>
-<p>Generates a validator for collection inputs where each element of the input will be validated against the validators provided. For convenience, a list of validators can be provided and will be replaced with an <code>and_</code>.</p>
-<p>Note that if you want to apply DIFFERENT validators for each element in the input collection, you should rather use <code>on_each_</code>.</p>
-<h4 id="on_each_validators_collection">on_each_(*validators_collection)<a class="headerlink" href="#on_each_validators_collection" title="Permanent link">&para;</a></h4>
-<p>Generates a validator for collection inputs where each element of the input will be validated against the corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an <code>and_</code> operator if the list has more than one element.</p>
-<p>Note that if you want to apply the SAME validators to all elements in the input, you should rather use <code>on_all_</code>.</p>
+<p>Don't hesitate to propose new ones ! Submit a pull request or an issue <a href="https://github.com/smarie/python-valid8">here</a>.</p>
+<h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
+<h3 id="instance_ofref_type">instance_of(ref_type)<a class="headerlink" href="#instance_ofref_type" title="Permanent link">&para;</a></h3>
+<p>'instance of' validation function generator. Returns a validation function to check that <code>is_instance(x, ref_type)</code>.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">instance_of</span>
+<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+</pre></div>
+
+
+<h3 id="subclass_ofref_type">subclass_of(ref_type)<a class="headerlink" href="#subclass_ofref_type" title="Permanent link">&para;</a></h3>
+<p>'subclass of' validation function generator. Returns a validation function to check that <code>is_subclass(x, ref_type)</code>.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">subclass_of</span>
+<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">subclass_of</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+</pre></div>
+
+
+<h2 id="comparables">Comparables<a class="headerlink" href="#comparables" title="Permanent link">&para;</a></h2>
+<h3 id="gtmin_value-strictboolfalse">gt(min_value, strict:bool=False)<a class="headerlink" href="#gtmin_value-strictboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Greater than' validation function generator. Returns a validation function to check that <code>x &gt;= min_value</code> (strict=False, default) or <code>x &gt; min_value</code> (strict=True).</p>
+<h3 id="gtsmin_value">gts(min_value)<a class="headerlink" href="#gtsmin_value" title="Permanent link">&para;</a></h3>
+<p>Alias for 'greater than' validation function generator in strict mode.</p>
+<h3 id="ltmax_value-strictboolfalse">lt(max_value, strict:bool=False)<a class="headerlink" href="#ltmax_value-strictboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Lesser than' validation function generator. Returns a validation function to check that <code>x &lt;= max_value</code> (strict=False, default) or <code>x &lt; max_value</code> (strict=True).</p>
+<h3 id="ltsmax_value">lts(max_value)<a class="headerlink" href="#ltsmax_value" title="Permanent link">&para;</a></h3>
+<p>Alias for 'lesser than' validation function generator in strict mode.</p>
+<h3 id="betweenmin_value-max_value-open_leftboolfalse-open_rightboolfalse">between(min_value, max_value, open_left:bool=False, open_right:bool=False)<a class="headerlink" href="#betweenmin_value-max_value-open_leftboolfalse-open_rightboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Is between' validation function generator. Returns a validation function to check that <code>min_val &lt;= x &lt;= max_val</code> (default). <code>open_right</code> and <code>open_left</code> flags allow to transform each side into strict mode. For example setting <code>open_left=True</code> will enforce <code>min_val &lt; x &lt;= max_val</code>.</p>
+<h2 id="numbers">Numbers<a class="headerlink" href="#numbers" title="Permanent link">&para;</a></h2>
+<h3 id="is_even">is_even<a class="headerlink" href="#is_even" title="Permanent link">&para;</a></h3>
+<p>Validates that x is even (<code>x % 2 == 0</code>).</p>
+<h3 id="is_odd">is_odd<a class="headerlink" href="#is_odd" title="Permanent link">&para;</a></h3>
+<p>Validates that x is odd (<code>x % 2 != 0</code>).</p>
+<h3 id="is_multiple_ofref">is_multiple_of(ref)<a class="headerlink" href="#is_multiple_ofref" title="Permanent link">&para;</a></h3>
+<p>'Is multiple of' validation function generator. Returns a validation function to check that  x is a multiple of the reference (<code>x % ref == 0</code>).</p>
+<h2 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h2>
+<h3 id="minlenmin_length-strictboolfalse">minlen(min_length, strict:bool=False)<a class="headerlink" href="#minlenmin_length-strictboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Minimum length' validation function generator. Returns a validation function to check that <code>len(x) &gt;= min_length</code> (strict=False, default) or <code>len(x) &gt; min_length</code> (strict=True).</p>
+<h3 id="minlensmin_length">minlens(min_length)<a class="headerlink" href="#minlensmin_length" title="Permanent link">&para;</a></h3>
+<p>Alias for minlen in strict mode.</p>
+<h3 id="maxlenmax_length-strictboolfalse">maxlen(max_length, strict:bool=False)<a class="headerlink" href="#maxlenmax_length-strictboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Maximum length' validation function generator. Returns a validation function to check that <code>len(x) &lt;= max_length</code> (strict=False, default) or <code>len(x) &lt; max_length</code> (strict=True).</p>
+<h3 id="maxlensmax_length">maxlens(max_length)<a class="headerlink" href="#maxlensmax_length" title="Permanent link">&para;</a></h3>
+<p>Alias for maxlen in strict mode.</p>
+<h3 id="length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse">length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)<a class="headerlink" href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" title="Permanent link">&para;</a></h3>
+<p>'Is length between' validation_function generator. Returns a validation_function to check that <code>min_len &lt;= len(x) &lt;= max_len (default)</code>. <code>open_right</code> and <code>open_left</code> flags allow to transform each side into strict mode. For example setting <code>open_left=True</code> will enforce <code>min_len &lt; len(x) &lt;= max_len</code>.</p>
+<h3 id="is_inallowed_values">is_in(allowed_values)<a class="headerlink" href="#is_inallowed_values" title="Permanent link">&para;</a></h3>
+<p>'Values in' validation function generator. Returns a validation function to check that x is in the provided set <code>allowed_values</code>.</p>
+<h3 id="is_subsetreference_set">is_subset(reference_set)<a class="headerlink" href="#is_subsetreference_set" title="Permanent link">&para;</a></h3>
+<p>'Is subset' validation function generator. Returns a validation function to check that <code>x</code> is a subset of <code>reference_set</code>. That is, <code>len(x - reference_set) == 0</code>.</p>
+<h3 id="is_supersetreference_set">is_superset(reference_set)<a class="headerlink" href="#is_supersetreference_set" title="Permanent link">&para;</a></h3>
+<p>'Is superset' validation function generator. Returns a validation function to check that <code>x</code> is a superset of <code>reference_set</code>. That is, <code>len(reference_set - x) == 0</code>.</p>
+<h3 id="on_all_validation-functions_for_all_elts">on_all_(*validation functions_for_all_elts)<a class="headerlink" href="#on_all_validation-functions_for_all_elts" title="Permanent link">&para;</a></h3>
+<p>Generates a validation function for collection inputs where each element of the input will be validated against the validation functions provided. For convenience, a list of validation functions can be provided and will be replaced with an <code>and_</code>.</p>
+<p>Note that if you want to apply DIFFERENT validation functions for each element in the input collection, you should rather use <code>on_each_</code>.</p>
+<h3 id="on_each_validation-functions_collection">on_each_(*validation functions_collection)<a class="headerlink" href="#on_each_validation-functions_collection" title="Permanent link">&para;</a></h3>
+<p>Generates a validation function for collection inputs where each element of the input will be validated against the corresponding validation function(s) in the validation functions_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an <code>and_</code> operator if the list has more than one element.</p>
+<p>Note that if you want to apply the SAME validation functions to all elements in the input, you should rather use <code>on_all_</code>.</p>
                 
                   
                 
