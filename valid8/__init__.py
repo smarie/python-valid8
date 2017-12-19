@@ -6,6 +6,7 @@ from valid8.utils_typing import *
 from valid8.base import *
 from valid8.composition import *
 
+from valid8.validation_lib.types import *
 from valid8.validation_lib.collections import *
 from valid8.validation_lib.comparables import *
 from valid8.validation_lib.numbers import *

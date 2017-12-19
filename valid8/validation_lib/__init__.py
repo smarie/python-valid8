@@ -1,1 +1,1 @@
-__all__ = ['collections', 'comparables', 'numbers']
+__all__ = ['types', 'collections', 'comparables', 'numbers']
