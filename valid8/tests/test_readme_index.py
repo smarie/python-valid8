@@ -7,7 +7,7 @@ from valid8 import InputValidationError, ValidationError
 
 def test_readme_index_first_inline():
     from mini_lambda import x
-    from valid8 import assert_valid, is_multiple_of, NonePolicy, Failure
+    from valid8 import assert_valid, is_multiple_of, NonePolicy, WrappingFailure
 
     surf = -1
 
@@ -16,62 +16,91 @@ def test_readme_index_first_inline():
         assert_valid(is_multiple_of(100), surface=surf)
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
-                     'Root validator [is_multiple_of_100] raised [BasicFailure: x % 100 == 0 does not hold for x=-1]'
+                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
     # + explicit failure on None
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(is_multiple_of(100), surface=surf, none_policy=NonePolicy.FAIL)
+        assert_valid(is_multiple_of(100), surface=None, none_policy=NonePolicy.FAIL)
     e = exc_info.value
-    assert str(e) == 'Error validating [surface=-1]. ' \
-                     'Root validator [reject_none(is_multiple_of_100)] ' \
-                     'raised [BasicFailure: x % 100 == 0 does not hold for x=-1]'
+    assert str(e) == 'Error validating [surface=None]. ValueIsNone: The value must be non-None. Wrong value: [None].'
 
     # + explicit failure message
     with pytest.raises(ValidationError) as exc_info:
         assert_valid(x > 0, help_msg='Surface should be positive', surface=surf)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=-1]. " \
-                     "Root validator [failure_raiser(x > 0, Surface should be positive)] " \
-                     "raised [Failure: Surface should be positive. " \
-                     "Function [x > 0] returned [False] for value [-1].]"
+    assert str(e) == "Surface should be positive. " \
+                     "Error validating [surface=-1]: validation function [x > 0] returned [False]."
 
-    # + explicit failure type
-    class SurfaceNotMul100(Failure):
+    # + unique applicative error type
+    class SurfaceNotMul100(ValidationError):
         help_msg = 'Surface should be a multiple of 100'
 
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(is_multiple_of(100), failure_type=SurfaceNotMul100, surface=surf)
+        assert_valid(is_multiple_of(100), error_type=SurfaceNotMul100, surface=surf)
     e = exc_info.value
-    assert str(e) == 'Error validating [surface=-1]. ' \
-                     'Root validator [failure_raiser(is_multiple_of_100, SurfaceNotMul100)] ' \
-                     'raised [SurfaceNotMul100: Surface should be a multiple of 100. ' \
-                     'Function [is_multiple_of_100] raised [BasicFailure: x % 100 == 0 does not hold for x=-1] for ' \
-                     'value [-1].]'
+    assert isinstance(e, SurfaceNotMul100)
+    assert str(e) == 'Surface should be a multiple of 100. ' \
+                     'Error validating [surface=-1]. ' \
+                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
     # multiple validation functions
     with pytest.raises(ValidationError) as exc_info:
         assert_valid((x >= 0) & (x < 10000), is_multiple_of(100), surface=surf)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "Root validator [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [-1]. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'False', " \
-                     "'is_multiple_of_100': '[BasicFailure] x % 100 == 0 does not hold for x=-1'}]"
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
+
+    # + unique applicative error type
+    class InvalidSurface(ValidationError):
+        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100'
+
+    with pytest.raises(ValidationError) as exc_info:
+        assert_valid((x >= 0) & (x < 10000), is_multiple_of(100), surface=surf, error_type=InvalidSurface)
+    e = exc_info.value
+    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \
+                     "Error validating [surface=-1]. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
+                     "Successes: [] / Failures: {" \
+                     "'(x >= 0) & (x < 10000)': 'False', " \
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
 
     # + failure messages for each
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(((x >= 0) & (x < 10000), 'Out of range'),
-                     (is_multiple_of(100), SurfaceNotMul100), surface=surf)
+        assert_valid(((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
+                     (is_multiple_of(100), 'Surface should be a multiple of 100'), surface=surf)
     e = exc_info.value
+    # TODO this one may be improved...
     assert str(e) == "Error validating [surface=-1]. " \
-                     "Root validator [and(failure_raiser((x >= 0) & (x < 10000), Out of range), " \
-                     "failure_raiser(is_multiple_of_100, SurfaceNotMul100))] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [-1]. Successes: [] / Failures: " \
-                     "{'failure_raiser((x >= 0) & (x < 10000), Out of range)': '[Failure] Out of range. " \
+                     "AtLeastOneFailed: At least one validation function failed validation. " \
+                     "Successes: [] / Failures: {" \
+                     "'failure_raiser((x >= 0) & (x < 10000), Surface should be betwen 0 and 10000)': " \
+                     "'WrappingFailure: Surface should be betwen 0 and 10000. " \
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
-                     "'failure_raiser(is_multiple_of_100, SurfaceNotMul100)': '[SurfaceNotMul100] Surface " \
-                     "should be a multiple of 100. Function [is_multiple_of_100] raised " \
-                     "[BasicFailure: x % 100 == 0 does not hold for x=-1] for value [-1].'}]"
+                     "'failure_raiser(is_multiple_of_100, Surface should be a multiple of 100)': " \
+                     "'WrappingFailure: Surface should be a multiple of 100. " \
+                     "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
+                     "Wrong value: [-1]].'}."
+
+    # + unique applicative error type
+    with pytest.raises(ValidationError) as exc_info:
+        assert_valid(((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
+                     (is_multiple_of(100), 'Surface should be a multiple of 100'),
+                     error_type=InvalidSurface, surface=surf)
+    e = exc_info.value
+    # TODO this one may be improved...
+    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \
+                     "Error validating [surface=-1]. " \
+                     "AtLeastOneFailed: At least one validation function failed validation. " \
+                     "Successes: [] / Failures: {" \
+                     "'failure_raiser((x >= 0) & (x < 10000), Surface should be betwen 0 and 10000)': " \
+                     "'WrappingFailure: Surface should be betwen 0 and 10000. " \
+                     "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
+                     "'failure_raiser(is_multiple_of_100, Surface should be a multiple of 100)': " \
+                     "'WrappingFailure: Surface should be a multiple of 100. " \
+                     "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
+                     "Wrong value: [-1]].'}."
 
 
 def test_index_enforce_mini_lambda():
@@ -85,16 +114,16 @@ def test_index_enforce_mini_lambda():
 
     # Imports - for value validation
     from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of, Failure
+    from valid8 import validate_arg, is_multiple_of, WrappingFailure
 
     # Example of unique error type for easier handling at app-level
-    class EmptyNameString(Failure):
+    class EmptyNameString(WrappingFailure):
         help_msg = 'Name should be a non-empty string'
 
-    class SurfaceOutOfRange(Failure):
+    class SurfaceOutOfRange(WrappingFailure):
         help_msg = 'Surface should be comprised between 0 and 10000 m²'
 
-    class SurfaceNotMultipleOf100(Failure):
+    class SurfaceNotMultipleOf100(WrappingFailure):
         help_msg = 'Surface should be a multiple of 100'
 
     @runtime_validation
@@ -155,10 +184,10 @@ def test_index_enforce_old_style():
     build_house('test', 12, None)  # Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value: @validate raises a BasicFailure
+        build_house('test', -1, 2)  # Value: @validate raises a Failure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value: @validate raises a BasicFailure
+        build_house('', 12, 2)  # Value: @validate raises a Failure
 
 
 @pytest.mark.skip(reason="waiting for the next version of pytypes")
@@ -191,7 +220,7 @@ def test_index_pytypes():
     build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate raises a BasicFailure
+        build_house('test', -1, 2)  # Value validation: @validate raises a Failure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate raises a BasicFailure
+        build_house('', 12, 2)  # Value validation: @validate raises a Failure

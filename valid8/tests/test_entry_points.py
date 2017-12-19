@@ -2,7 +2,7 @@ import pytest
 from typing import Optional
 
 from valid8 import validate, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
-    decorate_with_validation, lt, not_all, BasicFailure
+    decorate_with_validation, lt, not_all, Failure
 
 
 def test_validate_nominal_builtin_validators():
@@ -58,38 +58,36 @@ def test_validate_custom_validators_basic():
         myfunc(4, 21)  # InputValidationError: a is not a multiple of 3
     e = exc_info.value
     assert str(e) == "Error validating input [a=4] for function [myfunc]. " \
-                     "Root validator [and(gt_assert2, is_mod_3)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [4]. " \
-                     "Successes: ['gt_assert2'] / Failures: {'is_mod_3': 'False'}]"
+                     "AtLeastOneFailed: At least one validation function failed validation for value [4]. " \
+                     "Successes: ['gt_assert2'] / Failures: {'is_mod_3': 'False'}."
 
     with pytest.raises(InputValidationError) as exc_info:
         myfunc(15, 1)  # InputValidationError: b is not a multiple of 5
     e = exc_info.value
     assert str(e) == "Error validating input [b=1] for function [myfunc]: " \
-                     "root validator [is_mod] returned [False]."
+                     "validation function [is_mod] returned [False]."
 
     with pytest.raises(InputValidationError) as exc_info:
         myfunc(1, 0)  # InputValidationError caused by AssertionError: a is not >= 2
     e = exc_info.value
     assert str(e) == "Error validating input [a=1] for function [myfunc]. " \
-                     "Root validator [and(gt_assert2, is_mod_3)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [1]. Successes: [] " \
-                     "/ Failures: {'gt_assert2': '[AssertionError] assert 1 >= 2', 'is_mod_3': 'False'}]"
+                     "AtLeastOneFailed: At least one validation function failed validation for value [1]. " \
+                     "Successes: [] / Failures: {'gt_assert2': 'AssertionError: assert 1 >= 2', 'is_mod_3': 'False'}."
 
 
 def test_validate_custom_validators_with_exception():
-    """ Checks that custom functions throwing BasicFailure can be used as validators """
+    """ Checks that custom functions throwing Failure can be used as validators """
 
     def gt_ex1(x):
         """ A validator raising a custom exception in case of failure """
         if not x >= 1:
-            raise BasicFailure('x >= 1 does not hold for x={val}'.format(val=x))
+            raise Failure('x >= 1 does not hold for x={val}'.format(val=x))
 
     def is_mod(ref):
         """ A validator generator, with parameters and which raises a custom exception """
         def is_mod(x):
             if x % ref != 0:
-                raise BasicFailure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
+                raise Failure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
         return is_mod
 
     @validate(a=[gt_ex1, lt(12), is_mod(5)])
@@ -104,30 +102,27 @@ def test_validate_custom_validators_with_exception():
         myfunc(0)  # InputValidationError: a >= 1 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=0] for function [myfunc]. " \
-                     "Root validator [and(gt_ex1, lesser_than_12, is_mod)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [0]. " \
-                     "Successes: ['lesser_than_12', 'is_mod'] " \
-                     "/ Failures: {'gt_ex1': '[BasicFailure] x >= 1 does not hold for x=0'}]"
+                     "AtLeastOneFailed: At least one validation function failed validation for value [0]. " \
+                     "Successes: ['lesser_than_12', 'is_mod'] / " \
+                     "Failures: {'gt_ex1': 'Failure: Wrong value: [x >= 1 does not hold for x=0]'}."
 
     with pytest.raises(InputValidationError) as exc_info:
         print(2)
         myfunc(3)  # InputValidationError: a % 5 == 0 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=3] for function [myfunc]. " \
-                     "Root validator [and(gt_ex1, lesser_than_12, is_mod)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [3]. " \
-                     "Successes: ['gt_ex1', 'lesser_than_12'] " \
-                     "/ Failures: {'is_mod': '[BasicFailure] x % 5 == 0 does not hold for x=3'}]"
+                     "AtLeastOneFailed: At least one validation function failed validation for value [3]. " \
+                     "Successes: ['gt_ex1', 'lesser_than_12'] / " \
+                     "Failures: {'is_mod': 'Failure: Wrong value: [x % 5 == 0 does not hold for x=3]'}."
 
     with pytest.raises(InputValidationError) as exc_info:
         print(3)
         myfunc(15)  # InputValidationError: a < 12 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=15] for function [myfunc]. " \
-                     "Root validator [and(gt_ex1, lesser_than_12, is_mod)] raised [AtLeastOneFailed: " \
-                     "At least one validator failed validation for value [15]. " \
-                     "Successes: ['gt_ex1', 'is_mod'] " \
-                     "/ Failures: {'lesser_than_12': '[BasicFailure] lt: x <= 12 does not hold for x=15'}]"
+                     "AtLeastOneFailed: At least one validation function failed validation for value [15]. " \
+                     "Successes: ['gt_ex1', 'is_mod'] / " \
+                     "Failures: {'lesser_than_12': 'TooBig: x <= 12 does not hold for x=15. Wrong value: [15]'}."
 
 
 def test_validate_mini_lambda():

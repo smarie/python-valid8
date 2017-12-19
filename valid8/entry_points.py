@@ -1,13 +1,10 @@
-from inspect import signature, Parameter
-
+from copy import copy
 from typing import Callable, Any, List, Union, Type
 
-from decorator import decorate
-
-from valid8.utils_typing import is_pep484_nonable
-from valid8.core import result_is_success, get_validation_function_name, ValidationFuncs, Failure, \
-    _process_validation_function_s, _none_accepter, _none_rejecter
-from valid8.utils_decoration import create_function_decorator__robust_to_args, apply_on_each_func_args_sig
+from base import RootException, HelpMsgMixIn
+from valid8.utils_string import end_with_dot
+from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter
+from valid8.composition import ValidationFuncs, _process_validation_function_s
 
 
 class NonePolicy:
@@ -40,33 +37,36 @@ class NoneArgPolicy(NonePolicy):
     Optional) then the policy for this argument is SKIP, otherwise the policy for this argument is FAIL """
 
 
-def get_none_policy_text(none_policy: NoneArgPolicy):
+def get_none_policy_text(none_policy: int, verbose: bool=False):
     """
     Returns a user-friendly description of a NonePolicy taking into account NoneArgPolicy
 
     :param none_policy:
+    :param verbose:
     :return:
     """
     if none_policy is NonePolicy.SKIP:
-        return "accept None without performing validation"
+        return "accept None without performing validation" if verbose else 'SKIP'
     elif none_policy is NonePolicy.FAIL:
-        return "fail on None without performing validation"
+        return "fail on None without performing validation" if verbose else 'FAIL'
     elif none_policy is NonePolicy.VALIDATE:
-        return "validate None as any other values"
+        return "validate None as any other values" if verbose else 'VALIDATE'
     elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_FAIL:
-        return "accept None witout validation if the argument is optional, otherwise fail on None"
+        return "accept None without validation if the argument is optional, otherwise fail on None" if verbose \
+            else 'SKIP_IF_NONABLE_ELSE_FAIL'
     elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE:
-        return "accept None witout validation if the argument is optional, otherwise validate None as any other values"
+        return "accept None without validation if the argument is optional, otherwise validate None as any other " \
+               "values" if verbose else 'SKIP_IF_NONABLE_ELSE_VALIDATE'
     else:
         raise ValueError('Invalid none_policy ' + str(none_policy))
 
 
-def _add_none_handler(validation_callable: Callable, none_policy: NonePolicy) -> Callable:
+def _add_none_handler(validation_callable: Callable, none_policy: int) -> Callable:
     """
     Adds a wrapper or nothing around the provided validation_callable, depending on the selected policy
 
     :param validation_callable:
-    :param none_policy:
+    :param none_policy: an int representing the None policy, see NonePolicy
     :return:
     """
     if none_policy is NonePolicy.SKIP:
@@ -82,50 +82,145 @@ def _add_none_handler(validation_callable: Callable, none_policy: NonePolicy) ->
         raise ValueError('Invalid none_policy : ' + str(none_policy))  # invalid none_policy
 
 
-class ValidationError(ValueError):
+class ValidationError(HelpMsgMixIn, ValueError, RootException):
     """
-    Exception raised in 'defensive mode' whenever value validation fails. This may be because of an internal exception
-    in the validation functions, or of something else (for example validation functions returned False).
+    Represents a Validation error raised by a 'defensive mode' validation entry point such as `assert_valid`,
+    `@validate`, `@validate_arg`, or `<Validator>.assert_valid()`. It contains details about the `Validator`, the value
+    that was being validated, and the outcome (a value or an exception). All these details are stored in the instance.
 
-    Note that custom base validation functions should not raise this kind of exception - this is reserved to global
-    Validator objects. Instead you might wish to raise (a subclass of) valid8.BasicFailure or valid8.Failure
+    There are two ways to use this class:
+
+     * either use the syntax `assert_valid(..., help_msg=<help_msg>)` when performing validation, or create your
+     `Validator` instances with argument help_msg=<help_msg>. Both are equivalent and will create instances of
+     `ValidationError` with the provided help message when validation fails.
+
+     * or subclass it explicitly (recommended) and then use the syntax `assert_valid(..., error_type=<subclass>)` or
+     create your `Validator` instances with argument `error_type=<subclass>`. Both are equivalent and will create
+     instances of your subclass when validation fails.
+
+    This class looks very similar to `Failure` but is very different:
+     - `Failure` is an *optional* base exception type for *base validation functions*. It does not know anything about
+     the validation context or purpose. Besides, many base validation functions do not even raise it (they would raise
+     other exceptions or return a non-True, non-None result). So consider it a goodie when writing validation functions.
+     - `ValidationError` is the base exception type for validation. When validation fails, the exception raised will
+     *always* be an instance of `ValidationError`. It knows the full context of validation: name of variable being
+     validated, name of function and argument in case of InputValidation, and applicative intent through the help
+     message or a user-created subclass. If a `ValidationError` was caused by a base validation function raising a
+     `Failure`, then this `Failure` will be set as the `__cause__` of the error, and will also be available in the
+     contents of `ValidationError` (in the `validation_outcome` field)
+
+    It is recommended that Users extend this class to define their own validation errors, so as to provide a unique
+    error type for each kind of applicative error (this eases the process of error handling at app-level). An easy way
+    to do this while providing details about the validation error is to override the 'help_msg' field:
+
+    ```python
+    class SurfaceNotInValidRange(ValidationError):
+        help_msg = 'Surface should be a positive number less than 10000 (square meter)'
+
+    assert_valid(is_between(0, 10000), surface=surface, error_type=SurfaceNotInValidRange)
+    ```
+
+    If you wish that users get more informative help messages, you may insert formatting placeholders in the `help_msg`
+    field as it will be automatically formatted using help_msg.format(wrong_value=wrong_value, **kw_context_args).
+    Any number of contextual keyword arguments (**kw_context_args) may be provided in the constructor for this purpose:
+
+    ```python
+    class SurfaceNotInValidRange(ValidationError):
+        help_msg = "x={wrong_value} does not meet {condition}"
+
+    def my_validator(x):
+        if <condition>:
+            return True
+        else:
+            # the only mandatory argument is `wrong_value`, then any set of keyword arguments may be provided:
+            raise ConditionWasNotMet(wrong_value=x, condition=condition)
+    ```
+
+    For more stronger constructor signature, your subclass may override the __init__ method. The class below has an
+    equivalent behaviour than above, but with a stricter constructor:
+
+    ```python
+    class ConditionWasNotMet(Failure):
+        def __init__(self, wrong_value, condition):
+            help_msg = "x={wrong_value} does not meet {condition}"
+            super(ConditionWasNotMet, self).__init__(wrong_value=wrong_value, condition=condition, help_msg=help_msg)
+    ```
+
+    Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then
+    they should subclass `WrappingFailure` instead of `Failure`. See `WrappingFailure` for details.
     """
 
-    def __init__(self, validator: 'Validator', var_value, var_name: str = None, validation_outcome: Any = None):
+    def __init__(self, validator: 'Validator', wrong_value, variable_name: str, validation_outcome: Any = None,
+                 help_msg: str = None, append_details: bool = True, **kw_context_args):
         """
-        Creates a ValidationError associated with validation of var_value using validator. Additional details
-        about the variable name and validation_outcome (result or exception) can be provided. All of this information
-        is stored in the exception object so as to be managed by a global error handler at application-level if needed
-        (for example for internationalization purposes)
+        Creates a ValidationError associated with validation of `wrong_value` using `validator`. Additional details
+        about the `variable_name` and `validation_outcome` (result or exception) can be provided. All of this
+        information is stored in the exception object so as to be managed by a global error handler at application-level
+        if needed (for example for internationalization purposes)
 
         :param validator: the Validator that raised this exception
-        :param var_value: the value that was being validated
-        :param var_name: the optional name associated to that value
+        :param wrong_value: the value that was validated and failed validation
+        :param variable_name: the name associated to that value
         :param validation_outcome: the result of the validation process (either a non-True non-None value, or an
         exception)
+        :param help_msg: an optional help message specific to this validation error. If not provided, the class
+        attribute `help_msg` will be used. This behaviour may be redefined by subclasses by overriding `get_help_msg`
+        :param append_details: a boolean indicating if a default message containing the value should be appended to the
+        string representation. Default is True
+        :param kw_context_args: optional context (results, other) to store in this failure and that will be also used
+        for help message formatting
         """
 
-        # store details in the object for future access if needed
+        self.append_details = append_details
+
+        # store everything in self
         self.validator = validator
-        self.var_name = var_name
-        self.var_value = var_value
+        self.var_value = wrong_value
+        self.var_name = variable_name
         self.validation_outcome = validation_outcome
+        self.__dict__.update(kw_context_args)
+
+        # store help_msg ONLY if non-None otherwise the possibly user-overridden class attribute should be left visible
+        if help_msg is not None:
+            self.help_msg = help_msg
+
+        # call super constructor with nothing, since Exception does not accept keyword arguments and we are redefining
+        # __str__ anyway
+        super(ValidationError, self).__init__()
+
+        # automatically set the exception as the cause, so that we can forget to "raise from"
+        if isinstance(validation_outcome, Exception):
+            self.__cause__ = validation_outcome
+
+    def __str__(self):
+        """ Overrides the default exception message by relying on HelpMsgMixIn """
+        if self.append_details:
+            return self.get_help_msg(dotspace_ending=True, **self.__dict__) + self.get_details()
+        else:
+            return self.get_help_msg(**self.__dict__)
+
+    def get_details(self):
+        """ The function called to get the details appended to the help message when self.append_details is True """
 
         # create the exception main message according to the type of result
-        if isinstance(validation_outcome, Exception):
-            contents = 'Error validating {what}. Root validator [{val}] raised [{exc}: {det}]' \
+        if isinstance(self.validation_outcome, Exception):
+            # new: we now remove  "Root validator was [{validator}]", users can get it through e.validator
+            contents = 'Error validating {what}. {exception}: {details}' \
                        ''.format(what=self.get_what_txt(),
-                                 val=validator.get_main_function_name(),
-                                 exc=type(validation_outcome).__name__, det=validation_outcome)
-            # exception: also link the traceback
-            self.__traceback__ = validation_outcome.__traceback__
-        else:
-            contents = 'Error validating {what}: root validator [{val}] returned [{res}].' \
-                       ''.format(what=self.get_what_txt(),
-                                 val=validator.get_main_function_name(), res=validation_outcome)
+                                 exception=type(self.validation_outcome).__name__,
+                                 details=end_with_dot(str(self.validation_outcome)))
 
-        # call super constructor with the message
-        super(ValidationError, self).__init__(contents)
+        else:
+            contents = 'Error validating {what}: validation function [{val}] returned [{result}].' \
+                       ''.format(what=self.get_what_txt(), val=self.validator.get_main_function_name(),
+                                 result=self.validation_outcome)
+
+        # return 'Wrong value: [{}]'.format(self.wrong_value)
+        return contents
+
+    def get_variable_str(self):
+        """ Utility method to get the variable value or 'variable_name=value' if name is not None """
+        return ('' if self.var_name is None else (self.var_name + '=')) + str(self.var_value)
 
     def get_what_txt(self):
         """
@@ -136,105 +231,153 @@ class ValidationError(ValueError):
         validated.
         :return:
         """
-        var = ('' if self.var_name is None else (self.var_name + '=')) + str(self.var_value)
-        return '[{var}]'.format(var=var)
+        return '[{var}]'.format(var=self.get_variable_str())
 
 
 class Validator:
     """
     Represents a 'pre-compiled' validator, to avoid as much as possible functions creation overhead when performing
-    validation. It is constructed from a list of base validation functions, and can then be called to perform defensive
-    programming (using `assert_valid`) or case handling (using `is_valid`).
+    validation. It is constructed from a list of base validation functions (see constructor for details). Validation
+    will succeed if all base validation functions succeed.
 
-    A Validator object is the only one to know the full context of validation, and therefore is the only one able
-    to raise the top-level `ValidationError`. Base validation functions should either return `False` or a non-`None`
-    result in case of failure, or they should raise any exception. It is recommended that they raise subclasses of
-    `valid8.Failure` for consistency, and that they create very explicit exception messages about what was wrong with
-    the value.
+    Once created, a `Validator` may be called to either perform defensive programming (using `assert_valid`) or
+    case handling (using `is_valid`).
+
+    A Validator object is the only object that knows the full context of validation, and therefore is the only one able
+    to raise the top-level `ValidationError` or subclass if user-provided (recommended, use constructor argument
+    `error_type`). See `ValidationError` for details.
     """
 
-    __slots__ = ['main_function', 'none_policy', 'exc_type']
-
-    def __init__(self, *validation_func: ValidationFuncs, failure_type: Type[Failure] = None, help_msg: str = None,
-                 none_policy: NonePolicy = None, error_type: Type[ValidationError] = None):
+    def __init__(self, *validation_func: ValidationFuncs, error_type: Type[ValidationError] = None,
+                 help_msg: str = None, none_policy: int = None, **kw_context_args):
         """
-        Creates a validator from a (possibly list of) base validation functions. A list will be converted to an
-        implicit 'and_'. A base validation function should return `True` or `None` for the validation to be a success.
-        Note that this is quite different from the standard python truth value test (where None is equivalent to False),
-        but it seems more adapted to an intuitive usage, where a function that returns silently without any output means
-        'no problem there, move one'.
+        Creates a validator from a set of base validation functions. Validation will succeed if all base validation
+        functions succeed.
+
+        The most basic validation function to use in a `Validator` is a callable that takes a single argument and
+        returns `True` or `None` in case of success - any other result or any exception is a failure. Note that this is
+        quite different from the standard python truth value test (where None is equivalent to False), but it seems more
+        adapted to an intuitive usage, where a function that returns silently without any output means 'no problem
+        there, move one'. Users defining their own base validation functions may wish to raise instances or subclasses
+        of `Failure` to provide more user-friendly details and unique failure identifiers. Raw mini_lambda expressions
+        are supported and are automatically transformed to functions.
+
+        For example:
+
+        ```python
+        # (a) an existing validation function
+        from math import isfinite
+        Validator(isfinite)
+
+        # (b) a mini_lambda
+        from mini_lambda import x
+        Validator(x > 0)
+
+        # (c) a user-defined function raising unique Failure
+        class NotFriendly(Failure):
+            help_msg = "The value should be friendly"
+
+        def my_validator(x):
+            if not_friendly(x):
+                return True
+            else:
+                raise NotFriendly(wrong_value=x)
+
+        Validator(my_validator)
+        ```
+
+        Users may perform composition on base validation functions used in a `Validator`:
+        - either explicitly using the various operators provided in valid8.composition (`and_`, `or_`, `xor_`,
+        `failure_raiser()`, `skip_on_none()`, `fail_on_none()`...)
+        - or implicitly using the syntax defined in `ValidationFuncs`: i.e. a list means an implicit `and_()` and a
+        tuple means an implicit `failure_raiser()`
+
+        It is possible to provide values for `help_msg` and `error_type` in the constructor so as to reuse them in any
+        subsequent call to `assert_valid`. See `assert_valid` for details about those fields
+
+        Finally the `none_policy` argument controls how the creates `Validator` will behave when asked to validate
+        `None` values. See `NonePolicy` for details about the possible options.
 
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
         are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
         `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
+        :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
+        ValidationError will be raised with the provided help_msg
+        :param help_msg: an optional help message to be used in the raised error in case of validation failure.
         :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
         Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
         the same validation process.
-        :param error_type:
+        :param kw_context_args: optional contextual information to store in the exception, and that may be also used
+        to format the help message
         """
         self.none_policy = none_policy or NonePolicy.VALIDATE
 
-        self.exc_type = error_type or ValidationError
-        if not issubclass(self.exc_type, ValidationError):
+        self.error_type = error_type or ValidationError
+        if not issubclass(self.error_type, ValidationError):
             raise ValueError('error_type should be a subclass of ValidationError')
 
+        self.help_msg = help_msg
+
+        self.kw_context_args = kw_context_args
+
         # replace validation_func lists with explicit 'and_' if needed, and tuples with _failure_raiser()
-        main_val_func = _process_validation_function_s(list(validation_func), failure_type=failure_type, help_msg=help_msg)
+        main_val_func = _process_validation_function_s(list(validation_func))
 
         # finally wrap in a none handler according to the policy
         self.main_function = _add_none_handler(main_val_func, none_policy=self.none_policy)
 
-    def __repr__(self):
-        return "{validator_type}<{main_val_function}, none_policy={none_policy}>" \
-               "".format(validator_type=type(self).__name__,
-                         main_val_function=self.get_main_function_name(),
-                         none_policy=get_none_policy_text(self.none_policy))
-
-    def get_main_function_name(self):
+    def get_main_function_name(self) -> str:
         """
         Utility method to get a friendly display name for the main validation function used by this Validator.
         Note that the main validation function is potentially a combination of several functions through a 'and_()'
         :return:
         """
-        return get_validation_function_name(self.main_function)
+        return get_callable_name(self.main_function)
 
-    def __call__(self, name: str=None, value=None, **named_values):
+    def __repr__(self) -> str:
+        """ Overrides the default string representation for Validator instances """
+
+        info = self.get_additional_info_for_repr()
+        return "{validator_type}<{additional_info}validation_function={main_val_function}, none_policy={none_policy}," \
+               " exc_type={exc_type}>" \
+               "".format(additional_info=(info + ', ') if len(info) > 0 else '',
+                         validator_type=type(self).__name__,
+                         main_val_function=self.get_main_function_name(),
+                         none_policy=get_none_policy_text(self.none_policy),
+                         exc_type=self.error_type.__name__)
+
+    def get_additional_info_for_repr(self) -> str:
+        """ Subclasses may override this method to add custom information in the string representation of instances """
+        return ''
+
+    def assert_valid(self, name: str, value: Any, error_type: Type[ValidationError] = None,
+                     help_msg: str = None, **kw_context_args):
         """
-        Shortcut for self.assert_valid, in case you saved a validator in an already explicit variable name.
-        Two modes are supported:
+        Asserts that the provided named value is valid with respect to the inner base validation functions. It returns
+        silently in case of success, and raises a `ValidationError` or a subclass in case of failure. This corresponds
+        to a 'Defensive programming' (sometimes known as 'Offensive programming') mode.
 
-        :param name:
-        :param value:
-        :return:
-        """
-        # check the mode used
-        if value is not None:
-            if name is None or len(named_values) > 0:
-                raise ValueError('Calling a validator accepts either a non-None name and a non-None value arguments, '
-                                 'or a single name-value keyword argument. Received arguments: '
-                                 + str(dict(name=name, value=value)) + ', ' + str(**named_values))
-        else:
-            if name is not None or len(named_values) != 1:
-                raise ValueError('Calling a validator accepts either a non-None name and a non-None value arguments, '
-                                 'or a single name-value keyword argument. Received arguments: '
-                                 + str(dict(name=name, value=value)) + ', ' + str(**named_values))
-            else:
-                name, value = next(iter(named_values.items()))
+        By default this raises instances of `ValidationError` with a default message, in case of failure. There are
+        two ways that you can customize this behaviour:
 
-        # perform validation
-        self.assert_valid(name, value)
+         * if you set `help_msg` in this method or in `Validator` constructor, instances of `ValidationError` created
+         will be customized with the provided help message.
 
-    def assert_valid(self, name, value):
-        """
-        Asserts that the provided value is valid with respect to the inner validation function.
-        This corresponds to a 'Defensive programming' (sometimes known as 'Offensive programming') mode: on any kind of
-        failure (explicit exception or wrong result returned by a validator), the function will raise a ValidationError,
-        or a subclass of it if it was provided in the constructor.
+         * if you set `error_type` in this method or in `Validator` constructor, instances of your custom class will be
+         created. Note that you may still provide a `help_msg`.
+
+        It is recommended that Users define their own validation error types (case 2 above), so as to provide a unique
+        error type for each kind of applicative error. This eases the process of error handling at app-level.
 
         :param name: the name of the variable to validate (for error messages)
         :param value: the value to validate
+        :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
+        `ValidationError` will be raised with the provided `help_msg`
+        :param help_msg: an optional help message to be used in the raised error in case of validation failure.
+        :param kw_context_args: optional contextual information to store in the exception, and that may be also used
+        to format the help message
         :return: nothing in case of success. Otherwise, raises a ValidationError
         """
         try:
@@ -242,27 +385,57 @@ class Validator:
             res = self.main_function(value)
 
         except Exception as e:
-            # caught any exception: raise ValidationError with that exception in the details
-            self._raise_from_exception(name, value, e)
+            # caught any exception: raise ValidationError or subclass with that exception in the details
+            # --old bad idea: first wrap into a failure ==> NO !!! I tried and it was making it far too messy/verbose
+
+            # note: we do not have to 'raise x from e' since the ValidationError constructor already sets the __cause__
+            # so we can safely take the same handling than for non-exception failures.
+            res = e
 
         # check the result
         if not result_is_success(res):
-            # failure without exception: raise a ValidationError with some details about the function that failed
-            self._raise_from_silent_failure(name, value, res)
+            # first merge the info provided in arguments and in self
+            error_type = error_type or self.error_type
+            help_msg = help_msg or self.help_msg
+            ctx = copy(self.kw_context_args)
+            ctx.update(kw_context_args)
 
-    def _raise_from_silent_failure(self, name, value, res):
-        """ Called whenever there is a need to raise a validation error because the function returned 'res' """
+            # then raise the appropriate ValidationError or subclass
+            raise error_type(validator=self, wrong_value=value, variable_name=name, validation_outcome=res,
+                             help_msg=help_msg, **ctx)
 
-        # note: we do not use 'raise x from e' but the ValidationError constructor sets the traceback correctly
-        raise self.exc_type(self, var_name=name, var_value=value, validation_outcome=res)
+    def __call__(self, name: str=None, value=None, error_type: Type[ValidationError] = None, help_msg: str = None,
+                 **named_value):
+        """
+        Shortcut for self.assert_valid, with an additional keyword mode to specify the name/value pair through
+        **named_value (only one pair may be provided). If this mode is used, name and value should be left to None.
 
-    def _raise_from_exception(self, name, value, exc):
-        """ Called whenever there is a need to raise a validation error because the function raised 'exc' """
+        :param name:
+        :param value:
+        :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
+        `ValidationError` will be raised with the provided `help_msg`
+        :param help_msg: an optional help message to be used in the raised error in case of validation failure.
+        :param named_value:
+        :return:
+        """
+        # check the mode used
+        if value is not None:
+            if name is None or len(named_value) > 0:
+                raise ValueError('Calling a validator accepts either a non-None name and a non-None value arguments, '
+                                 'or a single name-value keyword argument. Received arguments: '
+                                 + str(dict(name=name, value=value)) + ', ' + str(**named_value))
+        else:
+            if name is not None or len(named_value) != 1:
+                raise ValueError('Calling a validator accepts either a non-None name and a non-None value arguments, '
+                                 'or a single name-value keyword argument. Received arguments: '
+                                 + str(dict(name=name, value=value)) + ', ' + str(**named_value))
+            else:
+                name, value = next(iter(named_value.items()))
 
-        # note: we do not use 'raise x from e' but the ValidationError constructor sets the traceback correctly
-        raise self.exc_type(self, var_name=name, var_value=value, validation_outcome=exc)
+        # perform validation using `assert_valid`
+        self.assert_valid(name, value, error_type=error_type, help_msg=help_msg)
 
-    def is_valid(self, value):
+    def is_valid(self, value: Any) -> bool:
         """
         Validates the provided value and returns a boolean indicating success or failure. Any Exception happening in
         the validation process will be silently caught.
@@ -283,8 +456,8 @@ class Validator:
             return False
 
 
-def assert_valid(*validation_func: ValidationFuncs, none_policy: NonePolicy = None,
-                 failure_type: Type[Failure] = None, help_msg: str = None, **named_values):
+def assert_valid(*validation_func: ValidationFuncs, none_policy: int = None,
+                 error_type: Type[ValidationError] = None, help_msg: str = None, **named_values):
     """
     Validates value `value` using validation function(s) `base_validator_s`.
     As opposed to `is_valid`, this function raises a `ValidationError` if validation fails.
@@ -307,16 +480,17 @@ def assert_valid(*validation_func: ValidationFuncs, none_policy: NonePolicy = No
     :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
     Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
     the same validation process.
-    :param failure_type: a type of failure to raise if ALL the provided
-    :param help_msg:
+    :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
+    ValidationError will be raised with the provided help_msg
+    :param help_msg: an optional help message to be used in the raised error in case of validation failure.
     :param named_values: the values to validate as named arguments. Currently this can only contain one a single entry.
-    :return: nothing
+    :return: nothing in case of success. In case of failure, raises a <error_type> if provided, or a ValidationError.
     """
-    return Validator(*validation_func, failure_type=failure_type, help_msg=help_msg,
+    return Validator(*validation_func, error_type=error_type, help_msg=help_msg,
                      none_policy=none_policy)(**named_values)
 
 
-def is_valid(*validation_func: Union[Callable, List[Callable]], value, none_policy: NonePolicy=None) -> bool:
+def is_valid(*validation_func: Union[Callable, List[Callable]], value, none_policy: int=None) -> bool:
     """
     Validates value `value` using validation function(s) `validator_func`.
     As opposed to `assert_valid`, this function returns a boolean indicating if validation was a success or a failure.
@@ -344,278 +518,3 @@ def is_valid(*validation_func: Union[Callable, List[Callable]], value, none_poli
     :return: True if validation was a success, False otherwise
     """
     return Validator(*validation_func, none_policy=none_policy).is_valid(value)
-
-
-class InputValidationError(ValidationError):
-    """
-    Exception raised whenever function input validation fails. It is not meant to be subclassed by users, please rather
-    subclass BasicFailure.
-    """
-
-    def __init__(self, validator: 'InputValidator', var_value, var_name: str = None, validation_outcome: Any = None):
-        """
-        Creates a ValidationError associated with validation of var_value as part of function input validation.
-        validator is therefore assumed to be a subclass of InputValidator
-
-        :param validator: an InputValidator
-        :param var_value:
-        :param var_name:
-        :param validation_outcome:
-        """
-        super(InputValidationError, self).__init__(validator, var_value=var_value, var_name=var_name,
-                                                   validation_outcome=validation_outcome)
-
-    def get_what_txt(self):
-        """
-        Overrides the base behaviour defined in ValidationError in order to add details about the function.
-        :return:
-        """
-        var = ('' if self.var_name is None else (self.var_name + '=')) + str(self.var_value)
-        return 'input [{var}] for function [{func}]'.format(var=var,
-                                                            func=self.validator.get_validated_func_display_name())
-
-
-class InputValidator(Validator):
-    """ Represents a special kind of validator responsible to validate a function input """
-
-    __slots__ = ['validated_func']
-
-    def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs, none_policy: NonePolicy = None,
-                 error_type: Type[InputValidationError] = None):
-        """
-
-        :param validated_func: the function whose input is being validated.
-        :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-        are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-        of callables, they will be transformed to functions automatically.
-        :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
-        possibilities. Default is `NonePolicy.VALIDATE`.
-        :param error_type:
-        """
-        super(InputValidator, self).__init__(*validation_func, none_policy=none_policy,
-                                             error_type=error_type or InputValidationError)
-
-        self.validated_func = validated_func
-
-    def __repr__(self):
-        return "{validator_type}<{main_val_function}, validated_function={func}, " \
-               "none_policy={none_policy}>".format(validator_type=type(self).__name__,
-                                                   func=self.validated_func,
-                                                   main_val_function=self.get_main_function_name(),
-                                                   none_policy=get_none_policy_text(self.none_policy))
-
-    def get_validated_func_display_name(self):
-        """
-        Utility method to get a friendly display name for the function being validated by this InputValidator
-        :return:
-        """
-        return self.validated_func.__name__ or str(self.validated_func)
-
-
-# TODO: offer the capability to validate function outputs
-def validate(none_policy: NoneArgPolicy=None, **kw_validation_funcs: ValidationFuncs):
-    """
-    A function decorator to add input validation prior to the function execution. It should be called with named
-    arguments: for each function arg name, provide a single validation function or a list of validation functions to
-    apply. If validation fails, it will raise an InputValidationError with details about the function, the input name,
-    and any further information available from the validation function(s)
-
-    For example:
-
-    ```
-    def is_even(x):
-        return x % 2 == 0
-
-    def gt(a):
-        def gt(x):
-            return x >= a
-        return gt
-
-    @validate(a=[is_even, gt(1)], b=is_even)
-    def myfunc(a, b):
-        print('hello')
-    ```
-
-    will generate the equivalent of :
-
-    ```
-    def myfunc(a, b):
-        gt1 = gt(1)
-        if (is_even(a) and gt1(a)) and is_even(b):
-            print('hello')
-        else:
-            raise InputValidationError(...)
-    ```
-
-    :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
-    possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
-    :param kw_validation_funcs: keyword arguments: for each of the function's input names, the validation function or
-    list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
-    implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
-    [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will
-    be transformed to functions automatically.
-    :return: the decorated function, that will perform input validation before executing the function's code everytime
-    it is executed.
-    """
-
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate will never be used as is (without a call), but it does not
-    # cost much and may be of interest in the future
-    return create_function_decorator__robust_to_args(decorate_with_validation, none_policy=none_policy,
-                                                     **kw_validation_funcs)
-
-
-alidate = validate
-""" an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
-
-
-def validate_arg(arg_name, *validation_func: ValidationFuncs, none_policy: NoneArgPolicy=None) -> Callable:
-    """
-    A decorator to apply function input validation for the given argument name, with the provided base validation
-    function(s). You may use several such decorators on a given function as long as they are stacked on top of each
-    other (no external decorator in the middle)
-
-    :param arg_name:
-    :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
-    :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
-    possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
-    :return: a function decorator, able to transform a function into a function that will perform input validation
-    before executing the function's code everytime it is executed.
-    """
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate will never be used as is (without a call), but it does not
-    # cost much and may be of interest in the future
-    return create_function_decorator__robust_to_args(decorate_with_validation, none_policy=none_policy,
-                                                     **{arg_name: list(validation_func)})
-
-
-def _create_input_validator(validated_func, validated_func_arg: Parameter, validation_func: ValidationFuncs,
-                            none_policy: NoneArgPolicy):
-    """
-    Routine used internally to create an InputValidator for a given function argument
-
-    :param validated_func:
-    :param validated_func_arg:
-    :param validation_func:
-    :param none_policy:
-    :return:
-    """
-
-    is_nonable = (validated_func_arg.default is None) or is_pep484_nonable(validated_func_arg.annotation)
-
-    if none_policy in {NonePolicy.VALIDATE, NonePolicy.SKIP, NonePolicy.FAIL}:
-        none_policy_to_use = none_policy
-
-    elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE:
-        none_policy_to_use = NonePolicy.SKIP if is_nonable else NonePolicy.VALIDATE
-
-    elif none_policy is NoneArgPolicy.SKIP_IF_NONABLE_ELSE_FAIL:
-        none_policy_to_use = NonePolicy.SKIP if is_nonable else NonePolicy.FAIL
-
-    else:
-        raise ValueError('Invalid none policy: ' + str(none_policy))
-
-    return InputValidator(validated_func, validation_func, none_policy=none_policy_to_use)
-
-
-def decorate_with_validation(func: Callable, none_policy: NoneArgPolicy=None,
-                             **kw_validation_funcs: ValidationFuncs) -> Callable:
-    """
-    This method is equivalent to decorating a function with the `@validate` decorator, but can be used a posteriori.
-
-    :param func:
-    :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various possibilities.
-    Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_REJECT`.
-    :param kw_validation_funcs: keyword arguments: for each of the function's input names, the validation function or
-    list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
-    implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
-    [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will
-    be transformed to functions automatically.
-    :return: the decorated function, that will perform input validation (using `_assert_input_is_valid`) before
-    executing the function's code everytime it is executed.
-    """
-
-    none_policy = none_policy or NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
-
-    # (1) retrieve target function signature
-    s = signature(func)
-
-    # (2) check that provided kw_validation_funcs don't contain function input names that are incorrect
-    incorrect = set(kw_validation_funcs.keys()) - set(s.parameters.keys())
-    if len(incorrect) > 0:
-        raise ValueError('@validate[...] definition exception: kw_validation_funcs are defined for \''
-                         + str(incorrect) + '\' that is/are not part of signature for ' + str(func))
-
-    # (3) create or update a wrapper around the function to add validation
-    if hasattr(func, '__wrapped__') and hasattr(func.__wrapped__, '__validators__'):
-        # ---- This function is already wrapped by our validator. ----
-
-        # First check that the new validators to create are for inputs that did not have some validators already
-        incorrect = set(kw_validation_funcs.keys()).intersection(set(func.__wrapped__.__validators__.keys()))
-        if len(incorrect) > 0:
-            raise ValueError('@validate[...] definition exception: kw_validation_funcs are already defined for function input(s)'
-                             ' \'' + str(incorrect) + '\', you can not define them twice.')
-
-        # Then update the dictionary of validators with the new validators
-        for att_name, att_validators in kw_validation_funcs.items():
-            # create the new validators as InputValidator objects according to the none_policy and function signature
-            func.__wrapped__.__validators__[att_name] = _create_input_validator(func.__wrapped__,
-                                                                                s.parameters[att_name],
-                                                                                att_validators,
-                                                                                none_policy=none_policy)
-
-        # return the function, no need to wrap it further (it is already wrapped)
-        return func
-
-    else:
-        # ---- This function is not yet wrapped by our validator. ----
-
-        # create the new validators as InputValidator objects according to the none_policy and function signature
-        for att_name, att_validators in kw_validation_funcs.items():
-            kw_validation_funcs[att_name] = _create_input_validator(func, s.parameters[att_name], att_validators,
-                                                                    none_policy=none_policy)
-
-        # Store the dictionary of kw_validation_funcs as an attribute of the function
-        if hasattr(func, '__validators__'):
-            raise ValueError('Function ' + str(func) + ' already has a defined __validators__ attribute, valid8 '
-                             'decorators can not be applied on it')
-        func.__validators__ = kw_validation_funcs
-
-        # we used @functools.wraps(), but we now use 'decorate()' to have a wrapper that has the same signature
-        def validating_wrapper(f, *args, **kwargs):
-            """ This is the wrapper that will be called everytime the function is called """
-
-            # (a) Perform input validation by applying `_assert_input_is_valid` on all received arguments
-            apply_on_each_func_args_sig(f, args, kwargs, s,
-                                        func_to_apply=_assert_input_is_valid,
-                                        func_to_apply_paramers_dict=f.__validators__)
-
-            # (b) execute the function as usual
-            return f(*args, **kwargs)
-
-        decorated_function = decorate(func, validating_wrapper)
-        return decorated_function
-
-
-def _assert_input_is_valid(input_value: Any, validator: InputValidator, validated_func: Callable, input_name: str):
-    """
-    Called by the `validating_wrapper` in the first step (a) `apply_on_each_func_args` for each function input before
-    executing the function. It simply delegates to the validator. The signature of this function is hardcoded to
-    correspond to `apply_on_each_func_args`'s behaviour and should therefore not be changed.
-    
-    :param input_value: the value to validate
-    :param validator: the Validator object that will be applied on input_value_to_validate
-    :param validated_func: the function for which this validation is performed. This is not used since the Validator
-    knows it already, but we should not change the signature here.
-    :param input_name: the name of the function input that is being validated
-    :return: Nothing
-    """
-    validator.assert_valid(input_name, input_value)

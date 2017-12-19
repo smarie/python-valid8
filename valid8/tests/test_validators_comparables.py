@@ -1,18 +1,18 @@
 import pytest
 
-from valid8 import gt, gts, lt, lts, between, BasicFailure
+from valid8 import gt, gts, lt, lts, between, Failure
 
 
 def test_gt():
     """ tests that the gt() function works """
     assert gt(1)(1)
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         gt(-1)(-1.1)
 
 
 def test_gts():
     """ tests that the gts() function works """
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         gts(1)(1)
     assert gts(-1)(-0.9)
 
@@ -20,13 +20,13 @@ def test_gts():
 def test_lt():
     """ tests that the lt() function works """
     assert lt(1)(1)
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         lt(-1)(-0.9)
 
 
 def test_lts():
     """ tests that the lts() function works """
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         lts(1)(1)
     assert lts(-1)(-1.1)
 
@@ -36,8 +36,8 @@ def test_between():
     assert between(0, 1)(0)
     assert between(0, 1)(1)
 
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         between(0, 1)(-0.1)
 
-    with pytest.raises(BasicFailure):
+    with pytest.raises(Failure):
         between(0, 1)(1.1)

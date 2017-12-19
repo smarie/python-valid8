@@ -1,6 +1,6 @@
 import pytest
 
-from core import _process_validation_function_s
+from valid8.composition import _process_validation_function_s
 
 
 def test_empty_validators_list():

@@ -1,14 +1,21 @@
 # allow users to do
 #     from valid8 import xxx
+from valid8.utils_string import *
 from valid8.utils_typing import *
-from valid8.core import *
+
+from valid8.base import *
+from valid8.composition import *
+
+from valid8.validation_lib.collections import *
+from valid8.validation_lib.comparables import *
+from valid8.validation_lib.numbers import *
+
 from valid8.entry_points import *
-from valid8.validators_boolean_composition import *
-from valid8.validators_comparables import *
-from valid8.validators_collections import *
-from valid8.validators_numbers import *
+from valid8.entry_points_annotations import *
 
 # allow users to do
 #     import valid8 as v
-__all__ = ['utils_typing', 'core', 'entry_points',
-           'validators_boolean_composition', 'validators_collections', 'validators_comparables', 'validators_numbers']
+__all__ = ['utils_string', 'utils_typing',
+           'base', 'composition',
+           'validation_lib',
+           'entry_points', 'entry_points_annotations']
