@@ -4,6 +4,7 @@ from valid8.base import Failure
 
 
 class TooSmall(Failure):
+    """ Custom Failure raised by gt """
     def __init__(self, wrong_value, min_value, strict):
         symbol = '>' if strict else '>='
         help_msg = 'x {symbol} {min_value} does not hold for x={{wrong_value}}'
@@ -12,8 +13,8 @@ class TooSmall(Failure):
 
 def gt(min_value: Any, strict: bool = False):
     """
-    'Greater than' validator generator.
-    Returns a validator to check that x >= min_value (strict=False, default) or x > min_value (strict=True)
+    'Greater than' validation_function generator.
+    Returns a validation_function to check that x >= min_value (strict=False, default) or x > min_value (strict=True)
 
     :param min_value: minimum value for x
     :param strict: Boolean flag to switch between x >= min_value (strict=False) and x > min_value (strict=True)
@@ -41,11 +42,12 @@ def gt(min_value: Any, strict: bool = False):
 
 
 def gts(min_value_strict: Any):
-    """ Alias for 'greater than' validator generator in strict mode """
+    """ Alias for 'greater than' validation_function generator in strict mode """
     return gt(min_value_strict, True)
 
 
 class TooBig(Failure):
+    """ Custom Failure raised by lt """
     def __init__(self, wrong_value, max_value, strict):
         symbol = '<' if strict else '<='
         help_msg = 'x {symbol} {max_value} does not hold for x={wrong_value}'
@@ -54,8 +56,8 @@ class TooBig(Failure):
 
 def lt(max_value: Any, strict: bool = False):
     """
-    'Lesser than' validator generator.
-    Returns a validator to check that x <= max_value (strict=False, default) or x < max_value (strict=True)
+    'Lesser than' validation_function generator.
+    Returns a validation_function to check that x <= max_value (strict=False, default) or x < max_value (strict=True)
 
     :param max_value: maximum value for x
     :param strict: Boolean flag to switch between x <= max_value (strict=False) and x < max_value (strict=True)
@@ -83,11 +85,12 @@ def lt(max_value: Any, strict: bool = False):
 
 
 def lts(max_value_strict: Any):
-    """ Alias for 'lesser than' validator generator in strict mode """
+    """ Alias for 'lesser than' validation_function generator in strict mode """
     return lt(max_value_strict, True)
 
 
 class NotInRange(Failure):
+    """ Custom Failure raised by between """
     def __init__(self, wrong_value, min_value, left_strict, max_value, right_strict):
         left_symbol = '<' if left_strict else '<='
         right_symbol = '<' if right_strict else '<='
@@ -98,9 +101,9 @@ class NotInRange(Failure):
 
 def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: bool = False):
     """
-    'Is between' validator generator.
-    Returns a validator to check that min_val <= x <= max_val (default). open_right and open_left flags allow to
-    transform each side into strict mode. For example setting open_left=True will enforce min_val < x <= max_val
+    'Is between' validation_function generator.
+    Returns a validation_function to check that min_val <= x <= max_val (default). open_right and open_left flags allow
+    to transform each side into strict mode. For example setting open_left=True will enforce min_val < x <= max_val
 
     :param min_val: minimum value for x
     :param max_val: maximum value for x

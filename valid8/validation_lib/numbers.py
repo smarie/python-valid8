@@ -4,6 +4,7 @@ from valid8.base import Failure
 
 
 class IsNotEven(Failure):
+    """ Custom Failure raised by is_even """
     help_msg = 'Value should be even'
 
 
@@ -16,6 +17,7 @@ def is_even(x: Integral):
 
 
 class IsNotOdd(Failure):
+    """ Custom Failure raised by is_odd """
     help_msg = 'Value should be odd'
 
 
@@ -28,6 +30,7 @@ def is_odd(x: Integral):
 
 
 class IsNotMultipleOf(Failure):
+    """ Custom Failure raised by is_multiple_of """
     help_msg = 'Value should be a multiple of {ref}'
 
 

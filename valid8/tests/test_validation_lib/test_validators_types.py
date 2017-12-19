@@ -1,6 +1,6 @@
 import pytest
 
-from valid8 import instance_of, HasWrongType, subclass_of, IsWrongType
+from valid8 import instance_of, HasWrongType, subclass_of, IsWrongType, assert_valid
 
 
 def test_instance_of():
@@ -13,6 +13,8 @@ def test_instance_of():
 
     with pytest.raises(HasWrongType):
         instance_of(int)('r')
+
+    assert_valid('instance', 'r', instance_of(str))
 
 
 def test_subclass_of():

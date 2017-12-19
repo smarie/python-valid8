@@ -1,106 +1,123 @@
-## Validators list
+# Validation library - reusable base validation functions
 
-Several validators are bundled in the package to be used with `@validate`. Don't hesitate to propose new ones !
+Several base validation functions are bundled in the package. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](./usage) for details
 
-### All objects
-
-#### not_none
-
-Checks that the input is not None. It should be first in the validators' list to apply. When it applies, the whole list of validators will be **bypassed** for `None` inputs. In other words when it applies, `None` inputs will always be accepted whatever the other validators present. 
-
-Note that if you use `@validate` in combination with a PEP484 type checker such as enforce, you don't need to include the `not_none` validator. Indeed if an input is not explicitly declared with type `Optional[...]` or `Union[NoneType, ...]`, a good type checker should already raise an error:
+A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal
 
 ```python
-from enforce import runtime_validation
-from numbers import Integral
-from valid8 import validate, is_even, gt
+# get the list of submodules containing base validation functions
+help(valid8.validation_lib)
 
-@runtime_validation
-@validate(a=[is_even, gt(1)], b=is_even)
-def myfunc(a: Integral, b):
-    print('hello')
+# get the list of base validation functions for each submodule
+help(valid8.validation_lib.numbers)
 
-# -- check that the validation works
-myfunc(84, None) # OK because b has no type annotation nor not_none validator
-myfunc(None, 0)  # RuntimeTypeError: a is None
+# help on a specific function
+help(valid8.validation_lib.numbers.is_multiple_of)
 ```
 
-
-### Comparables
-
-#### gt(min_value, strict: bool = False)
-
-'Greater than' validator generator. Returns a validator to check that `x >= min_value` (strict=False, default) or `x > min_value` (strict=True)
-
-#### gts(min_value)
-
-Alias for 'greater than' validator generator in strict mode
-
-#### lt(max_value, strict: bool = False)
-
-'Lesser than' validator generator. Returns a validator to check that `x <= max_value` (strict=False, default) or `x < max_value` (strict=True)
-
-#### lts(max_value)
-
-Alias for 'lesser than' validator generator in strict mode
-
-#### between(min_value, max_value, open_left: bool = False, open_right: bool = False)
-
-'Is between' validator generator. Returns a validator to check that `min_val <= x <= max_val` (default). `open_right` and `open_left` flags allow to transform each side into strict mode. For example setting `open_left=True` will enforce `min_val < x <= max_val`
-
-### Numbers
-
-#### is_even
-
-Validates that x is even (`x % 2 == 0`)
-
-#### is_odd
-
-Validates that x is odd (`x % 2 != 0`)
-
-#### is_multiple_of(ref)
-
-Validates that x is a multiple of the reference (`x % ref == 0`)
+Don't hesitate to propose new ones ! Submit a pull request or an issue [here](https://github.com/smarie/python-valid8).
 
 
-### Collections
+## Types
 
-#### minlen(min_length, strict: bool = False)
+### instance_of(ref_type)
 
-'Minimum length' validator generator. Returns a validator to check that `len(x) >= min_length` (strict=False, default) or `len(x) > min_length` (strict=True)
+'instance of' validation function generator. Returns a validation function to check that `is_instance(x, ref_type)`.
 
-#### minlens(min_length)
+```python
+from valid8 import assert_valid, instance_of
+assert_valid('Foo', 'r', instance_of(str))
+```
 
-Alias for minlen in strict mode
+### subclass_of(ref_type)
 
-#### maxlen(max_length, strict: bool = False)
+'subclass of' validation function generator. Returns a validation function to check that `is_subclass(x, ref_type)`.
 
-'Maximum length' validator generator. Returns a validator to check that `len(x) <= max_length` (strict=False, default) or `len(x) < max_length` (strict=True)
+```python
+from valid8 import assert_valid, subclass_of
+assert_valid('Foo', bool, subclass_of(int))
+```
 
-#### maxlens(max_length)
+## Comparables
 
-Alias for maxlen in strict mode
+### gt(min_value, strict:bool=False)
 
-#### is_in(allowed_values)
+'Greater than' validation function generator. Returns a validation function to check that `x >= min_value` (strict=False, default) or `x > min_value` (strict=True).
 
-'Values in' validator generator. Returns a validator to check that x is in the provided set `allowed_values`
+### gts(min_value)
 
-#### is_subset(reference_set)
+Alias for 'greater than' validation function generator in strict mode.
 
-'Is subset' validator generator. Returns a validator to check that `x` is a subset of `reference_set`. That is, `len(x - reference_set) == 0`
+### lt(max_value, strict:bool=False)
 
-#### is_superset(reference_set)
+'Lesser than' validation function generator. Returns a validation function to check that `x <= max_value` (strict=False, default) or `x < max_value` (strict=True).
 
-'Is superset' validator generator. Returns a validator to check that `x` is a superset of `reference_set`. That is, `len(reference_set - x) == 0`
+### lts(max_value)
 
-#### on_all_(*validators_for_all_elts)
+Alias for 'lesser than' validation function generator in strict mode.
 
-Generates a validator for collection inputs where each element of the input will be validated against the validators provided. For convenience, a list of validators can be provided and will be replaced with an `and_`.
+### between(min_value, max_value, open_left:bool=False, open_right:bool=False)
 
-Note that if you want to apply DIFFERENT validators for each element in the input collection, you should rather use `on_each_`.
+'Is between' validation function generator. Returns a validation function to check that `min_val <= x <= max_val` (default). `open_right` and `open_left` flags allow to transform each side into strict mode. For example setting `open_left=True` will enforce `min_val < x <= max_val`.
 
-#### on_each_(*validators_collection)
 
-Generates a validator for collection inputs where each element of the input will be validated against the corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an `and_` operator if the list has more than one element.
+## Numbers
 
-Note that if you want to apply the SAME validators to all elements in the input, you should rather use `on_all_`.
+### is_even
+
+Validates that x is even (`x % 2 == 0`).
+
+### is_odd
+
+Validates that x is odd (`x % 2 != 0`).
+
+### is_multiple_of(ref)
+
+'Is multiple of' validation function generator. Returns a validation function to check that  x is a multiple of the reference (`x % ref == 0`).
+
+
+## Collections
+
+### minlen(min_length, strict:bool=False)
+
+'Minimum length' validation function generator. Returns a validation function to check that `len(x) >= min_length` (strict=False, default) or `len(x) > min_length` (strict=True).
+
+### minlens(min_length)
+
+Alias for minlen in strict mode.
+
+### maxlen(max_length, strict:bool=False)
+
+'Maximum length' validation function generator. Returns a validation function to check that `len(x) <= max_length` (strict=False, default) or `len(x) < max_length` (strict=True).
+
+### maxlens(max_length)
+
+Alias for maxlen in strict mode.
+
+### length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
+
+'Is length between' validation_function generator. Returns a validation_function to check that `min_len <= len(x) <= max_len (default)`. `open_right` and `open_left` flags allow to transform each side into strict mode. For example setting `open_left=True` will enforce `min_len < len(x) <= max_len`.
+
+### is_in(allowed_values)
+
+'Values in' validation function generator. Returns a validation function to check that x is in the provided set `allowed_values`.
+
+### is_subset(reference_set)
+
+'Is subset' validation function generator. Returns a validation function to check that `x` is a subset of `reference_set`. That is, `len(x - reference_set) == 0`.
+
+### is_superset(reference_set)
+
+'Is superset' validation function generator. Returns a validation function to check that `x` is a superset of `reference_set`. That is, `len(reference_set - x) == 0`.
+
+### on_all_(*validation functions_for_all_elts)
+
+Generates a validation function for collection inputs where each element of the input will be validated against the validation functions provided. For convenience, a list of validation functions can be provided and will be replaced with an `and_`.
+
+Note that if you want to apply DIFFERENT validation functions for each element in the input collection, you should rather use `on_each_`.
+
+### on_each_(*validation functions_collection)
+
+Generates a validation function for collection inputs where each element of the input will be validated against the corresponding validation function(s) in the validation functions_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an `and_` operator if the list has more than one element.
+
+Note that if you want to apply the SAME validation functions to all elements in the input, you should rather use `on_all_`.

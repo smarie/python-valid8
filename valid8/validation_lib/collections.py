@@ -1,10 +1,11 @@
 from typing import Set, Tuple
 
-from composition import _process_validation_function_s
+from valid8.composition import _process_validation_function_s
 from valid8.base import Failure, WrappingFailure, result_is_success
 
 
 class TooShort(Failure):
+    """ Custom Failure raised by minlen """
     def __init__(self, wrong_value, min_length, strict):
         symbol = '>' if strict else '>='
         help_msg = 'len(x) {symbol} {min_length} does not hold for x={{wrong_value}}'
@@ -13,8 +14,8 @@ class TooShort(Failure):
 
 def minlen(min_length, strict: bool = False):
     """
-    'Minimum length' validator generator.
-    Returns a validator to check that len(x) >= min_length (strict=False, default) or len(x) > min_length (strict=True)
+    'Minimum length' validation_function generator.
+    Returns a validation_function to check that len(x) >= min_length (strict=False, default) or len(x) > min_length (strict=True)
 
     :param min_length: minimum length for x
     :param strict: Boolean flag to switch between len(x) >= min_length (strict=False) and len(x) > min_length
@@ -41,11 +42,12 @@ def minlen(min_length, strict: bool = False):
 
 
 def minlens(min_length_strict):
-    """ Alias for 'Minimum length' validator generator in strict mode """
+    """ Alias for 'Minimum length' validation_function generator in strict mode """
     return minlen(min_length_strict, True)
 
 
 class TooLong(Failure):
+    """ Custom Failure raised by maxlen """
     def __init__(self, wrong_value, max_length, strict):
         symbol = '<' if strict else '<='
         help_msg = 'len(x) {symbol} {max_length} does not hold for x={{wrong_value}}'
@@ -54,8 +56,8 @@ class TooLong(Failure):
 
 def maxlen(max_length, strict: bool = False):
     """
-    'Maximum length' validator generator.
-    Returns a validator to check that len(x) <= max_length (strict=False, default) or len(x) < max_length (strict=True)
+    'Maximum length' validation_function generator.
+    Returns a validation_function to check that len(x) <= max_length (strict=False, default) or len(x) < max_length (strict=True)
 
     :param max_length: maximum length for x
     :param strict: Boolean flag to switch between len(x) <= max_length (strict=False) and len(x) < max_length
@@ -82,11 +84,12 @@ def maxlen(max_length, strict: bool = False):
 
 
 def maxlens(max_length_strict):
-    """ Alias for 'Maximum length' validator generator in strict mode """
+    """ Alias for 'Maximum length' validation_function generator in strict mode """
     return maxlen(max_length_strict, True)
 
 
 class LengthNotInRange(Failure):
+    """ Custom Failure raised by length_between """
     def __init__(self, wrong_value, min_length, left_strict, max_length, right_strict):
         left_symbol = '<' if left_strict else '<='
         right_symbol = '<' if right_strict else '<='
@@ -97,9 +100,10 @@ class LengthNotInRange(Failure):
 
 def length_between(min_len, max_len, open_left: bool = False, open_right: bool = False):
     """
-    'Is length between' validator generator.
-    Returns a validator to check that min_len <= len(x) <= max_len (default). open_right and open_left flags allow to
-    transform each side into strict mode. For example setting open_left=True will enforce min_len < len(x) <= max_len
+    'Is length between' validation_function generator.
+    Returns a validation_function to check that `min_len <= len(x) <= max_len (default)`. `open_right` and `open_left`
+    flags allow to transform each side into strict mode. For example setting `open_left=True` will enforce
+    `min_len < len(x) <= max_len`.
 
     :param min_len: minimum length for x
     :param max_len: maximum length for x
@@ -149,6 +153,7 @@ def length_between(min_len, max_len, open_left: bool = False, open_right: bool =
 
 
 class NotInAllowedValues(Failure):
+    """ Custom Failure raised by is_in """
     def __init__(self, wrong_value, allowed_values):
         help_msg = 'x in {allowed_values} does not hold for x={wrong_value}'
         super(NotInAllowedValues, self).__init__(wrong_value=wrong_value, allowed_values=allowed_values,
@@ -157,8 +162,8 @@ class NotInAllowedValues(Failure):
 
 def is_in(allowed_values: Set):
     """
-    'Values in' validator generator.
-    Returns a validator to check that x is in the provided set of allowed values
+    'Values in' validation_function generator.
+    Returns a validation_function to check that x is in the provided set of allowed values
 
     :param allowed_values: a set of allowed values
     :return:
@@ -174,6 +179,7 @@ def is_in(allowed_values: Set):
 
 
 class NotSubset(Failure):
+    """ Custom Failure raised by is_subset """
     def __init__(self, wrong_value, reference_set, unsupported):
         help_msg = 'x subset of {reference_set} does not hold for x={wrong_value}. Unsupported elements: {unsupported}'
         super(NotSubset, self).__init__(wrong_value=wrong_value, reference_set=reference_set, unsupported=unsupported,
@@ -182,8 +188,8 @@ class NotSubset(Failure):
 
 def is_subset(reference_set: Set):
     """
-    'Is subset' validator generator.
-    Returns a validator to check that x is a subset of reference_set
+    'Is subset' validation_function generator.
+    Returns a validation_function to check that x is a subset of reference_set
 
     :param reference_set: the reference set
     :return:
@@ -202,6 +208,7 @@ def is_subset(reference_set: Set):
 
 
 class NotSuperset(Failure):
+    """ Custom Failure raised by is_superset """
     def __init__(self, wrong_value, reference_set, missing):
         help_msg = 'x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}'
         super(NotSuperset, self).__init__(wrong_value=wrong_value, reference_set=reference_set, missing=missing,
@@ -210,8 +217,8 @@ class NotSuperset(Failure):
 
 def is_superset(reference_set: Set):
     """
-    'Is superset' validator generator.
-    Returns a validator to check that x is a superset of reference_set
+    'Is superset' validation_function generator.
+    Returns a validation_function to check that x is a superset of reference_set
 
     :param reference_set: the reference set
     :return:
@@ -230,16 +237,17 @@ def is_superset(reference_set: Set):
 
 
 class InvalidItemInSequence(WrappingFailure):
+    """ Custom Failure raised by on_all_ and on_each_ """
     help_msg = 'Provided sequence contains one value that is invalid.'
 
 
 # TODO rename 'all_on_each'
 def on_all_(*validation_func):
     """
-    Generates a validator for collection inputs where each element of the input will be validated against the validators
-    provided. For convenience, a list of validators can be provided and will be replaced with an 'and_'.
+    Generates a validation_function for collection inputs where each element of the input will be validated against the validation_functions
+    provided. For convenience, a list of validation_functions can be provided and will be replaced with an 'and_'.
 
-    Note that if you want to apply DIFFERENT validators for each element in the input, you should rather use on_each_.
+    Note that if you want to apply DIFFERENT validation_functions for each element in the input, you should rather use on_each_.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -249,7 +257,7 @@ def on_all_(*validation_func):
     :return:
     """
     # create the validation functions
-    validator_func = _process_validation_function_s(list(validation_func))
+    validation_function_func = _process_validation_function_s(list(validation_func))
 
     def on_all_val(x):
         # validate all elements in x in turn
@@ -257,30 +265,30 @@ def on_all_(*validation_func):
         for x_elt in x:
             idx += 1
             try:
-                res = validator_func(x_elt)
+                res = validation_function_func(x_elt)
             except Exception as e:
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validator_func, validation_outcome=e)
+                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=e)
 
             if not result_is_success(res):
                 # one element of x was not valid > raise
                 # raise Failure('on_all_(' + str(validation_func) + '): failed validation for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validator_func, validation_outcome=res)
+                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=res)
         return True
 
     return on_all_val
 
 
 # TODO rename one_for_each
-def on_each_(*validators_collection):
+def on_each_(*validation_functions_collection):
     """
-    Generates a validator for collection inputs where each element of the input will be validated against the
-    corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for
+    Generates a validation_function for collection inputs where each element of the input will be validated against the
+    corresponding validation_function(s) in the validation_functions_collection. Validators inside the tuple can be provided as a list for
     convenience, this will be replaced with an 'and_' operator if the list has more than one element.
 
-    Note that if you want to apply the SAME validators to all elements in the input, you should rather use on_all_.
+    Note that if you want to apply the SAME validation_functions to all elements in the input, you should rather use on_all_.
 
-    :param validators_collection: a sequence of (base validation function or list of base validation functions to use).
+    :param validation_functions_collection: a sequence of (base validation function or list of base validation functions to use).
     A base validation function may be a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or
     a list of several such elements. Nested lists are supported and indicate an implicit `and_` (such as the main list).
     Tuples indicate an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/)
@@ -288,29 +296,29 @@ def on_each_(*validators_collection):
     :return:
     """
     # create a tuple of validation functions.
-    validator_funcs = tuple(_process_validation_function_s(validation_func)
-                            for validation_func in validators_collection)
+    validation_function_funcs = tuple(_process_validation_function_s(validation_func)
+                            for validation_func in validation_functions_collection)
 
-    # generate a validation function based on the tuple of validators lists
+    # generate a validation function based on the tuple of validation_functions lists
     def on_each_val(x: Tuple):
-        if len(validator_funcs) != len(x):
-            raise Failure('on_each_: x does not have the same number of elements than validators_collection.')
+        if len(validation_function_funcs) != len(x):
+            raise Failure('on_each_: x does not have the same number of elements than validation_functions_collection.')
         else:
-            # apply each validator on the input with the same position in the collection
+            # apply each validation_function on the input with the same position in the collection
             idx = -1
-            for elt, validator_func in zip(x, validator_funcs):
+            for elt, validation_function_func in zip(x, validation_function_funcs):
                 idx += 1
                 try:
-                    res = validator_func(elt)
+                    res = validation_function_func(elt)
                 except Exception as e:
-                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validator_func, validation_outcome=e)
+                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validation_function_func, validation_outcome=e)
 
                 if not result_is_success(res):
-                    # one validator was unhappy > raise
-                    # raise Failure('on_each_(' + str(validators_collection) + '): _validator [' + str(idx)
-                    #               + '] (' + str(validators_collection[idx]) + ') failed validation for '
+                    # one validation_function was unhappy > raise
+                    # raise Failure('on_each_(' + str(validation_functions_collection) + '): _validation_function [' + str(idx)
+                    #               + '] (' + str(validation_functions_collection[idx]) + ') failed validation for '
                     #                       'input ' + str(x[idx]))
-                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validator_func, validation_outcome=res)
+                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validation_function_func, validation_outcome=res)
             return True
 
     return on_each_val

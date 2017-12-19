@@ -1,7 +1,8 @@
 import pytest
 
 from mini_lambda import make_lambda_friendly_method, _, x
-from valid8 import on_each_, is_even, lt, on_all_, is_subset, is_superset, is_in, Failure
+from valid8 import on_each_, is_even, maxlen, on_all_, is_subset, is_superset, is_in, Failure, minlen, TooShort, \
+    minlens, TooLong, length_between, maxlens, LengthNotInRange, lt
 
 
 def test_is_in():
@@ -51,3 +52,43 @@ def test_on_each():
     a((0, -1))
     with pytest.raises(Failure):
         a((0, 2))
+
+
+def test_minlen():
+    """ tests that the minlen() function works """
+    assert minlen(1)(['a'])
+    with pytest.raises(TooShort):
+        minlen(1)([])
+
+
+def test_minlens():
+    """ tests that the minlens() function works """
+    with pytest.raises(TooShort):
+        minlens(1)(['a'])
+    assert minlens(1)(['a', 'a'])
+
+
+def test_maxlen():
+    """ tests that the maxlen() function works """
+    assert maxlen(1)(['a'])
+    with pytest.raises(TooLong):
+        maxlen(1)(['a', 'a'])
+
+
+def test_maxlens():
+    """ tests that the maxlens() function works """
+    with pytest.raises(TooLong):
+        maxlens(1)(['a'])
+    assert maxlens(3)(['a', 'a'])
+
+
+def test_length_between():
+    """ tests that the length_between() function works """
+    assert length_between(0, 1)([])
+    assert length_between(0, 1)(['a'])
+
+    with pytest.raises(LengthNotInRange):
+        length_between(0, 1)(['a', 'a'])
+
+    with pytest.raises(LengthNotInRange):
+        length_between(0, 1, open_left=True)([])
