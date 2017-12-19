@@ -47,6 +47,16 @@ def result_is_success(validation_result) -> bool:
     return validation_result in {None, True}
 
 
+class HelpMsgFormattingException(Exception):
+    def __init__(self, help_msg: str, caught: KeyError):
+        self.help_msg = help_msg
+        self.__cause__ = caught
+
+        msg = "Error while formatting help msg [{msg}], keyword [{kw}] was not found in the validation context" \
+              "".format(msg=help_msg, kw=caught.args[0])
+        super(HelpMsgFormattingException, self).__init__(msg)
+
+
 class HelpMsgMixIn:
     """ A helper class providing the ability to store a help message in the class or in the instance, and to get a
     formatted help message """
@@ -71,7 +81,11 @@ class HelpMsgMixIn:
         """
         if self.help_msg is not None and len(self.help_msg) > 0:
             # first format if needed
-            help_msg = self.help_msg.format(**kwargs)
+            try:
+                help_msg = self.help_msg.format(**kwargs)
+            except KeyError as e:
+                # no need to raise from e, __cause__ is set in the constructor
+                raise HelpMsgFormattingException(self.help_msg, e)
 
             # then add a trailing dot and space if needed
             if dotspace_ending:
@@ -172,6 +186,11 @@ class Failure(HelpMsgMixIn, ValueError, RootException):
         else:
             return self.get_help_msg(**self.__dict__)
 
+    def __repr__(self):
+        """ Overrides the default exception representation """
+        fields = [name + '=' + str(val) for name, val in self.__dict__.items() if not name.startswith('_')]
+        return type(self).__name__ + '(' + ','.join(fields) + ')'
+
     def get_details(self):
         """ The function called to get the details appended to the help message when self.append_details is True """
         return 'Wrong value: [{}]'.format(self.wrong_value)
@@ -263,8 +282,8 @@ class WrappingFailure(Failure):
         return contents
 
 
-def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFailure] = None, help_msg: str = None) \
-        -> Callable:
+def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFailure] = None, help_msg: str = None,
+                    **kw_context_args) -> Callable:
     """
     Wraps the provided validation function so that in case of failure it raises the given failure_type or a WrappingFailure
     with the given help message.
@@ -273,6 +292,7 @@ def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFa
     :param failure_type: an optional subclass of `WrappingFailure` that should be raised in case of failure, instead of
     `WrappingFailure`.
     :param help_msg: an optional string help message for the raised `WrappingFailure` (if no failure_type is provided)
+    :param kw_context_args: optional context arguments for the custom failure message
     :return:
     """
 
@@ -297,32 +317,32 @@ def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFa
             res = validation_callable(x)
 
         except Exception as e:
-            # caught any exception: raise the provided failure type with that exception in the details
-            if help_msg:
-                exc = WrappingFailure(wrapped_func=validation_callable, wrong_value=x,
-                                      validation_outcome=e, help_msg=help_msg)
-            else:
-                typ = failure_type or WrappingFailure
-                exc = typ(validation_function=validation_callable, validated_value=x, validation_outcome=e)
-            # no need to raise from e since the __cause__ is already set in the constructor
-            raise exc
+            # no need to raise from e since the __cause__ is already set in the constructor: we can safely commonalize
+            res = e
 
         if not result_is_success(res):
-            # failure without exception: raise the provided failure type
-            if help_msg:
-                exc = WrappingFailure(wrapped_func=validation_callable, wrong_value=x,
-                                      validation_outcome=res, help_msg=help_msg)
-            else:
-                typ = failure_type or WrappingFailure
-                exc = typ(validation_function=validation_callable, validated_value=x, validation_outcome=res)
+            typ = failure_type or WrappingFailure
+            exc = typ(wrapped_func=validation_callable, wrong_value=x, validation_outcome=res,
+                      help_msg=help_msg, **kw_context_args)
             raise exc
 
     # set a name so that the error messages are more user-friendly
-    if help_msg or failure_type:
-        raiser.__name__ = 'failure_raiser({}, {})'.format(get_callable_name(validation_callable),
-                                                          help_msg or failure_type.__name__)
-    else:
-        raiser.__name__ = 'failure_raiser({})'.format(get_callable_name(validation_callable))
+
+    # NO, Do not include the callable type or error message in the name since it is only used in error messages where
+    # they will appear anyway !
+    # ---
+    # if help_msg or failure_type:
+    #     raiser.__name__ = 'failure_raiser({}, {})'.format(get_callable_name(validation_callable),
+    #                                                       help_msg or failure_type.__name__)
+    # else:
+    # ---
+    # raiser.__name__ = 'failure_raiser({})'.format(get_callable_name(validation_callable))
+    raiser.__name__ = get_callable_name(validation_callable)
+    # Note: obviously this can hold as long as we do not check the name of this object in any other context than
+    # raising errors. If we want to support this, then creating a callable object with everything in the fields will be
+    # probably more appropriate so that error messages will be able to display the inner name, while repr() will still
+    # say that this is a failure raiser.
+    # TODO consider transforming failure_raiser into a class (see comment above)
 
     return raiser
 

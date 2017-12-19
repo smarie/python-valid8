@@ -224,7 +224,7 @@ def and_(*validation_func: ValidationFuncs) -> Callable:
                     res = validator(x)
                 except Exception as e:
                     # one validator was unhappy > raise
-                    raise AtLeastOneFailed(validation_func, x, e)
+                    raise AtLeastOneFailed(validation_func, x, cause=e)
                 if not result_is_success(res):
                     # one validator was unhappy > raise
                     raise AtLeastOneFailed(validation_func, x)
@@ -416,7 +416,7 @@ def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Calla
 
 
 def failure_raiser(*validation_func: ValidationFuncs, failure_type: Type[WrappingFailure] = None,
-                   help_msg: str = None) -> Callable:
+                   help_msg: str = None, **kw_context_args) -> Callable:
     """
     Utility method to create a failure raiser manually, surrounding the provided validation function(s).
 
@@ -431,7 +431,7 @@ def failure_raiser(*validation_func: ValidationFuncs, failure_type: Type[Wrappin
     :return:
     """
     main_func = _process_validation_function_s(list(validation_func))
-    return _failure_raiser(main_func, failure_type=failure_type,  help_msg=help_msg)
+    return _failure_raiser(main_func, failure_type=failure_type,  help_msg=help_msg, **kw_context_args)
 
 
 def skip_on_none(*validation_func: ValidationFuncs) -> Callable:

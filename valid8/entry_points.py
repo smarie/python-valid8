@@ -199,6 +199,11 @@ class ValidationError(HelpMsgMixIn, ValueError, RootException):
         else:
             return self.get_help_msg(**self.__dict__)
 
+    def __repr__(self):
+        """ Overrides the default exception representation """
+        fields = [name + '=' + str(val) for name, val in self.__dict__.items() if not name.startswith('_')]
+        return type(self).__name__ + '(' + ','.join(fields) + ')'
+
     def get_details(self):
         """ The function called to get the details appended to the help message when self.append_details is True """
 
@@ -474,7 +479,7 @@ def assert_valid(name: str, value: Any, *validation_func: ValidationFuncs, none_
     :return: nothing in case of success. In case of failure, raises a <error_type> if provided, or a ValidationError.
     """
     return Validator(*validation_func, error_type=error_type, help_msg=help_msg,
-                     none_policy=none_policy)(name=name, value=value, **kw_context_args)
+                     none_policy=none_policy).assert_valid(name=name, value=value, **kw_context_args)
 
 
 def is_valid(value, *validation_func: Union[Callable, List[Callable]], none_policy: int=None) -> bool:

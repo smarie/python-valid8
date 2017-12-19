@@ -2,7 +2,7 @@ import pytest
 from enforce.exceptions import RuntimeTypeError
 from pytypes import InputTypeError
 
-from valid8 import InputValidationError, ValidationError
+from valid8 import InputValidationError, ValidationError, failure_raiser
 
 
 def test_readme_index_first_inline():
@@ -18,20 +18,20 @@ def test_readme_index_first_inline():
     assert str(e) == 'Error validating [surface=-1]. ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
-    # + explicit failure on None
+    # + explicit validation error on None
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', None, is_multiple_of(100), none_policy=NonePolicy.FAIL)
     e = exc_info.value
     assert str(e) == 'Error validating [surface=None]. ValueIsNone: The value must be non-None. Wrong value: [None].'
 
-    # + explicit failure message
+    # + custom error message (exception is still ValidationError)
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf, x > 0, help_msg='Surface should be positive')
     e = exc_info.value
     assert str(e) == "Surface should be positive. " \
                      "Error validating [surface=-1]: validation function [x > 0] returned [False]."
 
-    # + unique applicative error type
+    # + custom error message (unique applicative exception type)
     class SurfaceNotMul100(ValidationError):
         help_msg = 'Surface should be a multiple of 100'
 
@@ -54,55 +54,62 @@ def test_readme_index_first_inline():
 
     # + unique applicative error type
     class InvalidSurface(ValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100'
+        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100, found {var_value}'
 
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf,
                      (x >= 0) & (x < 10000), is_multiple_of(100),
                      error_type=InvalidSurface)
     e = exc_info.value
-    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \
+    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'False', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
 
+    # *** TEST: custom failure details message. Does it have any interest ? ***
+    with pytest.raises(ValidationError) as exc_info:
+        assert_valid('surface', surf, (is_multiple_of(100), 'Surface should be a multiple of 100'))
+    e = exc_info.value
+    assert str(e) == 'Error validating [surface=-1]. ' \
+                     'WrappingFailure: Surface should be a multiple of 100. ' \
+                     'Function [is_multiple_of_100] raised ' \
+                     '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]].'
+
     # + failure messages for each
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf,
-                     ((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
+                     ((x >= 0) & (x < 10000), 'Surface should be between 0 and 10000'),
                      (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
-    # TODO this one may be improved...
     assert str(e) == "Error validating [surface=-1]. " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
-                     "'failure_raiser((x >= 0) & (x < 10000), Surface should be betwen 0 and 10000)': " \
-                     "'WrappingFailure: Surface should be betwen 0 and 10000. " \
+                     "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
-                     "'failure_raiser(is_multiple_of_100, Surface should be a multiple of 100)': " \
-                     "'WrappingFailure: Surface should be a multiple of 100. " \
+                     "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: [-1]].'}."
 
-    # + unique applicative error type
+    # + unique applicative error type + custom message formatting
     with pytest.raises(ValidationError) as exc_info:
+        min_val = 0
+        max_val = 10000
         assert_valid('surface', surf,
-                     ((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
-                     (is_multiple_of(100), 'Surface should be a multiple of 100'),
+                     failure_raiser((x >= min_val) & (x < max_val),
+                                    help_msg='Surface should be between {min_val} and {max_val}',
+                                    min_val=min_val, max_val=max_val),
+                     (is_multiple_of(100), 'Surface should be a multiple of 100, found {wrong_value}'),
                      error_type=InvalidSurface)
     e = exc_info.value
-    # TODO this one may be improved...
-    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \
+    assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
-                     "'failure_raiser((x >= 0) & (x < 10000), Surface should be betwen 0 and 10000)': " \
-                     "'WrappingFailure: Surface should be betwen 0 and 10000. " \
+                     "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
-                     "'failure_raiser(is_multiple_of_100, Surface should be a multiple of 100)': " \
-                     "'WrappingFailure: Surface should be a multiple of 100. " \
+                     "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100, found -1. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: [-1]].'}."
 
