@@ -1,3 +1,4 @@
+from copy import copy
 from typing import Callable, Type, Sequence, Any
 
 from utils_string import end_with_dot_space
@@ -79,10 +80,12 @@ class HelpMsgMixIn:
         :param kwargs: keyword arguments to format the help message
         :return: the formatted help message
         """
+        context = self.get_context_for_help_msgs(kwargs)
+
         if self.help_msg is not None and len(self.help_msg) > 0:
             # first format if needed
             try:
-                help_msg = self.help_msg.format(**kwargs)
+                help_msg = self.help_msg.format(**context)
             except KeyError as e:
                 # no need to raise from e, __cause__ is set in the constructor
                 raise HelpMsgFormattingException(self.help_msg, e)
@@ -94,6 +97,11 @@ class HelpMsgMixIn:
                 return help_msg
         else:
             return ''
+
+    def get_context_for_help_msgs(self, context_dict):
+        """ Subclasses may wish to override this method to change the dictionary of contextual information before it is
+        sent to the help message formatter """
+        return context_dict
 
 
 class Failure(HelpMsgMixIn, ValueError, RootException):
@@ -280,6 +288,12 @@ class WrappingFailure(Failure):
                                  value=self.wrong_value)
 
         return contents
+
+    def get_context_for_help_msgs(self, context_dict):
+        """ We override this method from HelpMsgMixIn to replace wrapped_func with its name """
+        context_dict = copy(context_dict)
+        context_dict['wrapped_func'] = get_callable_name(context_dict['wrapped_func'])
+        return context_dict
 
 
 def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFailure] = None, help_msg: str = None,
