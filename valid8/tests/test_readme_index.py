@@ -13,20 +13,20 @@ def test_readme_index_first_inline():
 
     # simplest: one validation function and one variable name+value
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(is_multiple_of(100), surface=surf)
+        assert_valid('surface', surf, is_multiple_of(100))
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
     # + explicit failure on None
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(is_multiple_of(100), surface=None, none_policy=NonePolicy.FAIL)
+        assert_valid('surface', None, is_multiple_of(100), none_policy=NonePolicy.FAIL)
     e = exc_info.value
     assert str(e) == 'Error validating [surface=None]. ValueIsNone: The value must be non-None. Wrong value: [None].'
 
     # + explicit failure message
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(x > 0, help_msg='Surface should be positive', surface=surf)
+        assert_valid('surface', surf, x > 0, help_msg='Surface should be positive')
     e = exc_info.value
     assert str(e) == "Surface should be positive. " \
                      "Error validating [surface=-1]: validation function [x > 0] returned [False]."
@@ -36,7 +36,7 @@ def test_readme_index_first_inline():
         help_msg = 'Surface should be a multiple of 100'
 
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(is_multiple_of(100), error_type=SurfaceNotMul100, surface=surf)
+        assert_valid('surface', surf, is_multiple_of(100), error_type=SurfaceNotMul100)
     e = exc_info.value
     assert isinstance(e, SurfaceNotMul100)
     assert str(e) == 'Surface should be a multiple of 100. ' \
@@ -45,7 +45,7 @@ def test_readme_index_first_inline():
 
     # multiple validation functions
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid((x >= 0) & (x < 10000), is_multiple_of(100), surface=surf)
+        assert_valid('surface', surf, (x >= 0) & (x < 10000), is_multiple_of(100))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
@@ -57,7 +57,9 @@ def test_readme_index_first_inline():
         help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100'
 
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid((x >= 0) & (x < 10000), is_multiple_of(100), surface=surf, error_type=InvalidSurface)
+        assert_valid('surface', surf,
+                     (x >= 0) & (x < 10000), is_multiple_of(100),
+                     error_type=InvalidSurface)
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \
                      "Error validating [surface=-1]. " \
@@ -68,8 +70,9 @@ def test_readme_index_first_inline():
 
     # + failure messages for each
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
-                     (is_multiple_of(100), 'Surface should be a multiple of 100'), surface=surf)
+        assert_valid('surface', surf,
+                     ((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
+                     (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     # TODO this one may be improved...
     assert str(e) == "Error validating [surface=-1]. " \
@@ -85,9 +88,10 @@ def test_readme_index_first_inline():
 
     # + unique applicative error type
     with pytest.raises(ValidationError) as exc_info:
-        assert_valid(((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
+        assert_valid('surface', surf,
+                     ((x >= 0) & (x < 10000), 'Surface should be betwen 0 and 10000'),
                      (is_multiple_of(100), 'Surface should be a multiple of 100'),
-                     error_type=InvalidSurface, surface=surf)
+                     error_type=InvalidSurface)
     e = exc_info.value
     # TODO this one may be improved...
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100. " \

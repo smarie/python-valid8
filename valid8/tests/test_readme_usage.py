@@ -19,7 +19,7 @@ def test_tutorial():
     from valid8 import assert_valid
 
     def hello(age):
-        assert_valid(isfinite, age=age)
+        assert_valid('age', age, isfinite)
         print('Hello, {}-years-old fella !'.format(age))
 
     with pytest.raises(ValidationError) as exc_info:
@@ -36,7 +36,7 @@ def test_tutorial():
     # v2: age between 0 and 100
     from valid8 import between
     def hello(age):
-        assert_valid([isfinite, between(0, 150)], age=age)
+        assert_valid('age', age, [isfinite, between(0, 150)])
         print('Hello, {}-years-old fella !'.format(age))
 
     with pytest.raises(ValidationError) as exc_info:
@@ -51,7 +51,7 @@ def test_tutorial():
     # https://stackoverflow.com/questions/3501382/checking-whether-a-variable-is-an-integer-or-not
     from mini_lambda import x, Int
     def hello(age):
-        assert_valid([isfinite, between(0, 150), Int(x) == x], age=age)
+        assert_valid('age', age, [isfinite, between(0, 150), Int(x) == x])
         print('Hello, {}-years-old fella !'.format(age))
 
     with pytest.raises(ValidationError) as exc_info:
@@ -80,43 +80,43 @@ def test_usage_ensure_valid():
     from mini_lambda import s
 
     # (1) Existing function
-    assert_valid(isfinite, nb=0)
+    assert_valid('nb', 0, isfinite)
     with pytest.raises(ValidationError):
-        assert_valid(isfinite, nb=inf)
+        assert_valid('nb', inf, isfinite)
     # (2) Functools partial
-    assert_valid(partial(issubclass, bool), typ=int)
+    assert_valid('typ', int, partial(issubclass, bool))
     with pytest.raises(ValidationError):
-        assert_valid(partial(issubclass, bool), typ=str)
+        assert_valid('typ', str, partial(issubclass, bool))
     # (3) User-defined, standard
-    assert_valid(is_multiple_of_3, nb=3)
+    assert_valid('nb', 3, is_multiple_of_3)
     with pytest.raises(ValidationError):
-        assert_valid(is_multiple_of_3, nb=1)
+        assert_valid('nb', 1, is_multiple_of_3)
     # (4) User-defined, lambda
-    assert_valid(lambda s: s.islower(), txt='abc')
+    assert_valid('txt', 'abc', lambda s: s.islower())
     with pytest.raises(ValidationError):
-        assert_valid(lambda s: s.islower(), txt='aBc')
+        assert_valid('txt', 'aBc', lambda s: s.islower())
     # (5) User-defined, mini-lambda
-    assert_valid(s.lower().startswith('a'), txt='Abc')
+    assert_valid('txt', 'Abc', s.lower().startswith('a'))
     with pytest.raises(ValidationError):
-        assert_valid(s.lower().startswith('a'), txt='Bbc')
+        assert_valid('txt', 'Bbc', s.lower().startswith('a'))
     # (6) User-defined, factory
-    assert_valid(is_multiple_of(5), nb=15)
+    assert_valid('nb', 15, is_multiple_of(5))
     with pytest.raises(ValidationError):
-        assert_valid(is_multiple_of(5), nb=1)
+        assert_valid('nb', 1, is_multiple_of(5))
 
     gt_0, gt_1, gt_2, gt_3 = create_base_functions_2()
-    assert_valid(gt_0, nb=1)
+    assert_valid('nb', 1, gt_0)
     with pytest.raises(ValidationError):
-        assert_valid(gt_0, nb=-0.2)
-    assert_valid(gt_1, nb=1)
+        assert_valid('nb', -0.2, gt_0)
+    assert_valid('nb', 1, gt_1)
     with pytest.raises(ValidationError):
-        assert_valid(gt_1, nb=0.2)
-    assert_valid(gt_2, nb=2)
+        assert_valid('nb', 0.2, gt_1)
+    assert_valid('nb', 2, gt_2)
     with pytest.raises(ValidationError):
-        assert_valid(gt_2, nb=0.2)
-    assert_valid(gt_3, nb=3)
+        assert_valid('nb', 0.2, gt_2)
+    assert_valid('nb', 3, gt_3)
     with pytest.raises(ValidationError):
-        assert_valid(gt_3, nb=0.2)
+        assert_valid('nb', 0.2, gt_3)
 
 
 def test_usage_is_valid():
@@ -130,33 +130,33 @@ def test_usage_is_valid():
     from mini_lambda import s
 
     # (1) Existing function
-    assert is_valid(isfinite, value=0) is True
-    assert is_valid(isfinite, value=inf) is False
+    assert is_valid(0, isfinite) is True
+    assert is_valid(inf, isfinite) is False
     # (2) Functools partial
-    assert is_valid(partial(issubclass, bool), value=int) is True
-    assert is_valid(partial(issubclass, bool), value=str) is False
+    assert is_valid(int, partial(issubclass, bool)) is True
+    assert is_valid(str, partial(issubclass, bool)) is False
     # (3) User-defined, standard
-    assert is_valid(is_multiple_of_3, value=9) is True
-    assert is_valid(is_multiple_of_3, value=1) is False
+    assert is_valid(9, is_multiple_of_3) is True
+    assert is_valid(1, is_multiple_of_3) is False
     # (4) User-defined, lambda
-    assert is_valid(lambda s: s.islower(), value='abc') is True
-    assert is_valid(lambda s: s.islower(), value='aBc') is False
+    assert is_valid('abc', lambda s: s.islower()) is True
+    assert is_valid('aBc', lambda s: s.islower()) is False
     # (5) User-defined, mini-lambda
-    assert is_valid(s.lower().startswith('a'), value='Abc') is True
-    assert is_valid(s.lower().startswith('a'), value='Bbc') is False
+    assert is_valid('Abc', s.lower().startswith('a')) is True
+    assert is_valid('Bbc', s.lower().startswith('a')) is False
     # (6) User-defined, factory
-    assert is_valid(is_multiple_of(5), value=15) is True
-    assert is_valid(is_multiple_of(5), value=1) is False
+    assert is_valid(15, is_multiple_of(5)) is True
+    assert is_valid(1, is_multiple_of(5)) is False
 
     gt_0, gt_1, gt_2, gt_3 = create_base_functions_2()
-    assert is_valid(gt_0, value=0) is True
-    assert is_valid(gt_0, value=-0.2) is False
-    assert is_valid(gt_1, value=1) is True
-    assert is_valid(gt_1, value=0.2) is False
-    assert is_valid(gt_2, value=2) is True
-    assert is_valid(gt_2, value=0.2) is False
-    assert is_valid(gt_3, value=3) is True
-    assert is_valid(gt_3, value=0.2) is False
+    assert is_valid(0, gt_0) is True
+    assert is_valid(-0.2, gt_0) is False
+    assert is_valid(1, gt_1) is True
+    assert is_valid(0.2, gt_1) is False
+    assert is_valid(2, gt_2) is True
+    assert is_valid(0.2, gt_2) is False
+    assert is_valid(3, gt_3) is True
+    assert is_valid(0.2, gt_3) is False
 
 
 def test_usage_validators():
@@ -184,63 +184,63 @@ def test_usage_validators():
     # -- check that the validation works
 
     # (1) Existing function
-    validate_is_finite(val=0.5)  # ok
+    validate_is_finite('val', 0.5)  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_finite(val=inf)
+        validate_is_finite('val', inf)
     e = exc_info.value
     assert str(e) == 'Error validating [val=inf]: validation function [isfinite] returned [False].'
 
-    validate_is_superclass_of_bool(typ=int)  # ok
+    validate_is_superclass_of_bool('typ', int)  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_superclass_of_bool(typ=str)
+        validate_is_superclass_of_bool('typ', str)
     e = exc_info.value
     assert str(e) == "Error validating [typ=<class 'str'>]: " \
                      "validation function [functools.partial(<built-in function issubclass>, <class 'bool'>)] " \
                      "returned [False]."
 
-    validate_is_multiple_of_3(val=21)  # ok
+    validate_is_multiple_of_3('val', 21)  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_multiple_of_3(val=4)
+        validate_is_multiple_of_3('val', 4)
     e = exc_info.value
     assert str(e) == "Error validating [val=4]: validation function [is_multiple_of_3] returned [False]."
 
-    validate_is_lowercase(txt='abc')  # ok
+    validate_is_lowercase('txt', 'abc')  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_lowercase(txt='aBc')
+        validate_is_lowercase('txt','aBc')
     e = exc_info.value
     assert str(e) == "Error validating [txt=aBc]: validation function [<lambda>] returned [False]."
 
-    validate_starts_with_a(txt='Abc')  # ok
+    validate_starts_with_a('txt','Abc')  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_starts_with_a(txt='bac')
+        validate_starts_with_a('txt','bac')
     e = exc_info.value
     assert str(e) == "Error validating [txt=bac]: validation function [s.lower().startswith('a')] returned [False]."
 
-    validate_is_multiple_of_5(val=15)  # ok
+    validate_is_multiple_of_5('val',15)  # ok
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_multiple_of_5(val=1)
+        validate_is_multiple_of_5('val',1)
     e = exc_info.value
     assert str(e) == "Error validating [val=1]: validation function [is_multiple_of_5] returned [False]."
 
     # last batch of functions: with exceptions
-    validate_is_greater_than_0(val=0)
+    validate_is_greater_than_0('val',0)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_0(val=-0.2)
+        validate_is_greater_than_0('val',-0.2)
     e = exc_info.value
     assert str(e) == "Error validating [val=-0.2]. ValueError: x is not greater than 0, x=-0.2."
-    validate_is_greater_than_1(val=1)
+    validate_is_greater_than_1('val',1)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_1(val=0.2)
+        validate_is_greater_than_1('val',0.2)
     e = exc_info.value
     assert str(e) == "Error validating [val=0.2]. Failure: Wrong value: [x is not greater than 1, x=0.2]."
-    validate_is_greater_than_2(val=2)
+    validate_is_greater_than_2('val',2)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_2(val=0.2)
+        validate_is_greater_than_2('val',0.2)
     e = exc_info.value
     assert str(e) == "Error validating [val=0.2]. AssertionError: assert 0.2 >= 2."
-    validate_is_greater_than_3(val=3)
+    validate_is_greater_than_3('val',3)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_3(val=0.2)
+        validate_is_greater_than_3('val',0.2)
     e = exc_info.value
     assert str(e) == "Error validating [val=0.2]: validation function [gt_3] returned [x is not greater than 3, x=0.2]."
 
