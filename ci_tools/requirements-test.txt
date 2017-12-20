@@ -3,3 +3,4 @@ enforce
 pytypes
 pytest
 pytest-logging
+mini_lambda

@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['decorator']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda']
 EXTRAS_REQUIRE = {}
 
 # simple check
