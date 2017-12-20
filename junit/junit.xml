@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.766"><testcase classname="" file="valid8/tests/test_validation_lib/test_validators_collections.py" name="valid8.tests.test_validation_lib.test_validators_collections" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-valid8/valid8/tests/test_validation_lib/test_validators_collections.py&apos;.
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.765"><testcase classname="" file="valid8/tests/test_validation_lib/test_validators_collections.py" name="valid8.tests.test_validation_lib.test_validators_collections" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-valid8/valid8/tests/test_validation_lib/test_validators_collections.py&apos;.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../../../virtualenv/python3.5.4/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule
