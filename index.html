@@ -703,7 +703,7 @@
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
-<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># means that subclasses of required types are valid too</span>
+<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># type validation will accept subclasses too</span>
 
 <span class="c1"># Imports - for value validation</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
@@ -754,8 +754,10 @@
 <span class="nd">@autoclass</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
 
-    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
-    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
+    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> 
+                  <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
+    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> 
+                  <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">pass</span>
 
