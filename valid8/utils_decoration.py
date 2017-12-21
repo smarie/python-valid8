@@ -6,18 +6,18 @@ class DecorationException(Exception):
     pass
 
 
-def check_known_decorators(typ, calling_decorator: str) -> bool:
-    """
-    Checks that a given type is not already decorated by known decorators that may cause trouble.
-    If so, it raises an Exception
-    :return:
-    """
-    for member in typ.__dict__.values():
-        if hasattr(member, '__enforcer__'):
-            raise DecorationException('It seems that @runtime_validation decorator was applied to type <'
-                                      + str(typ) + '> BEFORE ' + calling_decorator + '. This is not supported '
-                                               'as it may lead to counter-intuitive behaviour, please change the order '
-                                               'of the decorators on <' + str(typ) + '>')
+# def check_known_decorators(typ, calling_decorator: str) -> bool:
+#     """
+#     Checks that a given type is not already decorated by known decorators that may cause trouble.
+#     If so, it raises an Exception
+#     :return:
+#     """
+#     for member in typ.__dict__.values():
+#         if hasattr(member, '__enforcer__'):
+#             raise DecorationException('It seems that @runtime_validation decorator was applied to type <'
+#                                       + str(typ) + '> BEFORE ' + calling_decorator + '. This is not supported '
+#                                       'as it may lead to counter-intuitive behaviour, please change the order '
+#                                       'of the decorators on <' + str(typ) + '>')
 
 
 def call_decorator_with_or_without_args(decorator_function_impl: Callable, objectIsFunction: bool, *args, **kwargs):
@@ -54,71 +54,71 @@ def create_function_decorator__robust_to_args(decorator_impl: Callable, *args, *
     return call_decorator_with_or_without_args(decorator_impl, True, *args, **kwargs)
 
 
-def create_class_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
-    """
-    Utility method to create a decorator for classes based on the provided implementation and arguments
-    
-    :param decorator_impl: 
-    :param args: 
-    :param kwargs: 
-    :return: 
-    """
-    return call_decorator_with_or_without_args(decorator_impl, False, *args, **kwargs)
+# def create_class_decorator__robust_to_args(decorator_impl: Callable, *args, **kwargs):
+#     """
+#     Utility method to create a decorator for classes based on the provided implementation and arguments
+#
+#     :param decorator_impl:
+#     :param args:
+#     :param kwargs:
+#     :return:
+#     """
+#     return call_decorator_with_or_without_args(decorator_impl, False, *args, **kwargs)
 
 
-def apply_on_each_func_args(func, cur_args, cur_kwargs,
-                            signature_attrs, signature_defaults, signature_varargs, signature_varkw,
-                            func_to_apply, func_to_apply_paramers_dict):
-    """
-    Applies func_to_apply on each argument of func according to what's received in current call (cur_args, cur_kwargs).
-    For each argument of func named 'att' in its signature, the following method is called:
-
-    `func_to_apply(cur_att_value, func_to_apply_paramers_dict[att], func, att_name)`
-
-    :param func:
-    :param cur_args:
-    :param cur_kwargs:
-    :param signature_attrs:
-    :param signature_defaults:
-    :param signature_varargs: variable length positional argument (name or none)
-    :param signature_varkw: variable length keyword argument (name or none)
-    :param func_to_apply:
-    :param func_to_apply_paramers_dict:
-    :return:
-    """
-    # handle default values and kw arguments
-    for attr_name, val in zip(reversed(signature_attrs), reversed(signature_defaults or [])):
-        if attr_name in func_to_apply_paramers_dict.keys():
-            # set default or provided value
-            if attr_name in cur_kwargs.keys():
-                # provided: we never seem to enter here, why ? maybe depends on the version of python
-                func_to_apply(cur_kwargs[attr_name], func_to_apply_paramers_dict[attr_name], func, attr_name)
-            else:
-                # default
-                func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
-
-    # handle positional arguments
-    for attr_name, val in zip(signature_attrs, cur_args):
-        if attr_name in func_to_apply_paramers_dict.keys():
-            func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
-
-    # handle varargs : since we dont know their name, they can only be validated as a whole
-    if signature_varargs:
-        remaining_args = cur_args[len(signature_attrs):]
-        if signature_varargs in func_to_apply_paramers_dict.keys():
-            func_to_apply(remaining_args, func_to_apply_paramers_dict[signature_varargs], func, signature_varargs)
-
-    # handle varkw : since we know their names, they can be validated either as a whole or independently
-    if signature_varkw:
-        # either the item is the whole dictionary (if func signature is generic such as in **kwargs)
-        if signature_varkw in func_to_apply_paramers_dict.keys():
-            # value = the cur_kwargs as a whole
-            func_to_apply(cur_kwargs, func_to_apply_paramers_dict[signature_varkw], func, signature_varkw)
-        else:
-            # or each item is handled independently (if func signature contains the kw args names such as a, b)
-            for attr_name, val in cur_kwargs.items():
-                if attr_name in func_to_apply_paramers_dict.keys():
-                    func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
+# def apply_on_each_func_args(func, cur_args, cur_kwargs,
+#                             signature_attrs, signature_defaults, signature_varargs, signature_varkw,
+#                             func_to_apply, func_to_apply_paramers_dict):
+#     """
+#     Applies func_to_apply on each argument of func according to what's received in current call (cur_args,cur_kwargs).
+#     For each argument of func named 'att' in its signature, the following method is called:
+#
+#     `func_to_apply(cur_att_value, func_to_apply_paramers_dict[att], func, att_name)`
+#
+#     :param func:
+#     :param cur_args:
+#     :param cur_kwargs:
+#     :param signature_attrs:
+#     :param signature_defaults:
+#     :param signature_varargs: variable length positional argument (name or none)
+#     :param signature_varkw: variable length keyword argument (name or none)
+#     :param func_to_apply:
+#     :param func_to_apply_paramers_dict:
+#     :return:
+#     """
+#     # handle default values and kw arguments
+#     for attr_name, val in zip(reversed(signature_attrs), reversed(signature_defaults or [])):
+#         if attr_name in func_to_apply_paramers_dict.keys():
+#             # set default or provided value
+#             if attr_name in cur_kwargs.keys():
+#                 # provided: we never seem to enter here, why ? maybe depends on the version of python
+#                 func_to_apply(cur_kwargs[attr_name], func_to_apply_paramers_dict[attr_name], func, attr_name)
+#             else:
+#                 # default
+#                 func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
+#
+#     # handle positional arguments
+#     for attr_name, val in zip(signature_attrs, cur_args):
+#         if attr_name in func_to_apply_paramers_dict.keys():
+#             func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
+#
+#     # handle varargs : since we dont know their name, they can only be validated as a whole
+#     if signature_varargs:
+#         remaining_args = cur_args[len(signature_attrs):]
+#         if signature_varargs in func_to_apply_paramers_dict.keys():
+#             func_to_apply(remaining_args, func_to_apply_paramers_dict[signature_varargs], func, signature_varargs)
+#
+#     # handle varkw : since we know their names, they can be validated either as a whole or independently
+#     if signature_varkw:
+#         # either the item is the whole dictionary (if func signature is generic such as in **kwargs)
+#         if signature_varkw in func_to_apply_paramers_dict.keys():
+#             # value = the cur_kwargs as a whole
+#             func_to_apply(cur_kwargs, func_to_apply_paramers_dict[signature_varkw], func, signature_varkw)
+#         else:
+#             # or each item is handled independently (if func signature contains the kw args names such as a, b)
+#             for attr_name, val in cur_kwargs.items():
+#                 if attr_name in func_to_apply_paramers_dict.keys():
+#                     func_to_apply(val, func_to_apply_paramers_dict[attr_name], func, attr_name)
 
 
 def apply_on_each_func_args_sig(func, cur_args, cur_kwargs, sig: Signature,
