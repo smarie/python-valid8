@@ -4,3 +4,4 @@ pytypes
 pytest
 pytest-logging
 mini_lambda
+autoclass
