@@ -239,7 +239,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../validation_fun/" title="Built-in validation functions" class="md-nav__link">
+    <a href="../base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
       Built-in validation functions
     </a>
   </li>
@@ -364,7 +364,7 @@
 <li>
 <p>New and improved entry points:</p>
 <ul>
-<li><strong>Function inputs validation</strong>: <code>@validate_arg</code> may be used instead of <code>@validate</code> to add input validation argument by argument instead of all in the same decorator (same functionality, this is just a question of style). The manual decorator <code>validate_decorate</code> was also renamed <code>decorate_with_validation</code> for clarity</li>
+<li><strong>Function inputs validation</strong>: <code>@validate_arg</code> may be used instead of <code>@validate</code> to add input validation argument by argument instead of all in the same decorator (same functionality, this is just a question of style). A new decorator <code>@validate_out</code> is provided. The manual decorator <code>validate_decorate</code> was also renamed <code>decorate_with_validation</code> for clarity</li>
 <li><strong>Inline validation</strong>: two new functions <code>assert_valid</code> and <code>is_valid</code>, allowing users to perform validation anywhere in their code in defensive programming mode (<code>assert_valid</code>) or case handling mode (<code>is_valid</code>)</li>
 <li><strong>Common Validator class</strong>: the common logic behind all the above entry points. It offers two methods for defensive programming (<code>validator.assert_valid</code>) and case handling (<code>validator.is_valid</code>). It may also be used directly by users, to 'pre-compile' validators, so that they are not constructed at every call like when using <code>assert_valid</code> and <code>is_valid</code>. But the difference is probably negligible.</li>
 </ul>
@@ -372,8 +372,8 @@
 <li>
 <p>Clearer separation of concepts:</p>
 <ul>
-<li><strong>Entry points</strong> (the above) know the full validation context, and raise <code>ValidationError</code> (or a subclass such as <code>InputValidationError</code>) when validation fails. The <code>ValidationError</code> object holds all information available concerning that validation context, and may be used by your application to improve or internationalize error messages.</li>
-<li><strong>Base validation functions</strong> (your methods or the ones from utility libraries including valid8) <em>may</em> raise subclasses of <code>BaseFailure</code> such as <code>Failure</code> if they wish to benefit from this helper type as well as ease applicatoin-level error handling and internationalization. The helper method <code>failure_raiser</code> allows to add such a friendly exception to a method not raising it (such as a lambda).</li>
+<li><strong>Entry points</strong> (the above) know the full validation context, and raise <code>ValidationError</code> (or a subclass such as <code>InputValidationError</code> or <em>your</em> custom subclass) when validation fails. The <code>ValidationError</code> object holds all information available concerning that validation context, and may be used by your application to improve or internationalize error messages.</li>
+<li><strong>Base validation functions</strong> (your methods or the ones from utility libraries including valid8) <em>may</em> raise subclasses of <code>Failure</code> or <code>WrappingFailure</code> if they wish to benefit from this helper type as well as ease application-level error handling and internationalization. The helper method <code>failure_raiser</code> allows to add such a friendly exception to a method not raising it (such as a lambda).</li>
 </ul>
 </li>
 <li>
@@ -382,22 +382,24 @@
 <li>base validation function(s) can be provided as a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. </li>
 <li>Nested lists are supported and indicate an implicit <code>and_</code> (such as the main list). </li>
 <li><a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a> expressions can be used instead of callables, they will be transformed to functions automatically.</li>
-<li>Tuples indicate an implicit <code>failure_raiser</code>. Combined with mini_lambda, this is a very powerful way to create validation functions: <code>(Len(s) &gt; 0, 'The value should be an empty string')</code> or <code>(Len(s) &gt; 0, EmptyStringFailure)</code>. </li>
+<li>Tuples indicate an implicit <code>_failure_raiser</code>. Combined with mini_lambda, this is a very powerful way to create validation functions: <code>(Len(s) &gt; 0, 'The value should be an empty string')</code> or <code>(Len(s) &gt; 0, EmptyStringFailure)</code>. </li>
 </ul>
 </li>
 <li>
 <p>Minor improvements of the base functions library</p>
 <ul>
-<li>split in independent files <code>validators_collections</code>, <code>validators_comparables</code>, <code>validators_numbers</code> so as to ease maintenance and possible contributions in the future</li>
+<li>split in independent files <code>collections</code>, <code>comparables</code>, <code>numbers</code> in a <code>validation_lib</code> submodule so as to ease maintenance and possible contributions in the future</li>
 <li>added <code>length_between</code> validator</li>
+<li>added type validation functions <code>instance_of</code> and <code>subclass_of</code></li>
+<li>all functions now raise unique subclasses of <code>Failure</code> ('eat your own dog food')</li>
 <li>Most built-in validator generators have their corresponding <code>__name__</code> now correctly set resulting in more user-friendly error messages</li>
 </ul>
 </li>
 <li>
-<p>Improvements of the boolean operators</p>
+<p>Improvements of the composition operators</p>
 <ul>
 <li><code>and_</code>, <code>or_</code>, <code>xor_</code> now support variable number of arguments (no need to pass a list anymore)</li>
-<li><code>not_</code>, <code>and_</code>, <code>or_</code>, <code>xor_</code> now raise consistent exceptions (subclasses of <code>BasicFailure</code>), with a user-friendly error message indicating the detailed validation results.</li>
+<li><code>not_</code>, <code>and_</code>, <code>or_</code>, <code>xor_</code> now raise consistent exceptions (subclasses of <code>CompositionFailure</code>), with a user-friendly error message indicating the detailed validation results.</li>
 </ul>
 </li>
 <li>

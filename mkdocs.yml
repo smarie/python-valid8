@@ -5,7 +5,7 @@ pages:
     - Home: index.md
     - Why validation: why_validation.md
     - Usage details: usage.md
-    - Built-in validation functions: validation_fun.md
+    - Built-in validation functions: base_validation_lib.md
     - Other validation libs: other_libs.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs

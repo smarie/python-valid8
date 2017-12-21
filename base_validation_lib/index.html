@@ -716,11 +716,11 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_fun.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/base_validation_lib.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="validation-library-reusable-base-validation-functions">Validation library - reusable base validation functions<a class="headerlink" href="#validation-library-reusable-base-validation-functions" title="Permanent link">&para;</a></h1>
-<p>Several base validation functions are bundled in the package. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="../usage">Usage</a> for details</p>
+                <h1 id="base-validation-functions-library">Base validation functions library<a class="headerlink" href="#base-validation-functions-library" title="Permanent link">&para;</a></h1>
+<p>Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="../usage">Usage</a> for details.</p>
 <p>A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal</p>
 <div class="codehilite"><pre><span></span><span class="c1"># get the list of submodules containing base validation functions</span>
 <span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="p">)</span>
@@ -733,7 +733,8 @@
 </pre></div>
 
 
-<p>Don't hesitate to propose new ones ! Submit a pull request or an issue <a href="https://github.com/smarie/python-valid8">here</a>.</p>
+<p>If you do not find the function you're looking for in this list, don't hesitate to propose new ones ! Submit a pull request or an issue <a href="https://github.com/smarie/python-valid8">here</a>.</p>
+<p>In parallel, if your function is very specific but writes quite well in plain old python syntax, <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a> may provide a good alternative.</p>
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
 <h3 id="instance_ofref_type">instance_of(ref_type)<a class="headerlink" href="#instance_ofref_type" title="Permanent link">&para;</a></h3>
 <p>'instance of' validation function generator. Returns a validation function to check that <code>is_instance(x, ref_type)</code>.</p>

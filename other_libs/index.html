@@ -239,7 +239,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../validation_fun/" title="Built-in validation functions" class="md-nav__link">
+    <a href="../base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
       Built-in validation functions
     </a>
   </li>
@@ -313,8 +313,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
-    Validation of data 'at the entry point'
+  <a href="#validation-of-data-at-the-applications-entry-point" title="Validation of data 'at the application's entry point'" class="md-nav__link">
+    Validation of data 'at the application's entry point'
   </a>
   
     <nav class="md-nav">
@@ -430,8 +430,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#validation-of-data-at-the-entry-point" title="Validation of data 'at the entry point'" class="md-nav__link">
-    Validation of data 'at the entry point'
+  <a href="#validation-of-data-at-the-applications-entry-point" title="Validation of data 'at the application's entry point'" class="md-nav__link">
+    Validation of data 'at the application's entry point'
   </a>
   
     <nav class="md-nav">
@@ -519,6 +519,7 @@
 <h2 id="schema-based-validation">Schema-based validation<a class="headerlink" href="#schema-based-validation" title="Permanent link">&para;</a></h2>
 <p>These libraries check that data is valid with respect to a <strong>schema</strong>. </p>
 <ul>
+<li><a href="https://github.com/alecthomas/voluptuous">voluptuous</a> (2017)</li>
 <li><a href="https://github.com/keleshev/schema">schema</a> (2017) </li>
 <li><a href="https://github.com/devdoomari/pyvalidator">pyvalidator</a> (2015) a modified fork of <a href="https://github.com/keleshev/schema">schema</a></li>
 <li><a href="https://github.com/guyskk/validr">validr</a> (2017) "10X faster than jsonschema, 40X faster than schematics". Based on <a href="https://github.com/guyskk/validr/blob/master/Isomorph-JSON-Schema.md">Isomorph-JSON-Schema</a></li>
@@ -527,7 +528,8 @@
 <li><a href="http://clivern.github.io/PyValitron/">PyValitron</a> (2016) separation of the concepts of validators / sanitizers (for text: lower case, strip, etc.). Quite a number of validators.</li>
 <li><a href="https://github.com/wilhelm-murdoch/validator">validator</a> (2014) A few built-in validators. validator are objects (Rule)</li>
 </ul>
-<h2 id="validation-of-data-at-the-entry-point">Validation of data 'at the entry point'<a class="headerlink" href="#validation-of-data-at-the-entry-point" title="Permanent link">&para;</a></h2>
+<h2 id="validation-of-data-at-the-applications-entry-point">Validation of data 'at the application's entry point'<a class="headerlink" href="#validation-of-data-at-the-applications-entry-point" title="Permanent link">&para;</a></h2>
+<p>If your application can <em>only</em> receive data from the outside world through forms, CLI or web service inputs, you might wish to validate as early as possible (as soon as it is received) that it is correct. This is what these libraries provide:</p>
 <h3 id="from-forms">from Forms<a class="headerlink" href="#from-forms" title="Permanent link">&para;</a></h3>
 <p>Data from forms sometimes requires validation to follow some kind of process with several steps, where a validation context (permissions) may need to be maintained.</p>
 <ul>
@@ -541,7 +543,7 @@
 <li><a href="https://github.com/docopt/docopt/commits/master">docopt</a> (2016) delegates to <a href="https://github.com/keleshev/schema">schema</a> for validation</li>
 </ul>
 <h2 id="domain-specific-validators-validators-for-specific-data-types-validators-without-framework">Domain-specific validators / validators for specific data types / validators without framework<a class="headerlink" href="#domain-specific-validators-validators-for-specific-data-types-validators-without-framework" title="Permanent link">&para;</a></h2>
-<p>These packages provide validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with <code>valid8</code>.</p>
+<p>These packages provide base validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with <code>valid8</code>.</p>
 <ul>
 <li><a href="http://pandas-validation.readthedocs.io/en/latest/">pandas-validation</a>: (2017) pandas dataframes</li>
 <li><a href="https://github.com/c-data/pandas-validator">pandas-validator</a>: (2017) pandas dataframes</li>
@@ -574,7 +576,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../validation_fun/" title="Built-in validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../base_validation_lib/" title="Built-in validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
