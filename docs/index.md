@@ -169,7 +169,7 @@ The following snippet shows a `build_house` function with four inputs `name`, `s
 from numbers import Integral
 from typing import Tuple, Optional
 from enforce import runtime_validation, config
-config(dict(mode='covariant'))  # means that subclasses of required types are valid too
+config(dict(mode='covariant'))  # type validation will accept subclasses too
 
 # Imports - for value validation
 from mini_lambda import s, x, Len
@@ -225,8 +225,10 @@ class InvalidSurfaceError(InputValidationError):
 @autoclass
 class House:
 
-    @validate_arg('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
-    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100), error_type=InvalidSurfaceError)
+    @validate_arg('name', instance_of(str), Len(s) > 0, 
+                  error_type=InvalidNameError)
+    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100), 
+                  error_type=InvalidSurfaceError)
     def __init__(self, name, surface=None):
         pass
 
