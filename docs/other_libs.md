@@ -39,6 +39,7 @@ These packages seem to mostly have been developed for type validation, not much 
 
 These libraries check that data is valid with respect to a **schema**. 
 
+ * [voluptuous](https://github.com/alecthomas/voluptuous) (2017)
  * [schema](https://github.com/keleshev/schema) (2017) 
  * [pyvalidator](https://github.com/devdoomari/pyvalidator) (2015) a modified fork of [schema](https://github.com/keleshev/schema)
  * [validr](https://github.com/guyskk/validr) (2017) "10X faster than jsonschema, 40X faster than schematics". Based on [Isomorph-JSON-Schema](https://github.com/guyskk/validr/blob/master/Isomorph-JSON-Schema.md)
@@ -47,7 +48,9 @@ These libraries check that data is valid with respect to a **schema**.
  * [PyValitron](http://clivern.github.io/PyValitron/) (2016) separation of the concepts of validators / sanitizers (for text: lower case, strip, etc.). Quite a number of validators.
  * [validator](https://github.com/wilhelm-murdoch/validator) (2014) A few built-in validators. validator are objects (Rule)
 
-## Validation of data 'at the entry point'
+## Validation of data 'at the application's entry point'
+
+If your application can *only* receive data from the outside world through forms, CLI or web service inputs, you might wish to validate as early as possible (as soon as it is received) that it is correct. This is what these libraries provide:
 
 ### from Forms
 
@@ -64,7 +67,7 @@ Data from forms sometimes requires validation to follow some kind of process wit
 
 ## Domain-specific validators / validators for specific data types / validators without framework
 
-These packages provide validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with `valid8`.
+These packages provide base validation functions, not validation frameworks. Therefore you could wish to reuse some of these functions in combination with `valid8`.
 
  * [pandas-validation](http://pandas-validation.readthedocs.io/en/latest/): (2017) pandas dataframes
  * [pandas-validator](https://github.com/c-data/pandas-validator): (2017) pandas dataframes

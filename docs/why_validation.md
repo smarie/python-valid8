@@ -6,7 +6,7 @@ Good question, thanks for asking. Having a common understanding of this is key, 
 
 If you are an experienced coder, you have probably *already* implemented validation in a number of ways:
 
- * 'pythonic' way: (thanks [source for the else-in-try construct](Thanks, https://openclassrooms.com/courses/apprenez-a-programmer-en-python/les-exceptions-4))
+ * 'pythonic' way: (thanks [source for the try-except-else construct](https://openclassrooms.com/courses/apprenez-a-programmer-en-python/les-exceptions-4))
 
 ```python
 def pythonic_function(x):
