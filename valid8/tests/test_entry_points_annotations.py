@@ -260,7 +260,7 @@ def test_decorate_manually():
     def my_func(a):
         pass
 
-    my_func = decorate_with_validation(my_func, a=is_even)
+    my_func = decorate_with_validation(my_func, 'a', is_even)
 
     with pytest.raises(InputValidationError):
         my_func(9)
