@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from collections import OrderedDict
 
 from typing import Callable, Union, List, Type, Tuple, Any
 
@@ -139,7 +140,7 @@ class CompositionFailure(Failure):
 
         # transform the dictionary of failures into a printable form
         need_to_print_value = True
-        failures_for_print = dict()
+        failures_for_print = OrderedDict()
         for validator, failure in self.failures.items():
             name = get_callable_name(validator)
             if isinstance(failure, Exception):
@@ -154,10 +155,14 @@ class CompositionFailure(Failure):
         else:
             value_str = ''
 
+        # OrderedDict does not pretty print...
+        key_values_str = [repr(key) + ': ' + repr(val) for key, val in failures_for_print.items()]
+        failures_for_print_str = '{' + ', '.join(key_values_str) + '}'
+
         # Note: we do note cite the value in the message since it is most probably available in inner messages [{val}]
         msg = '{what}{possibly_value}. Successes: {success} / Failures: {fails}' \
               ''.format(what=self.get_what(), possibly_value=value_str,
-                        success=self.successes, fails=failures_for_print)
+                        success=self.successes, fails=failures_for_print_str)
 
         return msg
 
@@ -170,7 +175,7 @@ class CompositionFailure(Failure):
         :return:
         """
         successes = list()
-        failures = dict()
+        failures = OrderedDict()
         for validator in validators:
             name = get_callable_name(validator)
             try:
