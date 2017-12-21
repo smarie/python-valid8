@@ -1,14 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.846"><testcase classname="" file="valid8/tests/test_validation_lib/test_validators_collections.py" name="valid8.tests.test_validation_lib.test_validators_collections" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-valid8/valid8/tests/test_validation_lib/test_validators_collections.py&apos;.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule
-    mod = self.fspath.pyimport(ensuresyspath=importmode)
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/py/_path/local.py:662: in pyimport
-    __import__(modname)
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/_pytest/assertion/rewrite.py:212: in load_module
-    py.builtin.exec_(co, mod.__dict__)
-valid8/tests/test_validation_lib/test_validators_collections.py:3: in &lt;module&gt;
-    from mini_lambda import make_lambda_friendly_method, _, x
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/mini_lambda/__init__.py:4: in &lt;module&gt;
-    from mini_lambda.generated import *
-E   ImportError: No module named &apos;mini_lambda.generated&apos;</error></testcase></testsuite>
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="1" tests="47" time="0.925"><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="6" name="test_empty_validators_list" time="0.0016782283782958984"></testcase><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="13" name="test_list_implicit_and" time="0.0017671585083007812"></testcase><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="22" name="test_not_not_all" time="0.0065343379974365234"></testcase><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="56" name="test_validate_or" time="0.0014302730560302734"></testcase><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="82" name="test_validate_xor" time="0.0011849403381347656"></testcase><testcase classname="valid8.tests.test_composition" file="valid8/tests/test_composition.py" line="106" name="test_validate_and" time="0.0016789436340332031"></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="7" name="test_validate_arg_nominal_builtin_validators" time="0.0024840831756591797"><system-out>hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="37" name="test_validate_out" time="0.002980947494506836"></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="54" name="test_validate_nominal_builtin_validators" time="0.0022089481353759766"><system-out>hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="84" name="test_validate_custom_validators_basic" time="0.0061187744140625"><failure message="assert &quot;Error valida...ert 1 &gt;= 2&apos;}.&quot; == &quot;Error validat...3&apos;: &apos;False&apos;}.&quot;
+  - Error validating input [a=1] for function [myfunc]. AtLeastOneFailed: At least one validation function failed validation for value [1]. Successes: [] / Failures: {&apos;is_mod_3&apos;: &apos;False&apos;, &apos;gt_assert2&apos;: &apos;AssertionError: assert 1 &gt;= 2&apos;}.
+  ?                                                                                                                                                                                      -----------------------------------------------
+  + Error validating input [a=1] for function [myfunc]. AtLeastOneFailed: At least one validation function failed validation for value [1]. Successes: [] / Failures: {&apos;gt_assert2&apos;: &apos;AssertionError: assert 1 &gt;= 2&apos;, &apos;is_mod_3&apos;: &apos;False&apos;}.
+  ?                                                                                                                                                                    +++++++++++++++++++++++++++++++++++++++++++++++">def test_validate_custom_validators_basic():
+        &quot;&quot;&quot; Checks that basic custom functions can be used as validators &quot;&quot;&quot;
+    
+        def is_mod_3(x):
+            &quot;&quot;&quot; A simple validator with no parameters&quot;&quot;&quot;
+            return x % 3 == 0
+    
+        def is_mod(ref):
+            &quot;&quot;&quot; A validator generator, with parameters &quot;&quot;&quot;
+            def is_mod(x):
+                return x % ref == 0
+            return is_mod
+    
+        def gt_assert2(x):
+            &quot;&quot;&quot; (not recommended) A validator relying on assert and therefore only valid in &apos;debug&apos; mode &quot;&quot;&quot;
+            assert x &gt;= 2
+    
+        @validate(a=[gt_assert2, is_mod_3],
+                  b=is_mod(5))
+        def myfunc(a, b):
+            print(&apos;hello&apos;)
+    
+        # -- check that the validation works
+        myfunc(21, 15)
+    
+        with pytest.raises(InputValidationError) as exc_info:
+            myfunc(4, 21)  # InputValidationError: a is not a multiple of 3
+        e = exc_info.value
+        assert str(e) == &quot;Error validating input [a=4] for function [myfunc]. &quot; \
+                         &quot;AtLeastOneFailed: At least one validation function failed validation for value [4]. &quot; \
+                         &quot;Successes: [&apos;gt_assert2&apos;] / Failures: {&apos;is_mod_3&apos;: &apos;False&apos;}.&quot;
+    
+        with pytest.raises(InputValidationError) as exc_info:
+            myfunc(15, 1)  # InputValidationError: b is not a multiple of 5
+        e = exc_info.value
+        assert str(e) == &quot;Error validating input [b=1] for function [myfunc]: &quot; \
+                         &quot;validation function [is_mod] returned [False].&quot;
+    
+        with pytest.raises(InputValidationError) as exc_info:
+            myfunc(1, 0)  # InputValidationError caused by AssertionError: a is not &gt;= 2
+        e = exc_info.value
+&gt;       assert str(e) == &quot;Error validating input [a=1] for function [myfunc]. &quot; \
+                         &quot;AtLeastOneFailed: At least one validation function failed validation for value [1]. &quot; \
+                         &quot;Successes: [] / Failures: {&apos;gt_assert2&apos;: &apos;AssertionError: assert 1 &gt;= 2&apos;, &apos;is_mod_3&apos;: &apos;False&apos;}.&quot;
+E       assert &quot;Error valida...ert 1 &gt;= 2&apos;}.&quot; == &quot;Error validat...3&apos;: &apos;False&apos;}.&quot;
+E         - Error validating input [a=1] for function [myfunc]. AtLeastOneFailed: At least one validation function failed validation for value [1]. Successes: [] / Failures: {&apos;is_mod_3&apos;: &apos;False&apos;, &apos;gt_assert2&apos;: &apos;AssertionError: assert 1 &gt;= 2&apos;}.
+E         ?                                                                                                                                                                                      -----------------------------------------------
+E         + Error validating input [a=1] for function [myfunc]. AtLeastOneFailed: At least one validation function failed validation for value [1]. Successes: [] / Failures: {&apos;gt_assert2&apos;: &apos;AssertionError: assert 1 &gt;= 2&apos;, &apos;is_mod_3&apos;: &apos;False&apos;}.
+E         ?                                                                                                                                                                    +++++++++++++++++++++++++++++++++++++++++++++++
+
+valid8/tests/test_entry_points_annotations.py:126: AssertionError</failure><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="130" name="test_validate_custom_validators_with_exception" time="0.0025153160095214844"><system-out>hello
+1
+2
+3
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="180" name="test_validate_mini_lambda" time="0.002336263656616211"><system-out>Hello, john your age is 20
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="193" name="test_validate_none_enforce" time="0.0048868656158447266"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="214" name="test_validate_none_pytypes" time="0.00821065902709961"><system-out>hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="235" name="test_validate_none_is_allowed" time="0.0015842914581298828"><system-out>hello
+hello
+</system-out></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="247" name="test_validate_name_error" time="0.0019829273223876953"></testcase><testcase classname="valid8.tests.test_entry_points_annotations" file="valid8/tests/test_entry_points_annotations.py" line="256" name="test_decorate_manually" time="0.001773834228515625"></testcase><testcase classname="valid8.tests.test_readme_index" file="valid8/tests/test_readme_index.py" line="7" name="test_readme_index_first_inline" time="0.003747224807739258"></testcase><testcase classname="valid8.tests.test_readme_index" file="valid8/tests/test_readme_index.py" line="116" name="test_index_enforce_mini_lambda" time="0.008517742156982422"><system-out>Building house...
+DONE !
+Building house...
+DONE !
+</system-out></testcase><testcase classname="valid8.tests.test_readme_index" file="valid8/tests/test_readme_index.py" line="167" name="test_index_enforce_old_style" time="0.009277820587158203"><system-out>you did it !
+you did it !
+</system-out></testcase><testcase classname="valid8.tests.test_readme_index" file="valid8/tests/test_readme_index.py" line="203" name="test_index_pytypes" time="0.0014672279357910156"><skipped message="waiting for the next version of pytypes" type="pytest.skip">valid8/tests/test_readme_index.py:203: &lt;py._xmlgen.raw object at 0x7fd3235029e8&gt;</skipped></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="5" name="test_tutorial" time="0.0020668506622314453"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="65" name="test_usage_base_validation_functions" time="0.0014929771423339844"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="71" name="test_usage_ensure_valid" time="0.0021924972534179688"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="121" name="test_usage_is_valid" time="0.004043102264404297"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="161" name="test_usage_validators" time="0.005021810531616211"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="316" name="test_usage_validate_annotation" time="0.003195524215698242"></testcase><testcase classname="valid8.tests.test_readme_usage" file="valid8/tests/test_readme_usage.py" line="333" name="test_usage_custom_validators" time="0.00603795051574707"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="7" name="test_is_in" time="0.001466989517211914"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="15" name="test_is_subset_is_superset" time="0.0024445056915283203"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="38" name="test_on_all" time="0.0011866092681884766"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="47" name="test_on_each" time="0.0024178028106689453"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="56" name="test_minlen" time="0.0014660358428955078"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="63" name="test_minlens" time="0.0014269351959228516"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="70" name="test_maxlen" time="0.0014412403106689453"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="77" name="test_maxlens" time="0.001676321029663086"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_collections" file="valid8/tests/test_validation_lib/test_validators_collections.py" line="84" name="test_length_between" time="0.0014815330505371094"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_comparables" file="valid8/tests/test_validation_lib/test_validators_comparables.py" line="5" name="test_gt" time="0.0010230541229248047"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_comparables" file="valid8/tests/test_validation_lib/test_validators_comparables.py" line="12" name="test_gts" time="0.0008711814880371094"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_comparables" file="valid8/tests/test_validation_lib/test_validators_comparables.py" line="19" name="test_lt" time="0.0012078285217285156"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_comparables" file="valid8/tests/test_validation_lib/test_validators_comparables.py" line="26" name="test_lts" time="0.0017790794372558594"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_comparables" file="valid8/tests/test_validation_lib/test_validators_comparables.py" line="33" name="test_between" time="0.002588987350463867"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_numbers" file="valid8/tests/test_validation_lib/test_validators_numbers.py" line="5" name="test_is_even" time="0.001020193099975586"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_numbers" file="valid8/tests/test_validation_lib/test_validators_numbers.py" line="11" name="test_is_odd" time="0.0017178058624267578"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_numbers" file="valid8/tests/test_validation_lib/test_validators_numbers.py" line="17" name="test_is_multiple_of" time="0.001749277114868164"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_types" file="valid8/tests/test_validation_lib/test_validators_types.py" line="5" name="test_instance_of" time="0.0017309188842773438"></testcase><testcase classname="valid8.tests.test_validation_lib.test_validators_types" file="valid8/tests/test_validation_lib/test_validators_types.py" line="19" name="test_subclass_of" time="0.0019249916076660156"></testcase></testsuite>
