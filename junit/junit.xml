@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.688"><testcase classname="" file="valid8/tests/test_validation_lib/test_validators_collections.py" name="valid8.tests.test_validation_lib.test_validators_collections" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-valid8/valid8/tests/test_validation_lib/test_validators_collections.py&apos;.
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.846"><testcase classname="" file="valid8/tests/test_validation_lib/test_validators_collections.py" name="valid8.tests.test_validation_lib.test_validators_collections" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-valid8/valid8/tests/test_validation_lib/test_validators_collections.py&apos;.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../../../virtualenv/python3.5.4/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule
@@ -9,8 +9,6 @@ Traceback:
     py.builtin.exec_(co, mod.__dict__)
 valid8/tests/test_validation_lib/test_validators_collections.py:3: in &lt;module&gt;
     from mini_lambda import make_lambda_friendly_method, _, x
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/mini_lambda/__init__.py:5: in &lt;module&gt;
-    from mini_lambda.goodies_generated import *
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/mini_lambda/goodies_generated.py:6: in &lt;module&gt;
-    from math import acos, acosh, asin, asinh, atan, atan2, atanh, ceil, copysign, cos, cosh, degrees, e, erf, erfc, exp, expm1, fabs, factorial, floor, fmod, frexp, fsum, gamma, gcd, hypot, inf, isclose, isfinite, isinf, isnan, ldexp, lgamma, log, log10, log1p, log2, modf, nan, pi, pow, radians, sin, sinh, sqrt, tan, tanh, tau, trunc
-E   ImportError: cannot import name &apos;tau&apos;</error></testcase></testsuite>
+../../../virtualenv/python3.5.4/lib/python3.5/site-packages/mini_lambda/__init__.py:4: in &lt;module&gt;
+    from mini_lambda.generated import *
+E   ImportError: No module named &apos;mini_lambda.generated&apos;</error></testcase></testsuite>
