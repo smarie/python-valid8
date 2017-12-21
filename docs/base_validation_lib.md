@@ -1,6 +1,6 @@
-# Validation library - reusable base validation functions
+# Base validation functions library
 
-Several base validation functions are bundled in the package. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](./usage) for details
+Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](./usage) for details.
 
 A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal
 
@@ -15,7 +15,9 @@ help(valid8.validation_lib.numbers)
 help(valid8.validation_lib.numbers.is_multiple_of)
 ```
 
-Don't hesitate to propose new ones ! Submit a pull request or an issue [here](https://github.com/smarie/python-valid8).
+If you do not find the function you're looking for in this list, don't hesitate to propose new ones ! Submit a pull request or an issue [here](https://github.com/smarie/python-valid8).
+
+In parallel, if your function is very specific but writes quite well in plain old python syntax, [mini_lambda](https://smarie.github.io/python-mini-lambda/) may provide a good alternative.
 
 
 ## Types
