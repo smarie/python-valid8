@@ -60,7 +60,8 @@ def test_tutorial():
     assert str(e) == "Error validating [age=12.5]." \
                      " AtLeastOneFailed: At least one validation function failed validation for value [12.5]. " \
                      "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'}."
-    # TODO continue !
+
+    # TODO continue this tutorial
 
 
 def test_usage_base_validation_functions():

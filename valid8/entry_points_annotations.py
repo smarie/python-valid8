@@ -172,7 +172,6 @@ class OutputValidator(FuncValidator):
                                                   **kw_context_args)
 
 
-# TODO: offer the capability to validate function outputs ()
 def validate(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation_funcs: ValidationFuncs):
     """
     A function decorator to add input validation prior to the function execution. It should be called with named
@@ -316,6 +315,10 @@ def _create_function_validator(validated_func: Callable, s: Signature, arg_name:
                                error_type: Type[InputValidationError] = None, none_policy: int = None,
                                **kw_context_args):
 
+    # if the function is a valid8 wrapper, rather refer to the __wrapped__ function.
+    if hasattr(validated_func, '__wrapped__') and hasattr(validated_func.__wrapped__, '__validators__'):
+        validated_func = validated_func.__wrapped__
+
     # check that provided input/output name is correct
     if arg_name not in s.parameters and arg_name is not _OUT_KEY:
         raise ValueError('@validate definition exception: argument name \''
@@ -397,46 +400,68 @@ def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, 
 
     none_policy = none_policy or NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
 
-    # (1) retrieve target function signature
-    s = signature(func)
+    # retrieve target function signature
+    func_sig = signature(func)
 
-    # (2) create or update the wrapper around the function to add validation
+    # create the new validator
+    new_validator = _create_function_validator(func, func_sig, arg_name, *validation_func,
+                                               none_policy=none_policy, error_type=error_type,
+                                               help_msg=help_msg, **kw_context_args)
+
+    # decorate or update decorator with this new validator
+    return decorate_with_validators(func, **{arg_name: new_validator}, func_signature=func_sig)
+
+
+def decorate_with_validators(func, func_signature: Signature = None, **validators: Validator):
+    """
+    Utility method to decorate the provided function with the provided input and output Validator objects. Since this
+    method takes Validator objects as argument, it is for advanced users.
+
+    :param func: the function to decorate. It might already be decorated, this method will check it and wont create
+    another wrapper in this case, simply adding the validators to the existing wrapper
+    :param func_signature: the function's signature if it is already known (internal calls), otherwise it will be found
+    again by inspection
+    :param validators: a dictionary of arg_name (or _out_) => Validator or list of Validator
+    :return:
+    """
+    # first turn the dictionary values into lists only
+    for arg_name, validator in validators.items():
+        if not isinstance(validator, list):
+            validators[arg_name] = [validator]
+
     if hasattr(func, '__wrapped__') and hasattr(func.__wrapped__, '__validators__'):
         # ---- This function is already wrapped by our validation wrapper ----
 
-        # create the new validator
-        new_validator = _create_function_validator(func.__wrapped__, s, arg_name, *validation_func,
-                                                   none_policy=none_policy, error_type=error_type,
-                                                   help_msg=help_msg, **kw_context_args)
-
-        # Update the dictionary of validators with the new validator
-        if arg_name in func.__wrapped__.__validators__:
-            func.__wrapped__.__validators__[arg_name].append(new_validator)
-        else:
-            func.__wrapped__.__validators__[arg_name] = [new_validator]
+        # Update the dictionary of validators with the new validator(s)
+        for arg_name, validator in validators.items():
+            for v in validator:
+                if arg_name in func.__wrapped__.__validators__:
+                    func.__wrapped__.__validators__[arg_name].append(v)
+                else:
+                    func.__wrapped__.__validators__[arg_name] = [v]
 
         # return the function, no need to wrap it further (it is already wrapped)
         return func
 
     else:
         # ---- This function is not yet wrapped by our validator. ----
-        # create the new validator
-        new_validator = _create_function_validator(func, s, arg_name, *validation_func,
-                                                   none_policy=none_policy, error_type=error_type,
-                                                   help_msg=help_msg, **kw_context_args)
 
-        # Store the dictionary of validation_funcs as an attribute of the function
+        # Store the dictionary of validators as an attribute of the function
         if hasattr(func, '__validators__'):
             raise ValueError('Function ' + str(func) + ' already has a defined __validators__ attribute, valid8 '
                              'decorators can not be applied on it')
-        func.__validators__ = {arg_name: [new_validator]}
+        else:
+            func.__validators__ = validators
+
+        # either reuse or recompute function signature
+        func_signature = func_signature or signature(func)
 
         # we used @functools.wraps(), but we now use 'decorate()' to have a wrapper that has the same signature
         def validating_wrapper(f, *args, **kwargs):
             """ This is the wrapper that will be called everytime the function is called """
 
             # (a) Perform input validation by applying `_assert_input_is_valid` on all received arguments
-            apply_on_each_func_args_sig(f, args, kwargs, s,
+            apply_on_each_func_args_sig(f, args, kwargs, func_signature,
                                         func_to_apply=_assert_input_is_valid,
                                         func_to_apply_paramers_dict=f.__validators__)
 
