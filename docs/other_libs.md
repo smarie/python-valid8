@@ -41,6 +41,7 @@ These libraries check that data is valid with respect to a **schema**.
 
  * [voluptuous](https://github.com/alecthomas/voluptuous) (2017)
  * [schema](https://github.com/keleshev/schema) (2017) 
+ * [datatyping](https://github.com/Zaab1t/datatyping) (2017)
  * [pyvalidator](https://github.com/devdoomari/pyvalidator) (2015) a modified fork of [schema](https://github.com/keleshev/schema)
  * [validr](https://github.com/guyskk/validr) (2017) "10X faster than jsonschema, 40X faster than schematics". Based on [Isomorph-JSON-Schema](https://github.com/guyskk/validr/blob/master/Isomorph-JSON-Schema.md)
  * [colander](https://docs.pylonsproject.org/projects/colander/en/latest/) (2017). A framework for serialization+deserialization including schema validation. With validators for strings, mappings, and lists
