@@ -48,7 +48,8 @@ These libraries check that data is valid with respect to a **schema**.
  * [python-jsonschema-objects](https://github.com/cwacek/python-jsonschema-objects) (2017). Automatic Python binding generation from JSON Schemas 
  * [PyValitron](http://clivern.github.io/PyValitron/) (2016) separation of the concepts of validators / sanitizers (for text: lower case, strip, etc.). Quite a number of validators.
  * [validator](https://github.com/wilhelm-murdoch/validator) (2014) A few built-in validators. validator are objects (Rule)
-
+ * [jsonobject](https://github.com/dimagi/jsonobject) (2017): specific to json
+ 
 ## Validation of data 'at the application's entry point'
 
 If your application can *only* receive data from the outside world through forms, CLI or web service inputs, you might wish to validate as early as possible (as soon as it is received) that it is correct. This is what these libraries provide:
