@@ -463,7 +463,7 @@ def decorate_with_validators(func, func_signature: Signature = None, **validator
             # (a) Perform input validation by applying `_assert_input_is_valid` on all received arguments
             apply_on_each_func_args_sig(f, args, kwargs, func_signature,
                                         func_to_apply=_assert_input_is_valid,
-                                        func_to_apply_paramers_dict=f.__validators__)
+                                        func_to_apply_params_dict=f.__validators__)
 
             # (b) execute the function as usual
             res = f(*args, **kwargs)
