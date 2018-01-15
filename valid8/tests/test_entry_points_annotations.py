@@ -2,7 +2,110 @@ import pytest
 from typing import Optional
 
 from valid8 import validate, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
-    decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError
+    decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError, \
+    ValidationError, validate_field, ClassFieldValidationError
+
+
+def test_validate_field():
+    """ Tests that the @validate_field decorator works on class descriptors """
+
+    from mini_lambda import x
+
+    class SurfaceField:
+        """ An example descriptor implementing everything (although only one of the three methods is required) """
+
+        def __init__(self, value=None):
+            self.val = value
+
+        def __get__(self, obj, objtype):
+            return self.val
+
+        def __set__(self, obj, val):
+            self.val = val
+
+        def __delete__(self, obj):
+            self.val = None
+
+    @validate_field('x', x <= 42, help_msg="x must be smaller or equal to 42")
+    class House:
+        x = SurfaceField(10)
+        y = 5
+        def foo(self):
+            pass
+
+    obj = House()
+
+    with pytest.raises(ClassFieldValidationError) as exc_info:
+        obj.x = 43
+    assert str(exc_info.value) == "x must be smaller or equal to 42. " \
+                                  "Error validating field [x=43] for class [House]: " \
+                                  "validation function [x <= 42] returned [False]."
+
+    # wrong name
+    with pytest.raises(ValueError):
+        @validate_field('y')
+        class House:
+            x = SurfaceField(10)
+            y = 5
+
+
+def test_validate_field_property():
+    """ Tests that the @validate_field decorator works when the class descriptor to validate is a @property """
+
+    from mini_lambda import x
+
+    def getx(self):
+        return self.__x
+
+    def setx(self, value):
+        self.__x = value
+
+    def delx(self):
+        del self.__x
+
+    @validate_field('x', x <= 42, help_msg="x must be smaller or equal to 42")
+    class House:
+        x = property(getx, setx, delx, "I'm the 'x' property.")
+        y = 5
+        def foo(self):
+            pass
+
+    obj = House()
+
+    with pytest.raises(ClassFieldValidationError):
+        obj.x = 43
+
+    # wrong name
+    with pytest.raises(ValueError):
+        @validate_field('y', x <= 42, help_msg="x must be smaller or equal to 42")
+        class House:
+            x = property(getx, setx, delx, "I'm the 'x' property.")
+            y = 5
+
+            def foo(self):
+                pass
+
+    # wrong name
+    with pytest.raises(ValueError):
+        @validate_field('foo', x <= 42, help_msg="x must be smaller or equal to 42")
+        class House:
+            x = property(getx, setx, delx, "I'm the 'x' property.")
+            y = 5
+
+            def foo(self):
+                pass
+
+
+def test_validate_attr():
+    """ Tests that the @validate_field decorator works when the class descriptor is from attrs """
+
+    import attr
+    from mini_lambda import x
+
+    @validate_field('x', x <= 42, help_msg="x must be smaller or equal to 42")
+    @attr.s
+    class C(object):
+        x = attr.ib()
 
 
 def test_validate_arg_nominal_builtin_validators():

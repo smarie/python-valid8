@@ -405,9 +405,16 @@ class Validator:
             ctx = copy(self.kw_context_args)
             ctx.update(kw_context_args)
 
+            # allow the class to override the name
+            name = self._get_name_for_errors(name)
+
             # then raise the appropriate ValidationError or subclass
             raise error_type(validator=self, var_value=value, var_name=name, validation_outcome=res,
                              help_msg=help_msg, **ctx)
+
+    def _get_name_for_errors(self, name: str):
+        """ Subclasses may override this """
+        return name
 
     def __call__(self, name: str, value: Any, error_type: Type[ValidationError] = None, help_msg: str = None,
                  **kw_context_args):
