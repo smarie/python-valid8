@@ -5,3 +5,4 @@ pytest
 pytest-logging
 mini_lambda
 autoclass
+attrs
