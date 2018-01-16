@@ -330,7 +330,7 @@ Of course you can also add type checking on top of that, see [autoclass document
 ```python
 import attr
 from mini_lambda import s, x, Len
-from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+from valid8 import validate_field, instance_of, is_multiple_of
 
 class InvalidNameError(ClassFieldValidationError):
     help_msg = 'name should be a non-empty string'
@@ -398,6 +398,7 @@ Many validation libraries are available on [PyPI](https://pypi.python.org/pypi?%
 
 ## See Also
 
+ * I opened this [discussion on python-ideas](https://groups.google.com/forum/#!topic/python-ideas/ZSp9UKmnF2Q) to suggest a `validate` statement, functional equivalent of `assert_valid`, that would be built-in the python syntax so as to reduce parenthesis. Feel free to jump in !
  * [decorator](http://decorator.readthedocs.io/en/stable/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of wrapped methods.
  * Julien Danjou's [Definitive Guide to Python Exceptions](https://julien.danjou.info/blog/2016/python-exceptions-guide). It was of great inspiration and help to design `valid8`'s exception hierarchy.
 
