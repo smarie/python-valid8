@@ -1,5 +1,5 @@
 from copy import copy
-from typing import Callable, Any, List, Union, Type
+from typing import Callable, Any, List, Union  # do not import Type for compatibility with earlier python 3.5
 
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
@@ -253,7 +253,7 @@ class Validator:
     `error_type`). See `ValidationError` for details.
     """
 
-    def __init__(self, *validation_func: ValidationFuncs, error_type: Type[ValidationError] = None,
+    def __init__(self, *validation_func: ValidationFuncs, error_type: 'Type[ValidationError]' = None,
                  help_msg: str = None, none_policy: int = None, **kw_context_args):
         """
         Creates a validator from a set of base validation functions. Validation will succeed if all base validation
@@ -357,7 +357,7 @@ class Validator:
         """ Subclasses may override this method to add custom information in the string representation of instances """
         return ''
 
-    def assert_valid(self, name: str, value: Any, error_type: Type[ValidationError] = None,
+    def assert_valid(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None,
                      help_msg: str = None, **kw_context_args):
         """
         Asserts that the provided named value is valid with respect to the inner base validation functions. It returns
@@ -416,7 +416,7 @@ class Validator:
         """ Subclasses may override this """
         return name
 
-    def __call__(self, name: str, value: Any, error_type: Type[ValidationError] = None, help_msg: str = None,
+    def __call__(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None, help_msg: str = None,
                  **kw_context_args):
         """
         Shortcut for self.assert_valid()
@@ -453,7 +453,7 @@ class Validator:
 
 
 def assert_valid(name: str, value: Any, *validation_func: ValidationFuncs, none_policy: int = None,
-                 error_type: Type[ValidationError] = None, help_msg: str = None, **kw_context_args):
+                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
     """
     Validates value `value` using validation function(s) `base_validator_s`.
     As opposed to `is_valid`, this function raises a `ValidationError` if validation fails.

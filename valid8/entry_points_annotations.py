@@ -1,6 +1,6 @@
 from inspect import signature, Signature, ismethod
 
-from typing import Callable, Any, List, Type, Union
+from typing import Callable, Any, List, Union  # do not import Type for compatibility with some python 3.5
 
 from decorator import decorate
 
@@ -79,7 +79,7 @@ class FuncValidator(Validator):
     """
 
     def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: Type[InputValidationError] = None, help_msg: str = None, none_policy: int = None,
+                 error_type: 'Type[InputValidationError]' = None, help_msg: str = None, none_policy: int = None,
                  **kw_context_args):
         """
 
@@ -122,7 +122,7 @@ class InputValidator(FuncValidator):
     """
 
     def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: Type[InputValidationError] = None, help_msg: str = None, none_policy: int = None,
+                 error_type: 'Type[InputValidationError]' = None, help_msg: str = None, none_policy: int = None,
                  **kw_context_args):
         """
 
@@ -155,7 +155,7 @@ class OutputValidator(FuncValidator):
     """ Represents a special kind of `Validator` responsible to validate a function output. """
 
     def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: Type[OutputValidationError] = None, help_msg: str = None, none_policy: int = None,
+                 error_type: 'Type[OutputValidationError]' = None, help_msg: str = None, none_policy: int = None,
                  **kw_context_args):
         """
 
@@ -185,11 +185,11 @@ class OutputValidator(FuncValidator):
         super(OutputValidator, self).__init__(validated_func, *validation_func, none_policy=none_policy,
                                               error_type=error_type, help_msg=help_msg, **kw_context_args)
 
-    def __call__(self, value: Any, error_type: Type[ValidationError] = None, help_msg: str = None, **kw_context_args):
+    def __call__(self, value: Any, error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
         super(OutputValidator, self).__call__('result', value, error_type=error_type, help_msg=help_msg,
                                               **kw_context_args)
 
-    def assert_valid(self, value: Any, error_type: Type[ValidationError] = None,
+    def assert_valid(self, value: Any, error_type: 'Type[ValidationError]' = None,
                      help_msg: str = None, **kw_context_args):
         super(OutputValidator, self).assert_valid('result', value, error_type=error_type, help_msg=help_msg,
                                                   **kw_context_args)
@@ -202,7 +202,7 @@ class ClassFieldValidator(Validator):
     """
 
     def __init__(self, validated_class: Callable, validated_field_name: str, *validation_func: ValidationFuncs,
-                 error_type: Type[ClassFieldValidationError] = None, help_msg: str = None, none_policy: int = None,
+                 error_type: 'Type[ClassFieldValidationError]' = None, help_msg: str = None, none_policy: int = None,
                  **kw_context_args):
         """
 
@@ -252,7 +252,8 @@ class ClassFieldValidator(Validator):
 
 
 def validate_field(field_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                   error_type: Type[InputValidationError] = None, none_policy: int = None, **kw_context_args) -> Type:
+                   error_type: 'Type[InputValidationError]' = None, none_policy: int = None, **kw_context_args) \
+        -> 'Type':
     """
     A class decorator. It goes through all class variables and for all of those that are descriptors with a __set__,
     it wraps the descriptors' setter function with a `validate_arg` annotation
@@ -336,7 +337,7 @@ alidate = validate
 
 
 def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                 error_type: Type[InputValidationError] = None, none_policy: int = None, **kw_context_args) -> Callable:
+                 error_type: 'Type[InputValidationError]' = None, none_policy: int = None, **kw_context_args) -> Callable:
     """
     A decorator to apply function input validation for the given argument name, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -368,7 +369,7 @@ def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = No
 
 
 def validate_out(*validation_func: ValidationFuncs, help_msg: str = None,
-                 error_type: Type[OutputValidationError] = None, none_policy: int = None, **kw_context_args) \
+                 error_type: 'Type[OutputValidationError]' = None, none_policy: int = None, **kw_context_args) \
         -> Callable:
     """
     A decorator to apply function output validation to this function's output, with the provided base validation
@@ -399,7 +400,7 @@ _OUT_KEY = '_out_'
 
 
 def decorate_cls_with_validation(cls, field_name: str, *validation_func: ValidationFuncs, help_msg: str = None,
-                                 error_type: Union[Type[InputValidationError], Type[OutputValidationError]] = None,
+                                 error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
                                  none_policy: int = None, **kw_context_args) -> Callable:
     """
     This method is equivalent to decorating a class with the `@validate_field` decorator but can be used a posteriori.
@@ -546,7 +547,7 @@ def decorate_several_with_validation(func, _out_: ValidationFuncs = None, none_p
 
 
 def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                             error_type: Union[Type[InputValidationError], Type[OutputValidationError]] = None,
+                             error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
                              none_policy: int = None, **kw_context_args) -> Callable:
     """
     This method is equivalent to decorating a function with the `@validate`, `@validate_arg` or `@validate_out`
@@ -610,8 +611,8 @@ def _get_final_none_policy_for_validator(is_nonable: bool, none_policy: NoneArgP
 
 def _create_function_validator(validated_func: Callable, s: Signature, arg_name: str,
                                *validation_func: ValidationFuncs, help_msg: str = None,
-                               error_type: Type[InputValidationError] = None, none_policy: int = None,
-                               validated_class: Type=None, validated_class_field_name: str=None,
+                               error_type: 'Type[InputValidationError]' = None, none_policy: int = None,
+                               validated_class: 'Type'=None, validated_class_field_name: str=None,
                                **kw_context_args):
 
     # if the function is a valid8 wrapper, rather refer to the __wrapped__ function.

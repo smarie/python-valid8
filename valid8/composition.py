@@ -1,13 +1,13 @@
 from abc import abstractmethod
 from collections import OrderedDict
 
-from typing import Callable, Union, List, Type, Tuple, Any
+from typing import Callable, Union, List, Tuple  # do not import Type for compatibility with earlier python 3.5
 
 from valid8.base import Failure, result_is_success, get_callable_names, get_callable_name, _failure_raiser, \
     WrappingFailure, _none_accepter, _none_rejecter, _LambdaExpression
 
 
-CallableAndFailureTuple = Tuple[Union[Callable, _LambdaExpression], Union[str, Type[Failure]]]
+CallableAndFailureTuple = Tuple[Union[Callable, _LambdaExpression], Union[str, 'Type[Failure]']]
 """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
 
 ValidationFunc = Union[Callable, _LambdaExpression, CallableAndFailureTuple]
@@ -410,7 +410,7 @@ def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Calla
     return not_(main_validator, catch_all=catch_all)
 
 
-def failure_raiser(*validation_func: ValidationFuncs, failure_type: Type[WrappingFailure] = None,
+def failure_raiser(*validation_func: ValidationFuncs, failure_type: 'Type[WrappingFailure]' = None,
                    help_msg: str = None, **kw_context_args) -> Callable:
     """
     Utility method to create a failure raiser manually, surrounding the provided validation function(s).

@@ -1,5 +1,5 @@
 from copy import copy
-from typing import Callable, Type, Sequence, Any
+from typing import Callable, Sequence, Any  # do not import Type for compatibility with earlier python 3.5
 
 from valid8.utils_string import end_with_dot_space
 
@@ -296,7 +296,7 @@ class WrappingFailure(Failure):
         return context_dict
 
 
-def _failure_raiser(validation_callable: Callable, failure_type: Type[WrappingFailure] = None, help_msg: str = None,
+def _failure_raiser(validation_callable: Callable, failure_type: 'Type[WrappingFailure]' = None, help_msg: str = None,
                     **kw_context_args) -> Callable:
     """
     Wraps the provided validation function so that in case of failure it raises the given failure_type or a WrappingFailure
