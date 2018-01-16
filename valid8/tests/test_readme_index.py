@@ -31,7 +31,7 @@ def test_readme_index_usage_basic():
 def test_readme_index_usage_customization():
     """ Tests that the examples provided in the index page under Usage examples/Customization are correct """
 
-    from valid8 import assert_valid, is_multiple_of
+    from valid8 import assert_valid, is_multiple_of, ValidationError
     from mini_lambda import x
 
     from valid8 import NonePolicy
@@ -183,6 +183,46 @@ def test_readme_index_usage_function():
         build_house('sweet home', 10000)  # surface is invalid
 
 
+def test_readme_index_usage_class_fields():
+    """ Tests that the examples provided in the index page under Usage examples/class fields are correct"""
+
+    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from mini_lambda import x, s, Len
+
+    class InvalidNameError(ClassFieldValidationError):
+        help_msg = 'name should be a non-empty string'
+
+    class InvalidSurfaceError(ClassFieldValidationError):
+        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
+
+    @validate_field('name', instance_of(str), Len(s) > 0,
+                    error_type=InvalidNameError)
+    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                    error_type=InvalidSurfaceError)
+    class House:
+        def __init__(self, name, surface=None):
+            self.name = name
+            self.surface = surface
+
+        @property
+        def surface(self):
+            return self.__surface
+
+        @surface.setter
+        def surface(self, surface=None):
+            self.__surface = surface
+
+    h = House('sweet home')
+    h.name = ''  # DOES NOT RAISE InvalidNameError
+
+    with pytest.raises(InvalidNameError):
+        h = House('')
+
+    h.surface = 100
+    with pytest.raises(InvalidSurfaceError):
+        h.surface = 10000
+
+
 def test_readme_index_combining_enforce():
     """ Tests that the examples provided in the index page under Combining/Enforce are correct """
 
@@ -230,6 +270,38 @@ def test_readme_index_combining_autoclass():
     """ Tests that the examples provided in the index page under Combining/autoclass are correct """
 
     from autoclass import autoclass
+    from mini_lambda import s, x, Len
+    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+
+    class InvalidNameError(ClassFieldValidationError):
+        help_msg = 'name should be a non-empty string'
+
+    class InvalidSurfaceError(ClassFieldValidationError):
+        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
+
+    @validate_field('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
+    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                    error_type=InvalidSurfaceError)
+    @autoclass
+    class House:
+        def __init__(self, name, surface=None):
+            pass
+
+    h = House('sweet home', 200)
+
+    h.surface = None  # Valid (surface is nonable by signature)
+
+    with pytest.raises(InvalidNameError):
+        h.name = ''  # InvalidNameError
+
+    with pytest.raises(InvalidSurfaceError):
+        h.surface = 10000  # InvalidSurfaceError
+
+
+def test_readme_index_combining_autoclass_2():
+    """ Tests that the examples provided in the index page under Combining/autoclass are correct (2) """
+
+    from autoclass import autoclass
     from mini_lambda import s, x, l, Len
     from valid8 import validate_arg, instance_of, is_multiple_of
 
@@ -255,6 +327,38 @@ def test_readme_index_combining_autoclass():
 
     with pytest.raises(InvalidSurfaceError):
         h.surface = 10000
+
+
+def test_readme_index_combining_attrs():
+    """ Tests that the examples provided in the index page under Combining/autoclass are correct """
+
+    import attr
+    from mini_lambda import s, x, Len
+    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+
+    class InvalidNameError(ClassFieldValidationError):
+        help_msg = 'name should be a non-empty string'
+
+    class InvalidSurfaceError(ClassFieldValidationError):
+        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
+
+    @validate_field('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
+    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                    error_type=InvalidSurfaceError)
+    @attr.s
+    class House:
+        name = attr.ib()
+        surface = attr.ib(default=None)
+
+    h = House('sweet home')  # Valid (surface is nonable by generated signature)
+
+    h.name = ''       # DOES NOT RAISE InvalidNameError (no setter!)
+
+    with pytest.raises(InvalidNameError):
+        House('', 10000)  # InvalidNameError
+
+    with pytest.raises(InvalidSurfaceError):
+        House('sweet home', 10000)  # InvalidSurfaceError
 
 
 def test_unused_pytypes():

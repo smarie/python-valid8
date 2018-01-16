@@ -1,3 +1,8 @@
+### 2.1.0 - new annotation @validate_field
+ 
+ * @validate_field allows users to validate class fields, whether they are descriptors, properties, or constructor arguments. Check the documentation for details!
+
+
 ### 2.0.0 - Major improvements and refactoring
 
  * New and improved entry points:

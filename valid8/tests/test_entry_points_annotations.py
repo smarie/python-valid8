@@ -3,7 +3,7 @@ from typing import Optional
 
 from valid8 import validate, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
     decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError, \
-    ValidationError, validate_field, ClassFieldValidationError
+    ValidationError, validate_field, ClassFieldValidationError, skip_on_none
 
 
 def test_validate_field():
@@ -20,7 +20,7 @@ def test_validate_field():
         def __get__(self, obj, objtype):
             return self.val
 
-        def __set__(self, obj, val):
+        def __set__(self, obj, val=None):  # note the None default value
             self.val = val
 
         def __delete__(self, obj):
@@ -35,11 +35,13 @@ def test_validate_field():
 
     obj = House()
 
+    obj.x = None
+
     with pytest.raises(ClassFieldValidationError) as exc_info:
         obj.x = 43
     assert str(exc_info.value) == "x must be smaller or equal to 42. " \
                                   "Error validating field [x=43] for class [House]: " \
-                                  "validation function [x <= 42] returned [False]."
+                                  "validation function [skip_on_none(x <= 42)] returned [False]."
 
     # wrong name
     with pytest.raises(ValueError):
@@ -57,7 +59,7 @@ def test_validate_field_property():
     def getx(self):
         return self.__x
 
-    def setx(self, value):
+    def setx(self, value=None):
         self.__x = value
 
     def delx(self):
@@ -71,6 +73,9 @@ def test_validate_field_property():
             pass
 
     obj = House()
+
+    obj.x = 42
+    obj.x = None
 
     with pytest.raises(ClassFieldValidationError):
         obj.x = 43

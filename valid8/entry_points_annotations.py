@@ -426,27 +426,7 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
     if type(cls) is not type:
         raise TypeError('decorated cls should be a type')
 
-    if not hasattr(cls, field_name):
-        # ** No class field with that name exist
-
-        # check for attrs
-        if hasattr(cls, '__attrs_attrs__'):
-            # try:
-            #     import attrs
-            # except ImportError as e:
-            #     raise ValueError('Impossible to decorate what seems to be an attrs-defined class, without being able to'
-            #                      ' import attrs') from e
-
-            # then it is easy: we just have to annotate the generated constructor
-            cls.__init__ = decorate_with_validation(cls.__init__, field_name, *validation_func, help_msg=help_msg,
-                                                    error_type=error_type, none_policy=none_policy, **kw_context_args)
-
-        else:
-            # TODO we should actually ALSO check the constructor AND __setattr__
-            # (for __setattr__ see https://stackoverflow.com/questions/15750522/class-properties-and-setattr/15751159)
-            raise ValueError("@validate_field definition exception: field '{}' can not be found in class '{}'"
-                             .format(field_name, cls.__name__))
-    else:
+    if hasattr(cls, field_name):
         # ** A class field with that name exist. Is it a descriptor ?
 
         var = cls.__dict__[field_name]  # note: we cannot use getattr here
@@ -454,10 +434,14 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
         if hasattr(var, '__set__') and callable(var.__set__):
 
             if isinstance(var, property):
+                # *** OLD WAY which was losing type hints and default values (see var.__set__ signature) ***
                 # properties are special beasts: their methods are method-wrappers (CPython) and can not have properties
                 # so we have to create a wrapper (sic) before sending it to the main wrapping function
-                def func(inst, value):
-                    var.__set__(inst, value)
+                # def func(inst, value):
+                #     var.__set__(inst, value)
+
+                # *** NEW WAY : more elegant, use directly the setter provided by the user ***
+                func = var.fset
                 nb_args = 2
             elif ismethod(var.__set__):
                 # bound method: normal. Let's access to the underlying function
@@ -514,6 +498,27 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
             raise ValueError("Class field '{}.{}' is not a valid class descriptor, see "
                              "https://docs.python.org/3.6/howto/descriptor.html".format(cls.__name__, field_name))
 
+    else:
+        # ** No class field with that name exist
+
+        # ? check for attrs ? > no specific need anymore, this is the same than annotating the constructor
+        # if hasattr(cls, '__attrs_attrs__'): this was a proof of attrs-defined class
+
+        # try to annotate the generated constructor
+        try:
+            cls.__init__ = decorate_with_validation(cls.__init__, field_name, *validation_func, help_msg=help_msg,
+                                                    _constructor_of_cls_=cls,
+                                                    error_type=error_type, none_policy=none_policy, **kw_context_args)
+        except InvalidNameError:
+            # the field was not found
+
+            # TODO should we also check if a __setattr__ is defined ?
+            # (for __setattr__ see https://stackoverflow.com/questions/15750522/class-properties-and-setattr/15751159)
+
+            # finally raise an error
+            raise ValueError("@validate_field definition exception: field '{}' can not be found in class '{}', and it "
+                             "is also not an input argument of the __init__ method.".format(field_name, cls.__name__))
+
     return cls
 
 
@@ -548,7 +553,7 @@ def decorate_several_with_validation(func, _out_: ValidationFuncs = None, none_p
 
 def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
                              error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
-                             none_policy: int = None, **kw_context_args) -> Callable:
+                             none_policy: int = None, _constructor_of_cls_: 'Type'=None, **kw_context_args) -> Callable:
     """
     This method is equivalent to decorating a function with the `@validate`, `@validate_arg` or `@validate_out`
     decorators, but can be used a posteriori.
@@ -578,9 +583,18 @@ def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, 
     func_sig = signature(func)
 
     # create the new validator
-    new_validator = _create_function_validator(func, func_sig, arg_name, *validation_func,
-                                               none_policy=none_policy, error_type=error_type,
-                                               help_msg=help_msg, **kw_context_args)
+    if _constructor_of_cls_ is None:
+        # standard method: input validator
+        new_validator = _create_function_validator(func, func_sig, arg_name, *validation_func,
+                                                   none_policy=none_policy, error_type=error_type,
+                                                   help_msg=help_msg, **kw_context_args)
+    else:
+        # class constructor: field validator
+        new_validator = _create_function_validator(func, func_sig, arg_name, *validation_func,
+                                                   none_policy=none_policy, error_type=error_type,
+                                                   help_msg=help_msg, validated_class=_constructor_of_cls_,
+                                                   validated_class_field_name=arg_name,
+                                                   **kw_context_args)
 
     # decorate or update decorator with this new validator
     return decorate_with_validators(func, func_signature=func_sig, **{arg_name: new_validator})
@@ -609,6 +623,12 @@ def _get_final_none_policy_for_validator(is_nonable: bool, none_policy: NoneArgP
     return none_policy_to_use
 
 
+class InvalidNameError(ValueError):
+    """ Raised whenever some name is invalid, typically does not exist in the validation target (method signature,
+    class fields)"""
+    pass
+
+
 def _create_function_validator(validated_func: Callable, s: Signature, arg_name: str,
                                *validation_func: ValidationFuncs, help_msg: str = None,
                                error_type: 'Type[InputValidationError]' = None, none_policy: int = None,
@@ -621,9 +641,9 @@ def _create_function_validator(validated_func: Callable, s: Signature, arg_name:
 
     # check that provided input/output name is correct
     if arg_name not in s.parameters and arg_name is not _OUT_KEY:
-        raise ValueError('@validate definition exception: argument name \''
-                         + str(arg_name) + '\' is not part of signature for ' + str(validated_func)
-                         + ' and is not ' + _OUT_KEY)
+        raise InvalidNameError('@validate definition exception: argument name \''
+                               + str(arg_name) + '\' is not part of signature for ' + str(validated_func)
+                               + ' and is not ' + _OUT_KEY)
 
     # create the new Validator object according to the none_policy and function signature
     if arg_name is not _OUT_KEY:
