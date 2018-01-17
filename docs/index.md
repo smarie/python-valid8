@@ -4,7 +4,7 @@
 
 *"valid8ing is not a crime" ;-)*
 
-As always unfortunately it starts with *"I could not find a validation library out there fitting my needs so I built my own"*. Almost. To be a little bit more precise, when it all started, I was just looking for a library providing a `@validate` annotation with a basic library of validators and some logic to associate them, so as to complete [autoclass](https://smarie.github.io/python-autoclass/). The idea was to show that with `autoclass`, if you annotate the `__init__` constructor with `@validate`, then the validator would be automatically applied to the generated property setters. I searched and found tons of good and less good libraries [out there](#other-validation-libraries). However none of them was really a good fit for `autoclass`, for diverse reasons:
+As always unfortunately it starts with *"I could not find a validation library out there fitting my needs so I built my own"*. Almost. To be a little bit more precise, when it all started, I was just looking for a library providing a `@validate` annotation with a basic library of validators and some logic to associate them, so as to complete [autoclass](https://smarie.github.io/python-autoclass/). I searched and found tons of good and less good libraries [out there](#other-validation-libraries). However none of them was really a good fit for `autoclass`, for diverse reasons:
 
  * only a few of them were available as decorators
  * many of them were strongly mixing type validation and value validation, which is not necessary anymore thanks to PEP484. This was making the `autoclass` examples more confusing.
