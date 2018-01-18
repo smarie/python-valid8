@@ -245,15 +245,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-validation" title="What is validation" class="md-nav__link">
-    What is validation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#purpose-of-validation" title="Purpose of validation" class="md-nav__link">
-    Purpose of validation
+  <a href="#what-is-validation-goals" title="What is validation - goals" class="md-nav__link">
+    What is validation - goals
   </a>
   
 </li>
@@ -293,13 +286,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
-    Note on entry-point validation: Cli, Schema and Forms
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -321,28 +307,35 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#exceptions-consistency" title="Exceptions consistency" class="md-nav__link">
+    Exceptions consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#easy-blending-to-reuse-base-validation-functions" title="Easy blending to reuse base validation functions" class="md-nav__link">
+    Easy blending to reuse base validation functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#functions-and-classes" title="Functions and classes" class="md-nav__link">
     Functions and classes
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#consistency" title="Consistency" class="md-nav__link">
-    Consistency
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reuse" title="Reuse" class="md-nav__link">
-    Reuse
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
+    Note on entry-point validation: Cli, Schema and Forms
+  </a>
   
 </li>
       
@@ -424,15 +417,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-validation" title="What is validation" class="md-nav__link">
-    What is validation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#purpose-of-validation" title="Purpose of validation" class="md-nav__link">
-    Purpose of validation
+  <a href="#what-is-validation-goals" title="What is validation - goals" class="md-nav__link">
+    What is validation - goals
   </a>
   
 </li>
@@ -472,13 +458,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
-    Note on entry-point validation: Cli, Schema and Forms
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -500,28 +479,35 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#exceptions-consistency" title="Exceptions consistency" class="md-nav__link">
+    Exceptions consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#easy-blending-to-reuse-base-validation-functions" title="Easy blending to reuse base validation functions" class="md-nav__link">
+    Easy blending to reuse base validation functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#functions-and-classes" title="Functions and classes" class="md-nav__link">
     Functions and classes
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#consistency" title="Consistency" class="md-nav__link">
-    Consistency
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reuse" title="Reuse" class="md-nav__link">
-    Reuse
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-on-entry-point-validation-cli-schema-and-forms" title="Note on entry-point validation: Cli, Schema and Forms" class="md-nav__link">
+    Note on entry-point validation: Cli, Schema and Forms
+  </a>
   
 </li>
       
@@ -544,15 +530,16 @@
                 
                 <h1 id="why-would-i-need-a-validation-library">Why would I need a validation library ?<a class="headerlink" href="#why-would-i-need-a-validation-library" title="Permanent link">&para;</a></h1>
 <p><em>As for the whole <code>valid8</code> project, this page is open to contribution, do not hesitate to submit issues or pull requests !</em></p>
-<h2 id="what-is-validation">What is validation<a class="headerlink" href="#what-is-validation" title="Permanent link">&para;</a></h2>
+<h2 id="what-is-validation-goals">What is validation - goals<a class="headerlink" href="#what-is-validation-goals" title="Permanent link">&para;</a></h2>
 <p>A variable <code>x</code>, or several variables, are to be used as inputs in a piece of code. These variables might have been received from an external, untrusted/error-prone source such as a caller code, a cli, web form, a web service client, data files, etc. </p>
-<p>Validation is the process of handling bad values so as to make the sender of these bad values aware that they are bad, and possibly to stop processing them.</p>
-<h2 id="purpose-of-validation">Purpose of validation<a class="headerlink" href="#purpose-of-validation" title="Permanent link">&para;</a></h2>
-<p>The purpose may vary, but it is often one of these (please feel free to suggest other benefits here):</p>
+<p>Validation is <em>the process of handling bad values</em> so as to </p>
 <ul>
-<li>let users get <strong>explicit error messages</strong> when they did not input correct data (in the function, or indirectly in web forms, web service inputs, cli, etc.)</li>
-<li><strong>defensive programming</strong>: do not let the code get an opportunity to fall into a harder-to-detect bug. This is also called <a href="https://en.wikipedia.org/wiki/Offensive_programming">offensive programming</a>.</li>
-<li><strong>avoid performing a computationally expensive task</strong> if it is to discover at the very end of the execution that one of the inputs was a known incorrect situation.</li>
+<li>
+<p><strong>make the sender of these bad values aware that they are bad</strong>, and aware of <em>why</em> they are bad. This is typically done with <em>explicit, user-friendly error messages</em> sent if anything went wrong during validation (even the unexpected!). What is key here is to remember that the caller's primary concern is <em>first</em> to know what was validated and why (<strong>intent / requirement for good data</strong>), <em>then</em> the <strong>means / inner details</strong> about e.g. what library you are using to validate his data, and its particular error message.</p>
+</li>
+<li>
+<p><strong>stop processing early</strong>, so that the code does not get an opportunity to fall into a harder-to-detect bug, or so as to avoid performing a computationally expensive task if it is useless. This is also called defensive programming, or <a href="https://en.wikipedia.org/wiki/Offensive_programming">offensive programming</a>.</p>
+</li>
 </ul>
 <h2 id="how-do-you-write-validation-today">How do you write validation today<a class="headerlink" href="#how-do-you-write-validation-today" title="Permanent link">&para;</a></h2>
 <p>If you are an experienced coder, you probably <em>already</em> implement validation in a number of ways, whether to check the variables' types and/or values. Below we present the main styles.</p>
@@ -576,19 +563,19 @@
 
 <p>This style has the advantage of being compact but has two major drawbacks:</p>
 <ul>
-<li>useless long-running operations: if the exception happens late in the code, that my lead to a long waiting time for the caller before it gets notified</li>
-<li>'crap in-crap out': for scientific applications such as machine learning, it might be that invalid data goes all the way through the code until you get a result, without throwing a single exception. It might even be hard to see that the output is actually completely wrong, until much further in the application lifecycle.</li>
+<li><strong>useless long-running operations</strong>: if the exception happens late in the code, that my lead to a long waiting time for the caller before it gets notified</li>
+<li><strong>undetected bad data / 'crap in-crap out'</strong>: for scientific applications such as machine learning, it might be that invalid data goes all the way through the code until you get a result, without throwing a single exception. It might even be hard to see that the output is actually completely wrong, until much further in the application lifecycle.</li>
 </ul>
 <p>(thanks <a href="https://openclassrooms.com/courses/apprenez-a-programmer-en-python/les-exceptions-4">source for the try-except-else construct</a>)</p>
 <h3 id="explicit-traditional-way">Explicit / 'traditional' way<a class="headerlink" href="#explicit-traditional-way" title="Permanent link">&para;</a></h3>
-<p>More conservative: here you explicitly validate the variables before using them. For this you typically rely on a blend of</p>
+<p>With this style you explicitly validate the variables before using them. To that end you typically rely on a blend of</p>
 <ul>
-<li><strong>custom validation statements</strong> such as <code>x &gt; 0</code>, that might contain function calls, such as <code>sqrt(x) &gt; 0.5</code>.</li>
+<li><strong>custom validation statements</strong> such as <code>x &gt; 0</code>, that might contain function calls, such as <code>sqrt(x) &gt; 0.5</code>. These functions might raise exceptions on some edge cases (<code>sqrt(-1)</code>)</li>
 <li>
-<p><strong>user-made or third party base validation functions</strong>, such as <code>isfinite(x)</code> or <code>assert_array_equal(x, ref)</code>. There are two predominant styles out there:</p>
+<p><strong>reused user-made or third party validation functions</strong>, such as <code>isfinite(x)</code> or <code>assert_array_equal(x, ref)</code>. Many, many such functions are available out there from various libraries - here is an <a href="../other_libs#domain-specific-validators-validators-for-specific-data-types-validators-without-framework">extract</a>. There are two predominant styles out there:</p>
 <ul>
-<li><em>boolean testers</em> such as <code>isfinite</code> : they return <code>True</code> in case of success and <code>False</code> in case of failure, and therefore do not provide any details about the failure when they fail.</li>
-<li><em>asserters</em> such as <code>check_uniform_sampling</code> or <code>assert_array_equal</code>: they do not return anything in case of success, but raise exceptions with details in case of failure.</li>
+<li><em>boolean testers</em> such as <code>isfinite</code> : they return <code>True</code> in case of success and <code>False</code> in case of failure, and therefore do not provide any details about the failure when they fail. Sometimes they continue to raise exceptions on edge cases (<code>isfinite(None)</code>, <code>isfinite(1+1j)</code>).</li>
+<li><em>failure raisers</em> such as <code>check_uniform_sampling</code> or <code>assert_array_equal</code>: they do not return anything in case of success, but raise exceptions with details in case of failure.</li>
 </ul>
 </li>
 </ul>
@@ -610,7 +597,7 @@
 </pre></div>
 
 
-<p>Also note that it is <strong>not easy</strong> to combine <em>asserters</em> together, or with <em>boolean testers</em>, in a boolean logic style. For example below we perform a virtual <code>or</code> between two <em>asserters</em>:</p>
+<p>Also note that it is <strong>not easy</strong> to combine <em>failure raisers</em> together, or with <em>boolean testers</em>, in a boolean logic style. For example below we perform a virtual <code>or</code> between two <em>failure raisers</em>:</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -640,34 +627,38 @@
 
 <p>However it has three major drawbacks that make it unusable in practice:</p>
 <ul>
-<li>the error raised in case of failure is an <code>AssertionError</code>, which is usually not the type of error you want to raise, and lacks customizability</li>
-<li>if <code>&lt;validation_statement_on_x&gt;</code> raises exceptions, they will be raised directly and not wrapped by the <code>AssertionError</code>: that might lead to several exception types for the same applicative intent</li>
-<li>it can be disabled at application-level: the statement won't be executed if the code is executed in optimized mode, as explained in the <a href="https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement">documentation</a>. </li>
+<li>the error raised in case of failure is an <code>AssertionError</code>, which is usually not the type of error you want to raise if you want unique error types for each kind of applicative validation, and it lacks customizability</li>
+<li>if <code>&lt;validation_statement_on_x&gt;</code> raises exceptions, they will be raised directly and not wrapped by the <code>AssertionError</code> and used as the <code>__cause__</code>: that might lead to several exception types for the same applicative intent</li>
+<li><code>assert</code> can be disabled at application-level: the statement won't be executed if the code is executed in optimized mode, as explained in the <a href="https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement">documentation</a>. </li>
 </ul>
 <p>To quote <a href="https://mail.python.org/pipermail/python-list/2013-November/660568.html">this source</a> <em>"Many people use asserts as a quick and easy way to raise an exception if an argument is given the wrong value. But this is wrong, dangerously wrong, for two reasons. The first is that AssertionError is usually the wrong error to give when testing function arguments. But, and more dangerously, there's a twist with assert: it can be compiled away and never executed, if you run Python with the -O or -OO 
 optimization flags [...]"</em>. In addition here again, note that if the <code>&lt;validate&gt;</code> function itself may raise Exceptions, you can end up with two kind of exceptions raised. </p>
-<h3 id="note-on-entry-point-validation-cli-schema-and-forms">Note on entry-point validation: Cli, Schema and Forms<a class="headerlink" href="#note-on-entry-point-validation-cli-schema-and-forms" title="Permanent link">&para;</a></h3>
+<h2 id="what-are-we-missing-today-for-general-purpose-validation">What are we missing today for general-purpose validation<a class="headerlink" href="#what-are-we-missing-today-for-general-purpose-validation" title="Permanent link">&para;</a></h2>
+<p>We saw in the examples above that <a href="#implicit-pythonic-way">implicit validation</a> and <a href="#special-case-of-assert">asserts</a> are not satisfying, therefore we are left with <a href="#explicit-traditional-way">explicit handcrafted validation</a>. What are the drawbacks as of today, where could we make progress ?</p>
+<h3 id="compactness-readability">Compactness / readability<a class="headerlink" href="#compactness-readability" title="Permanent link">&para;</a></h3>
+<p>It takes far too many lines of code to implement <a href="#explicit-traditional-way">explicit handcrafted validation</a>. This is a pity, as it does not encourage developers to insert validation in their code, and it makes the code less readable/maintainable. </p>
+<p>Having a solution to write most validation tasks in <strong>one or two lines of code</strong> would completely change the game: people would actually do it more often (and with actual pleasure doing it), and hopefully the amount of annoying cryptic exceptions we receive daily from our favorite opensource libraries would reduce significantly. </p>
+<p>If this goal is reached, this would improve quality of small open source projects over time. Indeed, with limited resources (time+human), validation is often skipped, which is not the case for "more serious" projects with a full team of developers.</p>
+<h3 id="exceptions-consistency">Exceptions consistency<a class="headerlink" href="#exceptions-consistency" title="Permanent link">&para;</a></h3>
+<p>There are many choices left in <a href="#explicit-traditional-way">explicit handcrafted validation</a> concerning the exception that is raised in case of validation failure. This may make any application/library rapidly lack consistency except for highly skilled coders. The following points in particular need to be handled consistently... but do we take the time to do it (especially when under pressure for delivery)?</p>
+<ul>
+<li>validation <strong>root exception types</strong> are not standard across developers and even inside a code base. It is recommended to use <a href="https://docs.python.org/3/library/exceptions.html#TypeError"><code>TypeError</code></a> for type validation and <a href="https://docs.python.org/3/library/exceptions.html#ValueError"><code>ValueError</code></a> for value validation, or any subclass of those, but at the same time we might wish to have <strong>a common <code>ValidationError</code> type</strong> holding validation context and intent ; so we have to use multiple inheritance to do this right</li>
+<li>when failure comes from a caught inner exception, the <strong><code>__cause__</code></strong> flag of the wrapper validation exception would need to be correctly set (or <code>raise e from f</code>), everywhere, consistently </li>
+<li>if we wish validation exceptions to easily be associated with <strong>error codes</strong> when exchanged with the rest of the application (web front-end, etc.), for <strong>internationalization (i18n)</strong> purposes, the best practice in python would be to create one exception class per type of error, so that an exception class = an error code. We <em>can</em> do this, but here again we have to think about it everywhere to keep consistency.</li>
+<li>even in plain english, validation <strong>messages</strong> should be user-friendly otherwise the user may struggle some time to understand why the value he entered was not correct. This can be mitigated if we have a global error code handler at the top of our application, that re-writes the appropriate internationalized message before sending it back to the user.</li>
+</ul>
+<h3 id="easy-blending-to-reuse-base-validation-functions">Easy blending to reuse base validation functions<a class="headerlink" href="#easy-blending-to-reuse-base-validation-functions" title="Permanent link">&para;</a></h3>
+<p>We saw above that with <a href="#explicit-traditional-way">explicit handcrafted validation</a>, we often end up reusing functions that are written in two incompatible styles (<em>boolean testers</em> and <em>failure raisers</em>), not to mention our own custom <em>validation statements</em>.</p>
+<p>Providing ways to easily blend those would encourage a larger reuse of privately made or community-grown validation libraries such as <a href="../other_libs#domain-specific-validators-validators-for-specific-data-types-validators-without-framework">these</a>. Less boring copy/paste, more leveraging existing good work.</p>
+<h3 id="functions-and-classes">Functions and classes<a class="headerlink" href="#functions-and-classes" title="Permanent link">&para;</a></h3>
+<p>Function inputs and outputs as well as class fields could be validated at function/class definition directly, instead of inside the function body / attribute setter.</p>
+<h2 id="note-on-entry-point-validation-cli-schema-and-forms">Note on entry-point validation: Cli, Schema and Forms<a class="headerlink" href="#note-on-entry-point-validation-cli-schema-and-forms" title="Permanent link">&para;</a></h2>
 <p>If you are sure that nobody will access your code directly (e.g. you do not share it as a library), you may wish to only perform value validation directly at the entry point, whether it is a command line interface, a web form or a soap/rest webservice in json or xml. This is perfectly fine and libraries providing the entry-point often come with validators/decorators bundled inside, such as in <a href="http://click.pocoo.org">click</a> or <a href="https://docs.djangoproject.com/search/?q=forms">django</a>. See <a href="../other_libs#validation-of-data-at-the-entry-point">here</a>.</p>
 <p>However as soon as you wish to also share your code as a library, you end up needing to maintain two validation frameworks: one for the entry points, and one for the library. There is no easy solution to solve this problem:</p>
 <ul>
 <li>you may wish to only perform validation in you core library functions, or core library's API. This can be enhanced by the creation of 'validated objects' for example using <a href="https://smarie.github.io/python-autoclass/">autoclass</a>, so that you do not re-validate in every function the object contents once it has been created</li>
 <li>you may need to still perform entry point-validation, may it only for the reason that you share a schema as a contract with your customers (through <a href="https://swagger.io/">swagger</a> or equivalent).</li>
 </ul>
-<h2 id="what-are-we-missing-today-for-general-purpose-validation">What are we missing today for general-purpose validation<a class="headerlink" href="#what-are-we-missing-today-for-general-purpose-validation" title="Permanent link">&para;</a></h2>
-<h3 id="compactness-readability">Compactness / readability<a class="headerlink" href="#compactness-readability" title="Permanent link">&para;</a></h3>
-<p>We saw in the examples above that it often takes several lines of code to implement value validation. This is a pity, as it does not encourage developers to insert validation in their code, and it makes the code less readable/maintainable.</p>
-<h3 id="functions-and-classes">Functions and classes<a class="headerlink" href="#functions-and-classes" title="Permanent link">&para;</a></h3>
-<p>Function inputs and outputs as well as class fields could be validated too.</p>
-<h3 id="consistency">Consistency<a class="headerlink" href="#consistency" title="Permanent link">&para;</a></h3>
-<p>We saw above the most typical ways that validation is done today by developers. As we could see there are many choices left concerning the exception that is raised in case of validation failure, which may make your code rapidly lack consistency except for highly skilled coders. The following points in particular need to be handled consistently... but do we take the time to do it (especially when under pressure for delivery)?</p>
-<ul>
-<li>validation <strong>root exception types</strong> are not standard across developers and even inside a code base. You <em>should</em> use <a href="https://docs.python.org/3/library/exceptions.html#TypeError"><code>TypeError</code></a> for type validation and <a href="https://docs.python.org/3/library/exceptions.html#ValueError"><code>ValueError</code></a> for value validation, or any subclass of those </li>
-<li>when failure comes from a caught inner exception, the <strong><code>__cause__</code></strong> flag of the wrapper validation exception would need to be correctly set (or <code>raise e from f</code>), everywhere, consistently </li>
-<li>if you wish validation exceptions to easily be associated with <strong>error codes</strong> when exchanged with the rest of the application (web front-end, etc.), for <strong>internationalization (i18n)</strong> purposes, the best practice in python would be to create one exception class per type of error, so that an exception class = an error code. You <em>can</em> do this, but here again you'll have to think about it everywhere to keep consistency.</li>
-<li>even in plain english, validation <strong>messages</strong> should be user-friendly otherwise the user of your function may struggle some time to understand why the value he entered was not correct. Of course if you have some error code handling at the top of your application this is ok since you probably re-write the appropriate internationalized message before sending it back to the user.</li>
-</ul>
-<h3 id="reuse">Reuse<a class="headerlink" href="#reuse" title="Permanent link">&para;</a></h3>
-<p>At some point you will probably want to reuse validation functions. For example to validate that a dataframe has certain column names, or that a text string follows a certain regex. Today this can be done by finding some libraries <a href="#other-validation-libraries">out there</a> and cherry-picking. It would be encouraged by a central catalog/page listing what kind of validation you can find in each library.</p>
                 
                   
                 
