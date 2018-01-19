@@ -1,10 +1,13 @@
-### 3.0.0 - new inline validators + dynamic typing
+### 3.0.0 - new inline validators + dynamic exception typing
 
  * Added two new entry points that should be more useful and usable than `assert_valid` for inline validation:
  
    - `quick_valid` for limited but simple one-line validation (most common tasks)
    - `wrap_valid` for more flexible validation (a contextmanager so it takes 2 lines)
  
+ * `ValidationError` does not inherit from `ValueError` anymore. Instead an exception type is dynamically created with the appropriate base class (either `ValueError` or `TypeError`) when a validation exception is raised. This can be disabled by explicitly inheriting from one or the other in custom exception types.
+ 
+ * improved documentation overall
 
 ### 2.1.0 - new annotation @validate_field
  
