@@ -89,7 +89,7 @@
                 valid8
               </span>
               <span class="md-header-nav__topic">
-                Home
+                Home and usage
               </span>
             
           
@@ -215,11 +215,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Home
+        Home and usage
       </label>
     
-    <a href="." title="Home" class="md-nav__link md-nav__link--active">
-      Home
+    <a href="." title="Home and usage" class="md-nav__link md-nav__link--active">
+      Home and usage
     </a>
     
       
@@ -233,8 +233,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-would-i-need-a-validation-library" title="Why would I need a validation library ?" class="md-nav__link">
-    Why would I need a validation library ?
+  <a href="#do-i-need-a-validation-library" title="Do I need a validation library ?" class="md-nav__link">
+    Do I need a validation library ?
   </a>
   
 </li>
@@ -247,30 +247,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples-inline" title="Usage examples - inline" class="md-nav__link">
-    Usage examples - inline
+  <a href="#usage-inline-validation" title="Usage - inline validation" class="md-nav__link">
+    Usage - inline validation
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic" title="Basic" class="md-nav__link">
-    Basic
+  <a href="#a-quick_valid" title="(a) quick_valid" class="md-nav__link">
+    (a) quick_valid
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#customization" title="Customization" class="md-nav__link">
-    Customization
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#composition" title="Composition" class="md-nav__link">
-    Composition
+  <a href="#b-wrap_valid" title="(b) wrap_valid" class="md-nav__link">
+    (b) wrap_valid
   </a>
   
 </li>
@@ -281,23 +274,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples-decorators" title="Usage examples - decorators" class="md-nav__link">
-    Usage examples - decorators
+  <a href="#customizing-the-validationexception" title="Customizing the ValidationException" class="md-nav__link">
+    Customizing the ValidationException
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#validating-function-inputsoutputs" title="Validating function inputs/outputs" class="md-nav__link">
-    Validating function inputs/outputs
+  <a href="#a-custom-message" title="(a) custom message" class="md-nav__link">
+    (a) custom message
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#validating-class-fields" title="Validating class fields" class="md-nav__link">
-    Validating class fields
+  <a href="#b-custom-type" title="(b) custom type" class="md-nav__link">
+    (b) custom type
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-message-templating" title="(c) message templating" class="md-nav__link">
+    (c) message templating
   </a>
   
 </li>
@@ -308,30 +308,37 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#valid8-other-tools" title="valid8 + other tools" class="md-nav__link">
-    valid8 + other tools
+  <a href="#validating-functions-classes" title="Validating functions &amp; classes" class="md-nav__link">
+    Validating functions &amp; classes
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
-    PEP484 type checkers
+  <a href="#a-functions" title="(a) functions" class="md-nav__link">
+    (a) functions
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#autoclass" title="autoclass" class="md-nav__link">
-    autoclass
+  <a href="#b-class-fields" title="(b) class fields" class="md-nav__link">
+    (b) class fields
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#attrs" title="attrs" class="md-nav__link">
-    attrs
+  <a href="#c-testing-goodies" title="(c) testing goodies" class="md-nav__link">
+    (c) testing goodies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-advanced-composition" title="(d) advanced composition" class="md-nav__link">
+    (d) advanced composition
   </a>
   
 </li>
@@ -346,11 +353,31 @@
     Main features
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decorator-specific" title="decorator-specific" class="md-nav__link">
+    decorator-specific
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#other-validation-libraries" title="Other Validation libraries" class="md-nav__link">
     Other Validation libraries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#origin-of-this-project" title="Origin of this project" class="md-nav__link">
+    Origin of this project
   </a>
   
 </li>
@@ -395,10 +422,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      For `valid8` decorators only
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        For `valid8` decorators only
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="usage/" title="Usage details" class="md-nav__link">
-      Usage details
+    <a href="accepted/" title="Accepted base validation functions" class="md-nav__link">
+      Accepted base validation functions
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="base_validation_lib/" title="Built-in base validation functions" class="md-nav__link">
+      Built-in base validation functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="composition/" title="Composing base validation functions" class="md-nav__link">
+      Composing base validation functions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -408,8 +483,8 @@
 
 
   <li class="md-nav__item">
-    <a href="base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
-      Built-in validation functions
+    <a href="valid8_with_other/" title="valid8 + other tools" class="md-nav__link">
+      valid8 + other tools
     </a>
   </li>
 
@@ -459,8 +534,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-would-i-need-a-validation-library" title="Why would I need a validation library ?" class="md-nav__link">
-    Why would I need a validation library ?
+  <a href="#do-i-need-a-validation-library" title="Do I need a validation library ?" class="md-nav__link">
+    Do I need a validation library ?
   </a>
   
 </li>
@@ -473,30 +548,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples-inline" title="Usage examples - inline" class="md-nav__link">
-    Usage examples - inline
+  <a href="#usage-inline-validation" title="Usage - inline validation" class="md-nav__link">
+    Usage - inline validation
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic" title="Basic" class="md-nav__link">
-    Basic
+  <a href="#a-quick_valid" title="(a) quick_valid" class="md-nav__link">
+    (a) quick_valid
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#customization" title="Customization" class="md-nav__link">
-    Customization
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#composition" title="Composition" class="md-nav__link">
-    Composition
+  <a href="#b-wrap_valid" title="(b) wrap_valid" class="md-nav__link">
+    (b) wrap_valid
   </a>
   
 </li>
@@ -507,23 +575,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-examples-decorators" title="Usage examples - decorators" class="md-nav__link">
-    Usage examples - decorators
+  <a href="#customizing-the-validationexception" title="Customizing the ValidationException" class="md-nav__link">
+    Customizing the ValidationException
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#validating-function-inputsoutputs" title="Validating function inputs/outputs" class="md-nav__link">
-    Validating function inputs/outputs
+  <a href="#a-custom-message" title="(a) custom message" class="md-nav__link">
+    (a) custom message
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#validating-class-fields" title="Validating class fields" class="md-nav__link">
-    Validating class fields
+  <a href="#b-custom-type" title="(b) custom type" class="md-nav__link">
+    (b) custom type
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-message-templating" title="(c) message templating" class="md-nav__link">
+    (c) message templating
   </a>
   
 </li>
@@ -534,30 +609,37 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#valid8-other-tools" title="valid8 + other tools" class="md-nav__link">
-    valid8 + other tools
+  <a href="#validating-functions-classes" title="Validating functions &amp; classes" class="md-nav__link">
+    Validating functions &amp; classes
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pep484-type-checkers" title="PEP484 type checkers" class="md-nav__link">
-    PEP484 type checkers
+  <a href="#a-functions" title="(a) functions" class="md-nav__link">
+    (a) functions
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#autoclass" title="autoclass" class="md-nav__link">
-    autoclass
+  <a href="#b-class-fields" title="(b) class fields" class="md-nav__link">
+    (b) class fields
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#attrs" title="attrs" class="md-nav__link">
-    attrs
+  <a href="#c-testing-goodies" title="(c) testing goodies" class="md-nav__link">
+    (c) testing goodies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-advanced-composition" title="(d) advanced composition" class="md-nav__link">
+    (d) advanced composition
   </a>
   
 </li>
@@ -572,11 +654,31 @@
     Main features
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decorator-specific" title="decorator-specific" class="md-nav__link">
+    decorator-specific
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#other-validation-libraries" title="Other Validation libraries" class="md-nav__link">
     Other Validation libraries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#origin-of-this-project" title="Origin of this project" class="md-nav__link">
+    Origin of this project
   </a>
   
 </li>
@@ -615,17 +717,12 @@
                 <h1 id="python-validate-valid8">python-validate (valid8)<a class="headerlink" href="#python-validate-valid8" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-valid8"><img alt="Build Status" src="https://travis-ci.org/smarie/python-valid8.svg?branch=master" /></a> <a href="https://smarie.github.io/python-valid8/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-valid8/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-valid8"><img alt="codecov" src="https://codecov.io/gh/smarie/python-valid8/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-valid8/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/valid8/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-valid8-blue.svg" /></a></p>
 <p><em>"valid8ing is not a crime" ;-)</em></p>
-<p>As always unfortunately it starts with <em>"I could not find a validation library out there fitting my needs so I built my own"</em>. Almost. To be a little bit more precise, when it all started, I was just looking for a library providing a <code>@validate</code> annotation with a basic library of validators and some logic to associate them, so as to complete <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>. However none of them was really a good fit for <code>autoclass</code>, for diverse reasons:</p>
-<ul>
-<li>only a few of them were available as decorators</li>
-<li>many of them were strongly mixing type validation and value validation, which is not necessary anymore thanks to PEP484. This was making the <code>autoclass</code> examples more confusing.</li>
-<li>only a few of them were providing a simple yet consistent and reusable framework to deal with validation functions, combine them, etc. And the good ones were based on defining a Schema first, which seemed a bit 'too much' for me already.</li>
-<li>finally, none of them was really encouraging the community to collaborate by displaying a catalog of base validation functions per data type, open to contributions.</li>
-</ul>
-<p>So I first created the <code>@validate</code> goodie in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. When the project became more mature, I decided to extract it and make it independent, so that maybe the community will find it interesting. </p>
-<p>When this project grew, I found that its <a href="./base_validation_lib">embedded library of base validation functions</a> was not flexible enough to cover a large variety of use cases, and will probably <strong>never</strong> be even if we try our best, so I came up with the complementary <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda syntax</a> which is now an independent project, typically used when your base validation function is very specific, but yet quite simple to write in plain python.</p>
-<h2 id="why-would-i-need-a-validation-library">Why would I need a validation library ?<a class="headerlink" href="#why-would-i-need-a-validation-library" title="Permanent link">&para;</a></h2>
-<p>Defensive programming, user-friendly error messages, app-wide consistency of error types, i18n... We try to dig the topic <a href="./why_validation">here</a>.</p>
+<p>Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.</p>
+<p>I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>, but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. </p>
+<p>I therefore propose this library to the open source community, at least to create a reference and maybe one day (?) reach a satisfying solution for a significant amount of developers.</p>
+<h2 id="do-i-need-a-validation-library">Do I need a validation library ?<a class="headerlink" href="#do-i-need-a-validation-library" title="Permanent link">&para;</a></h2>
+<p>In <a href="./why_validation">this page</a>, we explain what is validation, what you would need to do in order to implement it correctly (<code>assert</code> is not a viable solution), and demonstrate how much effort that would cost you. This high development cost results in validation being done inconsistently, if not skipped totally, in many applications and libraries.</p>
+<p><code>valid8</code> provides tools to perform validation in a minimum number of lines and with built-in consistency, so that it hopefully becomes fun and easy to include in your code. </p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install valid8
 </pre></div>
@@ -637,99 +734,191 @@
 <p>If you wish to define your own validation functions dynamically you may wish to also install <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a>.</p>
 </li>
 <li>
-<p>Since <code>valid8</code> does not support complex <em>type</em> validation, it is recommended to also install a PEP484 <em>type</em> checker such as <a href="https://github.com/RussBaz/enforce">enforce</a> of <a href="https://github.com/Stewori/pytypes">pytypes</a>.</p>
+<p>Since <code>valid8</code> only provides simple <em>type</em> validation, it is recommended to also install a more capable PEP484 <em>type</em> checker such as <a href="https://github.com/RussBaz/enforce">enforce</a> of <a href="https://github.com/Stewori/pytypes">pytypes</a>.</p>
 </li>
 <li>
 <p>In addition, if you wish to create highly compact object classes with field type+value validation, have a look at <a href="https://smarie.github.io/python-autoclass/">autoclass</a> which is where <code>valid8</code> actually originates from.</p>
 </li>
 </ul>
-<h2 id="usage-examples-inline">Usage examples - inline<a class="headerlink" href="#usage-examples-inline" title="Permanent link">&para;</a></h2>
-<h3 id="basic">Basic<a class="headerlink" href="#basic" title="Permanent link">&para;</a></h3>
-<p><code>assert_valid</code> is a replacement for <code>assert</code>, to validate some value anywhere in the code (see <a href="./why_validation">here</a> if you wonder why <code>assert</code> is not good enough):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
+<h2 id="usage-inline-validation">Usage - inline validation<a class="headerlink" href="#usage-inline-validation" title="Permanent link">&para;</a></h2>
+<p><code>valid8</code> provides two validation methods that you may use anywhere in your code: </p>
+<ul>
+<li><code>quick_valid</code> to perform the most simple validation tasks in one line of code</li>
+<li><code>wrap_valid</code> for any other validation task, in two or more lines of code</li>
+</ul>
+<h3 id="a-quick_valid">(a) <code>quick_valid</code><a class="headerlink" href="#a-quick_valid" title="Permanent link">&para;</a></h3>
+<p>The <code>quick_valid</code> method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:</p>
+<ul>
+<li>value is not <code>None</code></li>
+<li>value is an instance of one type in a <code>var_types</code> set</li>
+<li>value is one of the elements in a <code>allowed_values</code> set </li>
+<li>value is greater/smaller than <code>min_value</code>/<code>max_value</code> (strict or not)</li>
+<li>value length is greater/smaller than <code>min_len</code> / <code>max_len</code> (strict or not).</li>
+</ul>
+<p>In case of failure, it raises the same kind of <code>ValidationError</code> objects than more elaborate validation methods provided below, so it is consistent with the rest of <code>valid8</code>. Besides, the exception <code>__cause__</code> is the same than the equivalent operators from the <a href="./base_validation_lib">valid8 base validation library</a>.</p>
+<p>For example:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">quick_valid</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="c1"># (1) simplest: one named variable to validate + one validation function</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-
-<span class="c1"># (2) native mini_lambda support to define validation functions</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">allowed_types</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
 
-<p>The main benefit from this is that you are <strong>guaranteed</strong> that any exception happening in the validation process will be caught and turned into a <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual if/else/try/except wrappers to handle all cases. Yay!</p>
-<p>In (1) we used the validation functions from the bundled <a href="./base_validation_lib">validation functions library</a>. In (2) we used <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> to define the validation function inline (<code>x &gt; 0</code>). Other options are supported including defining your own validation functions very easily, as explained in the <a href="./usage/">Usage</a> page.</p>
-<div class="admonition note">
-<p class="admonition-title">Note on type validation</p>
-<p>Although simple type validation may be performed using the bundled <code>instance_of</code> or <code>subclass_of</code> function as shown above in (1), <code>valid8</code> is not meant for advanced type validation as it does not "know" anything about types. It is recommended to rely on a proper PEP484 type checker to support type validation more extensively.</p>
-</div>
-<h3 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">&para;</a></h3>
-<p>Various options are provided to adapt <code>valid8</code> to your needs:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">NonePolicy</span>
+<p>results in</p>
+<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+   TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
+</pre></div>
 
-<span class="c1"># (3) explicit validation policy for None (FAIL/SKIP/VALIDATE*)</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">none_policy</span><span class="o">=</span><span class="n">NonePolicy</span><span class="o">.</span><span class="n">FAIL</span><span class="p">)</span>
 
-<span class="c1"># (4) custom error message (exception is still a ValidationError)</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;Surface should be positive&#39;</span><span class="p">)</span>
+<p>Note that the resulting exception object contains much of the available information (<code>var_name</code>, <code>var_value</code>, <code>validation_outcome</code>) as fields.</p>
+<p>See <code>help(quick_valid)</code> for usage details.</p>
+<h3 id="b-wrap_valid">(b) <code>wrap_valid</code><a class="headerlink" href="#b-wrap_valid" title="Permanent link">&para;</a></h3>
+<p>The <code>wrap_valid</code> context manager is a bit more flexible than <code>quick_valid</code>: it allows you to define the validation procedure yourself, with any statement or function of your choice.</p>
+<p>If you rely on <strong>functions that output a boolean flag indicating success</strong>, you simply have to plug that flag on the object provided by the context manager, as shown below:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">wrap_valid</span>
 
-<span class="c1"># (5) *YOUR* error type (recommended to provide unique applicative errors / i18n)</span>
-<span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be a positive number&#39;</span>
+<span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+</pre></div>
 
-<span class="c1"># (6) Templating is supported in all `help_msg` texts</span>
-<span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+
+<p>Which yields</p>
+<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
+   validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
+</pre></div>
+
+
+<p>Note that the text of the error displays the source code that led to that failure. </p>
+<p>If you rely on <strong>functions that may raise exceptions</strong>, <code>wrap_valid</code> will catch them and append them as the <code>__cause__</code> of the resulting <code>ValidationError</code>: </p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">wrap_valid</span>
+
+<span class="n">surf</span> <span class="o">=</span> <span class="mi">1j</span>
+
+<span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+</pre></div>
+
+
+<p>yields</p>
+<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> raised <span class="se">\</span>
+       TypeError: <span class="s1">&#39;&gt;&#39;</span> not supported between instances of <span class="s1">&#39;complex&#39;</span> and <span class="s1">&#39;int&#39;</span>.
+</pre></div>
+
+
+<p>With <code>wrap_valid</code> you are therefore <strong>guaranteed</strong> that any exception happening in the validation process will be caught and turned into a friendly <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual <a href="./why_validation#explicit-traditional-way">if/else/try/except wrappers</a> to handle all cases.</p>
+<p>Two important things to note:</p>
+<ul>
+<li>the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as <code>with wrap_valid(...) as r:</code> and then <code>r.esults =</code></li>
+<li>there is no need to feed any result to that boolean flag. If you rely on <em>failure raiser</em>-style base functions, for example a <code>check_uniform_sampling</code> or a <code>assert_series_equal</code>, just can just call them and the wrapper will assume that no exception means success:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;dataframe&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="n">check_uniform_sampling</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">assert_series_equal</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ref_series</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="customizing-the-validationexception">Customizing the <code>ValidationException</code><a class="headerlink" href="#customizing-the-validationexception" title="Permanent link">&para;</a></h2>
+<p>Various options are provided to customize the raised exception. These options are available both on <code>quick_valid</code>, <code>wrap_valid</code>, and even on valid8 function and class decorators that we'll see below (<code>@validate_arg</code>, <code>@validate_field</code>...). </p>
+<h3 id="a-custom-message">(a) custom message<a class="headerlink" href="#a-custom-message" title="Permanent link">&para;</a></h3>
+<p>You can specify a custom error message that will be displayed at the beginning of the default message:</p>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> 
+                <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Surface should be a finite positive integer&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+</pre></div>
+
+
+<p>yields for <code>surf = -1</code></p>
+<div class="codehilite"><pre><span></span>ValidationError: Surface should be a finite positive integer. <span class="se">\</span>
+    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>: <span class="se">\</span>
+    validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
+</pre></div>
+
+
+<h3 id="b-custom-type">(b) custom type<a class="headerlink" href="#b-custom-type" title="Permanent link">&para;</a></h3>
+<p>Or even better, a custom error type, which is a good practice to ease internationalization (unique applicative error codes). The base <code>ValidationError</code> class provides default behaviours allowing you to define subclasses in a quite compact form:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be a positive integer&#39;</span>
+
+<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">allowed_types</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+            <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
+</pre></div>
+
+
+<p>yields for <code>surf = -1</code></p>
+<div class="codehilite"><pre><span></span>InvalidSurface: Surface should be a positive integer. <span class="se">\</span>
+   Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+   TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
+</pre></div>
+
+
+<h3 id="c-message-templating">(c) message templating<a class="headerlink" href="#c-message-templating" title="Permanent link">&para;</a></h3>
+<p>Finally, the <code>help_msg</code> field acts as a string template that will receive any additional keyword argument thrown at the validation method. So you can define reusable error classes without too much hassle:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be &gt; {minimum}, found {var_value}&#39;</span>
 
-<span class="n">min_value</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc_info</span><span class="p">:</span>
-    <span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">min_value</span><span class="p">,</span> 
-                 <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">min_value</span><span class="p">)</span>
+<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">allowed_types</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+            <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
 
-<h3 id="composition">Composition<a class="headerlink" href="#composition" title="Permanent link">&para;</a></h3>
-<p>You can combine several base validation functions together:</p>
-<div class="codehilite"><pre><span></span><span class="c1"># (8) composition of several base validation functions...</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-
-<span class="c1"># (9) you can still provide a global custom error type</span>
-<span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
-
-<span class="c1"># (10) you can also provide user-friendly intermediate failure messages/types</span>
-<span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span>
-             <span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="s1">&#39;Surface should be between 0 and 10000&#39;</span><span class="p">),</span>
-             <span class="p">(</span><span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;Surface should be a multiple of 100&#39;</span><span class="p">),</span>
-             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
+<p>yields</p>
+<div class="codehilite"><pre><span></span>InvalidSurface: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
+   Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+   TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
 </pre></div>
 
 
-<h2 id="usage-examples-decorators">Usage examples - decorators<a class="headerlink" href="#usage-examples-decorators" title="Permanent link">&para;</a></h2>
-<h3 id="validating-function-inputsoutputs">Validating function inputs/outputs<a class="headerlink" href="#validating-function-inputsoutputs" title="Permanent link">&para;</a></h3>
-<p>You can decorate any function with <code>@validate_arg</code> and <code>@validate_out</code> to validate its inputs and outputs. Both work exactly the same way than <code>assert_valid</code>, but they are a bit smarter when it comes to <code>None</code> handling (see note below). Here is an example where we add validation to a <code>build_house</code> function with two inputs:</p>
+<p>Note: as shown in that last example, the value being validated is already sent to the help message string to format under the <code>'var_value'</code> key, so you do not need to pass it. </p>
+<p>Obviously you can further customize your exception subclasses if you wish.</p>
+<h2 id="validating-functions-classes">Validating functions &amp; classes<a class="headerlink" href="#validating-functions-classes" title="Permanent link">&para;</a></h2>
+<p>In order to use the decorators presented in this section, you will have to provide them with a <strong>base validation function</strong> - as opposed to <code>quick_valid</code> where it was just a bunch of options, and <code>wrap_valid</code> where you could basically write any validation code inside the context manager.</p>
+<p>The requirements for accepted base validation functions are extremely simple: any single-input function returning <code>True</code> or <code>None</code> in case of success is <a href="./accepted">accepted</a>. In order for you to get started quickly, you can even leverage the following existing tools:</p>
+<ul>
+<li>the bundled <a href="./base_validation_lib">validation functions library</a>.</li>
+<li>the <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> syntax to define some validation functions inline (such as <code>x &gt; 0</code>) without writing <code>lambda x:</code>. </li>
+<li>the bundled <a href="./composition">composition functions</a></li>
+</ul>
+<h3 id="a-functions">(a) functions<a class="headerlink" href="#a-functions" title="Permanent link">&para;</a></h3>
+<p>The <code>@validate_arg</code> decorator adds input validation to a function. Here is an example where we decorate a <code>build_house</code> function:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
+
+<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> 
+              <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
+</pre></div>
+
+
+<p>As you can see above, any number of base validation functions can be provided to the decorator - this will correspond to an implicit <code>and_</code> being performed, equivalent to one that you would have done with the <a href="./composition">composition framework</a>. Here we validate the input argument <code>name</code> by chaining the function <code>instance_of(str)</code> (from the built-in <a href="./base_validation_lib">validation functions library</a>) with a custom lambda function <code>Len(s) &gt; 0</code> created using the <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> syntax. An implicit <code>and_</code> is done between the two.</p>
+<p>Let's try it:</p>
+<div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, <span class="m">200</span><span class="o">)</span>    <span class="c1"># Valid</span>
+
+&gt; build_house<span class="o">(</span><span class="s1">&#39;&#39;</span>, <span class="m">200</span><span class="o">)</span>
+InputValidationError: name should be a non-empty string. <span class="se">\</span>
+   Error validating input <span class="o">[</span><span class="nv">name</span><span class="o">=]</span> <span class="k">for</span> <span class="k">function</span> <span class="o">[</span>build_house<span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">(</span>instance_of_&lt;class <span class="s1">&#39;str&#39;</span>&gt;, len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
+   AtLeastOneFailed: <span class="se">\</span>
+     At least one validation <span class="k">function</span> failed validation <span class="k">for</span> value <span class="o">[]</span>. <span class="se">\</span>
+     Successes: <span class="o">[</span><span class="s2">&quot;instance_of_&lt;class &#39;str&#39;&gt;&quot;</span><span class="o">]</span> / Failures: <span class="o">{</span><span class="s1">&#39;len(s) &gt; 0&#39;</span>: <span class="s1">&#39;False&#39;</span><span class="o">}</span>.
+</pre></div>
+
+
+<p>We can see in this verbose exception all details of interest: first the custom <code>help_msg</code>; then the validated function and input name; and finally the composition failure resulting from one of the two base functions failing (<code>len(s) &gt; 0</code> as stated). <em>Note that since <code>Len</code> is <code>mini_lambda</code>'s equivalent of <code>len</code>, the string representation is lowercase</em></p>
+<p>The <code>@validate_out</code> function decorator works the same way for output validation, except that you don't provide it with any name. </p>
+<p>Here is a more complete example with both input and output validation:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">validate_out</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
 
-<span class="c1"># Define our 2 applicative error types</span>
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
-
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
-<span class="c1"># Apply validation</span>
-<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span>    <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>             
-              <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
+<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+              <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="p">)</span>
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-              <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
+              <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;Surface should be a multiple of 100 between 0 and 10000.&#39;</span><span class="p">)</span>
 <span class="nd">@validate_out</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
@@ -737,39 +926,54 @@
 </pre></div>
 
 
-<p>Let's try to call it with various input values:</p>
-<div class="codehilite"><pre><span></span><span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>    <span class="c1"># Valid</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">)</span>         <span class="c1"># Valid, see note below</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>              <span class="c1"># InvalidNameError</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>  <span class="c1"># InvalidSurfaceError</span>
+<p>Something strange happens:</p>
+<div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span>None<span class="o">)</span>
+InputValidationError: name should be a non-empty string. <span class="se">\</span>
+   Error validating input <span class="o">[</span><span class="nv">name</span><span class="o">=</span>None<span class="o">]</span> ...
+
+&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>         <span class="c1"># No error !</span>
+&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, None<span class="o">)</span>   <span class="c1"># No error !</span>
 </pre></div>
 
 
-<div class="admonition note">
-<p class="admonition-title">Note on None handling policies</p>
-<p>We saw <a href="#customization">earlier</a> that for <code>assert_valid</code> you can customize the policy so that <code>None</code> are not validated (<code>VALIDATE</code>, the default behaviour) but rather accepted (<code>SKIP</code>) or rejected (<code>FAIL</code>). For function input and output validation, two additional policies may be selected in addition to these 3: the first <code>SKIP_IF_NONABLE_ELSE_VALIDATE</code> (default) will skip validation of <code>None</code> values if the argument has a default value of <code>None</code> in the function signature or if the argument or output has a PEP484 <code>Optional[...]</code> type hint, and otherwise will perform validation as usual. The second, <code>SKIP_IF_NONABLE_ELSE_FAIL</code>, will do the same but its last resort fallback is a failure instead of a validation. </p>
-</div>
-<h3 id="validating-class-fields">Validating class fields<a class="headerlink" href="#validating-class-fields" title="Permanent link">&para;</a></h3>
-<p>You can decorate any class with <code>@validate_field</code> to validate a field defined as </p>
+<p>No error is raised when <code>surface</code> is <code>None</code>, while our base validation functions should both fail in presence of <code>None</code>:</p>
+<div class="codehilite"><pre><span></span>&gt; is_multiple_of<span class="o">(</span><span class="m">100</span><span class="o">)(</span>None<span class="o">)</span>   
+TypeError: unsupported operand type<span class="o">(</span>s<span class="o">)</span> <span class="k">for</span> %: <span class="s1">&#39;NoneType&#39;</span> and <span class="s1">&#39;int&#39;</span>
+
+&gt; <span class="o">(</span>Len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)</span>.evaluate<span class="o">(</span>None<span class="o">)</span>
+TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType&#39;</span> has no len<span class="o">()</span>
+</pre></div>
+
+
+<p>Indeed, by default <code>None</code> values have a special treatment depending on the function signature: </p>
+<ul>
+<li>if the input to validate has a default value of <code>None</code>it is considered <strong><em>nonable</em></strong>. For this input, <code>None</code> values will not enter the validation procedure and be sent directly to the function. In other words validation is skipped for <code>None</code>. The same principle goes for inputs and outputs that have a PEP484 <code>Optional[...]</code> type hint, with or without default value.</li>
+<li>in the absence of <code>None</code> default value or <code>Optional[...]</code> type hint, the input or output is considered <strong><em>normal</em></strong>. <code>None</code> values will be send to the validation function as usual, as it would be for non-<code>None</code> values</li>
+</ul>
+<p>The default behaviour described above may not suit your needs, and can be changed by changing the <code>none_policy</code> keyword argument. Valid values are:</p>
+<ul>
+<li><code>NonePolicy.SKIP_IF_NONABLE_ELSE_VALIDATE</code>: the default behaviour described above</li>
+<li><code>NonePolicy.SKIP_IF_NONABLE_ELSE_FAIL</code>: same than the above, except that for <strong><em>normal</em></strong> inputs and outputs, <code>None</code> values will be rejected automatically - no need to test for <code>None</code> in your validation function.</li>
+<li><code>NonePolicy.SKIP</code>: validation will always be skipped for <code>None</code> values</li>
+<li><code>NonePolicy.FAIL</code>: validation will always fail for <code>None</code> values</li>
+<li><code>NonePolicy.VALIDATE</code>: validation will always be performed even for <code>None</code> values</li>
+</ul>
+<p>Finally, the exception customization options described <a href="#customizing-the-validationexception">earlier</a> apply. For example a custom <code>error_type</code> may be provided, except that the custom type should inherit from <code>InputValidationError</code> or <code>OutputValidationError</code>.</p>
+<h3 id="b-class-fields">(b) class fields<a class="headerlink" href="#b-class-fields" title="Permanent link">&para;</a></h3>
+<p>The <code>@validate_field</code> decorator adds field validation to a class. It is able to validate a field if the field is:</p>
 <ul>
 <li>a <a href="https://docs.python.org/3.6/howto/descriptor.html#descriptor-example">descriptor</a> - in which case it is equivalent to a <code>@validate_arg</code> added on the <code>__set__</code> function of the descriptor, but with a more user-friendly error message</li>
 <li>a <a href="https://docs.python.org/3.6/howto/descriptor.html#properties">property</a>, in which case it is equivalent to a <code>@validate_arg</code> added on the <code>fset</code> function of the descriptor, but with a more user-friendly error message.</li>
-<li>or a constructor input, in which case it is equivalent to a <code>@validate_arg</code> added on the constructor. In such case WARNING validation will only be called at initial object creation, not at subsequent field modifications!</li>
+<li>or a <em>constructor input</em>, in which case it is equivalent to a <code>@validate_arg</code> added on the constructor. In such case <strong>WARNING</strong> validation will only be called at initial object creation, not at subsequent field modifications!</li>
 </ul>
 <p>Here is an example where we add validation to a <code>House</code> class with two fields:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
 
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
-
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
+                <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="p">)</span>
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-                <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
+                <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;Surface should be a multiple of100 between 0 and 10000&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -786,210 +990,160 @@
 
 
 <p>Let's try it:</p>
-<div class="codehilite"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">House</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">)</span>  <span class="c1"># valid</span>
-<span class="n">h</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>              <span class="c1"># DOES NOT RAISE InvalidNameError (no setter!)</span>
+<div class="codehilite"><pre><span></span>&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>  <span class="c1"># valid</span>
 
-<span class="n">h</span> <span class="o">=</span> <span class="n">House</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>            <span class="c1"># InvalidNameError</span>
-<span class="n">h</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="mi">10000</span>        <span class="c1"># InvalidSurfaceError</span>
+&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">)</span>
+ClassFieldValidationError: name should be a non-empty string. <span class="se">\</span>
+   Error validating field <span class="o">[</span><span class="nv">name</span><span class="o">=]</span> <span class="k">for</span> class <span class="o">[</span>House<span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">(</span>instance_of_&lt;class <span class="s1">&#39;str&#39;</span>&gt;, len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
+   AtLeastOneFailed: <span class="se">\</span>
+      At least one validation <span class="k">function</span> failed validation <span class="k">for</span> value <span class="o">[]</span>. <span class="se">\</span>
+      Successes: <span class="o">[</span><span class="s2">&quot;instance_of_&lt;class &#39;str&#39;&gt;&quot;</span><span class="o">]</span> / Failures: <span class="o">{</span><span class="s1">&#39;len(s) &gt; 0&#39;</span>: <span class="s1">&#39;False&#39;</span><span class="o">}</span>
+
+&gt; h.surface <span class="o">=</span> <span class="m">10000</span>
+ClassFieldValidationError: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>
+   Error validating field <span class="o">[</span><span class="nv">surface</span><span class="o">=</span><span class="m">10000</span><span class="o">]</span> <span class="k">for</span> class <span class="o">[</span>House<span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>skip_on_none<span class="o">(</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, <span class="se">\</span>
+                        is_multiple_of_100<span class="o">))]</span> <span class="se">\</span>
+   raised AtLeastOneFailed: <span class="se">\</span>
+      At least one validation <span class="k">function</span> failed validation <span class="k">for</span> value <span class="o">[</span><span class="m">10000</span><span class="o">]</span>. <span class="se">\</span>
+      Successes: <span class="o">[</span><span class="s1">&#39;is_multiple_of_100&#39;</span><span class="o">]</span> <span class="se">\</span>
+        / Failures: <span class="o">{</span><span class="s1">&#39;(x &gt;= 0) &amp; (x &lt; 10000)&#39;</span>: <span class="s1">&#39;False&#39;</span><span class="o">}</span>.
+
+&gt; h.name <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1"># WARNING: does not raise ValidationError (no setter!)</span>
 </pre></div>
 
 
-<h2 id="valid8-other-tools"><code>valid8</code> + other tools<a class="headerlink" href="#valid8-other-tools" title="Permanent link">&para;</a></h2>
-<h3 id="pep484-type-checkers">PEP484 type checkers<a class="headerlink" href="#pep484-type-checkers" title="Permanent link">&para;</a></h3>
-<p>As said previously, even if you can rely on <code>instance_of</code> and <code>subclass_of</code> for basic type validation, it is not the purpose of <code>valid8</code> to do serious type validation, especially when PEP484 is now mainstream and many type checkers are available. It is better to combine their strengths. </p>
-<p>The following snippet shows a <code>build_house</code> function with four inputs <code>name</code>, <code>surface</code>, <code>nb_floors</code>, and <code>with_windows</code>, where:</p>
+<p>Once again, </p>
 <ul>
-<li>Each input is validated against the expected type thanks to the PEP484 type checking library (<a href="https://github.com/RussBaz/enforce">enforce</a> in this example)</li>
-<li>the <code>name</code> and <code>surface</code> attribute are further value-validated with valid8 (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>), with the help of the <code>mini_lambda</code> syntax.</li>
+<li>the default none policy is <code>SKIP_IF_NONABLE_ELSE_VALIDATE</code> but can be changed as we described in <a href="#a-functions">previous section</a></li>
+<li>the exception customization options described <a href="#customizing-the-validationexception">earlier</a> apply. For example a custom <code>error_type</code> may be provided, except that the custom type should inherit from <code>ClassFieldValidationError</code>.</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="c1"># Imports - for type validation</span>
-<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
-<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># type validation will accept subclasses too</span>
+<h3 id="c-testing-goodies">(c) testing goodies<a class="headerlink" href="#c-testing-goodies" title="Permanent link">&para;</a></h3>
+<p>It might be convient for you to be able to test your validation functions outside of a decorator. For this purpose you may wish to use the <code>assert_valid</code> function, which provides a similar signature, or the <code>Validator</code> object:</p>
+<div class="codehilite"><pre><span></span>from mini_lambda import s, Len
+from valid8 import assert_valid, Validator, instance_of
 
-<span class="c1"># Imports - for value validation</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">is_multiple_of</span><span class="p">,</span> <span class="n">InputValidationError</span>
+<span class="nv">name</span> <span class="o">=</span> <span class="s1">&#39;sweet_home&#39;</span>
 
-<span class="c1"># Define our 2 applicative error types</span>
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
+<span class="c1"># validate name with the same base validation functions we used earlier</span>
+assert_valid<span class="o">(</span><span class="s1">&#39;name&#39;</span>, name, instance_of<span class="o">(</span>str<span class="o">)</span>, Len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span>, 
+             <span class="nv">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="o">)</span>
 
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
-<span class="c1"># Apply type + value validation</span>
-<span class="nd">@runtime_validation</span>
-<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
-<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-              <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> \
-        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
+<span class="c1"># same thing but in two steps</span>
+<span class="nv">v</span> <span class="o">=</span> Validator<span class="o">(</span>instance_of<span class="o">(</span>str<span class="o">)</span>, Len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span>, 
+              <span class="nv">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="o">)</span>
+v.assert_valid<span class="o">(</span><span class="s1">&#39;name&#39;</span>, name<span class="o">)</span>
 </pre></div>
 
 
-<p>We can test that validation works:</p>
-<div class="codehilite"><pre><span></span><span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>    <span class="c1"># valid</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">)</span>         <span class="c1"># valid (PEP484 Optional, default=None)</span>
+<h3 id="d-advanced-composition">(d) advanced composition<a class="headerlink" href="#d-advanced-composition" title="Permanent link">&para;</a></h3>
+<p>We saw that all tools described in this section perform an implicit <code>and_</code> between all the base validation functions provided in their positional arguments. There is a fast way to transform any of these individually into a <em>failure raiser</em> function, if it is more of a <em>boolean tester</em>: simply use a tuple <code>(&lt;function&gt;, &lt;help_msg&gt;)</code> and it will raise a <code>Failure</code> with the provided help message in case of failure. You can even use a tuple <code>(&lt;function&gt;, &lt;exc_type&gt;)</code> to provide a custom exception type, as long as it is a subclass of <code>Failure</code>.</p>
+<p>This mechanism is a way to add details if you feel that your functions are not very self-explicit, for example if you make great use of lambda expressions that return a boolean flag.</p>
+<p>For example:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be a multiple of 100 between 0 and 10000&#39;</span>
 
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>              <span class="c1"># InvalidNameError (valid8)</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>  <span class="c1"># InvalidSurfaceError (valid8)</span>
-<span class="n">build_house</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mf">100.1</span><span class="p">)</span>        <span class="c1"># RuntimeTypeError (enforce)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">Validator</span><span class="p">(((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="s1">&#39;Surface should be between 0 and 10000&#39;</span><span class="p">),</span>
+             <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Surface should be a multiple of 100&#39;</span><span class="p">),</span>
+              <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
 </pre></div>
 
 
-<p><strong>Note concerning PEP484 type validation</strong>: how can you make sure to accept both plain old <code>float</code>, <code>int</code> and <code>bool</code>, as well as their <code>numpy</code> equivalents ? Use the handy <code>Real</code> (=float) and <code>Integral</code> (=int) abstract numeric types provided in the <a href="https://docs.python.org/3.6/library/numbers.html"><code>numbers</code></a> built-in module ! They provide an easy way to support both python primitives AND others, e.g. numpy primitives. Unfortunately no equivalent type is provided for booleans, so in <code>valid8</code> we provide an additional <code>Boolean</code> class supporting numpy, to complete the picture.</p>
-<h3 id="autoclass">autoclass<a class="headerlink" href="#autoclass" title="Permanent link">&para;</a></h3>
-<p><code>valid8</code> plays well with <a href="https://smarie.github.io/python-autoclass/">autoclass</a>: </p>
-<ul>
-<li>if you decorate the whole class with <code>@validate_field</code> it will obviously work since <code>autoclass</code> generates plain old properties:</li>
-</ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
+<p>will raise the following two distinct error messages:</p>
+<div class="codehilite"><pre><span></span>&gt; v.assert_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -100<span class="o">)</span>
+InvalidSurface: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
+   Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, x % <span class="nv">100</span> <span class="o">==</span> <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
+   AtLeastOneFailed: <span class="se">\</span>
+      At least one validation <span class="k">function</span> failed validation. <span class="se">\</span>
+      Successes: <span class="o">[</span><span class="s1">&#39;x % 100 == 0&#39;</span><span class="o">]</span> <span class="se">\</span>
+      / Failures: <span class="o">{</span> <span class="se">\</span>
+        <span class="s1">&#39;(x &gt;= 0) &amp; (x &lt; 10000)&#39;</span>: <span class="se">\</span>
+            <span class="s1">&#39;WrappingFailure: Surface should be between 0 and 10000. \</span>
+<span class="s1">            Function [(x &gt;= 0) &amp; (x &lt; 10000)] returned [False] for value [-1].&#39;</span> 
+      <span class="o">}</span>.
 
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
-
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
-<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
-<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> 
-                <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-<span class="nd">@autoclass</span>
-<span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-<span class="n">h</span> <span class="o">=</span> <span class="n">House</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-
-<span class="n">h</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># Valid (surface is nonable by signature)</span>
-<span class="n">h</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="c1"># InvalidNameError</span>
-<span class="n">h</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># InvalidSurfaceError</span>
+&gt; v.assert_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, <span class="m">99</span><span class="o">)</span>
+InvalidSurface: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
+   Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span><span class="m">99</span><span class="o">]</span>. <span class="se">\</span>
+   Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, x % <span class="nv">100</span> <span class="o">==</span> <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
+   AtLeastOneFailed: <span class="se">\</span>
+      At least one validation <span class="k">function</span> failed validation. <span class="se">\</span>
+      Successes: <span class="o">[</span><span class="s1">&#39;(x &gt;= 0) &amp; (x &lt; 10000)&#39;</span><span class="o">]</span> <span class="se">\</span>
+      / Failures: <span class="o">{</span>
+         <span class="s1">&#39;x % 100 == 0&#39;</span>: <span class="se">\</span>
+            <span class="s1">&#39;WrappingFailure: Surface should be a multiple of 100. \</span>
+<span class="s1">            Function [x % 100 == 0] returned [False] for value [99].&#39;</span>
+      <span class="o">}</span>.
 </pre></div>
 
 
-<ul>
-<li>if you decorate a class constructor with <code>@validate_arg</code>, the property setters generated by <code>@autoclass</code> will include validation too. </li>
-</ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span><span class="p">,</span> <span class="n">InputValidationError</span>
-
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
-
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">InputValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
-<span class="nd">@autoclass</span>
-<span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-
-    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> 
-                  <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
-    <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> 
-                  <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-<span class="n">h</span> <span class="o">=</span> <span class="n">House</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-
-<span class="n">h</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># Valid (surface is nonable by signature)</span>
-<span class="n">h</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="c1"># InvalidNameError</span>
-<span class="n">h</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># InvalidSurfaceError</span>
-</pre></div>
-
-
-<p>Of course you can also add type checking on top of that, see <a href="https://smarie.github.io/python-autoclass/">autoclass documentation</a> for details.</p>
-<h3 id="attrs">attrs<a class="headerlink" href="#attrs" title="Permanent link">&para;</a></h3>
-<p><code>valid8</code> also integrates well with <a href="http://www.attrs.org/en/stable/">attrs</a>: if you decorate a class with <code>@validate_field</code> it will work because <code>attrs</code> generates a compliant class constructor behind the scenes. However WARNING validation will only be called at initial object creation, not at subsequent field modifications!</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">attr</span>
-<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Len</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
-
-<span class="k">class</span> <span class="nc">InvalidNameError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;name should be a non-empty string&#39;</span>
-
-<span class="k">class</span> <span class="nc">InvalidSurfaceError</span><span class="p">(</span><span class="n">ClassFieldValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be between 0 and 10000 and be a multiple of 100.&#39;</span>
-
-<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
-<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-                <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-<span class="nd">@attr.s</span>
-<span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
-    <span class="n">surface</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-
-<span class="n">h</span> <span class="o">=</span> <span class="n">House</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">)</span>  <span class="c1"># Valid (surface is nonable by generated signature)</span>
-
-<span class="n">h</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>       <span class="c1"># DOES NOT RAISE InvalidNameError (no setter!)</span>
-
-<span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">InvalidNameError</span><span class="p">):</span>
-    <span class="n">House</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>  <span class="c1"># InvalidNameError</span>
-
-<span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">InvalidSurfaceError</span><span class="p">):</span>
-    <span class="n">House</span><span class="p">(</span><span class="s1">&#39;sweet home&#39;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>  <span class="c1"># InvalidSurfaceError</span>
-</pre></div>
-
-
-<p>As of today <code>attrs</code> does not transform fields into descriptors or properties so there is no way to add validation to field setters. Note that this is actually also the case if you rely on the validation mechanisms built in attrs, as explained <a href="http://www.attrs.org/en/stable/examples.html#callables">here</a>. This feature has been requested <a href="https://github.com/python-attrs/attrs/issues/160">here</a>.</p>
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
-<p><strong>Separation of validation intent</strong> (entry points) <strong>from validation means</strong> (base validation functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.</p>
+<p><strong>Separation of validation intent</strong> (entry points <code>wrap_valid</code>, <code>@validate_arg</code>...) <strong>from validation means</strong> (base validation code / functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.</p>
 </li>
 <li>
-<p><strong>Clear entry points</strong> to serve most common needs related with validation:</p>
+<p>Clear entry points to <strong>serve most common needs</strong> related with validation:</p>
 <ul>
 <li>
-<p><em>Inline validation</em>: two functions <code>assert_valid</code> and <code>is_valid</code>, to perform validation anywhere in your code in defensive programming mode (<code>assert_valid</code>) or case handling mode (<code>is_valid</code>)</p>
+<p><em>Inline validation</em>: two functions <code>quick_valid</code> and <code>wrap_valid</code> to perform validation anywhere in your code.</p>
 </li>
 <li>
 <p><em>Function validation</em>: two decorators <code>@validate_arg</code> and <code>@validate_out</code>, as well as a more limited <code>@validate</code>, to add input and output validation to any function. A manual decorator <code>decorate_with_validation</code> provides the same functionality for retrofit purposes.</p>
 </li>
+<li>
+<p><em>Class validation</em>: one decorator <code>@validate_field</code> to add validation to class fields.</p>
+</li>
 </ul>
 </li>
 <li>
-<p><strong>Consistent behaviour</strong>: all defensive mode entry points provide the same behaviour, raising subclasses of <code>ValidationError</code> in case of failure, whatever the diversity of failure modes that can happen in base validation functions. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Consistency is ensured by the fact that all entry points rely on a <strong>common <code>Validator</code> class</strong>, which can also be used for advanced purposes, such as speeding up inline validation by creating validators ahead of time.</p>
+<p><strong>Consistent behaviour</strong>: all defensive mode entry points provide the same behaviour, raising subclasses of <code>ValidationError</code> in case of failure, whatever the diversity of failure modes that can happen in base validation code. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Consistency is also ensured by the fact that all entry points rely on a common <code>Validator</code> class.</p>
 </li>
 <li>
 <p><strong>Highly customizable</strong>: all entry points can be customized so as to fit your application needs. In particular you probably do not want users to see <code>valid8</code> exceptions and messages, but rather <em>your</em> exceptions and messages. This is easy to do with the two <code>help_msg</code> and <code>error_type</code> options.</p>
 </li>
 <li>
-<p><strong>Compliant with most validation functions out there</strong>. You may use base validation functions from anywhere including your own, and including <code>functools.partial</code>, <code>lambda</code> or even callable objects implementing the <code>__call__</code> magic method. The <em>only</em> requirement is that they return <code>True</code> or <code>None</code> in case of success ! The way they fail is not important, <code>valid8</code> tolerates all. </p>
+<p><strong>python-first, not schema-first</strong>. This library is intended to provide validation anywhere in your code, not only when data enters a web service, a CLI or a form. There already are <a href="./other_libs#validation-of-data-at-the-entry-point">libs out there</a> for that purpose. <code>valid8</code> is rather meant to be as simple as possible and as open as possible to any kind of validation, even those that can not easily be described in a schema.</p>
+</li>
+<li>
+<p><strong>Separation of <em>value</em> validation from <em>type</em> validation is possible</strong>. <code>valid8</code> can be <a href="./valid8_with_other#pep484-type-checkers">combined</a> with any PEP484-based type validation library such as <code>enforce</code> or <code>pytypes</code>.</p>
+</li>
+<li>
+<p><strong>Plays well with <a href="./valid8_with_other#autoclass">autoclass</a> and <a href="./valid8_with_other#attrs">attrs</a></strong>. Declare validation once by annotating the class with <code>@validate_field</code>, and you're good to go!</p>
+</li>
+</ul>
+<h3 id="decorator-specific">decorator-specific<a class="headerlink" href="#decorator-specific" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Compliant with <a href="./accepted">most</a> base validation functions out there</strong>. You may use base validation functions from anywhere including your own, and including <code>functools.partial</code>, <code>lambda</code> or even callable objects implementing the <code>__call__</code> magic method. The <em>only</em> requirement is that they return <code>True</code> or <code>None</code> in case of success ! The way they fail is not important, <code>valid8</code> tolerates all. If you wish to create your own, you can leverage the three <a href="./accepted#built-in-exceptions">exception classes</a> provided. </p>
 </li>
 <li>
 <p><strong>Built-in <a href="./base_validation_lib">library</a> of base validation functions</strong>, by object type. Do not hesitate to contribute! Also, do not hesitate to rely on other libraries for dedicated object types such as <a href="./other_libs#domain-specific-validators-validators-for-specific-data-types-validators-without-framework">these</a>, or to build your own !</p>
 </li>
 <li>
-<p><strong>Built-in support for <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a></strong> to define base validation functions, so that you do not need to write <code>lambda x:</code> everywhere, and the failure messages are far more easy to read.</p>
+<p><strong>Built-in support for <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a></strong> to define base validation functions for the decorators, so that you do not need to write <code>lambda x:</code> everywhere, and the failure messages are far more easy to read. Besides the global error customization as well as <strong>built-in syntax for <a href="#d-advanced-composition">failure raiser definition</a></strong> allows you to easily add exception details to lambda expressions.</p>
 </li>
 <li>
-<p><strong>Tools to build user-friendly base validation functions</strong>. Three exception classes <code>Failure</code>, <code>WrappingFailure</code> and <code>CompositionFailure</code>, are provided as goodies if you wish to write your own validation functions while providing a maximum amount of details in the raised failure exception. You can find some inspiration <a href="https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py">here</a>. As explained above this is not mandatory, as <code>valid8</code> will catch any kind of failure even without exception.</p>
-</li>
-<li>
-<p><strong>Composition of base validation functions</strong>. Built-in functions <code>and_</code>, <code>or_</code>, <code>xor_</code>, <code>not_</code>, <code>not_all</code>, <code>failure_raiser</code>, <code>skip_on_none</code> and <code>fail_on_none</code> allow you to quickly create complex validation functions by reusing simpler ones, if you do not want to do it using <code>lambda</code> or <code>mini_lambda</code>. Note that <code>and_</code> is implicitly used if you provide a list of base validation functions to any of the <code>valid8</code> entry points.</p>
-</li>
-<li>
-<p><strong>python-first, not schema-first</strong>. This library is intended to provide validation anywhere in your code, not only when data enters a web service, a CLI or a form. There already are <a href="./other_libs#validation-of-data-at-the-entry-point">libs out there</a> for that purpose. <code>valid8</code> is rather meant to be as simple as possible and as open as possible to any kind of validation, even those that can not easily be described in a schema. To bridge the gap, maybe it will be useful at some point to provide a more restrictive class of base validation objects so that users may be able to generate a schema from a function annotated with <code>@validate_arg</code>. Of course, only if interest is confirmed...</p>
-</li>
-<li>
-<p><strong>Separation of <em>value</em> validation from <em>type</em> validation</strong>. Using <code>valid8</code> for function input validation is compliant with the use of any PEP484-based type validation library such as <code>enforce</code> or <code>pytypes</code>.</p>
-</li>
-<li>
-<p><strong>Compliant with <a href="https://github.com/smarie/python-autoclass">autoclass</a></strong>. Declare validation once by annotating the class constructor with <code>@validate</code> or <code>@validate_arg</code>, and the generated property setters will be validated too!</p>
+<p><strong>Built-in composition framework</strong>. Built-in functions <code>and_</code>, <code>or_</code>, <code>xor_</code>, <code>not_</code>, <code>not_all</code>, <code>failure_raiser</code>, <code>skip_on_none</code> and <code>fail_on_none</code> allow you to quickly create complex validation functions by reusing simpler ones, if you do not want to do it using <code>lambda</code> or <code>mini_lambda</code>. In particular, <code>and_</code> is implicitly used if you provide a list of base validation functions to any of the <code>valid8</code> decorators.</p>
 </li>
 </ul>
 <h2 id="other-validation-libraries">Other Validation libraries<a class="headerlink" href="#other-validation-libraries" title="Permanent link">&para;</a></h2>
 <p>Many validation libraries are available on <a href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=valid&amp;submit=search">PyPI</a> already. The following <a href="./other_libs">list</a> is by far not exhaustive, but gives an overview. Do not hesitate to contribute to this list with a pull request! </p>
+<h2 id="origin-of-this-project">Origin of this project<a class="headerlink" href="#origin-of-this-project" title="Permanent link">&para;</a></h2>
+<p>When it all started, I was just looking for a library providing a <code>@validate</code> annotation with a basic library of validators and some logic to associate them, so as to complete <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>. However none of them was really a good fit for <code>autoclass</code>, for diverse reasons:</p>
+<ul>
+<li>only a few of them were available as decorators</li>
+<li>many of them were strongly mixing type validation and value validation, which is not necessary anymore thanks to PEP484. This was making the <code>autoclass</code> examples more confusing.</li>
+<li>only a few of them were providing a simple yet consistent and reusable framework to deal with validation functions, combine them, etc. And the good ones were based on defining a Schema first, which seemed a bit 'too much' for me already.</li>
+<li>finally, none of them was really encouraging the community to collaborate by displaying a catalog of base validation functions per data type, open to contributions.</li>
+</ul>
+<p>So I first created the <code>@validate</code> goodie in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. When the project became more mature, I decided to extract it and make it independent, so that maybe the community will find it interesting. </p>
+<p>When this project grew, I found that its <a href="./base_validation_lib">embedded library of base validation functions</a> was not flexible enough to cover a large variety of use cases, and will probably <strong>never</strong> be even if we try our best, so I came up with the complementary <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda syntax</a> which is now an independent project, typically used when your base validation function is very specific, but yet quite simple to write in plain python.</p>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li>I opened this <a href="https://groups.google.com/forum/#!topic/python-ideas/ZSp9UKmnF2Q">discussion on python-ideas</a> to suggest a <code>validate</code> statement, functional equivalent of <code>assert_valid</code>, that would be built-in the python syntax so as to reduce parenthesis. Feel free to jump in !</li>
+<li>We had this <a href="https://groups.google.com/forum/#!topic/python-ideas/ZSp9UKmnF2Q">discussion on python-ideas</a> to suggest a <code>validate</code> statement, functional equivalent of <code>assert_valid</code>, that would be built-in the python syntax so as to reduce parenthesis. An <a href="https://bugs.python.org/issue32590">issue</a> was also created.</li>
 <li><a href="http://decorator.readthedocs.io/en/stable/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of wrapped methods.</li>
 <li>Julien Danjou's <a href="https://julien.danjou.info/blog/2016/python-exceptions-guide">Definitive Guide to Python Exceptions</a>. It was of great inspiration and help to design <code>valid8</code>'s exception hierarchy.</li>
 </ul>

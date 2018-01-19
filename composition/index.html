@@ -32,7 +32,7 @@
     
     
       
-        <title>Changelog - valid8</title>
+        <title>Composing base validation functions - valid8</title>
       
     
     
@@ -89,7 +89,7 @@
                 valid8
               </span>
               <span class="md-header-nav__topic">
-                Changelog
+                Composing base validation functions
               </span>
             
           
@@ -228,10 +228,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
     <label class="md-nav__link" for="nav-3">
       For `valid8` decorators only
@@ -271,11 +273,96 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../composition/" title="Composing base validation functions" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Composing base validation functions
+      </label>
+    
+    <a href="./" title="Composing base validation functions" class="md-nav__link md-nav__link--active">
       Composing base validation functions
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#not_" title="not_" class="md-nav__link">
+    not_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#and_" title="and_" class="md-nav__link">
+    and_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#or_" title="or_" class="md-nav__link">
+    or_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xor_" title="xor_" class="md-nav__link">
+    xor_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not_all" title="not_all" class="md-nav__link">
+    not_all
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure_raiser" title="failure_raiser" class="md-nav__link">
+    failure_raiser
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skip_on_none" title="skip_on_none" class="md-nav__link">
+    skip_on_none
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail_on_none" title="fail_on_none" class="md-nav__link">
+    fail_on_none
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -312,64 +399,11 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Changelog
-      </label>
-    
-    <a href="./" title="Changelog" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../changelog/" title="Changelog" class="md-nav__link">
       Changelog
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#300-new-inline-validators-dynamic-typing" title="3.0.0 - new inline validators + dynamic typing" class="md-nav__link">
-    3.0.0 - new inline validators + dynamic typing
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#210-new-annotation-validate_field" title="2.1.0 - new annotation @validate_field" class="md-nav__link">
-    2.1.0 - new annotation @validate_field
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#200-major-improvements-and-refactoring" title="2.0.0 - Major improvements and refactoring" class="md-nav__link">
-    2.0.0 - Major improvements and refactoring
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#100-first-public-version" title="1.0.0 - First public version" class="md-nav__link">
-    1.0.0 - First public version
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
     
@@ -387,34 +421,64 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#300-new-inline-validators-dynamic-typing" title="3.0.0 - new inline validators + dynamic typing" class="md-nav__link">
-    3.0.0 - new inline validators + dynamic typing
+  <a href="#not_" title="not_" class="md-nav__link">
+    not_
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#210-new-annotation-validate_field" title="2.1.0 - new annotation @validate_field" class="md-nav__link">
-    2.1.0 - new annotation @validate_field
+  <a href="#and_" title="and_" class="md-nav__link">
+    and_
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#200-major-improvements-and-refactoring" title="2.0.0 - Major improvements and refactoring" class="md-nav__link">
-    2.0.0 - Major improvements and refactoring
+  <a href="#or_" title="or_" class="md-nav__link">
+    or_
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#100-first-public-version" title="1.0.0 - First public version" class="md-nav__link">
-    1.0.0 - First public version
+  <a href="#xor_" title="xor_" class="md-nav__link">
+    xor_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not_all" title="not_all" class="md-nav__link">
+    not_all
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure_raiser" title="failure_raiser" class="md-nav__link">
+    failure_raiser
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skip_on_none" title="skip_on_none" class="md-nav__link">
+    skip_on_none
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail_on_none" title="fail_on_none" class="md-nav__link">
+    fail_on_none
   </a>
   
 </li>
@@ -433,76 +497,46 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/changelog.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/composition.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Changelog</h1>
-                
-                <h3 id="300-new-inline-validators-dynamic-typing">3.0.0 - new inline validators + dynamic typing<a class="headerlink" href="#300-new-inline-validators-dynamic-typing" title="Permanent link">&para;</a></h3>
-<ul>
-<li>
-<p>Added two new entry points that should be more useful and usable than <code>assert_valid</code> for inline validation:</p>
-</li>
-<li>
-<p><code>quick_valid</code> for limited but simple one-line validation (most common tasks)</p>
-</li>
-<li><code>wrap_valid</code> for more flexible validation (a contextmanager so it takes 2 lines)</li>
-</ul>
-<h3 id="210-new-annotation-validate_field">2.1.0 - new annotation @validate_field<a class="headerlink" href="#210-new-annotation-validate_field" title="Permanent link">&para;</a></h3>
-<ul>
-<li>@validate_field allows users to validate class fields, whether they are descriptors, properties, or constructor arguments. Check the documentation for details!</li>
-</ul>
-<h3 id="200-major-improvements-and-refactoring">2.0.0 - Major improvements and refactoring<a class="headerlink" href="#200-major-improvements-and-refactoring" title="Permanent link">&para;</a></h3>
-<ul>
-<li>
-<p>New and improved entry points:</p>
-<ul>
-<li><strong>Function inputs validation</strong>: <code>@validate_arg</code> may be used instead of <code>@validate</code> to add input validation argument by argument instead of all in the same decorator (same functionality, this is just a question of style). A new decorator <code>@validate_out</code> is provided. The manual decorator <code>validate_decorate</code> was also renamed <code>decorate_with_validation</code> for clarity</li>
-<li><strong>Inline validation</strong>: two new functions <code>assert_valid</code> and <code>is_valid</code>, allowing users to perform validation anywhere in their code in defensive programming mode (<code>assert_valid</code>) or case handling mode (<code>is_valid</code>)</li>
-<li><strong>Common Validator class</strong>: the common logic behind all the above entry points. It offers two methods for defensive programming (<code>validator.assert_valid</code>) and case handling (<code>validator.is_valid</code>). It may also be used directly by users, to 'pre-compile' validators, so that they are not constructed at every call like when using <code>assert_valid</code> and <code>is_valid</code>. But the difference is probably negligible.</li>
-</ul>
-</li>
-<li>
-<p>Clearer separation of concepts:</p>
-<ul>
-<li><strong>Entry points</strong> (the above) know the full validation context, and raise <code>ValidationError</code> (or a subclass such as <code>InputValidationError</code> or <em>your</em> custom subclass) when validation fails. The <code>ValidationError</code> object holds all information available concerning that validation context, and may be used by your application to improve or internationalize error messages.</li>
-<li><strong>Base validation functions</strong> (your methods or the ones from utility libraries including valid8) <em>may</em> raise subclasses of <code>Failure</code> or <code>WrappingFailure</code> if they wish to benefit from this helper type as well as ease application-level error handling and internationalization. The helper method <code>failure_raiser</code> allows to add such a friendly exception to a method not raising it (such as a lambda).</li>
-</ul>
-</li>
-<li>
-<p>Better syntax to define base validation functions in entry points: </p>
-<ul>
-<li>base validation function(s) can be provided as a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. </li>
-<li>Nested lists are supported and indicate an implicit <code>and_</code> (such as the main list). </li>
-<li><a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a> expressions can be used instead of callables, they will be transformed to functions automatically.</li>
-<li>Tuples indicate an implicit <code>_failure_raiser</code>. Combined with mini_lambda, this is a very powerful way to create validation functions: <code>(Len(s) &gt; 0, 'The value should be an empty string')</code> or <code>(Len(s) &gt; 0, EmptyStringFailure)</code>. </li>
-</ul>
-</li>
-<li>
-<p>Minor improvements of the base functions library</p>
-<ul>
-<li>split in independent files <code>collections</code>, <code>comparables</code>, <code>numbers</code> in a <code>validation_lib</code> submodule so as to ease maintenance and possible contributions in the future</li>
-<li>added <code>length_between</code> validator</li>
-<li>added type validation functions <code>instance_of</code> and <code>subclass_of</code></li>
-<li>all functions now raise unique subclasses of <code>Failure</code> ('eat your own dog food')</li>
-<li>Most built-in validator generators have their corresponding <code>__name__</code> now correctly set resulting in more user-friendly error messages</li>
-</ul>
-</li>
-<li>
-<p>Improvements of the composition operators</p>
-<ul>
-<li><code>and_</code>, <code>or_</code>, <code>xor_</code> now support variable number of arguments (no need to pass a list anymore)</li>
-<li><code>not_</code>, <code>and_</code>, <code>or_</code>, <code>xor_</code> now raise consistent exceptions (subclasses of <code>CompositionFailure</code>), with a user-friendly error message indicating the detailed validation results.</li>
-</ul>
-</li>
-<li>
-<p>A lot of new tests</p>
-</li>
-</ul>
-<h3 id="100-first-public-version">1.0.0 - First public version<a class="headerlink" href="#100-first-public-version" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Initial fork from autoclass 1.8.1</li>
-</ul>
+                <h1 id="built-in-composition-functions">Built-in composition functions<a class="headerlink" href="#built-in-composition-functions" title="Permanent link">&para;</a></h1>
+<p>You can use the following methods to compose <strong>base validation functions</strong>, so as to build a function to be used in one of the <code>valid8</code> decorators presented <a href="../index">here</a>.</p>
+<h2 id="not_">not_<a class="headerlink" href="#not_" title="Permanent link">&para;</a></h2>
+<p><code>not_(validation_func: ValidationFuncs, catch_all: bool = False)</code></p>
+<p>Generates the inverse of the provided validation functions: when the validator returns <code>False</code> or raises a <code>Failure</code>, this function returns <code>True</code>. Otherwise it raises a <code>DidNotFail</code> failure.</p>
+<p>By default, exceptions of types other than <code>Failure</code> are not caught and therefore fail the validation (<code>catch_all=False</code>). To change this behaviour you can turn the <code>catch_all</code> parameter to <code>True</code>, in which case all exceptions will be caught instead of just <code>Failure</code>s.</p>
+<p>Note that you may use <code>not_all(&lt;validation_functions_list&gt;)</code> as a shortcut for <code>not_(and_(&lt;validation_functions_list&gt;))</code></p>
+<p>See <code>help(not_)</code></p>
+<h2 id="and_">and_<a class="headerlink" href="#and_" title="Permanent link">&para;</a></h2>
+<p><code>and_(\*validation_func: ValidationFuncs)</code></p>
+<p>An 'and' validator: it returns <code>True</code> if all of the provided validators return <code>True</code>, or raises a <code>AtLeastOneFailed</code> failure on the first <code>False</code> received or <code>Exception</code> caught.</p>
+<p>Note that an implicit <code>and_</code> is performed if you provide a list of validators to any of the entry points (<code>@validate</code>, <code>@validate_arg</code>, <code>assert_valid</code>, <code>is_valid</code>, <code>Validator</code>)</p>
+<p>See <code>help(and_)</code></p>
+<h2 id="or_">or_<a class="headerlink" href="#or_" title="Permanent link">&para;</a></h2>
+<p><code>or_(\*validation_func: ValidationFuncs)</code></p>
+<p>An 'or' validator: returns <code>True</code> if at least one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>AllValidatorsFailed</code> failure will be raised, together with details about all validation results.</p>
+<p>See <code>help(or_)</code></p>
+<h2 id="xor_">xor_<a class="headerlink" href="#xor_" title="Permanent link">&para;</a></h2>
+<p><code>xor_(\*validation_func: ValidationFuncs)</code></p>
+<p>A 'xor' validation function: returns <code>True</code> if exactly one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>XorTooManySuccess</code> or <code>AllValidatorsFailed</code> will be raised, together with details about the various validation results.</p>
+<p>See <code>help(xor_)</code></p>
+<h2 id="not_all">not_all<a class="headerlink" href="#not_all" title="Permanent link">&para;</a></h2>
+<p><code>not_all(\*validation_func: ValidationFuncs, catch_all: bool = False)</code></p>
+<p>An alias for not_(and_(validators)).</p>
+<p>See <code>help(not_all)</code></p>
+<h2 id="failure_raiser">failure_raiser<a class="headerlink" href="#failure_raiser" title="Permanent link">&para;</a></h2>
+<p><code>failure_raiser(\*validation_func: ValidationFuncs, failure_type: 'Type[WrappingFailure]' = None, help_msg: str = None, \*\*kw_context_args)</code></p>
+<p>This function is automatically used if you provide a tuple <code>(&lt;function&gt;, &lt;msg&gt;_or_&lt;Failure_type&gt;)</code>, to any of the methods in this page or to one of the <code>valid8</code> decorators. It transforms the provided <code>&lt;function&gt;</code> into a failure raiser, raising a subclass of <code>Failure</code> in case of failure (either not returning <code>True</code> or raising an exception)</p>
+<p>See <code>help(failure_raiser)</code></p>
+<h2 id="skip_on_none">skip_on_none<a class="headerlink" href="#skip_on_none" title="Permanent link">&para;</a></h2>
+<p><code>skip_on_none(\*validation_func: ValidationFuncs)</code></p>
+<p>This function is automatically used if you use <code>none_policy=SKIP</code>, you will probably never need to use it explicitly. If wraps the provided function (or implicit <code>and_</code> between provided functions) so that <code>None</code> values are not validated and the code continues executing.</p>
+<p>See <code>help(skip_on_none)</code></p>
+<h2 id="fail_on_none">fail_on_none<a class="headerlink" href="#fail_on_none" title="Permanent link">&para;</a></h2>
+<p><code>fail_on_none(\*validation_func: ValidationFuncs)</code></p>
+<p>This function is automatically used if you use <code>none_policy=FAIL</code>, you will probably never need to use it explicitly.  If wraps the provided function (or implicit <code>and_</code> between provided functions) so that <code>None</code> values are not validated instead a <code>ValueIsNone</code> failure is raised.</p>
+<p>See <code>help(fail_on_none)</code></p>
                 
                   
                 
@@ -521,7 +555,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../other_libs/" title="Other validation libs" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../base_validation_lib/" title="Built-in base validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -530,11 +564,25 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Other validation libs
+                Built-in base validation functions
               </span>
             </div>
           </a>
         
+        
+          <a href="../valid8_with_other/" title="valid8 + other tools" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                valid8 + other tools
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
         
       </nav>
     </div>

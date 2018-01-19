@@ -18,16 +18,30 @@
     
 
     
+        
     <url>
-     <loc>/usage/</loc>
+     <loc>/accepted/</loc>
      <lastmod>2018-01-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
+    <url>
+     <loc>/base_validation_lib/</loc>
+     <lastmod>2018-01-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/composition/</loc>
+     <lastmod>2018-01-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
     
     <url>
-     <loc>/base_validation_lib/</loc>
+     <loc>/valid8_with_other/</loc>
      <lastmod>2018-01-19</lastmod>
      <changefreq>daily</changefreq>
     </url>

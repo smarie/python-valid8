@@ -32,7 +32,7 @@
     
     
       
-        <title>Usage details - valid8</title>
+        <title>Accepted base validation functions - valid8</title>
       
     
     
@@ -89,7 +89,7 @@
                 valid8
               </span>
               <span class="md-header-nav__topic">
-                Usage details
+                Accepted base validation functions
               </span>
             
           
@@ -206,8 +206,8 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Home" class="md-nav__link">
-      Home
+    <a href=".." title="Home and usage" class="md-nav__link">
+      Home and usage
     </a>
   </li>
 
@@ -231,6 +231,27 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      For `valid8` decorators only
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        For `valid8` decorators only
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
@@ -239,11 +260,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Usage details
+        Accepted base validation functions
       </label>
     
-    <a href="./" title="Usage details" class="md-nav__link md-nav__link--active">
-      Usage details
+    <a href="./" title="Accepted base validation functions" class="md-nav__link md-nav__link--active">
+      Accepted base validation functions
     </a>
     
       
@@ -257,8 +278,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#defensive-programming-from-assert-to-assert_valid" title="Defensive programming - from assert to assert_valid" class="md-nav__link">
-    Defensive programming - from assert to assert_valid
+  <a href="#name-used-in-error-messages" title="Name used in error messages" class="md-nav__link">
+    Name used in error messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-exceptions" title="Built-in exceptions" class="md-nav__link">
+    Built-in exceptions
   </a>
   
 </li>
@@ -271,6 +299,35 @@
     
   </li>
 
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../base_validation_lib/" title="Built-in base validation functions" class="md-nav__link">
+      Built-in base validation functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../composition/" title="Composing base validation functions" class="md-nav__link">
+      Composing base validation functions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
     
       
       
@@ -278,8 +335,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
-      Built-in validation functions
+    <a href="../valid8_with_other/" title="valid8 + other tools" class="md-nav__link">
+      valid8 + other tools
     </a>
   </li>
 
@@ -329,8 +386,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#defensive-programming-from-assert-to-assert_valid" title="Defensive programming - from assert to assert_valid" class="md-nav__link">
-    Defensive programming - from assert to assert_valid
+  <a href="#name-used-in-error-messages" title="Name used in error messages" class="md-nav__link">
+    Name used in error messages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-exceptions" title="Built-in exceptions" class="md-nav__link">
+    Built-in exceptions
   </a>
   
 </li>
@@ -349,68 +413,34 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/usage.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/accepted.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="validation-entry-points">Validation entry points<a class="headerlink" href="#validation-entry-points" title="Permanent link">&para;</a></h1>
-<h2 id="defensive-programming-from-assert-to-assert_valid">Defensive programming - from <code>assert</code> to <code>assert_valid</code><a class="headerlink" href="#defensive-programming-from-assert-to-assert_valid" title="Permanent link">&para;</a></h2>
-<p>Let's start with a very simple <code>hello</code> function:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
-</pre></div>
-
-
-<p>We would like to protect it against bad data, for one of the reasons listed <a href="../why_validation#purpose-of-validation">here</a>. A first idea would probably be to use <code>assert</code>:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span><span class="p">,</span> <span class="n">inf</span>
-
-<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
-
-<span class="c1"># let&#39;s test that it works:</span>
-<span class="n">hello</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span>   <span class="c1"># &#39;Hello, 33-years-old fella !&#39;</span>
-<span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>  <span class="c1"># AssertionError: assert False \</span>
-            <span class="c1">#                 where False = &lt;built-in function isfinite&gt;(inf)</span>
-</pre></div>
-
-
-<p>But as explained <a href="../why_validation#how-do-you-do-today">here</a> this is maybe not satisfying: </p>
+                <h1 id="accepted-base-validation-functions">Accepted base validation functions<a class="headerlink" href="#accepted-base-validation-functions" title="Permanent link">&para;</a></h1>
+<p>There seem to be two main styles out there when it comes to writing validation functions: </p>
 <ul>
-<li>either the code may be used in an optimized environment and we don't want the assertion to disappear,</li>
-<li>or we think that the type of error raised by <code>assert</code> is not satisfying/user-friendly/consistent/good enough for app-wide error handling/i18n...(pick your favorite)</li>
+<li>
+<p><em>boolean testers</em> such as <code>isfinite</code> : they return <code>True</code> in case of success and <code>False</code> in case of failure, and therefore do not provide any details about the failure when they fail. Sometimes they continue to raise exceptions on edge cases (<code>isfinite(None)</code>, <code>isfinite(1+1j)</code>).</p>
+</li>
+<li>
+<p><em>failure raisers</em> such as <code>check_uniform_sampling</code> or <code>assert_series_equal</code>: they do not return anything in case of success, but raise exceptions with details in case of failure.</p>
+</li>
 </ul>
-<p>Let's replace <code>assert</code> with <code>assert_valid</code> from <code>valid8</code>:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span><span class="p">,</span> <span class="n">inf</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span>
-
-<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-    <span class="n">assert_valid</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="n">age</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
-
-<span class="c1"># let&#39;s test that it works:</span>
-<span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>   <span class="c1"># ValidationError: Error validating [age=inf]: \</span>
-             <span class="c1">#                  root validator [isfinite] returned [False].</span>
+<p>In order to be as open as possible, the definition of accepted functions in <code>valid8</code> <a href="../index#validating-functions-classes">decorators</a>, and in the <a href="../composition">composition framework</a> provided, is very large. Is considered a 'valid' validation function any callable that:</p>
+<ul>
+<li>takes a single argument as input</li>
+<li>returns <code>True</code> or <code>None</code> in case of success</li>
+</ul>
+<p>That's the two only requirements. That means that base validation functions <strong>may fail the way they like</strong>: returning <code>False</code> or something else, raising <code>Exception</code>s.</p>
+<h2 id="name-used-in-error-messages">Name used in error messages<a class="headerlink" href="#name-used-in-error-messages" title="Permanent link">&para;</a></h2>
+<p>In validation error messages, the name of the function that will be displayed is obtained from the validation callable <code>v_callable</code> with the following formula:</p>
+<div class="codehilite"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">v_callable</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v_callable</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">v_callable</span><span class="p">)</span>
 </pre></div>
 
 
-<p>As you can see above, our code is very similar to the one with <code>assert</code>, but the exception raised is now a <code>ValidationError</code> (and would be so even if <code>isfinite</code> had raised an exception), displaying all details about the validation context and the failure. We can inspect the exception to check that all this information is also available in the object itself:</p>
-<div class="codehilite"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">validator</span>                           <span class="c1"># &quot;Validator&lt;isfinite&gt;&quot;</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">var_name</span>                            <span class="c1"># &#39;age&#39;</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">var_value</span>                           <span class="c1"># inf</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">validation_outcome</span>                  <span class="c1"># False</span>
-</pre></div>
-
-
-<p>We will come back later to the notion of <code>Validator</code> object that appears here in <code>e.validator</code>.</p>
-<p>One of the great features of <code>valid8</code> is that it will fail consistently, whatever the way the inner validation function fails:</p>
-<div class="codehilite"><pre><span></span><span class="n">hello</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
-</pre></div>
-
-
-<p><strong><em>*</em></strong><strong><em>* WORK IN PROGRESS : TODO CONTINUE </em></strong><strong><em>*</em></strong><strong>*</strong></p>
+<h2 id="built-in-exceptions">Built-in exceptions<a class="headerlink" href="#built-in-exceptions" title="Permanent link">&para;</a></h2>
+<p>As explained above nothing else than returning <code>True</code> or <code>None</code> in case of success is required by <code>valid8</code>. However when creating your own base functions you might wish to create <em>failure raisers</em> rather than <em>boolean checkers</em> because in case of failure they can provide many useful details in the raised exception. </p>
+<p>If you go that way, you may wish to reuse one of the three exception classes <code>Failure</code>, <code>WrappingFailure</code> and <code>CompositionFailure</code>,  that are provided as goodies in <code>valid8</code>. You can find some inspiration <a href="https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py">here</a>. </p>
                 
                   
                 
@@ -444,13 +474,13 @@
           </a>
         
         
-          <a href="../base_validation_lib/" title="Built-in validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../base_validation_lib/" title="Built-in base validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Built-in validation functions
+                Built-in base validation functions
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
