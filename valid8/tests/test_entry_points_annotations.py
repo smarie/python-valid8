@@ -101,6 +101,45 @@ def test_validate_field_property():
                 pass
 
 
+def test_validate_field_custom_type():
+    """"""
+    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from mini_lambda import x, s, Len
+
+    class InvalidNameError(ClassFieldValidationError):
+        help_msg = 'name should be a non-empty string'
+
+    class InvalidSurfaceError(ClassFieldValidationError):
+        help_msg = 'Surface should be a multiple of 100 between 0 and 10000.'
+
+    @validate_field('name', instance_of(str), Len(s) > 0,
+                    error_type=InvalidNameError)
+    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                    error_type=InvalidSurfaceError)
+    class House:
+        def __init__(self, name, surface=None):
+            self.name = name
+            self.surface = surface
+
+        @property
+        def surface(self):
+            return self.__surface
+
+        @surface.setter
+        def surface(self, surface=None):
+            self.__surface = surface
+
+    h = House('sweet home')
+    h.name = ''  # DOES NOT RAISE InvalidNameError
+
+    with pytest.raises(InvalidNameError):
+        h = House('')
+
+    h.surface = 100
+    with pytest.raises(InvalidSurfaceError):
+        h.surface = 10000
+
+
 def test_validate_attr():
     """ Tests that the @validate_field decorator works when the class descriptor is from attrs """
 

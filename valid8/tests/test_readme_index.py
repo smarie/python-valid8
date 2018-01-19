@@ -5,6 +5,104 @@ from pytypes import InputTypeError
 from valid8 import InputValidationError, ValidationError, failure_raiser
 
 
+def test_readme_index_usage_quick():
+    """ Tests that the example under index/usage/quick works """
+
+    from valid8 import quick_valid
+
+    surf = -1
+
+    with pytest.raises(ValidationError) as exc_info:
+        quick_valid('surface', surf, allowed_types=int, min_value=0)
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=-1]. " \
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+
+
+def test_readme_usage_wrap_valid():
+    """ Tests that the example under index/usage/wrap_valid works """
+
+    from valid8 import wrap_valid
+    from math import isfinite
+
+    surf = -1
+
+    with pytest.raises(ValidationError) as exc_info:
+        with wrap_valid('surface', surf) as v:
+            v.alid = surf > 0 and isfinite(surf)
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=-1]: " \
+                     "validation function [v.alid = surf > 0 and isfinite(surf)] returned [False]."
+
+    surf = 1j
+
+    with pytest.raises(ValidationError) as exc_info:
+        with wrap_valid('surface', surf) as v:
+            v.alid = surf > 0 and isfinite(surf)
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=1j]. " \
+                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
+                     "TypeError: '>' not supported between instances of 'complex' and 'int'."
+
+    # alternate naming
+    surf = -1
+    with pytest.raises(ValidationError) as exc_info:
+        with wrap_valid('surface', surf) as r:
+            r.esults = surf > 0 and isfinite(surf)
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=-1]: " \
+                     "validation function [r.esults = surf > 0 and isfinite(surf)] returned [False]."
+
+
+def test_readme_usage_customization():
+
+    from valid8 import quick_valid, wrap_valid
+    from math import isfinite
+
+    surf = -1
+
+    # (A) custom error message (exception is still a ValidationError)
+    # with pytest.raises(ValidationError) as exc_info:
+    #     quick_valid('surface', surf, allowed_types=int, min_value=0,
+    #                 help_msg="Surface should be a positive integer")
+    # e = exc_info.value
+    # assert str(e) == "Surface should be a positive integer. Error validating [surface=-1]. " \
+    #                  "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+
+    # (A) custom error message (exception is still a ValidationError)
+    with pytest.raises(ValidationError) as exc_info:
+        with wrap_valid('surface', surf, help_msg="Surface should be a finite positive integer") as v:
+            v.alid = surf > 0 and isfinite(surf)
+    e = exc_info.value
+    assert str(e) == "Surface should be a finite positive integer. Error validating [surface=-1]: " \
+                     "validation function [v.alid = surf > 0 and isfinite(surf)] returned [False]."
+
+    # (B) custom error types (recommended to provide unique applicative errors)
+    class InvalidSurface(ValidationError):
+        help_msg = 'Surface should be a positive integer'
+
+    with pytest.raises(ValidationError) as exc_info:
+        quick_valid('surface', surf, allowed_types=int, min_value=0, error_type=InvalidSurface)
+    e = exc_info.value
+    assert type(e) == InvalidSurface
+    assert str(e) == "Surface should be a positive integer. " \
+                     "Error validating [surface=-1]. " \
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+
+    # (C) custom error types with templating
+    class InvalidSurface(ValidationError):
+        help_msg = 'Surface should be > {minimum}, found {var_value}'
+
+    with pytest.raises(ValidationError) as exc_info:
+        quick_valid('surface', surf, allowed_types=int, min_value=0,
+                    error_type=InvalidSurface, minimum=0)
+    e = exc_info.value
+    assert type(e) == InvalidSurface
+    assert str(e) == "Surface should be > 0, found -1. Error validating [surface=-1]. " \
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+
+
+# deprecated
 def test_readme_index_usage_basic():
     """ Tests that the examples provided in the index page under Usage examples/Basic are correct """
 
@@ -18,6 +116,7 @@ def test_readme_index_usage_basic():
         assert_valid('surface', surf, is_multiple_of(100))
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
+                     'Validation function [is_multiple_of_100] raised ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
     # (2) native mini_lambda support to define validation functions
@@ -28,6 +127,119 @@ def test_readme_index_usage_basic():
     assert str(e) == 'Error validating [surface=-1]: validation function [x > 0] returned [False].'
 
 
+def test_readme_index_usage_function():
+    """ Tests that the examples provided in the index page under Usage examples/Function are correct """
+
+    from mini_lambda import s, Len
+    from valid8 import validate_arg, instance_of
+
+    @validate_arg('name', instance_of(str), Len(s) > 0,
+                  help_msg='name should be a non-empty string')
+    def build_house(name, surface=None):
+        print('Building house... DONE !')
+        return name, surface
+
+    build_house('sweet home', 200)
+
+    with pytest.raises(InputValidationError) as exc_info:
+        build_house('', 100)  # name is invalid
+    e = exc_info.value
+    assert str(e) == "name should be a non-empty string. " \
+                     "Error validating input [name=] for function [build_house]. " \
+                     "Validation function [and(instance_of_<class 'str'>, len(s) > 0)] raised " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value []. " \
+                     "Successes: [\"instance_of_<class 'str'>\"] / Failures: {'len(s) > 0': 'False'}."
+
+    from mini_lambda import s, x, l, Len
+    from valid8 import validate_arg, validate_out, instance_of, is_multiple_of
+
+    @validate_arg('name', instance_of(str), Len(s) > 0,
+                  help_msg='name should be a non-empty string')
+    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                  help_msg='Surface should be a multiple of 100 between 0 and 10000.')
+    @validate_out(instance_of(tuple), Len(l) == 2)
+    def build_house(name, surface=None):
+        print('Building house... DONE !')
+        return name, surface
+
+    build_house('sweet home')
+    build_house('sweet home', None)  # No error !
+
+    with pytest.raises(TypeError):
+        is_multiple_of(100)(None)
+
+    with pytest.raises(TypeError):
+        (Len(s) > 0).evaluate(None)
+
+
+def test_readme_index_usage_class_fields():
+    """ Tests that the examples provided in the index page under Usage examples/class fields are correct"""
+
+    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from mini_lambda import x, s, Len
+
+    @validate_field('name', instance_of(str), Len(s) > 0,
+                    help_msg='name should be a non-empty string')
+    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                    help_msg='Surface should be a multiple of 100 between 0 and 10000.')
+    class House:
+        def __init__(self, name, surface=None):
+            self.name = name
+            self.surface = surface
+
+        @property
+        def surface(self):
+            return self.__surface
+
+        @surface.setter
+        def surface(self, surface=None):
+            self.__surface = surface
+
+    h = House('sweet home')
+    h.name = ''  # DOES NOT RAISE InvalidNameError
+
+    with pytest.raises(ClassFieldValidationError):
+        h = House('')
+
+    h.surface = 100
+    with pytest.raises(ClassFieldValidationError):
+        h.surface = 10000
+
+
+def test_testing():
+    """ """
+    from mini_lambda import s, Len
+    from valid8 import assert_valid, Validator, instance_of
+
+    name = 'sweet_home'
+
+    assert_valid('name', name, instance_of(str), Len(s) > 0,
+                 help_msg='name should be a non-empty string')
+
+    v = Validator(instance_of(str), Len(s) > 0,
+                  help_msg='name should be a non-empty string')
+    v.assert_valid('name', name)
+
+
+def test_advanced_composition():
+    """ """
+
+    from mini_lambda import x
+    from valid8 import Validator, is_multiple_of
+
+    class InvalidSurface(ValidationError):
+        help_msg = 'Surface should be a multiple of 100 between 0 and 10000'
+
+    v = Validator(((x >= 0) & (x < 10000), 'Surface should be between 0 and 10000'),
+                  (x % 100 == 0, 'Surface should be a multiple of 100'),
+                  error_type=InvalidSurface)
+
+    # v.assert_valid('surface', -100)
+
+    # v.assert_valid('surface', 99)
+
+
+# deprecated
 def test_readme_index_usage_customization():
     """ Tests that the examples provided in the index page under Usage examples/Customization are correct """
 
@@ -42,13 +254,15 @@ def test_readme_index_usage_customization():
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', None, x > 0, none_policy=NonePolicy.FAIL)
     e = exc_info.value
-    assert str(e) == 'Error validating [surface=None]. ValueIsNone: The value must be non-None. Wrong value: [None].'
+    assert str(e) == 'Error validating [surface=None]. Validation function [reject_none(x > 0)] raised ' \
+                     'ValueIsNone: The value must be non-None. Wrong value: [None].'
 
     # *** (4) TEST: custom Failure (not ValidationError) message. Does it have any interest ? ***
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf, (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
+                     'Validation function [is_multiple_of_100] raised ' \
                      'WrappingFailure: Surface should be a multiple of 100. ' \
                      'Function [is_multiple_of_100] raised ' \
                      '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]].'
@@ -70,6 +284,7 @@ def test_readme_index_usage_customization():
     assert isinstance(e, InvalidSurface)
     assert str(e) == 'Surface should be a positive number. ' \
                      'Error validating [surface=-1]. ' \
+                     'Validation function [is_multiple_of_100] raised ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
 
     # (6) custom error types with templating
@@ -97,6 +312,7 @@ def test_readme_index_usage_composition():
         assert_valid('surface', surf, (x >= 0) & (x < 10000), is_multiple_of(100))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
+                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'False', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
@@ -112,6 +328,7 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
+                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'False', " \
@@ -124,6 +341,7 @@ def test_readme_index_usage_composition():
                      (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
+                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
@@ -145,6 +363,7 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
+                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
@@ -152,245 +371,3 @@ def test_readme_index_usage_composition():
                      "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100, found -1. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: [-1]].'}."
-
-
-def test_readme_index_usage_function():
-    """ Tests that the examples provided in the index page under Usage examples/Function are correct """
-
-    from mini_lambda import s, x, l, Len
-    from valid8 import validate_arg, validate_out, instance_of, is_multiple_of
-
-    class InvalidNameError(InputValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(InputValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @validate_arg('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
-    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100), error_type=InvalidSurfaceError)
-    @validate_out(instance_of(tuple), Len(l) == 2)
-    def build_house(name, surface=None):
-        print('Building house... DONE !')
-        return name, surface
-
-    build_house('sweet home', 200)
-    build_house('sweet home')
-
-    with pytest.raises(InvalidNameError):
-        build_house('', 100)  # name is invalid
-
-    with pytest.raises(InvalidSurfaceError):
-        build_house('sweet home', 10000)  # surface is invalid
-
-
-def test_readme_index_usage_class_fields():
-    """ Tests that the examples provided in the index page under Usage examples/class fields are correct"""
-
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
-    from mini_lambda import x, s, Len
-
-    class InvalidNameError(ClassFieldValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(ClassFieldValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @validate_field('name', instance_of(str), Len(s) > 0,
-                    error_type=InvalidNameError)
-    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
-                    error_type=InvalidSurfaceError)
-    class House:
-        def __init__(self, name, surface=None):
-            self.name = name
-            self.surface = surface
-
-        @property
-        def surface(self):
-            return self.__surface
-
-        @surface.setter
-        def surface(self, surface=None):
-            self.__surface = surface
-
-    h = House('sweet home')
-    h.name = ''  # DOES NOT RAISE InvalidNameError
-
-    with pytest.raises(InvalidNameError):
-        h = House('')
-
-    h.surface = 100
-    with pytest.raises(InvalidSurfaceError):
-        h.surface = 10000
-
-
-def test_readme_index_combining_enforce():
-    """ Tests that the examples provided in the index page under Combining/Enforce are correct """
-
-    # Imports - for type validation
-    from numbers import Integral
-    from typing import Tuple, Optional
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # means that subclasses of required types are valid too
-
-    # Imports - for value validation
-    from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of
-
-    # Define our 2 applicative error types
-    class InvalidNameError(InputValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(InputValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    # Apply type + value validation
-    @runtime_validation
-    @validate_arg('name', Len(s) > 0, error_type=InvalidNameError)
-    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
-                  error_type=InvalidSurfaceError)
-    def build_house(name: str, surface: Optional[Integral]=None) \
-            -> Tuple[str, Optional[Integral]]:
-        print('Building house... DONE !')
-        return name, surface
-
-    build_house('sweet home', 200)
-    build_house('sweet home')
-
-    with pytest.raises(InvalidNameError):
-        build_house('', 100)  # InvalidNameError
-
-    with pytest.raises(InvalidSurfaceError):
-        build_house('sweet home', 10000)  # InvalidSurfaceError
-
-    with pytest.raises(RuntimeTypeError):
-        build_house('test', 100.1)  # RuntimeTypeError
-
-
-def test_readme_index_combining_autoclass():
-    """ Tests that the examples provided in the index page under Combining/autoclass are correct """
-
-    from autoclass import autoclass
-    from mini_lambda import s, x, Len
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
-
-    class InvalidNameError(ClassFieldValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(ClassFieldValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @validate_field('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
-    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
-                    error_type=InvalidSurfaceError)
-    @autoclass
-    class House:
-        def __init__(self, name, surface=None):
-            pass
-
-    h = House('sweet home', 200)
-
-    h.surface = None  # Valid (surface is nonable by signature)
-
-    with pytest.raises(InvalidNameError):
-        h.name = ''  # InvalidNameError
-
-    with pytest.raises(InvalidSurfaceError):
-        h.surface = 10000  # InvalidSurfaceError
-
-
-def test_readme_index_combining_autoclass_2():
-    """ Tests that the examples provided in the index page under Combining/autoclass are correct (2) """
-
-    from autoclass import autoclass
-    from mini_lambda import s, x, l, Len
-    from valid8 import validate_arg, instance_of, is_multiple_of
-
-    class InvalidNameError(InputValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(InputValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @autoclass
-    class House:
-
-        @validate_arg('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
-        @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100), error_type=InvalidSurfaceError)
-        def __init__(self, name, surface=None):
-            pass
-
-    h = House('sweet home', 200)
-    h.surface = None  # Valid
-
-    with pytest.raises(InvalidNameError):
-        h.name = ''
-
-    with pytest.raises(InvalidSurfaceError):
-        h.surface = 10000
-
-
-def test_readme_index_combining_attrs():
-    """ Tests that the examples provided in the index page under Combining/autoclass are correct """
-
-    import attr
-    from mini_lambda import s, x, Len
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
-
-    class InvalidNameError(ClassFieldValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurfaceError(ClassFieldValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @validate_field('name', instance_of(str), Len(s) > 0, error_type=InvalidNameError)
-    @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
-                    error_type=InvalidSurfaceError)
-    @attr.s
-    class House:
-        name = attr.ib()
-        surface = attr.ib(default=None)
-
-    h = House('sweet home')  # Valid (surface is nonable by generated signature)
-
-    h.name = ''       # DOES NOT RAISE InvalidNameError (no setter!)
-
-    with pytest.raises(InvalidNameError):
-        House('', 10000)  # InvalidNameError
-
-    with pytest.raises(InvalidSurfaceError):
-        House('sweet home', 10000)  # InvalidSurfaceError
-
-
-def test_unused_pytypes():
-    """ Tests that pytypes and valid8 can work together too """
-
-    # for type checking
-    from valid8 import Boolean
-    from numbers import Real, Integral
-    from typing import Optional
-    from pytypes import typechecked
-
-    # for value checking
-    from valid8 import validate, minlens, gt
-
-    @typechecked
-    @validate(name=minlens(0),
-              surface=gt(0))
-    def build_house(name: str,
-                    surface: Real,
-                    nb_floors: Optional[Integral] = 1,
-                    with_windows: Boolean = False):
-        print('you did it !')
-
-    build_house('test', 12, 2)  # validation OK
-
-    with pytest.raises(InputTypeError):
-        build_house('test', 12, 2.2)  # Type validation: @typechecked raises a InputTypeError
-
-    build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
-
-    with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate raises a Failure
-
-    with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate raises a Failure

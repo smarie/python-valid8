@@ -1,3 +1,11 @@
+### 3.0.0 - new inline validators + dynamic typing
+
+ * Added two new entry points that should be more useful and usable than `assert_valid` for inline validation:
+ 
+   - `quick_valid` for limited but simple one-line validation (most common tasks)
+   - `wrap_valid` for more flexible validation (a contextmanager so it takes 2 lines)
+ 
+
 ### 2.1.0 - new annotation @validate_field
  
  * @validate_field allows users to validate class fields, whether they are descriptors, properties, or constructor arguments. Check the documentation for details!

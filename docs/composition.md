@@ -1,6 +1,7 @@
 # Built-in composition functions
 
-You can use the following methods to compose a base validation function from other functions, so as to be used as the `validation_func` parameter in one of the `valid8` decorators presented [here](./index).
+You can use the following methods to compose **base validation functions**, so as to build a function to be used in one of the `valid8` decorators presented [here](./index).
+
 
 ## not_
 
