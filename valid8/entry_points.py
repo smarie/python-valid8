@@ -172,6 +172,8 @@ class ValidationError(HelpMsgMixIn, ValueError, RootException):
         for help message formatting
         """
 
+        self.display_prefix_for_exc_outcomes = True
+
         self.append_details = append_details
 
         # store everything in self
@@ -210,9 +212,13 @@ class ValidationError(HelpMsgMixIn, ValueError, RootException):
 
         # create the exception main message according to the type of result
         if isinstance(self.validation_outcome, Exception):
+
+            prefix = 'Validation function [{val}] raised ' if self.display_prefix_for_exc_outcomes else ''
+
             # new: we now remove  "Root validator was [{validator}]", users can get it through e.validator
-            contents = 'Error validating {what}. {exception}: {details}' \
-                       ''.format(what=self.get_what_txt(),
+            contents = ('Error validating {what}. ' + prefix + '{exception}: {details}')\
+                         .format(what=self.get_what_txt(),
+                                 val=self.validator.get_main_function_name(),
                                  exception=type(self.validation_outcome).__name__,
                                  details=end_with_dot(str(self.validation_outcome)))
 
@@ -400,11 +406,11 @@ class Validator:
 
         # check the result
         if not result_is_success(res):
-            self._raise_validation_error(name, value, validation_outcome=res, error_type=error_type,
-                                         help_msg=help_msg, **kw_context_args)
+            raise self._create_validation_error(name, value, validation_outcome=res, error_type=error_type,
+                                                help_msg=help_msg, **kw_context_args)
 
-    def _raise_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
-                                error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+    def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
+                                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
         """ The function doing the final error raising.  """
 
         # first merge the info provided in arguments and in self
@@ -417,8 +423,8 @@ class Validator:
         name = self._get_name_for_errors(name)
 
         # then raise the appropriate ValidationError or subclass
-        raise error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
-                         help_msg=help_msg, **ctx)
+        return error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
+                          help_msg=help_msg, **ctx)
 
     def _get_name_for_errors(self, name: str):
         """ Subclasses may override this """

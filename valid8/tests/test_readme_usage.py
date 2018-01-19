@@ -42,7 +42,7 @@ def test_tutorial():
     with pytest.raises(ValidationError) as exc_info:
         hello(152)
     e = exc_info.value
-    assert str(e) == "Error validating [age=152]. " \
+    assert str(e) == "Error validating [age=152]. Validation function [and(isfinite, between_0_and_150)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [152]. " \
                      "Successes: ['isfinite'] / Failures: {" \
                      "'between_0_and_150': 'NotInRange: 0 <= x <= 150 does not hold for x=152. Wrong value: [152]'}."
@@ -57,8 +57,9 @@ def test_tutorial():
     with pytest.raises(ValidationError) as exc_info:
         hello(12.5)
     e = exc_info.value
-    assert str(e) == "Error validating [age=12.5]." \
-                     " AtLeastOneFailed: At least one validation function failed validation for value [12.5]. " \
+    assert str(e) == "Error validating [age=12.5]. " \
+                     "Validation function [and(isfinite, between_0_and_150, int(x) == x)] raised " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value [12.5]. " \
                      "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'}."
 
     # TODO continue this tutorial
@@ -228,17 +229,19 @@ def test_usage_validators():
     with pytest.raises(ValidationError) as exc_info:
         validate_is_greater_than_0('val',-0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=-0.2]. ValueError: x is not greater than 0, x=-0.2."
+    assert str(e) == "Error validating [val=-0.2]. Validation function [gt_0] raised " \
+                     "ValueError: x is not greater than 0, x=-0.2."
     validate_is_greater_than_1('val',1)
     with pytest.raises(ValidationError) as exc_info:
         validate_is_greater_than_1('val',0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=0.2]. Failure: Wrong value: [x is not greater than 1, x=0.2]."
+    assert str(e) == "Error validating [val=0.2]. Validation function [gt_1] raised " \
+                     "Failure: Wrong value: [x is not greater than 1, x=0.2]."
     validate_is_greater_than_2('val',2)
     with pytest.raises(ValidationError) as exc_info:
         validate_is_greater_than_2('val',0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=0.2]. AssertionError: assert 0.2 >= 2."
+    assert str(e) == "Error validating [val=0.2]. Validation function [gt_2] raised AssertionError: assert 0.2 >= 2."
     validate_is_greater_than_3('val',3)
     with pytest.raises(ValidationError) as exc_info:
         validate_is_greater_than_3('val',0.2)

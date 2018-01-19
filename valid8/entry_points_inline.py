@@ -23,6 +23,16 @@ class _QuickValidator(Validator):
     def __init__(self):
         super(_QuickValidator, self).__init__(quick_valid)
 
+    def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
+                                error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+        err = super(_QuickValidator, self)._create_validation_error(name=name, value=value,
+                                                                    validation_outcome=validation_outcome,
+                                                                    error_type=error_type, help_msg=help_msg,
+                                                                    **kw_context_args)
+        # disable displaying the annoying prefix
+        err.display_prefix_for_exc_outcomes = False
+        raise err
+
     def assert_valid(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None,
                      help_msg: str = None, **kw_context_args):
         raise NotImplementedError('This is a special validator object that is not able to perform validation')
@@ -152,8 +162,8 @@ def quick_valid(name: str, value: Any,
                         raise TooLong(wrong_value=value, max_length=max_len, strict=False)
 
     except Exception as e:
-        _QUICK_VALIDATOR._raise_validation_error(name, value, validation_outcome=e, error_type=error_type,
-                                                 help_msg=help_msg, **kw_context_args)
+        raise _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,
+                                                        help_msg=help_msg, **kw_context_args)
 
 
 _QUICK_VALIDATOR = _QuickValidator()
@@ -183,37 +193,6 @@ class WrappingValidatorEye:
             # remember the key
             super(WrappingValidatorEye, self).__setattr__('last_field_name_used', key)
             super(WrappingValidatorEye, self).__setattr__('outcome', value)
-
-
-# This worked but was not aligned with the Validator class
-#
-# @contextmanager
-# def wrap_valid(name: str, value: Any, error_type: 'Type[ValidationError]' = None, help_msg: str = None,
-#                **kw_context_args) -> WrappingValidatorEye:
-#     """
-#     A context manager to wrap validation tasks.
-#
-#     Any exception caught within this context will be wrapped by a ValidationError and raised.
-#
-#     :param name: the variable being validated
-#     :param value: the value being validated
-#     :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
-#     `ValidationError` will be raised with the provided `help_msg`
-#     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
-#     :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-#     to format the help message
-#     """
-#     spy = WrappingValidatorEye()
-#
-#     try:
-#         yield spy
-#     except Exception as e:
-#         _WRAP_VALIDATOR._raise_validation_error(name, value, validation_outcome=e, error_type=error_type,
-#                                                  help_msg=help_msg, **kw_context_args)
-#
-#     if spy.alid is not None and not spy.alid:
-#         _WRAP_VALIDATOR._raise_validation_error(name, value, validation_outcome=spy.alid, error_type=error_type,
-#                                                  help_msg=help_msg, **kw_context_args)
 
 
 class _Dummy_Callable_:
@@ -315,4 +294,4 @@ class wrap_valid(Validator):
                         # not able to identify... dump the whole block
                         self.main_function.name = ' ; '.join(wrapped_block_lines)
 
-            self._raise_validation_error(self.name, self.value, validation_outcome=result)
+            raise self._create_validation_error(self.name, self.value, validation_outcome=result)
