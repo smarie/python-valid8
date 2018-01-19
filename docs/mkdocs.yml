@@ -4,7 +4,8 @@ repo_url: https://github.com/smarie/python-valid8
 pages:
     - Home: index.md
     - Why validation: why_validation.md
-    - Usage details: usage.md
+    #- Usage details: usage.md
+    - Built-in composition functions: composition.md
     - Built-in validation functions: base_validation_lib.md
     - Other validation libs: other_libs.md
     - Changelog: changelog.md
