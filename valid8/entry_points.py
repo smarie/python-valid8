@@ -3,7 +3,7 @@ from typing import Callable, Any, List, Union  # do not import Type for compatib
 
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
-    HelpMsgMixIn
+    HelpMsgMixIn, is_error_of_type
 from valid8.composition import ValidationFuncs, _process_validation_function_s
 
 
@@ -83,7 +83,7 @@ def _add_none_handler(validation_callable: Callable, none_policy: int) -> Callab
 
 
 # TODO should we remove ValueError from the hierarchy, and let users explicitly declare it either in constructor or in their custom classes ? Or on the contrary add both TypeError and ValueError here and remove dynamically when the exception is raised
-class ValidationError(HelpMsgMixIn, ValueError, RootException):
+class ValidationError(HelpMsgMixIn, RootException):
     """
     Represents a Validation error raised by a 'defensive mode' validation entry point such as `assert_valid`,
     `@validate`, `@validate_arg`, or `<Validator>.assert_valid()`. It contains details about the `Validator`, the value
@@ -244,6 +244,37 @@ class ValidationError(HelpMsgMixIn, ValueError, RootException):
         :return:
         """
         return '[{var}]'.format(var=self.get_variable_str())
+
+
+class MetaReprForValidator(type):
+    """ Utility metaclass used in add_base_type_dynamically """
+    def __repr__(cls):
+        return repr(cls.__bases__[0])[:-2] + '[' + cls.__bases__[1].__name__ + ']' + repr(cls.__bases__[0])[-2:]
+
+
+def add_base_type_dynamically(error_type, additional_type):
+    """
+    Utility method to create a new type dynamically, inheriting from both error_type (first) and additional_type
+    (second). The class representation (repr(cls)) of the resulting class reflects this by displaying both names
+    (fully qualified for the first type, __name__ for the second)
+
+    For example
+    ```
+    > new_type = add_base_type_dynamically(ValidationError, ValueError)
+    > repr(new_type)
+    "<class 'valid8.entry_points.ValidationError+ValueError'>"
+    ```
+    :return:
+    """
+    # the new type created dynamically, with the same name
+    class new_error_type(error_type, additional_type, metaclass=MetaReprForValidator):
+        pass
+
+    new_error_type.__name__ = error_type.__name__ + '[' + additional_type.__name__ + ']'
+    new_error_type.__qualname__ = error_type.__qualname__ + '[' + additional_type.__qualname__+ ']'
+    new_error_type.__module__ = error_type.__module__
+
+    return new_error_type
 
 
 class Validator:
@@ -422,9 +453,27 @@ class Validator:
         # allow the class to override the name
         name = self._get_name_for_errors(name)
 
+        if issubclass(error_type, TypeError) or issubclass(error_type, ValueError):
+            # this is most probably a custom error type, it is already annotated with ValueError and/or TypeError
+            # so use it 'as is'
+            new_error_type = error_type
+        else:
+            # Add the appropriate TypeError/ValueError base type dynamically
+            additional_type = None
+            if isinstance(validation_outcome, Exception):
+                if is_error_of_type(validation_outcome, TypeError):
+                    additional_type = TypeError
+                elif is_error_of_type(validation_outcome, ValueError):
+                    additional_type = ValueError
+            if additional_type is None:
+                # not much we can do here, let's assume a ValueError, that is more probable
+                additional_type = ValueError
+
+            new_error_type = add_base_type_dynamically(error_type, additional_type)
+
         # then raise the appropriate ValidationError or subclass
-        return error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
-                          help_msg=help_msg, **ctx)
+        return new_error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
+                              help_msg=help_msg, **ctx)
 
     def _get_name_for_errors(self, name: str):
         """ Subclasses may override this """

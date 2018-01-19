@@ -4,7 +4,7 @@ from valid8.composition import _process_validation_function_s
 from valid8.base import Failure, WrappingFailure, result_is_success
 
 
-class TooShort(Failure):
+class TooShort(Failure, ValueError):
     """ Custom Failure raised by minlen """
     def __init__(self, wrong_value, min_length, strict):
         symbol = '>' if strict else '>='
@@ -46,7 +46,7 @@ def minlens(min_length_strict):
     return minlen(min_length_strict, True)
 
 
-class TooLong(Failure):
+class TooLong(Failure, ValueError):
     """ Custom Failure raised by maxlen """
     def __init__(self, wrong_value, max_length, strict):
         symbol = '<' if strict else '<='
@@ -88,7 +88,7 @@ def maxlens(max_length_strict):
     return maxlen(max_length_strict, True)
 
 
-class LengthNotInRange(Failure):
+class LengthNotInRange(Failure, ValueError):
     """ Custom Failure raised by length_between """
     def __init__(self, wrong_value, min_length, left_strict, max_length, right_strict):
         left_symbol = '<' if left_strict else '<='
@@ -152,7 +152,7 @@ def length_between(min_len, max_len, open_left: bool = False, open_right: bool =
     return length_between_
 
 
-class NotInAllowedValues(Failure):
+class NotInAllowedValues(Failure, ValueError):
     """ Custom Failure raised by is_in """
     def __init__(self, wrong_value, allowed_values):
         help_msg = 'x in {allowed_values} does not hold for x={wrong_value}'
@@ -178,7 +178,7 @@ def is_in(allowed_values: Set):
     return is_in_allowed_values
 
 
-class NotSubset(Failure):
+class NotSubset(Failure, ValueError):
     """ Custom Failure raised by is_subset """
     def __init__(self, wrong_value, reference_set, unsupported):
         help_msg = 'x subset of {reference_set} does not hold for x={wrong_value}. Unsupported elements: {unsupported}'
@@ -207,7 +207,7 @@ def is_subset(reference_set: Set):
     return is_subset_of
 
 
-class NotSuperset(Failure):
+class NotSuperset(Failure, ValueError):
     """ Custom Failure raised by is_superset """
     def __init__(self, wrong_value, reference_set, missing):
         help_msg = 'x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}'
@@ -236,7 +236,7 @@ def is_superset(reference_set: Set):
     return is_superset_of
 
 
-class InvalidItemInSequence(WrappingFailure):
+class InvalidItemInSequence(WrappingFailure, ValueError):
     """ Custom Failure raised by on_all_ and on_each_ """
     help_msg = 'Provided sequence contains one value that is invalid.'
 

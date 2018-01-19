@@ -1,3 +1,5 @@
+import traceback
+
 import pytest
 from enforce.exceptions import RuntimeTypeError
 from pytypes import InputTypeError
@@ -84,7 +86,7 @@ def test_readme_usage_customization():
     with pytest.raises(ValidationError) as exc_info:
         quick_valid('surface', surf, allowed_types=int, min_value=0, error_type=InvalidSurface)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be a positive integer. " \
                      "Error validating [surface=-1]. " \
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
@@ -97,9 +99,24 @@ def test_readme_usage_customization():
         quick_valid('surface', surf, allowed_types=int, min_value=0,
                     error_type=InvalidSurface, minimum=0)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
+    assert type(e).__name__ == "InvalidSurface[ValueError]"
     assert str(e) == "Surface should be > 0, found -1. Error validating [surface=-1]. " \
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+
+    # (D) ValueError/TypeError
+    with pytest.raises(ValidationError) as exc_info:
+        quick_valid('surface', -1, allowed_types=int, min_value=0)
+    e = exc_info.value
+    assert traceback.format_exception_only(type(e), e)[0] == \
+           "valid8.entry_points.ValidationError[ValueError]: Error validating [surface=-1]. " \
+           "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].\n"
+    assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[ValueError]'>"
+
+    with pytest.raises(ValidationError) as exc_info:
+        quick_valid('surface', 1j, allowed_types=int, min_value=0)
+    e = exc_info.value
+    assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[TypeError]'>"
 
 
 # deprecated

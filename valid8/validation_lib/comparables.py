@@ -3,7 +3,7 @@ from typing import Any
 from valid8.base import Failure
 
 
-class TooSmall(Failure):
+class TooSmall(Failure, ValueError):
     """ Custom Failure raised by gt """
     def __init__(self, wrong_value, min_value, strict):
         symbol = '>' if strict else '>='
@@ -46,7 +46,7 @@ def gts(min_value_strict: Any):
     return gt(min_value_strict, True)
 
 
-class TooBig(Failure):
+class TooBig(Failure, ValueError):
     """ Custom Failure raised by lt """
     def __init__(self, wrong_value, max_value, strict):
         symbol = '<' if strict else '<='
@@ -89,7 +89,7 @@ def lts(max_value_strict: Any):
     return lt(max_value_strict, True)
 
 
-class NotInRange(Failure):
+class NotInRange(Failure, ValueError):
     """ Custom Failure raised by between """
     def __init__(self, wrong_value, min_value, left_strict, max_value, right_strict):
         left_symbol = '<' if left_strict else '<='

@@ -48,6 +48,20 @@ def result_is_success(validation_result) -> bool:
     return validation_result in {None, True}
 
 
+def is_error_of_type(exc, ref_type):
+    """
+    Helper function to determine if some exception is of some type, by also looking at its declared __cause__
+
+    :param exc:
+    :param ref_type:
+    :return:
+    """
+    if isinstance(exc, ref_type):
+        return True
+    elif exc.__cause__ is not None:
+        return is_error_of_type(exc.__cause__, ref_type)
+
+
 class HelpMsgFormattingException(Exception):
     def __init__(self, help_msg: str, caught: KeyError):
         self.help_msg = help_msg
@@ -104,7 +118,7 @@ class HelpMsgMixIn:
         return context_dict
 
 
-class Failure(HelpMsgMixIn, ValueError, RootException):
+class Failure(HelpMsgMixIn, RootException):
     """
     A utility class to represent base validation functions failures. It contains details about what was the value being
     validated. It allows users to provide a more friendly help message, that may get formatted using contextual
@@ -361,7 +375,7 @@ def _failure_raiser(validation_callable: Callable, failure_type: 'Type[WrappingF
     return raiser
 
 
-class ValueIsNone(Failure):
+class ValueIsNone(Failure, TypeError):
     help_msg = "The value must be non-None"
 
 

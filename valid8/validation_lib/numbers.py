@@ -3,7 +3,7 @@ from numbers import Integral
 from valid8.base import Failure
 
 
-class IsNotEven(Failure):
+class IsNotEven(Failure, ValueError):
     """ Custom Failure raised by is_even """
     help_msg = 'Value should be even'
 
@@ -16,7 +16,7 @@ def is_even(x: Integral):
         raise IsNotEven(wrong_value=x)
 
 
-class IsNotOdd(Failure):
+class IsNotOdd(Failure, ValueError):
     """ Custom Failure raised by is_odd """
     help_msg = 'Value should be odd'
 
@@ -29,7 +29,7 @@ def is_odd(x: Integral):
         raise IsNotOdd(wrong_value=x)
 
 
-class IsNotMultipleOf(Failure):
+class IsNotMultipleOf(Failure, ValueError):
     """ Custom Failure raised by is_multiple_of """
     help_msg = 'Value should be a multiple of {ref}'
 

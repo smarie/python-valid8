@@ -25,4 +25,4 @@ name = v_callable.__name__ if hasattr(v_callable, '__name__') else str(v_callabl
 
 As explained above nothing else than returning `True` or `None` in case of success is required by `valid8`. However when creating your own base functions you might wish to create *failure raisers* rather than *boolean checkers* because in case of failure they can provide many useful details in the raised exception. 
 
-If you go that way, you may wish to reuse one of the three exception classes `Failure`, `WrappingFailure` and `CompositionFailure`,  that are provided as goodies in `valid8`. You can find some inspiration [here](https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py). 
+If you go that way, you may wish to reuse one of the three exception classes `Failure`, `WrappingFailure` and `CompositionFailure`,  that are provided as goodies in `valid8`. You can find some inspiration [here](https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py).

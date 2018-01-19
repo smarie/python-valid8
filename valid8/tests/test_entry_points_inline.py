@@ -51,7 +51,7 @@ def test_readme_usage_quick_valid_customization():
     with pytest.raises(ValidationError) as exc_info:
         quick_valid('surface', surf, allowed_types=int, min_value=0, error_type=InvalidSurface)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
 
     # (C) custom error types with templating
     class InvalidSurface(ValidationError):
@@ -61,7 +61,7 @@ def test_readme_usage_quick_valid_customization():
         quick_valid('surface', surf, allowed_types=int, min_value=0,
                     error_type=InvalidSurface, minimum=0)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
                      "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
 
@@ -121,7 +121,7 @@ def test_readme_usage_wrap_valid_customization():
         with wrap_valid('surface', surf, error_type=InvalidSurface) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
 
     # (C) custom error types with templating
     class InvalidSurface(ValidationError):
@@ -131,7 +131,7 @@ def test_readme_usage_wrap_valid_customization():
         with wrap_valid('surface', surf, error_type=InvalidSurface, minimum=0) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert type(e) == InvalidSurface
+    assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
                      "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
                      "TypeError: '>' not supported between instances of 'complex' and 'int'."

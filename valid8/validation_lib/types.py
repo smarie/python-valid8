@@ -1,7 +1,7 @@
 from valid8.base import Failure
 
 
-class HasWrongType(Failure):
+class HasWrongType(Failure, TypeError):
     """ Custom Failure raised by instance_of """
     help_msg = 'Value should be an instance of {ref_type}'
 
@@ -34,7 +34,7 @@ def instance_of(ref_type):
     return instance_of_ref
 
 
-class IsWrongType(Failure):
+class IsWrongType(Failure, TypeError):
     """ Custom Failure raised by subclass_of """
     help_msg = 'Value should be a type that is a subclass of {ref_type}'
 

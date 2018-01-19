@@ -66,7 +66,7 @@ quick_valid('surface', surf, allowed_types=int, min_value=0)
 results in
 
 ```bash
-ValidationError: Error validating [surface=-1]. \
+ValidationError[ValueError]: Error validating [surface=-1]. \
    TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
 ```
 
@@ -93,7 +93,7 @@ with wrap_valid('surface', surf) as v:
 Which yields
 
 ```bash
-ValidationError: Error validating [surface=-1]:  \
+ValidationError[ValueError]: Error validating [surface=-1]:  \
    validation function [v.alid = surf > 0 and isfinite(surf)] returned [False].
 ```
 
@@ -114,7 +114,7 @@ with wrap_valid('surface', surf) as v:
 yields
 
 ```bash
-ValidationError: Error validating [surface=1j]. \
+ValidationError[TypeError]: Error validating [surface=1j]. \
    Validation function [v.alid = surf > 0 and isfinite(surf)] raised \
        TypeError: '>' not supported between instances of 'complex' and 'int'.
 ```
@@ -151,7 +151,7 @@ with wrap_valid('surface', surf,
 yields for `surf = -1`
 
 ```bash
-ValidationError: Surface should be a finite positive integer. \
+ValidationError[ValueError]: Surface should be a finite positive integer. \
     Error validating [surface=-1]: \
     validation function [v.alid = surf > 0 and isfinite(surf)] returned [False].
 ```
@@ -171,7 +171,7 @@ quick_valid('surface', surf, allowed_types=int, min_value=0,
 yields for `surf = -1`
 
 ```bash
-InvalidSurface: Surface should be a positive integer. \
+InvalidSurface[ValueError]: Surface should be a positive integer. \
    Error validating [surface=-1]. \
    TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
 ```
@@ -191,7 +191,7 @@ quick_valid('surface', surf, allowed_types=int, min_value=0,
 yields
 
 ```bash
-InvalidSurface: Surface should be > 0, found -1. \
+InvalidSurface[ValueError]: Surface should be > 0, found -1. \
    Error validating [surface=-1]. \
    TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
 ```
@@ -199,6 +199,28 @@ InvalidSurface: Surface should be > 0, found -1. \
 Note: as shown in that last example, the value being validated is already sent to the help message string to format under the `'var_value'` key, so you do not need to pass it. 
 
 Obviously you can further customize your exception subclasses if you wish.
+
+
+### (d) `TypeError` or `ValueError` base
+
+`ValidationError` does not by default inherit from `TypeError` or `ValueError`, because `valid8` has no means of knowing. But you may have noticed in all of the output message examples shown above, that one of the two is still appearing each time in the resulting exception. This is because `valid8` automatically guesses: when a validation error happens, it performs some introspection about the failure cause and **dynamically** creates an appropriate exception type inheriting both from `ValidationError` and from either `TypeError` or `ValueError`. Besides this dynamic type has some custom display methods that make it appear as follows:
+
+```bash
+> quick_valid('surface', -1, allowed_types=int, min_value=0)
+ValidationError[ValueError]
+
+> quick_valid('surface', 1j, allowed_types=int, min_value=0)
+ValidationError[TypeError]
+```
+
+If you do not wish the automatic guessing to happen, you can always declare the inheritance explicitly by creating custom subclasses inheriting from the one of your choice, or both:
+
+```python
+class InvalidSurface(ValidationError, TypeError, ValueError):
+    help_msg = ""
+```
+
+If you create a custom subclass but do not inherit from `TypeError` nor `ValueError`, the automatic guessing will take place as usual.
 
 
 ## Validating functions & classes
@@ -235,7 +257,7 @@ Let's try it:
 > build_house('sweet home', 200)    # Valid
 
 > build_house('', 200)
-InputValidationError: name should be a non-empty string. \
+InputValidationError[ValueError]: name should be a non-empty string. \
    Error validating input [name=] for function [build_house]. \
    Validation function [and(instance_of_<class 'str'>, len(s) > 0)] raised \
    AtLeastOneFailed: \
@@ -267,7 +289,7 @@ Something strange happens:
 
 ```bash
 > build_house(None)
-InputValidationError: name should be a non-empty string. \
+InputValidationError[TypeError]: name should be a non-empty string. \
    Error validating input [name=None] ...
    
 > build_house('sweet home')         # No error !
@@ -339,7 +361,7 @@ Let's try it:
 > h = House('sweet home')  # valid
 
 > h = House('')
-ClassFieldValidationError: name should be a non-empty string. \
+ClassFieldValidationError[ValueError]: name should be a non-empty string. \
    Error validating field [name=] for class [House]. \
    Validation function [and(instance_of_<class 'str'>, len(s) > 0)] raised \
    AtLeastOneFailed: \
@@ -347,7 +369,7 @@ ClassFieldValidationError: name should be a non-empty string. \
       Successes: ["instance_of_<class 'str'>"] / Failures: {'len(s) > 0': 'False'}
 
 > h.surface = 10000
-ClassFieldValidationError: Surface should be a multiple of 100 between 0 and 10000
+ClassFieldValidationError[ValueError]: Surface should be a multiple of 100 between 0 and 10000
    Error validating field [surface=10000] for class [House]. \
    Validation function [skip_on_none(and((x >= 0) & (x < 10000), \
                         is_multiple_of_100))] \
@@ -406,7 +428,7 @@ will raise the following two distinct error messages:
 
 ```bash
 > v.assert_valid('surface', -100)
-InvalidSurface: Surface should be a multiple of 100 between 0 and 10000. \
+InvalidSurface[ValueError]: Surface should be a multiple of 100 between 0 and 10000. \
    Error validating [surface=-1]. \
    Validation function [and((x >= 0) & (x < 10000), x % 100 == 0)] raised \
    AtLeastOneFailed: \
@@ -419,7 +441,7 @@ InvalidSurface: Surface should be a multiple of 100 between 0 and 10000. \
       }.
 
 > v.assert_valid('surface', 99)
-InvalidSurface: Surface should be a multiple of 100 between 0 and 10000. \
+InvalidSurface[ValueError]: Surface should be a multiple of 100 between 0 and 10000. \
    Error validating [surface=99]. \
    Validation function [and((x >= 0) & (x < 10000), x % 100 == 0)] raised \
    AtLeastOneFailed: \
@@ -445,7 +467,7 @@ InvalidSurface: Surface should be a multiple of 100 between 0 and 10000. \
     
     - *Class validation*: one decorator `@validate_field` to add validation to class fields.
     
- * **Consistent behaviour**: all defensive mode entry points provide the same behaviour, raising subclasses of `ValidationError` in case of failure, whatever the diversity of failure modes that can happen in base validation code. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Consistency is also ensured by the fact that all entry points rely on a common `Validator` class.
+ * **Consistent behaviour**: all defensive mode entry points provide the same behaviour, raising subclasses of `ValidationError` in case of failure, whatever the diversity of failure modes that can happen in base validation code. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Moreover, the appropriate `TypeError` or `ValueError` base class is dynamically added to the resulting exception type. Consistency is also ensured by the fact that all entry points rely on a common `Validator` class.
  
  * **Highly customizable**: all entry points can be customized so as to fit your application needs. In particular you probably do not want users to see `valid8` exceptions and messages, but rather *your* exceptions and messages. This is easy to do with the two `help_msg` and `error_type` options.
 
