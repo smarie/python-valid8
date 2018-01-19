@@ -205,7 +205,7 @@ class AtLeastOneFailed(CompositionFailure):
 def and_(*validation_func: ValidationFuncs) -> Callable:
     """
     An 'and' validator: it returns `True` if all of the provided validators return `True`, or raises a
-    `ValidationException` on the first `False` received or `Exception` caught.
+    `AtLeastOneFailed` failure on the first `False` received or `Exception` caught.
 
     Note that an implicit `and_` is performed if you provide a list of validators to any of the entry points
     (`@validate`, `@validate_arg`, `assert_valid`, `is_valid`, `Validator`)
@@ -248,11 +248,11 @@ class DidNotFail(WrappingFailure):
 def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
     """
     Generates the inverse of the provided validation functions: when the validator returns `False` or raises a
-    `ValidationError`, this function returns `True`. Otherwise it returns `False`.
+    `Failure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
 
-    By default, exceptions other than `Failure` are not caught and therefore fail the validation
+    By default, exceptions of types other than `Failure` are not caught and therefore fail the validation
     (`catch_all=False`). To change this behaviour you can turn the `catch_all` parameter to `True`, in which case all
-    exceptions will be caught instead of just `ValidationError`s.
+    exceptions will be caught instead of just `Failure`s.
 
     Note that you may use `not_all(<validation_functions_list>)` as a shortcut for
     `not_(and_(<validation_functions_list>))`
@@ -262,7 +262,7 @@ def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
     are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
     `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
     of callables, they will be transformed to functions automatically.
-    :param catch_all: an optional boolean flag. By default, only ValidationError are silently caught and turned into
+    :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
     a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
     'ok' result
     :return:
@@ -300,8 +300,8 @@ class AllValidatorsFailed(CompositionFailure):
 def or_(*validation_func: ValidationFuncs) -> Callable:
     """
     An 'or' validator: returns `True` if at least one of the provided validators returns `True`. All exceptions will be
-    silently caught. In case of failure, a global `ValidationException` will be raised, together with the first caught
-    exception's message if any.
+    silently caught. In case of failure, a global `AllValidatorsFailed` failure will be raised, together with details
+    about all validation results.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -345,8 +345,8 @@ class XorTooManySuccess(CompositionFailure):
 def xor_(*validation_func: ValidationFuncs) -> Callable:
     """
     A 'xor' validation function: returns `True` if exactly one of the provided validators returns `True`. All exceptions
-    will be silently caught. In case of failure, a global `ValidationException` will be raised, together with the first
-    caught exception's message if any.
+    will be silently caught. In case of failure, a global `XorTooManySuccess` or `AllValidatorsFailed` will be raised,
+    together with details about the various validation results.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -398,7 +398,7 @@ def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Calla
     are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
     `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
     of callables, they will be transformed to functions automatically.
-    :param catch_all: an optional boolean flag. By default, only ValidationError are silently caught and turned into
+    :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
     a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
     'ok' result
     :return:
@@ -413,7 +413,9 @@ def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Calla
 def failure_raiser(*validation_func: ValidationFuncs, failure_type: 'Type[WrappingFailure]' = None,
                    help_msg: str = None, **kw_context_args) -> Callable:
     """
-    Utility method to create a failure raiser manually, surrounding the provided validation function(s).
+    This function is automatically used if you provide a tuple `(<function>, <msg>_or_<Failure_type>)`, to any of the
+    methods in this page or to one of the `valid8` decorators. It transforms the provided `<function>` into a failure
+    raiser, raising a subclass of `Failure` in case of failure (either not returning `True` or raising an exception)
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -431,8 +433,9 @@ def failure_raiser(*validation_func: ValidationFuncs, failure_type: 'Type[Wrappi
 
 def skip_on_none(*validation_func: ValidationFuncs) -> Callable:
     """
-    Utility method to manually create a validation function ignoring none (None will be accepted without executing the
-    inner validation functions)
+    This function is automatically used if you use `none_policy=SKIP`, you will probably never need to use it
+    explicitly. If wraps the provided function (or implicit `and_` between provided functions) so that `None` values
+    are not validated and the code continues executing.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -447,8 +450,9 @@ def skip_on_none(*validation_func: ValidationFuncs) -> Callable:
 
 def fail_on_none(*validation_func: ValidationFuncs) -> Callable:
     """
-    Utility method to manually create a validation function failing on none (validation will fail without even
-    executing the inner validation functions)
+    This function is automatically used if you use `none_policy=FAIL`, you will probably never need to use it
+    explicitly.  If wraps the provided function (or implicit `and_` between provided functions) so that `None` values
+    are not validated and instead a `ValueIsNone` failure is raised.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
