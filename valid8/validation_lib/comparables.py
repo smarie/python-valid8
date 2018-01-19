@@ -7,7 +7,7 @@ class TooSmall(Failure):
     """ Custom Failure raised by gt """
     def __init__(self, wrong_value, min_value, strict):
         symbol = '>' if strict else '>='
-        help_msg = 'x {symbol} {min_value} does not hold for x={{wrong_value}}'
+        help_msg = 'x {symbol} {min_value} does not hold for x={wrong_value}'
         super(TooSmall, self).__init__(wrong_value=wrong_value, min_value=min_value, symbol=symbol, help_msg=help_msg)
 
 

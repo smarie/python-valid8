@@ -8,7 +8,7 @@ class TooShort(Failure):
     """ Custom Failure raised by minlen """
     def __init__(self, wrong_value, min_length, strict):
         symbol = '>' if strict else '>='
-        help_msg = 'len(x) {symbol} {min_length} does not hold for x={{wrong_value}}'
+        help_msg = 'len(x) {symbol} {min_length} does not hold for x={wrong_value}'
         super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, symbol=symbol, help_msg=help_msg)
 
 
@@ -50,7 +50,7 @@ class TooLong(Failure):
     """ Custom Failure raised by maxlen """
     def __init__(self, wrong_value, max_length, strict):
         symbol = '<' if strict else '<='
-        help_msg = 'len(x) {symbol} {max_length} does not hold for x={{wrong_value}}'
+        help_msg = 'len(x) {symbol} {max_length} does not hold for x={wrong_value}'
         super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, symbol=symbol, help_msg=help_msg)
 
 

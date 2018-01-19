@@ -24,7 +24,7 @@ In parallel, if your function is very specific but writes quite well in plain ol
 
 ### instance_of(ref_type)
 
-'instance of' validation function generator. Returns a validation function to check that `is_instance(x, ref_type)`.
+'instance of' validation function generator. Returns a validation function to check that `is_instance(x, ref_type)`. If ref_type is a set of types, any match with one of the included types will do.
 
 ```python
 from valid8 import assert_valid, instance_of
