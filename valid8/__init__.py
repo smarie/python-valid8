@@ -13,10 +13,11 @@ from valid8.validation_lib.numbers import *
 
 from valid8.entry_points import *
 from valid8.entry_points_annotations import *
+from valid8.entry_points_inline import *
 
 # allow users to do
 #     import valid8 as v
 __all__ = ['utils_string', 'utils_typing',
            'base', 'composition',
            'validation_lib',
-           'entry_points', 'entry_points_annotations']
+           'entry_points', 'entry_points_inline', 'entry_points_annotations']

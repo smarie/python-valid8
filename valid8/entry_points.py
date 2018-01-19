@@ -82,6 +82,7 @@ def _add_none_handler(validation_callable: Callable, none_policy: int) -> Callab
         raise ValueError('Invalid none_policy : ' + str(none_policy))  # invalid none_policy
 
 
+# TODO should we remove ValueError from the hierarchy, and let users explicitly declare it either in constructor or in their custom classes ? Or on the contrary add both TypeError and ValueError here and remove dynamically when the exception is raised
 class ValidationError(HelpMsgMixIn, ValueError, RootException):
     """
     Represents a Validation error raised by a 'defensive mode' validation entry point such as `assert_valid`,
@@ -399,18 +400,25 @@ class Validator:
 
         # check the result
         if not result_is_success(res):
-            # first merge the info provided in arguments and in self
-            error_type = error_type or self.error_type
-            help_msg = help_msg or self.help_msg
-            ctx = copy(self.kw_context_args)
-            ctx.update(kw_context_args)
+            self._raise_validation_error(name, value, validation_outcome=res, error_type=error_type,
+                                         help_msg=help_msg, **kw_context_args)
 
-            # allow the class to override the name
-            name = self._get_name_for_errors(name)
+    def _raise_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
+                                error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+        """ The function doing the final error raising.  """
 
-            # then raise the appropriate ValidationError or subclass
-            raise error_type(validator=self, var_value=value, var_name=name, validation_outcome=res,
-                             help_msg=help_msg, **ctx)
+        # first merge the info provided in arguments and in self
+        error_type = error_type or self.error_type
+        help_msg = help_msg or self.help_msg
+        ctx = copy(self.kw_context_args)
+        ctx.update(kw_context_args)
+
+        # allow the class to override the name
+        name = self._get_name_for_errors(name)
+
+        # then raise the appropriate ValidationError or subclass
+        raise error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
+                         help_msg=help_msg, **ctx)
 
     def _get_name_for_errors(self, name: str):
         """ Subclasses may override this """
