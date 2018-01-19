@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 19-Jan-2018 at 16:09:42 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
+    <p>Report generated on 19-Jan-2018 at 17:55:11 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,13 +239,13 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;, &apos;py&apos;: &apos;1.4.34&apos;}</td></tr>
+        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-101-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;html&apos;: &apos;1.16.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;cov&apos;: &apos;2.5.1&apos;}</td></tr>
+        <td>{&apos;html&apos;: &apos;1.16.1&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.4</td></tr>
@@ -254,29 +254,28 @@ function filter_table(elem) {
         <td>master</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>330883529</td></tr>
+        <td>330925209</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>34</td></tr>
+        <td>35</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
-        <td>bd6cd13f68c79d160036750f1e04f8056143c963</td></tr>
+        <td>b4bb02c739cd4b21c1083e531a47154e7d8622c2</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_MESSAGE</td>
-        <td>Updated documentation to suit the latest version
-Updated the tests accordingly</td></tr>
+        <td>Updated changelog. Version 3.0.0</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_RANGE</td>
-        <td>71e469ddade6...bd6cd13f68c7</td></tr>
+        <td>bd6cd13f68c7...b4bb02c739cd</td></tr>
       <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>330883530</td></tr>
+        <td>330925210</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>34.1</td></tr>
+        <td>35.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -311,7 +310,7 @@ Updated the tests accordingly</td></tr>
           <td>test_wrap_valid</td>
           <td> Tests the wrap_valid context manager </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_inline.py#L68">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_inline.py#L68">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">def test_wrap_valid():<br/>        &quot;&quot;&quot; Tests the wrap_valid context manager &quot;&quot;&quot;<br/>    <br/>        from valid8 import wrap_valid<br/>        from math import isfinite<br/>    <br/>        # nominal<br/>        surf = 2<br/>        with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>            v.alid = surf &gt; 0 and isfinite(surf)<br/>    <br/>        # wrong value (no inner exception)<br/>        surf = -1<br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>        assert str(e) == &quot;Error validating [surface=-1]: &quot; \<br/>                         &quot;validation function [v.alid = surf &gt; 0 and isfinite(surf)] returned [False].&quot;<br/>    <br/>        # wrong type (inner exception)<br/>        with pytest.raises(ValidationError) as exc_info:<br/>            surf = 1j<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>&gt;       assert str(e) == &quot;Error validating [surface=1j]. &quot; \<br/>                         &quot;Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised &quot; \<br/>                         &quot;TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.&quot;<br/><span class="error">E       assert &#x27;Error valida...ex() &gt; int().&#x27; == &quot;Error validat...x&#x27; and &#x27;int&#x27;.&quot;</span><br/><span class="error">E         - Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: unorderable types: complex() &gt; int().</span><br/><span class="error">E         ?                                                                                                             ^     ^ ^^^^^^^  ^^       ^^^^^   ^^</span><br/><span class="error">E         + Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.</span><br/><span class="error">E         ?                                                                                                             ^^^^  +++++++ ++ ++ ^^^^^^^^^^ ^^  ^^^^^       ^^^^^^^   ^</span><br/><br/>valid8/tests/test_entry_points_inline.py:95: AssertionError<br/></div></td></tr></tbody>
@@ -322,7 +321,7 @@ Updated the tests accordingly</td></tr>
           <td>test_readme_usage_wrap_valid_customization</td>
           <td>None</td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_inline.py#L99">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_inline.py#L99">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">def test_readme_usage_wrap_valid_customization():<br/>    <br/>        from valid8 import wrap_valid<br/>        from math import isfinite<br/>    <br/>        surf = 1j<br/>    <br/>        # (A) custom error message (exception is still a ValidationError)<br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf, help_msg=&quot;Surface should be a finite positive integer&quot;) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>&gt;       assert str(e) == &quot;Surface should be a finite positive integer. Error validating [surface=1j]. &quot; \<br/>                         &quot;Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised &quot; \<br/>                         &quot;TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.&quot;<br/><span class="error">E       assert &#x27;Surface shou...ex() &gt; int().&#x27; == &quot;Surface shoul...x&#x27; and &#x27;int&#x27;.&quot;</span><br/><span class="error">E         - Surface should be a finite positive integer. Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: unorderable types: complex() &gt; int().</span><br/><span class="error">E         ?                                                                                                                                                          ^^^^^^^^ ^^^^^^^^^^       ^^^^^^^^^^^</span><br/><span class="error">E         + Surface should be a finite positive integer. Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.</span><br/><span class="error">E         ?                                                                                                                                                          ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^</span><br/><br/>valid8/tests/test_entry_points_inline.py:112: AssertionError<br/></div></td></tr></tbody>
@@ -333,10 +332,10 @@ Updated the tests accordingly</td></tr>
           <td>test_readme_usage_wrap_valid</td>
           <td> Tests that the example under index/usage/wrap_valid works </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L21">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L23">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_readme_usage_wrap_valid():<br/>        &quot;&quot;&quot; Tests that the example under index/usage/wrap_valid works &quot;&quot;&quot;<br/>    <br/>        from valid8 import wrap_valid<br/>        from math import isfinite<br/>    <br/>        surf = -1<br/>    <br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>        assert str(e) == &quot;Error validating [surface=-1]: &quot; \<br/>                         &quot;validation function [v.alid = surf &gt; 0 and isfinite(surf)] returned [False].&quot;<br/>    <br/>        surf = 1j<br/>    <br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>&gt;       assert str(e) == &quot;Error validating [surface=1j]. &quot; \<br/>                         &quot;Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised &quot; \<br/>                         &quot;TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.&quot;<br/><span class="error">E       assert &#x27;Error valida...ex() &gt; int().&#x27; == &quot;Error validat...x&#x27; and &#x27;int&#x27;.&quot;</span><br/><span class="error">E         - Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: unorderable types: complex() &gt; int().</span><br/><span class="error">E         ?                                                                                                             ^     ^ ^^^^^^^  ^^       ^^^^^   ^^</span><br/><span class="error">E         + Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.</span><br/><span class="error">E         ?                                                                                                             ^^^^  +++++++ ++ ++ ^^^^^^^^^^ ^^  ^^^^^       ^^^^^^^   ^</span><br/><br/>valid8/tests/test_readme_index.py:43: AssertionError<br/></div></td></tr></tbody>
+            <div class="log">def test_readme_usage_wrap_valid():<br/>        &quot;&quot;&quot; Tests that the example under index/usage/wrap_valid works &quot;&quot;&quot;<br/>    <br/>        from valid8 import wrap_valid<br/>        from math import isfinite<br/>    <br/>        surf = -1<br/>    <br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>        assert str(e) == &quot;Error validating [surface=-1]: &quot; \<br/>                         &quot;validation function [v.alid = surf &gt; 0 and isfinite(surf)] returned [False].&quot;<br/>    <br/>        surf = 1j<br/>    <br/>        with pytest.raises(ValidationError) as exc_info:<br/>            with wrap_valid(&#x27;surface&#x27;, surf) as v:<br/>                v.alid = surf &gt; 0 and isfinite(surf)<br/>        e = exc_info.value<br/>&gt;       assert str(e) == &quot;Error validating [surface=1j]. &quot; \<br/>                         &quot;Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised &quot; \<br/>                         &quot;TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.&quot;<br/><span class="error">E       assert &#x27;Error valida...ex() &gt; int().&#x27; == &quot;Error validat...x&#x27; and &#x27;int&#x27;.&quot;</span><br/><span class="error">E         - Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: unorderable types: complex() &gt; int().</span><br/><span class="error">E         ?                                                                                                             ^     ^ ^^^^^^^  ^^       ^^^^^   ^^</span><br/><span class="error">E         + Error validating [surface=1j]. Validation function [v.alid = surf &gt; 0 and isfinite(surf)] raised TypeError: &#x27;&gt;&#x27; not supported between instances of &#x27;complex&#x27; and &#x27;int&#x27;.</span><br/><span class="error">E         ?                                                                                                             ^^^^  +++++++ ++ ++ ^^^^^^^^^^ ^^  ^^^^^       ^^^^^^^   ^</span><br/><br/>valid8/tests/test_readme_index.py:45: AssertionError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -344,7 +343,7 @@ Updated the tests accordingly</td></tr>
           <td>test_empty_validators_list</td>
           <td> Validates that an empty list of validators leads to a ValueError </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -355,7 +354,7 @@ Updated the tests accordingly</td></tr>
           <td>test_list_implicit_and</td>
           <td> Asserts that a list of validators leads to a &apos;and_&apos; and behaves correctly </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L13">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L13">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -365,8 +364,8 @@ Updated the tests accordingly</td></tr>
           <th>valid8/tests/test_composition.py</th>
           <td>test_not_not_all</td>
           <td> Test for the not_ and not_all validators </td>
-          <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L22">source</a></td></tr>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L22">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -377,7 +376,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_or</td>
           <td> Test for the or_ validator, also in combination with not_</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L56">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L56">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -388,7 +387,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_xor</td>
           <td> Test for the xor_ validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L82">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L82">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -399,7 +398,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_and</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_composition.py#L106">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_composition.py#L106">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -410,7 +409,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_field</td>
           <td> Tests that the @validate_field decorator works on class descriptors </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L8">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L8">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -421,7 +420,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_field_property</td>
           <td> Tests that the @validate_field decorator works when the class descriptor to validate is a @property </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L53">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L53">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -432,7 +431,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_field_custom_type</td>
           <td></td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L103">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L103">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -443,7 +442,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_attr</td>
           <td> Tests that the @validate_field decorator works when the class descriptor is from attrs </td>
           <td class="col-duration">0.02</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L142">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L142">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -454,7 +453,7 @@ Updated the tests accordingly</td></tr>
           <td>test_validate_arg_nominal_builtin_validators</td>
           <td> Simple test of the @validate_arg annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L154">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L154">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -467,7 +466,7 @@ hello
           <td>test_validate_out</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L184">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L184">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -478,7 +477,7 @@ hello
           <td>test_validate_nominal_builtin_validators</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L201">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -491,7 +490,7 @@ hello
           <td>test_validate_custom_validators_basic</td>
           <td> Checks that basic custom functions can be used as validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L231">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L231">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -503,7 +502,7 @@ hello
           <td>test_validate_custom_validators_with_exception</td>
           <td> Checks that custom functions throwing Failure can be used as validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L279">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L279">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -518,7 +517,7 @@ hello
           <td>test_validate_mini_lambda</td>
           <td> Tests that mini_lambda works with @validate </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L332">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L332">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Hello, john your age is 20
@@ -529,8 +528,8 @@ hello
           <th>valid8/tests/test_entry_points_annotations.py</th>
           <td>test_validate_none_enforce</td>
           <td> Tests that a None will be caught by enforce: no need for not_none validator </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L345">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L345">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -541,8 +540,8 @@ hello
           <th>valid8/tests/test_entry_points_annotations.py</th>
           <td>test_validate_none_pytypes</td>
           <td> Tests that a None will be caught by pytypes: no need for not_none validator </td>
-          <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L366">source</a></td></tr>
+          <td class="col-duration">0.02</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L366">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -554,7 +553,7 @@ hello
           <td>test_validate_none_is_allowed</td>
           <td> Tests that a None input is allowed by default and that in this case the validators are not executed </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L387">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L387">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -567,7 +566,7 @@ hello
           <td>test_validate_name_error</td>
           <td> Checks that wrong attribute names cant be provided to @validate</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L399">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L399">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -578,7 +577,7 @@ hello
           <td>test_decorate_manually</td>
           <td> Tests that the manual decorator works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_annotations.py#L408">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_annotations.py#L408">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -589,7 +588,7 @@ hello
           <td>test_quick_valid</td>
           <td> Tests the quick_valid function </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_inline.py#L4">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_inline.py#L4">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -600,7 +599,7 @@ hello
           <td>test_readme_usage_quick_valid_customization</td>
           <td> Tests the various customization options for quick_valid </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_entry_points_inline.py#L30">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_entry_points_inline.py#L30">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -611,7 +610,7 @@ hello
           <td>test_readme_index_combining_enforce</td>
           <td> Tests that the examples provided in the index page under Combining/Enforce are correct </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_combining.py#L7">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_combining.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Building house... DONE !
@@ -624,7 +623,7 @@ Building house... DONE !
           <td>test_readme_index_combining_autoclass</td>
           <td> Tests that the examples provided in the index page under Combining/autoclass are correct </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_combining.py#L50">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_combining.py#L50">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -634,8 +633,8 @@ Building house... DONE !
           <th>valid8/tests/test_readme_combining.py</th>
           <td>test_readme_index_combining_autoclass_2</td>
           <td> Tests that the examples provided in the index page under Combining/autoclass are correct (2) </td>
-          <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_combining.py#L82">source</a></td></tr>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_combining.py#L82">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -646,7 +645,7 @@ Building house... DONE !
           <td>test_readme_index_combining_attrs</td>
           <td> Tests that the examples provided in the index page under Combining/autoclass are correct </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_combining.py#L113">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_combining.py#L113">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -656,8 +655,8 @@ Building house... DONE !
           <th>valid8/tests/test_readme_combining.py</th>
           <td>test_unused_pytypes</td>
           <td> Tests that pytypes and valid8 can work together too </td>
-          <td class="col-duration">0.02</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_combining.py#L145">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_combining.py#L145">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>you did it !
@@ -670,7 +669,7 @@ you did it !
           <td>test_readme_index_usage_quick</td>
           <td> Tests that the example under index/usage/quick works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L7">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L9">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -681,7 +680,7 @@ you did it !
           <td>test_readme_usage_customization</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L56">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L58">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -692,7 +691,7 @@ you did it !
           <td>test_readme_index_usage_basic</td>
           <td> Tests that the examples provided in the index page under Usage examples/Basic are correct </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L105">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L122">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -703,7 +702,7 @@ you did it !
           <td>test_readme_index_usage_function</td>
           <td> Tests that the examples provided in the index page under Usage examples/Function are correct </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L129">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L146">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Building house... DONE !
@@ -717,7 +716,7 @@ Building house... DONE !
           <td>test_readme_index_usage_class_fields</td>
           <td> Tests that the examples provided in the index page under Usage examples/class fields are correct</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L174">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L191">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -728,7 +727,7 @@ Building house... DONE !
           <td>test_testing</td>
           <td> </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L208">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L225">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -739,7 +738,7 @@ Building house... DONE !
           <td>test_advanced_composition</td>
           <td> </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L223">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L240">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -750,7 +749,7 @@ Building house... DONE !
           <td>test_readme_index_usage_customization</td>
           <td> Tests that the examples provided in the index page under Usage examples/Customization are correct </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L242">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L259">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -760,8 +759,8 @@ Building house... DONE !
           <th>valid8/tests/test_readme_index.py</th>
           <td>test_readme_index_usage_composition</td>
           <td> Tests that the examples provided in the index page under Usage examples/Composition are correct </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_index.py#L301">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_index.py#L318">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -772,7 +771,7 @@ Building house... DONE !
           <td>test_tutorial</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L5">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -783,7 +782,7 @@ Building house... DONE !
           <td>test_usage_base_validation_functions</td>
           <td> Tests that the examples in the usage section of the documentation work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L67">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L67">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -794,7 +793,7 @@ Building house... DONE !
           <td>test_usage_ensure_valid</td>
           <td> Tests that the examples in the usage section of the documentation work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L73">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L73">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -805,7 +804,7 @@ Building house... DONE !
           <td>test_usage_is_valid</td>
           <td> Tests that the examples in the usage section of the documentation work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L123">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L123">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -815,8 +814,8 @@ Building house... DONE !
           <th>valid8/tests/test_readme_usage.py</th>
           <td>test_usage_validators</td>
           <td> Tests that the examples in the usage section of the documentation work </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L163">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L163">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -827,7 +826,7 @@ Building house... DONE !
           <td>test_usage_validate_annotation</td>
           <td> </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L320">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L320">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -838,7 +837,7 @@ Building house... DONE !
           <td>test_usage_custom_validators</td>
           <td> </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_readme_usage.py#L337">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_readme_usage.py#L337">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -849,7 +848,7 @@ Building house... DONE !
           <td>test_is_in</td>
           <td> Checks that is_in works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L7">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -860,7 +859,7 @@ Building house... DONE !
           <td>test_is_subset_is_superset</td>
           <td> Checks that is_subset and is_superset work </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L15">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L15">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -871,7 +870,7 @@ Building house... DONE !
           <td>test_on_all</td>
           <td> Checks that on_all works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L38">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L38">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -882,7 +881,7 @@ Building house... DONE !
           <td>test_on_each</td>
           <td> Checks that on_each works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L47">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L47">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -893,7 +892,7 @@ Building house... DONE !
           <td>test_minlen</td>
           <td> tests that the minlen() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L56">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L56">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -904,7 +903,7 @@ Building house... DONE !
           <td>test_minlens</td>
           <td> tests that the minlens() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L63">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L63">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -915,7 +914,7 @@ Building house... DONE !
           <td>test_maxlen</td>
           <td> tests that the maxlen() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L70">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L70">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -926,7 +925,7 @@ Building house... DONE !
           <td>test_maxlens</td>
           <td> tests that the maxlens() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L77">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L77">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -937,7 +936,7 @@ Building house... DONE !
           <td>test_length_between</td>
           <td> tests that the length_between() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_collections.py#L84">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_collections.py#L84">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -948,7 +947,7 @@ Building house... DONE !
           <td>test_gt</td>
           <td> tests that the gt() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_comparables.py#L5">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_comparables.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -959,7 +958,7 @@ Building house... DONE !
           <td>test_gts</td>
           <td> tests that the gts() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_comparables.py#L12">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_comparables.py#L12">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -970,7 +969,7 @@ Building house... DONE !
           <td>test_lt</td>
           <td> tests that the lt() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_comparables.py#L19">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_comparables.py#L19">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -981,7 +980,7 @@ Building house... DONE !
           <td>test_lts</td>
           <td> tests that the lts() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_comparables.py#L26">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_comparables.py#L26">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -992,7 +991,7 @@ Building house... DONE !
           <td>test_between</td>
           <td> tests that the between() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_comparables.py#L33">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_comparables.py#L33">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1003,7 +1002,7 @@ Building house... DONE !
           <td>test_is_even</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_numbers.py#L5">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_numbers.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1014,7 +1013,7 @@ Building house... DONE !
           <td>test_is_odd</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_numbers.py#L11">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_numbers.py#L11">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1025,7 +1024,7 @@ Building house... DONE !
           <td>test_is_multiple_of</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_numbers.py#L17">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_numbers.py#L17">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1036,7 +1035,7 @@ Building house... DONE !
           <td>test_instance_of</td>
           <td> tests that the instance_of() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_types.py#L5">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_types.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -1047,7 +1046,7 @@ Building house... DONE !
           <td>test_subclass_of</td>
           <td> tests that the subclass_of() function works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/bd6cd13f68c79d160036750f1e04f8056143c963/valid8/tests/test_validation_lib/test_validators_types.py#L19">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-valid8/src/b4bb02c739cd4b21c1083e531a47154e7d8622c2/valid8/tests/test_validation_lib/test_validators_types.py#L19">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>

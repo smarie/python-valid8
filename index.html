@@ -302,6 +302,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#d-typeerror-or-valueerror-base" title="(d) TypeError or ValueError base" class="md-nav__link">
+    (d) TypeError or ValueError base
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -603,6 +610,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#d-typeerror-or-valueerror-base" title="(d) TypeError or ValueError base" class="md-nav__link">
+    (d) TypeError or ValueError base
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -766,7 +780,7 @@
 
 
 <p>results in</p>
-<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
 </pre></div>
 
@@ -786,7 +800,7 @@
 
 
 <p>Which yields</p>
-<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
+<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
    validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
 </pre></div>
 
@@ -803,7 +817,7 @@
 
 
 <p>yields</p>
-<div class="codehilite"><pre><span></span>ValidationError: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
+<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>TypeError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> raised <span class="se">\</span>
        TypeError: <span class="s1">&#39;&gt;&#39;</span> not supported between instances of <span class="s1">&#39;complex&#39;</span> and <span class="s1">&#39;int&#39;</span>.
 </pre></div>
@@ -832,7 +846,7 @@
 
 
 <p>yields for <code>surf = -1</code></p>
-<div class="codehilite"><pre><span></span>ValidationError: Surface should be a finite positive integer. <span class="se">\</span>
+<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a finite positive integer. <span class="se">\</span>
     Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>: <span class="se">\</span>
     validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
 </pre></div>
@@ -849,7 +863,7 @@
 
 
 <p>yields for <code>surf = -1</code></p>
-<div class="codehilite"><pre><span></span>InvalidSurface: Surface should be a positive integer. <span class="se">\</span>
+<div class="codehilite"><pre><span></span>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a positive integer. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
 </pre></div>
@@ -866,7 +880,7 @@
 
 
 <p>yields</p>
-<div class="codehilite"><pre><span></span>InvalidSurface: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
+<div class="codehilite"><pre><span></span>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: <span class="o">[</span>-1<span class="o">]</span>.
 </pre></div>
@@ -874,6 +888,23 @@
 
 <p>Note: as shown in that last example, the value being validated is already sent to the help message string to format under the <code>'var_value'</code> key, so you do not need to pass it. </p>
 <p>Obviously you can further customize your exception subclasses if you wish.</p>
+<h3 id="d-typeerror-or-valueerror-base">(d) <code>TypeError</code> or <code>ValueError</code> base<a class="headerlink" href="#d-typeerror-or-valueerror-base" title="Permanent link">&para;</a></h3>
+<p><code>ValidationError</code> does not by default inherit from <code>TypeError</code> or <code>ValueError</code>, because <code>valid8</code> has no means of knowing. But you may have noticed in all of the output message examples shown above, that one of the two is still appearing each time in the resulting exception. This is because <code>valid8</code> automatically guesses: when a validation error happens, it performs some introspection about the failure cause and <strong>dynamically</strong> creates an appropriate exception type inheriting both from <code>ValidationError</code> and from either <code>TypeError</code> or <code>ValueError</code>. Besides this dynamic type has some custom display methods that make it appear as follows:</p>
+<div class="codehilite"><pre><span></span>&gt; quick_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -1, <span class="nv">allowed_types</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+ValidationError<span class="o">[</span>ValueError<span class="o">]</span>
+
+&gt; quick_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, 1j, <span class="nv">allowed_types</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
+</pre></div>
+
+
+<p>If you do not wish the automatic guessing to happen, you can always declare the inheritance explicitly by creating custom subclasses inheriting from the one of your choice, or both:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+
+
+<p>If you create a custom subclass but do not inherit from <code>TypeError</code> nor <code>ValueError</code>, the automatic guessing will take place as usual.</p>
 <h2 id="validating-functions-classes">Validating functions &amp; classes<a class="headerlink" href="#validating-functions-classes" title="Permanent link">&para;</a></h2>
 <p>In order to use the decorators presented in this section, you will have to provide them with a <strong>base validation function</strong> - as opposed to <code>quick_valid</code> where it was just a bunch of options, and <code>wrap_valid</code> where you could basically write any validation code inside the context manager.</p>
 <p>The requirements for accepted base validation functions are extremely simple: any single-input function returning <code>True</code> or <code>None</code> in case of success is <a href="./accepted">accepted</a>. In order for you to get started quickly, you can even leverage the following existing tools:</p>
@@ -900,7 +931,7 @@
 <div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, <span class="m">200</span><span class="o">)</span>    <span class="c1"># Valid</span>
 
 &gt; build_house<span class="o">(</span><span class="s1">&#39;&#39;</span>, <span class="m">200</span><span class="o">)</span>
-InputValidationError: name should be a non-empty string. <span class="se">\</span>
+InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
    Error validating input <span class="o">[</span><span class="nv">name</span><span class="o">=]</span> <span class="k">for</span> <span class="k">function</span> <span class="o">[</span>build_house<span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">(</span>instance_of_&lt;class <span class="s1">&#39;str&#39;</span>&gt;, len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
    AtLeastOneFailed: <span class="se">\</span>
@@ -928,7 +959,7 @@ InputValidationError: name should be a non-empty string. <span class="se">\</spa
 
 <p>Something strange happens:</p>
 <div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span>None<span class="o">)</span>
-InputValidationError: name should be a non-empty string. <span class="se">\</span>
+InputValidationError<span class="o">[</span>TypeError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
    Error validating input <span class="o">[</span><span class="nv">name</span><span class="o">=</span>None<span class="o">]</span> ...
 
 &gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>         <span class="c1"># No error !</span>
@@ -993,7 +1024,7 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
 <div class="codehilite"><pre><span></span>&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>  <span class="c1"># valid</span>
 
 &gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">)</span>
-ClassFieldValidationError: name should be a non-empty string. <span class="se">\</span>
+ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
    Error validating field <span class="o">[</span><span class="nv">name</span><span class="o">=]</span> <span class="k">for</span> class <span class="o">[</span>House<span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">(</span>instance_of_&lt;class <span class="s1">&#39;str&#39;</span>&gt;, len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
    AtLeastOneFailed: <span class="se">\</span>
@@ -1001,7 +1032,7 @@ ClassFieldValidationError: name should be a non-empty string. <span class="se">\
       Successes: <span class="o">[</span><span class="s2">&quot;instance_of_&lt;class &#39;str&#39;&gt;&quot;</span><span class="o">]</span> / Failures: <span class="o">{</span><span class="s1">&#39;len(s) &gt; 0&#39;</span>: <span class="s1">&#39;False&#39;</span><span class="o">}</span>
 
 &gt; h.surface <span class="o">=</span> <span class="m">10000</span>
-ClassFieldValidationError: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>
+ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>
    Error validating field <span class="o">[</span><span class="nv">surface</span><span class="o">=</span><span class="m">10000</span><span class="o">]</span> <span class="k">for</span> class <span class="o">[</span>House<span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>skip_on_none<span class="o">(</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, <span class="se">\</span>
                         is_multiple_of_100<span class="o">))]</span> <span class="se">\</span>
@@ -1052,7 +1083,7 @@ v.assert_valid<span class="o">(</span><span class="s1">&#39;name&#39;</span>, na
 
 <p>will raise the following two distinct error messages:</p>
 <div class="codehilite"><pre><span></span>&gt; v.assert_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -100<span class="o">)</span>
-InvalidSurface: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
+InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, x % <span class="nv">100</span> <span class="o">==</span> <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
    AtLeastOneFailed: <span class="se">\</span>
@@ -1065,7 +1096,7 @@ InvalidSurface: Surface should be a multiple of <span class="m">100</span> betwe
       <span class="o">}</span>.
 
 &gt; v.assert_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, <span class="m">99</span><span class="o">)</span>
-InvalidSurface: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
+InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a multiple of <span class="m">100</span> between <span class="m">0</span> and <span class="m">10000</span>. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span><span class="m">99</span><span class="o">]</span>. <span class="se">\</span>
    Validation <span class="k">function</span> <span class="o">[</span>and<span class="o">((</span>x &gt;<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="p">&amp;</span> <span class="o">(</span>x &lt; <span class="m">10000</span><span class="o">)</span>, x % <span class="nv">100</span> <span class="o">==</span> <span class="m">0</span><span class="o">)]</span> raised <span class="se">\</span>
    AtLeastOneFailed: <span class="se">\</span>
@@ -1099,7 +1130,7 @@ InvalidSurface: Surface should be a multiple of <span class="m">100</span> betwe
 </ul>
 </li>
 <li>
-<p><strong>Consistent behaviour</strong>: all defensive mode entry points provide the same behaviour, raising subclasses of <code>ValidationError</code> in case of failure, whatever the diversity of failure modes that can happen in base validation code. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Consistency is also ensured by the fact that all entry points rely on a common <code>Validator</code> class.</p>
+<p><strong>Consistent behaviour</strong>: all defensive mode entry points provide the same behaviour, raising subclasses of <code>ValidationError</code> in case of failure, whatever the diversity of failure modes that can happen in base validation code. The exception object contains all contextual information in its fields so as to be easily usable by a global exception handler at application-level, for example for internationalization. Moreover, the appropriate <code>TypeError</code> or <code>ValueError</code> base class is dynamically added to the resulting exception type. Consistency is also ensured by the fact that all entry points rely on a common <code>Validator</code> class.</p>
 </li>
 <li>
 <p><strong>Highly customizable</strong>: all entry points can be customized so as to fit your application needs. In particular you probably do not want users to see <code>valid8</code> exceptions and messages, but rather <em>your</em> exceptions and messages. This is easy to do with the two <code>help_msg</code> and <code>error_type</code> options.</p>

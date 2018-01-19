@@ -337,8 +337,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#300-new-inline-validators-dynamic-typing" title="3.0.0 - new inline validators + dynamic typing" class="md-nav__link">
-    3.0.0 - new inline validators + dynamic typing
+  <a href="#300-new-inline-validators-dynamic-exception-typing" title="3.0.0 - new inline validators + dynamic exception typing" class="md-nav__link">
+    3.0.0 - new inline validators + dynamic exception typing
   </a>
   
 </li>
@@ -392,8 +392,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#300-new-inline-validators-dynamic-typing" title="3.0.0 - new inline validators + dynamic typing" class="md-nav__link">
-    3.0.0 - new inline validators + dynamic typing
+  <a href="#300-new-inline-validators-dynamic-exception-typing" title="3.0.0 - new inline validators + dynamic exception typing" class="md-nav__link">
+    3.0.0 - new inline validators + dynamic exception typing
   </a>
   
 </li>
@@ -438,7 +438,7 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="300-new-inline-validators-dynamic-typing">3.0.0 - new inline validators + dynamic typing<a class="headerlink" href="#300-new-inline-validators-dynamic-typing" title="Permanent link">&para;</a></h3>
+                <h3 id="300-new-inline-validators-dynamic-exception-typing">3.0.0 - new inline validators + dynamic exception typing<a class="headerlink" href="#300-new-inline-validators-dynamic-exception-typing" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Added two new entry points that should be more useful and usable than <code>assert_valid</code> for inline validation:</p>
@@ -446,7 +446,15 @@
 <li>
 <p><code>quick_valid</code> for limited but simple one-line validation (most common tasks)</p>
 </li>
-<li><code>wrap_valid</code> for more flexible validation (a contextmanager so it takes 2 lines)</li>
+<li>
+<p><code>wrap_valid</code> for more flexible validation (a contextmanager so it takes 2 lines)</p>
+</li>
+<li>
+<p><code>ValidationError</code> does not inherit from <code>ValueError</code> anymore. Instead an exception type is dynamically created with the appropriate base class (either <code>ValueError</code> or <code>TypeError</code>) when a validation exception is raised. This can be disabled by explicitly inheriting from one or the other in custom exception types.</p>
+</li>
+<li>
+<p>improved documentation overall</p>
+</li>
 </ul>
 <h3 id="210-new-annotation-validate_field">2.1.0 - new annotation @validate_field<a class="headerlink" href="#210-new-annotation-validate_field" title="Permanent link">&para;</a></h3>
 <ul>
