@@ -273,25 +273,44 @@ class wrap_valid(Validator):
                      'be available')
             else:
                 # read the lines in the source corresponding to the contents
-                with open(self.src_file_path) as fin:
-                    lines = list(fin)
-                wrapped_block_lines = [line.strip() for line in lines[self.src_file_line_nb:src_file_line_nb_end]]
-
-                if exc_val is not None:
-                    # -- There was an exception, we do not know where: output the full code in self.main_function.name
-                    self.main_function.name = ' ; '.join(wrapped_block_lines)
-
-                else:
-                    # -- There was no exception so we just output the line where self.eye.outcome is computed
-                    found = None
-                    for idx, line in enumerate(wrapped_block_lines[::-1]):
-                        if ('.' + self.eye.last_field_name_used) in line:
-                            found = line
-                            break
-                    if found is not None:
-                        self.main_function.name = found
+                try:
+                    if self.src_file_path == '<input>':
+                        # -- that's the interpreter history
+                        # code inspired from 'findsource' function in
+                        #    https://github.com/uqfoundation/dill/blob/master/dill/source.py
+                        # TODO test it and make it work on windows as it doesn't (even with pyreadline installed)
+                        import readline
+                        lbuf = readline.get_current_history_length()
+                        lines = [readline.get_history_item(i) + '\n' for i in range(1, lbuf)]
+                        # print('history! yes {} {}'.format(self.src_file_line_nb, lbuf))
+                        # for line in lines:
+                        #     print(line)
+                        src_file_line_nb_end = len(lines)
                     else:
-                        # not able to identify... dump the whole block
+                        # -- that's a file
+                        with open(self.src_file_path) as src:
+                            lines = list(src)
+                    wrapped_block_lines = [line.strip() for line in lines[self.src_file_line_nb:src_file_line_nb_end]]
+
+                    if exc_val is not None:
+                        # -- There was an exception, we dont know where: output the full code in self.main_function.name
                         self.main_function.name = ' ; '.join(wrapped_block_lines)
+
+                    else:
+                        # -- There was no exception so we just output the line where self.eye.outcome is computed
+                        found = None
+                        for idx, line in enumerate(wrapped_block_lines[::-1]):
+                            if ('.' + self.eye.last_field_name_used) in line:
+                                found = line
+                                break
+                        if found is not None:
+                            self.main_function.name = found
+                        else:
+                            # not able to identify... dump the whole block
+                            self.main_function.name = ' ; '.join(wrapped_block_lines)
+
+                except Exception as e:
+                    warn('Error while inspecting source code at {}. No details will be added to the resulting '
+                         'exception. Caught {}'.format(self.src_file_path, e))
 
             raise self._create_validation_error(self.name, self.value, validation_outcome=result)

@@ -1,3 +1,7 @@
+### 3.0.1 - fixed bug with `wrap_valid` when run from a terminal
+
+ * Fixed #8 (OSError when executing from interpreter terminal)
+
 ### 3.0.0 - new inline validators + dynamic exception typing
 
  * Added two new entry points that should be more useful and usable than `assert_valid` for inline validation:
