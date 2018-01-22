@@ -150,7 +150,7 @@ with wrap_valid('surface', surf, instance_of=int) as v:
 from valid8 import assert_instanceof
 
 with wrap_valid('surface', surf) as v:
-    assert_instanceof(surf, int)
+    assert_instance_of(surf, int)
     v.alid = surf > 0
 ```
 
