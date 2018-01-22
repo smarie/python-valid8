@@ -15,6 +15,35 @@ except ImportError:
     pass
 
 
+def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
+    """
+    An inlined version of instance_of(var_types)(value) without 'return True': it does not return anything in case of
+    success, and raises a HasWrongType exception in case of failure.
+
+    Used in quick_valid and wrap_valid
+
+    :param value: the value to check
+    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    match is enough to succeed. If None, type will not be enforced
+    :return:
+    """
+    if not isinstance(allowed_types, set):
+        # ref_type is a single type
+        if not isinstance(value, allowed_types):
+            raise HasWrongType(wrong_value=value, ref_type=allowed_types)
+    else:
+        # ref_type is a set
+        match = False
+        # test against each of the provided types
+        for ref in allowed_types:
+            if isinstance(value, ref):
+                match = True
+                break
+        if not match:
+            raise HasWrongType(wrong_value=value, ref_type=allowed_types,
+                               help_msg='Value should be an instance of any of {ref_type}')
+
+
 class _QuickValidator(Validator):
     """
     Represents the validator behind the `quick_valid` function.
@@ -24,7 +53,7 @@ class _QuickValidator(Validator):
         super(_QuickValidator, self).__init__(quick_valid)
 
     def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
-                                error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+                                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
         err = super(_QuickValidator, self)._create_validation_error(name=name, value=value,
                                                                     validation_outcome=validation_outcome,
                                                                     error_type=error_type, help_msg=help_msg,
@@ -43,9 +72,9 @@ class _QuickValidator(Validator):
 
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
 def quick_valid(name: str, value: Any,
-                allowed_types: Union[type, Set[type]] = None, enforce_not_none: bool = True,
-                allowed_values: Set = None,
-                min_value: Any = None, min_strict: bool = False, max_value=None, max_strict: bool = False,
+                instance_of: Union[type, Set[type]] = None, enforce_not_none: bool = True,
+                is_in: Set = None,
+                min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
                 min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
                 error_type: 'Type[ValidationError]' = None,
                 help_msg: str = None, **kw_context_args):
@@ -63,9 +92,10 @@ def quick_valid(name: str, value: Any,
 
     :param name: the applicative name of the checked value, that will be used in error messages
     :param value: the value to check
-    :param allowed_types: the type(s) to enforce. If None, type will not be enforced
+    :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    match is enough to succeed. If None, type will not be enforced
     :param enforce_not_none: boolean, default True. Whether to enforce that var is not None.
-    :param allowed_values: an optional set of allowed values
+    :param is_in: an optional set of allowed values
     :param min_value: an optional minimum value
     :param min_strict: if True, only values strictly greater than `min_value` will be accepted
     :param max_value: an optional maximum value
@@ -81,6 +111,10 @@ def quick_valid(name: str, value: Any,
     to format the help message
     :return: nothing in case of success. Otherwise, raises a ValidationError
     """
+
+    # backwards compatibility
+    instance_of = instance_of or (kw_context_args.pop('allowed_types') if 'allowed_types' in kw_context_args else None)
+    is_in = is_in or (kw_context_args.pop('allowed_values') if 'allowed_values' in kw_context_args else None)
 
     try:
 
@@ -102,28 +136,13 @@ def quick_valid(name: str, value: Any,
             # else do nothing and return
 
         else:
-            if allowed_types is not None:
-                # inlined version of instance_of(var_types)(value) without 'return True'
-                if not isinstance(allowed_types, set):
-                    # ref_type is a single type
-                    if not isinstance(value, allowed_types):
-                        raise HasWrongType(wrong_value=value, ref_type=allowed_types)
-                else:
-                    # ref_type is a set
-                    match = False
-                    # test against each of the provided types
-                    for ref in allowed_types:
-                        if isinstance(value, ref):
-                            match = True
-                            break
-                    if not match:
-                        raise HasWrongType(wrong_value=value, ref_type=allowed_types,
-                                           help_msg='Value should be an instance of any of {ref_type}')
+            if instance_of is not None:
+                assert_instance_of(value, instance_of)
 
-            if allowed_values is not None:
+            if is_in is not None:
                 # inlined version of is_in(allowed_values=allowed_values)(value) without 'return True'
-                if value not in allowed_values:
-                    raise NotInAllowedValues(wrong_value=value, allowed_values=allowed_values)
+                if value not in is_in:
+                    raise NotInAllowedValues(wrong_value=value, allowed_values=is_in)
 
             if min_value is not None:
                 # inlined version of gt(min_value=min_value, strict=min_strict)(value) without 'return True'
@@ -220,8 +239,8 @@ class wrap_valid(Validator):
         v.alid = surf > 0 and isfinite(surf)
     ```
     """
-    def __init__(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None, help_msg: str = None,
-                 **kw_context_args):
+    def __init__(self, name: str, value: Any, instance_of: Union[type, Set[type]] = None,
+                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
         """
         Creates a context manager to wrap validation tasks. Any exception caught within this context will be wrapped
         by a ValidationError and raised.
@@ -236,12 +255,18 @@ class wrap_valid(Validator):
 
         :param name: the name of the variable being validated
         :param value: the value being validated
+        :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types:
+        one match is enough to succeed. If None, type will not be enforced
         :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
         `ValidationError` will be raised with the provided `help_msg`
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        # First perform the type check if needed
+        if instance_of is not None:
+            quick_valid(name=name, value=value, instance_of=instance_of)
+
         validation_function = _Dummy_Callable_('<wrap_valid_contents>')
         super(wrap_valid, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
                                          none_policy=NonePolicy.VALIDATE, **kw_context_args)

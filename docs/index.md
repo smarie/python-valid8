@@ -60,7 +60,7 @@ from valid8 import quick_valid
 
 surf = -1
 
-quick_valid('surface', surf, allowed_types=int, min_value=0)
+quick_valid('surface', surf, instance_of=int, min_value=0)
 ```
 
 results in
@@ -123,16 +123,38 @@ ValidationError[TypeError]: Error validating [surface=1j]. \
 With `wrap_valid` you are therefore **guaranteed** that any exception happening in the validation process will be caught and turned into a friendly `ValidationError`, whatever the cause (`None` handling, known validation failures, unknown other errors). You therefore do not have to write the usual [if/else/try/except wrappers](./why_validation#explicit-traditional-way) to handle all cases.
 
 
-Two important things to note:
+A couple important things to note:
 
  * the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as `with wrap_valid(...) as r:` and then `r.esults = `
  * there is no need to feed any result to that boolean flag. If you rely on *failure raiser*-style base functions, for example a `check_uniform_sampling` or a `assert_series_equal`, just can just call them and the wrapper will assume that no exception means success:
  
 ```python
-with wrap_valid('dataframe', df):
+with wrap_valid('dataframe', df, instance_of=pd.DataFrame):
     check_uniform_sampling(df)
     assert_series_equal(df['a'], ref_series)
 ```
+
+**Note on type checking with `isinstance`"**
+Although you *can* use the built-in `isinstance` method inside your validation code block, if you do it `valid8` will not be able to distinguish between `TypeError` and `ValueError`. Instead, please consider either 
+
+ * using the `instance_of` parameter of `wrap_valid`:
+
+```python
+with wrap_valid('surface', surf, instance_of=int) as v:
+    v.alid = surf > 0
+```
+    
+ * or using the provided `assert_instance_of` method:
+    
+```python
+from valid8 import assert_instanceof
+
+with wrap_valid('surface', surf) as v:
+    assert_instanceof(surf, int)
+    v.alid = surf > 0
+```
+
+
 
 ## Customizing the `ValidationException`
 
@@ -164,7 +186,7 @@ Or even better, a custom error type, which is a good practice to ease internatio
 class InvalidSurface(ValidationError):
     help_msg = 'Surface should be a positive integer'
 
-quick_valid('surface', surf, allowed_types=int, min_value=0, 
+quick_valid('surface', surf, instance_of=int, min_value=0, 
             error_type=InvalidSurface)
 ``` 
 
@@ -184,7 +206,7 @@ Finally, the `help_msg` field acts as a string template that will receive any ad
 class InvalidSurface(ValidationError):
     help_msg = 'Surface should be > {minimum}, found {var_value}'
 
-quick_valid('surface', surf, allowed_types=int, min_value=0, 
+quick_valid('surface', surf, instance_of=int, min_value=0, 
             error_type=InvalidSurface, minimum=0)
 ```
 
@@ -203,13 +225,13 @@ Obviously you can further customize your exception subclasses if you wish.
 
 ### (d) `TypeError` or `ValueError` base
 
-`ValidationError` does not by default inherit from `TypeError` or `ValueError`, because `valid8` has no means of knowing. But you may have noticed in all of the output message examples shown above, that one of the two is still appearing each time in the resulting exception. This is because `valid8` automatically guesses: when a validation error happens, it performs some introspection about the failure cause and **dynamically** creates an appropriate exception type inheriting both from `ValidationError` and from either `TypeError` or `ValueError`. Besides this dynamic type has some custom display methods that make it appear as follows:
+`ValidationError` does not by default inherit from `TypeError` or `ValueError`, because in the general case, `valid8` has no means of knowing. But you may have noticed in all of the output message examples shown above that one of the two is still appearing each time in the resulting exception. This is because `valid8` automatically guesses: when a validation error happens, it recursively looks at the type of the failure cause for a `TypeError` or `ValueError` (default if nothing is found). It then **dynamically** creates an appropriate exception type inheriting both from `ValidationError` and from either `TypeError` or `ValueError` according to what has been found. This dynamic type has some custom display methods that make it appear as follows:
 
 ```bash
-> quick_valid('surface', -1, allowed_types=int, min_value=0)
+> quick_valid('surface', -1, instance_of=int, min_value=0)
 ValidationError[ValueError]
 
-> quick_valid('surface', 1j, allowed_types=int, min_value=0)
+> quick_valid('surface', 1j, instance_of=int, min_value=0)
 ValidationError[TypeError]
 ```
 

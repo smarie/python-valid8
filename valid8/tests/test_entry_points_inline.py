@@ -9,12 +9,12 @@ def test_quick_valid():
 
     # nominal
     surf = 2
-    quick_valid('surface', surf, allowed_types=int, min_value=0)
+    quick_valid('surface', surf, instance_of=int, min_value=0)
 
     # error wrong value
     surf = -1
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, allowed_types=int, min_value=0)
+        quick_valid('surface', surf, instance_of=int, min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
@@ -22,7 +22,7 @@ def test_quick_valid():
     # error wrong type
     surf = 1j
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, allowed_types=int, min_value=0)
+        quick_valid('surface', surf, instance_of=int, min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
                      "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
@@ -38,7 +38,7 @@ def test_readme_usage_quick_valid_customization():
 
     # (A) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, allowed_types=int, min_value=0,
+        quick_valid('surface', surf, instance_of=int, min_value=0,
                     help_msg="Surface should be a positive integer")
     e = exc_info.value
     assert str(e) == "Surface should be a positive integer. Error validating [surface=1j]. " \
@@ -49,7 +49,7 @@ def test_readme_usage_quick_valid_customization():
         help_msg = 'Surface should be a positive integer'
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, allowed_types=int, min_value=0, error_type=InvalidSurface)
+        quick_valid('surface', surf, instance_of=int, min_value=0, error_type=InvalidSurface)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
 
@@ -58,7 +58,7 @@ def test_readme_usage_quick_valid_customization():
         help_msg = 'Surface should be > {minimum}, found {var_value}'
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, allowed_types=int, min_value=0,
+        quick_valid('surface', surf, instance_of=int, min_value=0,
                     error_type=InvalidSurface, minimum=0)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)

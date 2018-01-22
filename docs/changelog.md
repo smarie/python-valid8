@@ -1,6 +1,12 @@
+### 3.1.0 - new `instanceof` parameter
+
+ * `quick_valid`'s parameters `allowed_types` and `allowed_values` were renamed `instance_of` and `is_in` respectively. 
+ * `instance_of` parameter has been added to `wrap_valid` too. This solved [#10](https://github.com/smarie/python-valid8/issues/10)
+ * `assert_instance_of` function is now available for use with `wrap_valid`
+
 ### 3.0.1 - fixed bug with `wrap_valid` when run from a terminal
 
- * Fixed #8 (OSError when executing from interpreter terminal)
+ * Fixed [#8](https://github.com/smarie/python-valid8/issues/8) (OSError when executing from interpreter terminal)
 
 ### 3.0.0 - new inline validators + dynamic exception typing
 
