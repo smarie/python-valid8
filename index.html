@@ -856,7 +856,7 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_instanceof</span>
 
 <span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
-    <span class="n">assert_instanceof</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">assert_instance_of</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 
