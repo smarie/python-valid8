@@ -4,7 +4,13 @@
 
 *"valid8ing is not a crime" ;-)*
 
-An extensible library to validate function inputs with built-in or custom validators. Originally from the [autoclass](https://smarie.github.io/python-autoclass/) project.
+`valid8` provides user-friendly tools for 
+
+ * general-purpose inline validation, 
+ * function inputs/outputs validation 
+ * class fields validation. 
+ 
+All entry points raise consistent `ValidationError` including all contextual details, with dynamic inheritance of `ValueError`/`TypeError` as appropriate. Originally from the [autoclass](https://smarie.github.io/python-autoclass/) project.
 
 This is the readme for developers. The documentation for users is available here: [https://smarie.github.io/python-valid8/](https://smarie.github.io/python-valid8/)
 

@@ -27,7 +27,10 @@ except Exception as e:
 
 # ************** ID card *****************
 DISTNAME = 'valid8'
-DESCRIPTION = 'Validate function input *values* (not types, there is PEP484 for that) with decorators.'
+DESCRIPTION = 'Yet another validation lib ;). Provides tools for general-purpose variable validation, ' \
+              'function inputs/outputs validation as well as class fields validation. All entry points raise ' \
+              'consistent ValidationError including all contextual details, with dynamic inheritance of ' \
+              'ValueError/TypeError as appropriate.'
 MAINTAINER = 'Sylvain Marié'
 MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
 URL = 'https://github.com/smarie/python-valid8'
@@ -37,7 +40,8 @@ LICENSE_LONG = 'License :: OSI Approved :: BSD License'
 version_for_download_url = get_version()
 DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 
-KEYWORDS = 'decorate decorator arg input function contract value check valid validate validator'
+KEYWORDS = 'decorate decorator input arg args argument function contract value check checker valid validate validator' \
+           ' validation'
 # --Get the long description from the README file
 # with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 #    LONG_DESCRIPTION = f.read()
