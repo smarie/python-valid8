@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="./assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.2">
     
     
       
@@ -260,15 +260,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#a-quick_valid" title="(a) quick_valid" class="md-nav__link">
-    (a) quick_valid
+  <a href="#a-validate" title="(a) validate" class="md-nav__link">
+    (a) validate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#b-wrap_valid" title="(b) wrap_valid" class="md-nav__link">
-    (b) wrap_valid
+  <a href="#b-validatorvalidation" title="(b) validator/validation" class="md-nav__link">
+    (b) validator/validation
   </a>
   
 </li>
@@ -308,8 +308,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#d-typeerror-or-valueerror-base" title="(d) TypeError or ValueError base" class="md-nav__link">
-    (d) TypeError or ValueError base
+  <a href="#d-typeerror-or-valueerror" title="(d) TypeError or ValueError" class="md-nav__link">
+    (d) TypeError or ValueError
   </a>
   
 </li>
@@ -507,6 +507,18 @@
 
 
   <li class="md-nav__item">
+    <a href="examples/" title="Examples/Recipes" class="md-nav__link">
+      Examples/Recipes
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="other_libs/" title="Other validation libs" class="md-nav__link">
       Other validation libs
     </a>
@@ -568,15 +580,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#a-quick_valid" title="(a) quick_valid" class="md-nav__link">
-    (a) quick_valid
+  <a href="#a-validate" title="(a) validate" class="md-nav__link">
+    (a) validate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#b-wrap_valid" title="(b) wrap_valid" class="md-nav__link">
-    (b) wrap_valid
+  <a href="#b-validatorvalidation" title="(b) validator/validation" class="md-nav__link">
+    (b) validator/validation
   </a>
   
 </li>
@@ -616,8 +628,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#d-typeerror-or-valueerror-base" title="(d) TypeError or ValueError base" class="md-nav__link">
-    (d) TypeError or ValueError base
+  <a href="#d-typeerror-or-valueerror" title="(d) TypeError or ValueError" class="md-nav__link">
+    (d) TypeError or ValueError
   </a>
   
 </li>
@@ -736,10 +748,20 @@
                 <h1 id="python-validate-valid8">python-validate (valid8)<a class="headerlink" href="#python-validate-valid8" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-valid8"><img alt="Build Status" src="https://travis-ci.org/smarie/python-valid8.svg?branch=master" /></a> <a href="https://smarie.github.io/python-valid8/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-valid8/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-valid8"><img alt="codecov" src="https://codecov.io/gh/smarie/python-valid8/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-valid8/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/valid8/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-valid8-blue.svg" /></a></p>
 <p><em>"valid8ing is not a crime" ;-)</em></p>
-<p>Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.</p>
-<p>I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>, but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. </p>
-<p>I therefore propose this library to the open source community, at least to create a reference and maybe one day (?) reach a satisfying solution for a significant amount of developers.</p>
+<p><code>valid8</code> provides user-friendly tools for </p>
+<ul>
+<li>general-purpose inline validation, </li>
+<li>function inputs/outputs validation </li>
+<li>class fields validation. </li>
+</ul>
+<p>All entry points raise consistent <code>ValidationError</code> including all contextual details, with dynamic inheritance of <code>ValueError</code>/<code>TypeError</code> as appropriate.</p>
+<div class="admonition warning">
+<p class="admonition-title">Name changes in version 3.x</p>
+<p>In version 3.x several name changes were introduced to improve readability. The old names will stay valid until version 4.x, except for <code>@validate</code> that is discontinued starting in 3.2 (renamed <code>@validate_io</code>).</p>
+</div>
 <h2 id="do-i-need-a-validation-library">Do I need a validation library ?<a class="headerlink" href="#do-i-need-a-validation-library" title="Permanent link">&para;</a></h2>
+<p>Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.</p>
+<p>I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>, but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. I therefore propose this library to the open source community, at least to create a reference and maybe one day reach a satisfying solution for a significant amount of developers.</p>
 <p>In <a href="./why_validation">this page</a>, we explain what is validation, what you would need to do in order to implement it correctly (<code>assert</code> is not a viable solution), and demonstrate how much effort that would cost you. This high development cost results in validation being done inconsistently, if not skipped totally, in many applications and libraries.</p>
 <p><code>valid8</code> provides tools to perform validation in a minimum number of lines and with built-in consistency, so that it hopefully becomes fun and easy to include in your code. </p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
@@ -750,23 +772,20 @@
 <p>Optional but recommended:</p>
 <ul>
 <li>
-<p>If you wish to define your own validation functions dynamically you may wish to also install <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a>.</p>
+<p>If you wish to create highly compact object classes with field type+value validation, have a look at <a href="https://smarie.github.io/python-autoclass/">autoclass</a> which is where <code>valid8</code> actually originates from. See usage <a href="./valid8_with_other">here</a>.</p>
 </li>
 <li>
-<p>Since <code>valid8</code> only provides simple <em>type</em> validation, it is recommended to also install a more capable PEP484 <em>type</em> checker such as <a href="https://github.com/RussBaz/enforce">enforce</a> of <a href="https://github.com/Stewori/pytypes">pytypes</a>.</p>
-</li>
-<li>
-<p>In addition, if you wish to create highly compact object classes with field type+value validation, have a look at <a href="https://smarie.github.io/python-autoclass/">autoclass</a> which is where <code>valid8</code> actually originates from.</p>
+<p>If you wish to define your own validation functions dynamically for functions and classes validation, you may wish to also install <a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a>. See below for details.</p>
 </li>
 </ul>
 <h2 id="usage-inline-validation">Usage - inline validation<a class="headerlink" href="#usage-inline-validation" title="Permanent link">&para;</a></h2>
 <p><code>valid8</code> provides two validation methods that you may use anywhere in your code: </p>
 <ul>
-<li><code>quick_valid</code> to perform the most simple validation tasks in one line of code</li>
-<li><code>wrap_valid</code> for any other validation task, in two or more lines of code</li>
+<li><code>validate(...)</code> to perform the most simple validation tasks in one line of code</li>
+<li><code>with validation(...)</code> (or its alias <code>with validator(...) as v</code>) for any other validation task, in two or more lines of code</li>
 </ul>
-<h3 id="a-quick_valid">(a) <code>quick_valid</code><a class="headerlink" href="#a-quick_valid" title="Permanent link">&para;</a></h3>
-<p>The <code>quick_valid</code> method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:</p>
+<h3 id="a-validate">(a) <code>validate</code><a class="headerlink" href="#a-validate" title="Permanent link">&para;</a></h3>
+<p>The <code>validate</code> method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:</p>
 <ul>
 <li>value is not <code>None</code></li>
 <li>value is an instance of one type in a <code>var_types</code> set</li>
@@ -776,11 +795,11 @@
 </ul>
 <p>In case of failure, it raises the same kind of <code>ValidationError</code> objects than more elaborate validation methods provided below, so it is consistent with the rest of <code>valid8</code>. Besides, the exception <code>__cause__</code> is the same than the equivalent operators from the <a href="./base_validation_lib">valid8 base validation library</a>.</p>
 <p>For example:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">quick_valid</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
 
@@ -791,15 +810,15 @@
 
 
 <p>Note that the resulting exception object contains much of the available information (<code>var_name</code>, <code>var_value</code>, <code>validation_outcome</code>) as fields.</p>
-<p>See <code>help(quick_valid)</code> for usage details.</p>
-<h3 id="b-wrap_valid">(b) <code>wrap_valid</code><a class="headerlink" href="#b-wrap_valid" title="Permanent link">&para;</a></h3>
-<p>The <code>wrap_valid</code> context manager is a bit more flexible than <code>quick_valid</code>: it allows you to define the validation procedure yourself, with any statement or function of your choice.</p>
+<p>See <code>help(validate)</code> for usage details.</p>
+<h3 id="b-validatorvalidation">(b) <code>validator</code>/<code>validation</code><a class="headerlink" href="#b-validatorvalidation" title="Permanent link">&para;</a></h3>
+<p>The <code>validator</code> (alias <code>validation</code>) context manager is a bit more flexible than <code>validate</code>: it allows you to define the validation procedure yourself, with any statement or function of your choice.</p>
 <p>If you rely on <strong>functions that output a boolean flag indicating success</strong>, you simply have to plug that flag on the object provided by the context manager, as shown below:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">wrap_valid</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 </pre></div>
 
@@ -811,12 +830,12 @@
 
 
 <p>Note that the text of the error displays the source code that led to that failure. </p>
-<p>If you rely on <strong>functions that may raise exceptions</strong>, <code>wrap_valid</code> will catch them and append them as the <code>__cause__</code> of the resulting <code>ValidationError</code>: </p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">wrap_valid</span>
+<p>If you rely on <strong>functions that may raise exceptions</strong>, <code>validator</code> will catch them and append them as the <code>__cause__</code> of the resulting <code>ValidationError</code>: </p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="mi">1j</span>
 
-<span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 </pre></div>
 
@@ -828,13 +847,13 @@
 </pre></div>
 
 
-<p>With <code>wrap_valid</code> you are therefore <strong>guaranteed</strong> that any exception happening in the validation process will be caught and turned into a friendly <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual <a href="./why_validation#explicit-traditional-way">if/else/try/except wrappers</a> to handle all cases.</p>
+<p>With <code>validator</code> you are therefore <strong>guaranteed</strong> that any exception happening in the validation process will be caught and turned into a friendly <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual <a href="./why_validation#explicit-traditional-way">if/else/try/except wrappers</a> to handle all cases.</p>
 <p>A couple important things to note:</p>
 <ul>
-<li>the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as <code>with wrap_valid(...) as r:</code> and then <code>r.esults =</code></li>
-<li>there is no need to feed any result to that boolean flag. If you rely on <em>failure raiser</em>-style base functions, for example a <code>check_uniform_sampling</code> or a <code>assert_series_equal</code>, just can just call them and the wrapper will assume that no exception means success:</li>
+<li>the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as <code>with validator(...) as r:</code> and then <code>r.esults =</code></li>
+<li>there is no need to feed any result to the validator. If you rely on <em>failure raiser</em>-style base functions, for example a <code>check_uniform_sampling</code> or a <code>assert_series_equal</code>, you can just call them and the wrapper will assume that no exception means success. In such case the <code>validation</code> alias might make more sense in terms of readability:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;dataframe&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;dataframe&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
     <span class="n">check_uniform_sampling</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_series_equal</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ref_series</span><span class="p">)</span>
 </pre></div>
@@ -843,9 +862,9 @@
 <p><strong>Note on type checking with <code>isinstance</code>"</strong>
 Although you <em>can</em> use the built-in <code>isinstance</code> method inside your validation code block, if you do it <code>valid8</code> will not be able to distinguish between <code>TypeError</code> and <code>ValueError</code>. Instead, please consider either </p>
 <ul>
-<li>using the <code>instance_of</code> parameter of <code>wrap_valid</code>:</li>
+<li>using the <code>instance_of</code> parameter of <code>validation</code>:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 
@@ -855,17 +874,17 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 </ul>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_instanceof</span>
 
-<span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">assert_instance_of</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 
 
 <h2 id="customizing-the-validationexception">Customizing the <code>ValidationException</code><a class="headerlink" href="#customizing-the-validationexception" title="Permanent link">&para;</a></h2>
-<p>Various options are provided to customize the raised exception. These options are available both on <code>quick_valid</code>, <code>wrap_valid</code>, and even on valid8 function and class decorators that we'll see below (<code>@validate_arg</code>, <code>@validate_field</code>...). </p>
+<p>Various options are provided to customize the raised exception. These options are available both on <code>validate</code>, <code>validator</code>/<code>validation</code>, and even on valid8 function and class decorators that we'll see below (<code>@validate_arg</code>, <code>@validate_field</code>...). </p>
 <h3 id="a-custom-message">(a) custom message<a class="headerlink" href="#a-custom-message" title="Permanent link">&para;</a></h3>
 <p>You can specify a custom error message that will be displayed at the beginning of the default message:</p>
-<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">wrap_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> 
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> 
                 <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Surface should be a finite positive integer&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 </pre></div>
@@ -883,7 +902,7 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be a positive integer&#39;</span>
 
-<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+<span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
 </pre></div>
 
@@ -900,7 +919,7 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be &gt; {minimum}, found {var_value}&#39;</span>
 
-<span class="n">quick_valid</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+<span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
@@ -914,12 +933,12 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 
 <p>Note: as shown in that last example, the value being validated is already sent to the help message string to format under the <code>'var_value'</code> key, so you do not need to pass it. </p>
 <p>Obviously you can further customize your exception subclasses if you wish.</p>
-<h3 id="d-typeerror-or-valueerror-base">(d) <code>TypeError</code> or <code>ValueError</code> base<a class="headerlink" href="#d-typeerror-or-valueerror-base" title="Permanent link">&para;</a></h3>
+<h3 id="d-typeerror-or-valueerror">(d) <code>TypeError</code> or <code>ValueError</code><a class="headerlink" href="#d-typeerror-or-valueerror" title="Permanent link">&para;</a></h3>
 <p><code>ValidationError</code> does not by default inherit from <code>TypeError</code> or <code>ValueError</code>, because in the general case, <code>valid8</code> has no means of knowing. But you may have noticed in all of the output message examples shown above that one of the two is still appearing each time in the resulting exception. This is because <code>valid8</code> automatically guesses: when a validation error happens, it recursively looks at the type of the failure cause for a <code>TypeError</code> or <code>ValueError</code> (default if nothing is found). It then <strong>dynamically</strong> creates an appropriate exception type inheriting both from <code>ValidationError</code> and from either <code>TypeError</code> or <code>ValueError</code> according to what has been found. This dynamic type has some custom display methods that make it appear as follows:</p>
-<div class="codehilite"><pre><span></span>&gt; quick_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -1, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+<div class="codehilite"><pre><span></span>&gt; validate<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -1, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
 ValidationError<span class="o">[</span>ValueError<span class="o">]</span>
 
-&gt; quick_valid<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, 1j, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+&gt; validate<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, 1j, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
 ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
 </pre></div>
 
@@ -932,7 +951,7 @@ ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
 
 <p>If you create a custom subclass but do not inherit from <code>TypeError</code> nor <code>ValueError</code>, the automatic guessing will take place as usual.</p>
 <h2 id="validating-functions-classes">Validating functions &amp; classes<a class="headerlink" href="#validating-functions-classes" title="Permanent link">&para;</a></h2>
-<p>In order to use the decorators presented in this section, you will have to provide them with a <strong>base validation function</strong> - as opposed to <code>quick_valid</code> where it was just a bunch of options, and <code>wrap_valid</code> where you could basically write any validation code inside the context manager.</p>
+<p>In order to use the decorators presented in this section, you will have to provide them with a <strong>base validation function</strong> - as opposed to <code>validate</code> where it was just a bunch of options, and <code>validation</code>/<code>validator</code> where you could basically write any validation code inside the context manager.</p>
 <p>The requirements for accepted base validation functions are extremely simple: any single-input function returning <code>True</code> or <code>None</code> in case of success is <a href="./accepted">accepted</a>. In order for you to get started quickly, you can even leverage the following existing tools:</p>
 <ul>
 <li>the bundled <a href="./base_validation_lib">validation functions library</a>.</li>
@@ -1139,16 +1158,16 @@ InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surfac
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
-<p><strong>Separation of validation intent</strong> (entry points <code>wrap_valid</code>, <code>@validate_arg</code>...) <strong>from validation means</strong> (base validation code / functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.</p>
+<p><strong>Separation of validation intent</strong> (entry points <code>validate</code>, <code>validator</code>, <code>@validate_arg</code>...) <strong>from validation means</strong> (base validation code / functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.</p>
 </li>
 <li>
 <p>Clear entry points to <strong>serve most common needs</strong> related with validation:</p>
 <ul>
 <li>
-<p><em>Inline validation</em>: two functions <code>quick_valid</code> and <code>wrap_valid</code> to perform validation anywhere in your code.</p>
+<p><em>Inline validation</em>: two functions <code>validate</code> and <code>validator</code>/<code>validation</code> to perform validation anywhere in your code.</p>
 </li>
 <li>
-<p><em>Function validation</em>: two decorators <code>@validate_arg</code> and <code>@validate_out</code>, as well as a more limited <code>@validate</code>, to add input and output validation to any function. A manual decorator <code>decorate_with_validation</code> provides the same functionality for retrofit purposes.</p>
+<p><em>Function validation</em>: two decorators <code>@validate_arg</code> and <code>@validate_out</code>, as well as a more limited <code>@validate_io</code>, to add input and output validation to any function. A manual decorator <code>decorate_with_validation</code> provides the same functionality for retrofit purposes.</p>
 </li>
 <li>
 <p><em>Class validation</em>: one decorator <code>@validate_field</code> to add validation to class fields.</p>
@@ -1262,7 +1281,7 @@ InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surfac
       
     </div>
     
-      <script src="./assets/javascripts/application.ed2cc613.js"></script>
+      <script src="./assets/javascripts/application.f041762f.js"></script>
       
       <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
       

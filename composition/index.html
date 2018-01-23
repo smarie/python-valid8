@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.2">
     
     
       
@@ -394,6 +394,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../examples/" title="Examples/Recipes" class="md-nav__link">
+      Examples/Recipes
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../other_libs/" title="Other validation libs" class="md-nav__link">
       Other validation libs
     </a>
@@ -516,7 +528,7 @@
 <h2 id="and_">and_<a class="headerlink" href="#and_" title="Permanent link">&para;</a></h2>
 <p><code>and_(\*validation_func: ValidationFuncs)</code></p>
 <p>An 'and' validator: it returns <code>True</code> if all of the provided validators return <code>True</code>, or raises a <code>AtLeastOneFailed</code> failure on the first <code>False</code> received or <code>Exception</code> caught.</p>
-<p>Note that an implicit <code>and_</code> is performed if you provide a list of validators to any of the entry points (<code>@validate</code>, <code>@validate_arg</code>, <code>assert_valid</code>, <code>is_valid</code>, <code>Validator</code>)</p>
+<p>Note that an implicit <code>and_</code> is performed if you provide a list of validators to any of the entry points (<code>validate</code>, <code>validator</code>/<code>validation</code>, <code>@validate_arg</code>, <code>@validate_field</code> ...)</p>
 <p>See <code>help(and_)</code></p>
 <h2 id="or_">or_<a class="headerlink" href="#or_" title="Permanent link">&para;</a></h2>
 <p><code>or_(\*validation_func: ValidationFuncs)</code></p>
@@ -611,7 +623,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.ed2cc613.js"></script>
+      <script src="../assets/javascripts/application.f041762f.js"></script>
       
       <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       

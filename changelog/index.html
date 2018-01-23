@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.1">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.2">
     
     
       
@@ -68,7 +68,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#310-new-instanceof-parameter" tabindex="1" class="md-skip">
+      <a href="#320-new-names-and-aliases-for-readability" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -307,6 +307,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../examples/" title="Examples/Recipes" class="md-nav__link">
+      Examples/Recipes
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../other_libs/" title="Other validation libs" class="md-nav__link">
       Other validation libs
     </a>
@@ -340,6 +352,13 @@
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#320-new-names-and-aliases-for-readability" title="3.2.0 - new names and aliases for readability" class="md-nav__link">
+    3.2.0 - new names and aliases for readability
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#310-new-instanceof-parameter" title="3.1.0 - new instanceof parameter" class="md-nav__link">
@@ -411,6 +430,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#320-new-names-and-aliases-for-readability" title="3.2.0 - new names and aliases for readability" class="md-nav__link">
+    3.2.0 - new names and aliases for readability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#310-new-instanceof-parameter" title="3.1.0 - new instanceof parameter" class="md-nav__link">
     3.1.0 - new instanceof parameter
   </a>
@@ -471,7 +497,13 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="310-new-instanceof-parameter">3.1.0 - new <code>instanceof</code> parameter<a class="headerlink" href="#310-new-instanceof-parameter" title="Permanent link">&para;</a></h3>
+                <h3 id="320-new-names-and-aliases-for-readability">3.2.0 - new names and aliases for readability<a class="headerlink" href="#320-new-names-and-aliases-for-readability" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>wrap_valid</code> context manager was renamed <code>validation</code> with alias <code>validator</code>. The deprecated old name remains accepted until next major release 4.x.</li>
+<li><code>quick_valid</code> function was renamed <code>validate</code>. The deprecated old name remains accepted until next major release 4.x.</li>
+<li><code>@validate</code> decorator was renamed <code>@validate_io</code>. The old name is now used to denote <code>quick_valid</code>, see above. Its <code>alidate</code> alias was removed (was it used anyway ?)</li>
+</ul>
+<h3 id="310-new-instanceof-parameter">3.1.0 - new <code>instanceof</code> parameter<a class="headerlink" href="#310-new-instanceof-parameter" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>quick_valid</code>'s parameters <code>allowed_types</code> and <code>allowed_values</code> were renamed <code>instance_of</code> and <code>is_in</code> respectively. </li>
 <li><code>instance_of</code> parameter has been added to <code>wrap_valid</code> too. This solved <a href="https://github.com/smarie/python-valid8/issues/10">#10</a></li>
@@ -609,7 +641,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.ed2cc613.js"></script>
+      <script src="../assets/javascripts/application.f041762f.js"></script>
       
       <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
