@@ -10,6 +10,7 @@ pages:
       - Built-in base validation functions: base_validation_lib.md
       - Composing base validation functions: composition.md
     - valid8 + other tools: valid8_with_other.md
+    - Examples/Recipes: examples.md
     - Other validation libs: other_libs.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs
