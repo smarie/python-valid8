@@ -1,3 +1,10 @@
+### 3.2.0 - new names and aliases for readability
+
+ * `wrap_valid` context manager was renamed `validation` with alias `validator`. The deprecated old name remains accepted until next major release 4.x.
+ * `quick_valid` function was renamed `validate`. The deprecated old name remains accepted until next major release 4.x.
+ * `@validate` decorator was renamed `@validate_io`. The old name is now used to denote `quick_valid`, see above. Its `alidate` alias was removed (was it used anyway ?)
+ 
+
 ### 3.1.0 - new `instanceof` parameter
 
  * `quick_valid`'s parameters `allowed_types` and `allowed_values` were renamed `instance_of` and `is_in` respectively. 

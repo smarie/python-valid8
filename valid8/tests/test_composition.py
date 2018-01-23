@@ -105,7 +105,7 @@ def test_validate_xor():
 
 
 def test_validate_and():
-    """ Simple test of the @validate annotation, with built-in validators is_even and gt(1) """
+    """ Simple test of the @validate_io annotation, with built-in validators is_even and gt(1) """
 
     # empty list error
     with pytest.raises(ValueError):

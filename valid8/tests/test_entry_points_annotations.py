@@ -1,7 +1,7 @@
 import pytest
 from typing import Optional
 
-from valid8 import validate, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
+from valid8 import validate_io, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
     decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError, \
     ValidationError, validate_field, ClassFieldValidationError, skip_on_none
 
@@ -200,11 +200,11 @@ def test_validate_out():
 
 
 def test_validate_nominal_builtin_validators():
-    """ Simple test of the @validate annotation, with built-in validators is_even and gt(1) """
+    """ Simple test of the @validate_io annotation, with built-in validators is_even and gt(1) """
 
-    @validate(a=[is_even, gt(1)],
-              b=is_even,
-              _out_=lt(100))
+    @validate_io(a=[is_even, gt(1)],
+                 b=is_even,
+                 _out_=lt(100))
     def myfunc(a, b):
         print('hello')
         return a
@@ -246,8 +246,8 @@ def test_validate_custom_validators_basic():
         """ (not recommended) A validator relying on assert and therefore only valid in 'debug' mode """
         assert x >= 2
 
-    @validate(a=[gt_assert2, is_mod_3],
-              b=is_mod(5))
+    @validate_io(a=[gt_assert2, is_mod_3],
+                 b=is_mod(5))
     def myfunc(a, b):
         print('hello')
 
@@ -292,7 +292,7 @@ def test_validate_custom_validators_with_exception():
                 raise Failure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
         return is_mod
 
-    @validate(a=[gt_ex1, lt(12), is_mod(5)])
+    @validate_io(a=[gt_ex1, lt(12), is_mod(5)])
     def myfunc(a):
         print('hello')
 
@@ -331,12 +331,12 @@ def test_validate_custom_validators_with_exception():
 
 
 def test_validate_mini_lambda():
-    """ Tests that mini_lambda works with @validate """
+    """ Tests that mini_lambda works with @validate_io """
 
     from mini_lambda import Len, s, x, Int
 
-    @validate(name=(0 < Len(s)) & (Len(s) <= 10),
-              age=(x > 0) & (Int(x) == x))
+    @validate_io(name=(0 < Len(s)) & (Len(s) <= 10),
+                 age=(x > 0) & (Int(x) == x))
     def hello_world(name: str, age: float):
         print('Hello, ' + name + ' your age is ' + str(age))
 
@@ -354,7 +354,7 @@ def test_validate_none_enforce():
     config(dict(mode='covariant'))
 
     @runtime_validation
-    @validate(a=[is_even, gt(1)], b=is_even, c=is_even)
+    @validate_io(a=[is_even, gt(1)], b=is_even, c=is_even)
     def myfunc(a: Integral, b: Optional[int], c=None):
         print('hello')
 
@@ -375,7 +375,7 @@ def test_validate_none_pytypes():
     # config(dict(mode='covariant'))
 
     @typechecked
-    @validate(a=[is_even, gt(1)], b=is_even)
+    @validate_io(a=[is_even, gt(1)], b=is_even)
     def myfunc(a: Integral, b = None):
         print('hello')
 
@@ -388,7 +388,7 @@ def test_validate_none_pytypes():
 def test_validate_none_is_allowed():
     """ Tests that a None input is allowed by default and that in this case the validators are not executed """
 
-    @validate(a=is_even)
+    @validate_io(a=is_even)
     def myfunc(a = None, b = int):
         print('hello')
 
@@ -398,10 +398,10 @@ def test_validate_none_is_allowed():
 
 
 def test_validate_name_error():
-    """ Checks that wrong attribute names cant be provided to @validate"""
+    """ Checks that wrong attribute names cant be provided to @validate_io"""
 
     with pytest.raises(ValueError):
-        @validate(ab=[])
+        @validate_io(ab=[])
         def myfunc(a, b):
             print('hello')
 

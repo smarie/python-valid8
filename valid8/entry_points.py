@@ -23,8 +23,7 @@ class NonePolicy:
 
 
 class NoneArgPolicy(NonePolicy):
-    """ This enumeration extends `NonePolicy` to add policies specific to function input validation used in @validate
-    and @validate_arg """
+    """ This enumeration extends `NonePolicy` to add policies specific to function input validation used in @validate... decorators """
 
     __slots__ = []
 
@@ -82,11 +81,10 @@ def _add_none_handler(validation_callable: Callable, none_policy: int) -> Callab
         raise ValueError('Invalid none_policy : ' + str(none_policy))  # invalid none_policy
 
 
-# TODO should we remove ValueError from the hierarchy, and let users explicitly declare it either in constructor or in their custom classes ? Or on the contrary add both TypeError and ValueError here and remove dynamically when the exception is raised
 class ValidationError(HelpMsgMixIn, RootException):
     """
-    Represents a Validation error raised by a 'defensive mode' validation entry point such as `assert_valid`,
-    `@validate`, `@validate_arg`, or `<Validator>.assert_valid()`. It contains details about the `Validator`, the value
+    Represents a Validation error raised by a 'defensive mode' validation entry point such as `validate`, `validator`/`validation`, `assert_valid`,
+    `@validate_io`, `@validate_arg`, or `<Validator>.assert_valid()`. It contains details about the `Validator`, the value
     that was being validated, and the outcome (a value or an exception). All these details are stored in the instance.
 
     There are two ways to use this class:

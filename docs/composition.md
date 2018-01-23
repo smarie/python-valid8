@@ -21,7 +21,7 @@ See `help(not_)`
 
 An 'and' validator: it returns `True` if all of the provided validators return `True`, or raises a `AtLeastOneFailed` failure on the first `False` received or `Exception` caught.
 
-Note that an implicit `and_` is performed if you provide a list of validators to any of the entry points (`@validate`, `@validate_arg`, `assert_valid`, `is_valid`, `Validator`)
+Note that an implicit `and_` is performed if you provide a list of validators to any of the entry points (`validate`, `validator`/`validation`, `@validate_arg`, `@validate_field` ...)
     
 See `help(and_)`
 

@@ -10,19 +10,19 @@ from valid8 import InputValidationError, ValidationError, failure_raiser
 def test_readme_index_usage_quick():
     """ Tests that the example under index/usage/quick works """
 
-    from valid8 import quick_valid
+    from valid8 import validate
 
     surf = -1
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, instance_of=int, min_value=0)
+        validate('surface', surf, instance_of=int, min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
 
 
 def test_readme_usage_wrap_valid():
-    """ Tests that the example under index/usage/wrap_valid works """
+    """ Tests that the example under index/usage/validation works """
 
     from valid8 import wrap_valid
     from math import isfinite
@@ -77,14 +77,14 @@ def test_readme_usage_wrap_valid():
 
 def test_readme_usage_customization():
 
-    from valid8 import quick_valid, wrap_valid
+    from valid8 import validate, wrap_valid
     from math import isfinite
 
     surf = -1
 
     # (A) custom error message (exception is still a ValidationError)
     # with pytest.raises(ValidationError) as exc_info:
-    #     quick_valid('surface', surf, instance_of=int, min_value=0,
+    #     validate('surface', surf, instance_of=int, min_value=0,
     #                 help_msg="Surface should be a positive integer")
     # e = exc_info.value
     # assert str(e) == "Surface should be a positive integer. Error validating [surface=-1]. " \
@@ -103,7 +103,7 @@ def test_readme_usage_customization():
         help_msg = 'Surface should be a positive integer'
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, instance_of=int, min_value=0, error_type=InvalidSurface)
+        validate('surface', surf, instance_of=int, min_value=0, error_type=InvalidSurface)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be a positive integer. " \
@@ -115,8 +115,8 @@ def test_readme_usage_customization():
         help_msg = 'Surface should be > {minimum}, found {var_value}'
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', surf, instance_of=int, min_value=0,
-                    error_type=InvalidSurface, minimum=0)
+        validate('surface', surf, instance_of=int, min_value=0,
+                 error_type=InvalidSurface, minimum=0)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
     assert type(e).__name__ == "InvalidSurface[ValueError]"
@@ -125,7 +125,7 @@ def test_readme_usage_customization():
 
     # (D) ValueError/TypeError
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', -1, instance_of=int, min_value=0)
+        validate('surface', -1, instance_of=int, min_value=0)
     e = exc_info.value
     assert traceback.format_exception_only(type(e), e)[0] == \
            "valid8.entry_points.ValidationError[ValueError]: Error validating [surface=-1]. " \
@@ -133,7 +133,7 @@ def test_readme_usage_customization():
     assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[ValueError]'>"
 
     with pytest.raises(ValidationError) as exc_info:
-        quick_valid('surface', 1j, instance_of=int, min_value=0)
+        validate('surface', 1j, instance_of=int, min_value=0)
     e = exc_info.value
     assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[TypeError]'>"
 

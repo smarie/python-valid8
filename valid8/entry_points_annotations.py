@@ -276,7 +276,7 @@ def validate_field(field_name, *validation_func: ValidationFuncs, help_msg: str 
                                                      **kw_context_args)
 
 
-def validate(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation_funcs: ValidationFuncs):
+def validate_io(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation_funcs: ValidationFuncs):
     """
     A function decorator to add input validation prior to the function execution. It should be called with named
     arguments: for each function arg name, provide a single validation function or a list of validation functions to
@@ -294,7 +294,7 @@ def validate(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation
             return x >= a
         return gt
 
-    @validate(a=[is_even, gt(1)], b=is_even)
+    @validate_io(a=[is_even, gt(1)], b=is_even)
     def myfunc(a, b):
         print('hello')
     ```
@@ -325,15 +325,15 @@ def validate(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation
     """
 
     # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate will never be used as is (without a call), but it does not
+    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
     # cost much and may be of interest in the future
 
     return create_function_decorator__robust_to_args(decorate_several_with_validation, none_policy=none_policy,
                                                      _out_=_out_, **kw_validation_funcs)
 
 
-alidate = validate
-""" an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
+# alidate = validate
+# """ an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
 
 
 def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
@@ -360,7 +360,7 @@ def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = No
     before executing the function's code everytime it is executed.
     """
     # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate will never be used as is (without a call), but it does not
+    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
     # cost much and may be of interest in the future
     return create_function_decorator__robust_to_args(decorate_with_validation, arg_name,
                                                      *validation_func,
@@ -387,7 +387,7 @@ def validate_out(*validation_func: ValidationFuncs, help_msg: str = None,
     before executing the function's code everytime it is executed.
     """
     # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate will never be used as is (without a call), but it does not
+    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
     # cost much and may be of interest in the future
     return create_function_decorator__robust_to_args(decorate_with_validation, _OUT_KEY,
                                                      *validation_func,
@@ -555,7 +555,7 @@ def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, 
                              error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
                              none_policy: int = None, _constructor_of_cls_: 'Type'=None, **kw_context_args) -> Callable:
     """
-    This method is equivalent to decorating a function with the `@validate`, `@validate_arg` or `@validate_out`
+    This method is equivalent to decorating a function with the `@validate_io`, `@validate_arg` or `@validate_out`
     decorators, but can be used a posteriori.
 
     :param func:
@@ -641,7 +641,7 @@ def _create_function_validator(validated_func: Callable, s: Signature, arg_name:
 
     # check that provided input/output name is correct
     if arg_name not in s.parameters and arg_name is not _OUT_KEY:
-        raise InvalidNameError('@validate definition exception: argument name \''
+        raise InvalidNameError('valid8 definition exception: argument name \''
                                + str(arg_name) + '\' is not part of signature for ' + str(validated_func)
                                + ' and is not ' + _OUT_KEY)
 

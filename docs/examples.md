@@ -13,14 +13,14 @@ In the examples below, we use `numbers.Integral` rather than `int` so as to supp
 from numbers import Integral
 ```
 
-**Inline 1 (quick & simple)**
+### Inline - validate
 
 ```python
-from valid8 import quick_valid
-quick_valid('x', x, instance_of=Integral, min_value=0)
+from valid8 import validate
+validate('x', x, instance_of=Integral, min_value=0)
 ```
 
-**Inline 2 (extensible)**
+### Inline - with validator
 
 ```python
 from valid8 import validator
@@ -28,10 +28,13 @@ with validator('x', x, instance_of=Integral) as v:
     v.alid = x >= 0
 ```
 
-**Function input/output or Class 1 (built-in lib)**
+### Decorators - built-in lib
+
+We use the built-in `gt` function to check for positiveness here.
 
 ```python
-from valid8 import validate_arg, validate_out, validate_field, instance_of, gt
+from valid8 import validate_arg, validate_out, validate_io, validate_field
+from valid8 import instance_of, gt
 
 @validate_arg('x', instance_of(Integral), gt(0))
 def my_function(x):
@@ -39,18 +42,26 @@ def my_function(x):
 
 @validate_out(instance_of(Integral), gt(0))
 def my_function2():
-    return ...
+    return -1
+
+@validate_io(x=[instance_of(Integral), gt(0)])
+def my_function3(x):
+    pass
 
 @validate_field('x', instance_of(Integral), gt(0))
 class Foo:
-    ...
+    def __init__(self, x):
+        self.x = x
 ```
 
-**Function input/output or Class 2 (mini-lambda)**
+### Decorators - mini-lambda
+
+We use the mini-lambda `x >= 0` function to check for positiveness here.
 
 ```python
 from mini_lambda import x
-from valid8 import validate_arg, validate_out, validate_field, instance_of
+from valid8 import validate_arg, validate_out, validate_io, validate_field
+from valid8 import instance_of
 
 @validate_arg('x', instance_of(Integral), x >= 0)
 def my_function(x):
@@ -58,13 +69,59 @@ def my_function(x):
 
 @validate_out(instance_of(Integral), x >= 0)
 def my_function2():
-    return ...
+    return -1
+
+@validate_io(x=[instance_of(Integral), x >= 0])
+def my_function(x):
+    pass
 
 @validate_field('x', instance_of(Integral), x >= 0)
 class Foo:
-    ...
+    def __init__(self, x):
+        self.x = x
 ```
 
 ## 2- `s` is a lowercase non-empty string
 
-TODO
+### Inline - validate
+
+It is not possible to use `validate` to check that `s` is lowercase (only its type and length).
+
+### Inline - with validator
+
+```python
+from valid8 import validator
+with validator('s', s, instance_of=str) as v:
+    v.alid = s == s.lower()
+```
+
+### Decorators - built-in lib
+
+There is no built-in function to check that `s` is lowercase yet (only its type and length).
+
+### Decorators - mini-lambda
+
+We use the mini-lambda `s == s.lower()` function to check for positiveness here.
+
+```python
+from mini_lambda import s
+from valid8 import validate_arg, validate_out, validate_io, validate_field, 
+from valid8 import instance_of
+
+@validate_arg('s', instance_of(str), s == s.lower())
+def my_function(s):
+    pass
+
+@validate_out(instance_of(str), s == s.lower())
+def my_function2():
+    return -1
+
+@validate_io(s=[instance_of(str), s == s.lower()])
+def my_function3(s):
+    pass
+
+@validate_field('s', instance_of(str), s == s.lower())
+class Foo:
+    def __init__(self, s):
+        self.s = s
+```

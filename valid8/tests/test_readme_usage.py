@@ -3,6 +3,9 @@ import pytest
 from valid8 import InputValidationError, ValidationError
 
 
+# This test file corresponds to usage.md that is actually not used anymore. But we leave it as it can do no harm
+
+
 def test_tutorial():
 
     # 1. age: finite
@@ -61,8 +64,6 @@ def test_tutorial():
                      "Validation function [and(isfinite, between_0_and_150, int(x) == x)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [12.5]. " \
                      "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'}."
-
-    # TODO continue this tutorial
 
 
 def test_usage_base_validation_functions():
@@ -320,10 +321,10 @@ def create_base_functions_2():
 
 def test_usage_validate_annotation():
     """ """
-    from valid8 import validate
+    from valid8 import validate_io
     from math import isfinite, inf
 
-    @validate(arg2=isfinite, arg3=isfinite)
+    @validate_io(arg2=isfinite, arg3=isfinite)
     def myfunc(arg1, arg2, arg3):
         pass
 
@@ -338,7 +339,7 @@ def test_usage_validate_annotation():
 def test_usage_custom_validators():
     """ """
 
-    from valid8 import validate, ValidationError, Failure
+    from valid8 import validate_io, ValidationError, Failure
 
     def is_mod_3(x):
         """ A simple validator with no parameters """
@@ -363,8 +364,8 @@ def test_usage_custom_validators():
         """(not recommended) relying on assert, only valid in 'debug' mode"""
         assert x >= 2
 
-    @validate(a=[gt_ex1, gt_assert2, is_mod_3],
-              b=is_mod(5))
+    @validate_io(a=[gt_ex1, gt_assert2, is_mod_3],
+                 b=is_mod(5))
     def myfunc(a, b):
         pass
 

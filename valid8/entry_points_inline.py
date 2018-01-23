@@ -20,7 +20,7 @@ def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
     An inlined version of instance_of(var_types)(value) without 'return True': it does not return anything in case of
     success, and raises a HasWrongType exception in case of failure.
 
-    Used in quick_valid and wrap_valid
+    Used in validate and validation/validator
 
     :param value: the value to check
     :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
@@ -46,11 +46,11 @@ def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
 
 class _QuickValidator(Validator):
     """
-    Represents the validator behind the `quick_valid` function.
+    Represents the Validator behind the `validate` function.
     """
 
     def __init__(self):
-        super(_QuickValidator, self).__init__(quick_valid)
+        super(_QuickValidator, self).__init__(validate)
 
     def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
                                  error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
@@ -71,13 +71,13 @@ class _QuickValidator(Validator):
 
 
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
-def quick_valid(name: str, value: Any,
-                instance_of: Union[type, Set[type]] = None, enforce_not_none: bool = True,
-                is_in: Set = None,
-                min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
-                min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
-                error_type: 'Type[ValidationError]' = None,
-                help_msg: str = None, **kw_context_args):
+def validate(name: str, value: Any,
+             instance_of: Union[type, Set[type]] = None, enforce_not_none: bool = True,
+             is_in: Set = None,
+             min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
+             min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
+             error_type: 'Type[ValidationError]' = None,
+             help_msg: str = None, **kw_context_args):
     """
     A validation function for quick inline validation of `value`, with minimal capabilities:
 
@@ -126,6 +126,7 @@ def quick_valid(name: str, value: Any,
 
         # TODO try (https://github.com/orf/inliner) to perform the inlining below automatically without code duplication
         # maybe not because below we skip the "return True" everywhere for performance
+        # Another alternative would be to compile code with https://github.com/AlanCristhian/statically
 
         if value is None:
             # inlined version of _none_rejecter in base.py
@@ -188,8 +189,12 @@ def quick_valid(name: str, value: Any,
 _QUICK_VALIDATOR = _QuickValidator()
 
 
+quick_valid = validate
+""" Legacy, deprecated alias. Will disappear in 4.x """
+
+
 class WrappingValidatorEye:
-    """ Represents the object where users may put the validation outcome inside a wrap_valid context manager.
+    """ Represents the object where users may put the validation outcome inside a validation context manager.
     You may set any field on this object, it will be put in the 'outcome' field """
 
     __slots__ = ['outcome', 'last_field_name_used']
@@ -226,18 +231,26 @@ class _Dummy_Callable_:
         return self.name
 
 
-class wrap_valid(Validator):
+class validator(Validator):
     """
     A context manager to wrap validation tasks.
     Any exception caught within this context will be wrapped by a ValidationError and raised.
 
-    You can also use the returned object to store a boolean value indicating success or failure. For example
+    ```python
+    from valid8 import validation
+    with validation('df', df, instance_of=pd.DataFrame):
+        check_uniform_sampling(df)
+    ```
+
+    You can also use the returned object to store a boolean value indicating success or failure. In that case using the
+    'validator' alias might be more readable. For example
 
     ```python
-    from valid8 import wrap_valid
-    with wrap_valid('surface', surf) as v:
+    from valid8 import validation
+    with validator('surface', surf) as v:
         v.alid = surf > 0 and isfinite(surf)
     ```
+
     """
     def __init__(self, name: str, value: Any, instance_of: Union[type, Set[type]] = None,
                  error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
@@ -248,8 +261,8 @@ class wrap_valid(Validator):
         You can also use the returned object to store a boolean value indicating success or failure. For example
 
         ```python
-        from valid8 import wrap_valid
-        with wrap_valid('surface', surf) as v:
+        from valid8 import validation
+        with validation('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
         ```
 
@@ -265,17 +278,17 @@ class wrap_valid(Validator):
         """
         # First perform the type check if needed
         if instance_of is not None:
-            quick_valid(name=name, value=value, instance_of=instance_of)
+            validate(name=name, value=value, instance_of=instance_of)
 
         validation_function = _Dummy_Callable_('<wrap_valid_contents>')
-        super(wrap_valid, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
+        super(validator, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
                                          none_policy=NonePolicy.VALIDATE, **kw_context_args)
         self.name = name
         self.value = value
         self.eye = WrappingValidatorEye()
 
     def __enter__(self):
-        # extract the source file and line number where the calling 'with wrap_valid()' line is
+        # extract the source file and line number where the calling 'with validator()' line is
         stack = traceback.extract_stack()
         self.src_file_path, self.src_file_line_nb, *_ = stack[-2]
 
@@ -289,12 +302,12 @@ class wrap_valid(Validator):
         if result is not None and result is not True:
             # *** We should raise a Validation Error ***
 
-            # extract the source file and line number where the calling 'with wrap_valid()' line is
+            # extract the source file and line number where the calling 'with validator()' line is
             stack = traceback.extract_stack()
             src_file_path, src_file_line_nb_end, *_ = stack[-2]
 
             if src_file_path != self.src_file_path:
-                warn('Error identifying the source file where wrap_valid was used - no string representation will '
+                warn('Error identifying the source file where validator/validation was used - no string representation will '
                      'be available')
             else:
                 # read the lines in the source corresponding to the contents
@@ -339,3 +352,10 @@ class wrap_valid(Validator):
                          'exception. Caught {}'.format(self.src_file_path, e))
 
             raise self._create_validation_error(self.name, self.value, validation_outcome=result)
+
+
+validation = validator
+""" Alias for validation, more readable when using the returned object to store boolean results """
+
+wrap_valid = validator
+""" Legacy, deprecated alias. Will disappear in 4.x """

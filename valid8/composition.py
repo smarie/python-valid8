@@ -208,7 +208,7 @@ def and_(*validation_func: ValidationFuncs) -> Callable:
     `AtLeastOneFailed` failure on the first `False` received or `Exception` caught.
 
     Note that an implicit `and_` is performed if you provide a list of validators to any of the entry points
-    (`@validate`, `@validate_arg`, `assert_valid`, `is_valid`, `Validator`)
+    (`validate`, `validation`/`validator`, `@validate_arg`, `@validate_out`, `@validate_field` ...)
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists

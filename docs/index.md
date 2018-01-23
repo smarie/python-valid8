@@ -4,14 +4,23 @@
 
 *"valid8ing is not a crime" ;-)*
 
-Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.
+`valid8` provides user-friendly tools for 
 
-I searched and found tons of good and less good libraries [out there](#other-validation-libraries), but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in [autoclass](https://smarie.github.io/python-autoclass/). 
+ * general-purpose inline validation, 
+ * function inputs/outputs validation 
+ * class fields validation. 
+ 
+All entry points raise consistent `ValidationError` including all contextual details, with dynamic inheritance of `ValueError`/`TypeError` as appropriate.
 
-I therefore propose this library to the open source community, at least to create a reference and maybe one day (?) reach a satisfying solution for a significant amount of developers.
+!!! warning "Name changes in version 3.x"
+    In version 3.x several name changes were introduced to improve readability. The old names will stay valid until version 4.x, except for `@validate` that is discontinued starting in 3.2 (renamed `@validate_io`).
 
 
 ## Do I need a validation library ?
+
+Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.
+
+I searched and found tons of good and less good libraries [out there](#other-validation-libraries), but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in [autoclass](https://smarie.github.io/python-autoclass/). I therefore propose this library to the open source community, at least to create a reference and maybe one day reach a satisfying solution for a significant amount of developers.
 
 In [this page](./why_validation), we explain what is validation, what you would need to do in order to implement it correctly (`assert` is not a viable solution), and demonstrate how much effort that would cost you. This high development cost results in validation being done inconsistently, if not skipped totally, in many applications and libraries.
 
@@ -26,24 +35,22 @@ In [this page](./why_validation), we explain what is validation, what you would 
 
 Optional but recommended:
 
- - If you wish to define your own validation functions dynamically you may wish to also install [mini_lambda](https://smarie.github.io/python-mini-lambda/).
+ - If you wish to create highly compact object classes with field type+value validation, have a look at [autoclass](https://smarie.github.io/python-autoclass/) which is where `valid8` actually originates from. See usage [here](./valid8_with_other).
 
- - Since `valid8` only provides simple *type* validation, it is recommended to also install a more capable PEP484 *type* checker such as [enforce](https://github.com/RussBaz/enforce) of [pytypes](https://github.com/Stewori/pytypes).
-
- - In addition, if you wish to create highly compact object classes with field type+value validation, have a look at [autoclass](https://smarie.github.io/python-autoclass/) which is where `valid8` actually originates from.
+ - If you wish to define your own validation functions dynamically for functions and classes validation, you may wish to also install [mini_lambda](https://smarie.github.io/python-mini-lambda/). See below for details.
 
 
 ## Usage - inline validation
 
 `valid8` provides two validation methods that you may use anywhere in your code: 
 
- * `quick_valid` to perform the most simple validation tasks in one line of code
- * `wrap_valid` for any other validation task, in two or more lines of code
+ * `validate(...)` to perform the most simple validation tasks in one line of code
+ * `with validation(...)` (or its alias `with validator(...) as v`) for any other validation task, in two or more lines of code
 
 
-### (a) `quick_valid`
+### (a) `validate`
 
-The `quick_valid` method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:
+The `validate` method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:
 
  * value is not `None`
  * value is an instance of one type in a `var_types` set
@@ -56,11 +63,11 @@ In case of failure, it raises the same kind of `ValidationError` objects than mo
 For example:
 
 ```python
-from valid8 import quick_valid
+from valid8 import validate
 
 surf = -1
 
-quick_valid('surface', surf, instance_of=int, min_value=0)
+validate('surface', surf, instance_of=int, min_value=0)
 ```
 
 results in
@@ -72,21 +79,21 @@ ValidationError[ValueError]: Error validating [surface=-1]. \
 
 Note that the resulting exception object contains much of the available information (`var_name`, `var_value`, `validation_outcome`) as fields.
 
-See `help(quick_valid)` for usage details.
+See `help(validate)` for usage details.
 
 
-### (b) `wrap_valid`
+### (b) `validator`/`validation`
 
-The `wrap_valid` context manager is a bit more flexible than `quick_valid`: it allows you to define the validation procedure yourself, with any statement or function of your choice.
+The `validator` (alias `validation`) context manager is a bit more flexible than `validate`: it allows you to define the validation procedure yourself, with any statement or function of your choice.
 
 If you rely on **functions that output a boolean flag indicating success**, you simply have to plug that flag on the object provided by the context manager, as shown below:
 
 ```python
-from valid8 import wrap_valid
+from valid8 import validator
 
 surf = -1
 
-with wrap_valid('surface', surf) as v:
+with validator('surface', surf) as v:
     v.alid = surf > 0 and isfinite(surf)
 ```
 
@@ -100,14 +107,14 @@ ValidationError[ValueError]: Error validating [surface=-1]:  \
 Note that the text of the error displays the source code that led to that failure. 
 
 
-If you rely on **functions that may raise exceptions**, `wrap_valid` will catch them and append them as the `__cause__` of the resulting `ValidationError`: 
+If you rely on **functions that may raise exceptions**, `validator` will catch them and append them as the `__cause__` of the resulting `ValidationError`: 
 
 ```python
-from valid8 import wrap_valid
+from valid8 import validator
 
 surf = 1j
 
-with wrap_valid('surface', surf) as v:
+with validator('surface', surf) as v:
     v.alid = surf > 0 and isfinite(surf)
 ```
 
@@ -120,16 +127,16 @@ ValidationError[TypeError]: Error validating [surface=1j]. \
 ```
 
 
-With `wrap_valid` you are therefore **guaranteed** that any exception happening in the validation process will be caught and turned into a friendly `ValidationError`, whatever the cause (`None` handling, known validation failures, unknown other errors). You therefore do not have to write the usual [if/else/try/except wrappers](./why_validation#explicit-traditional-way) to handle all cases.
+With `validator` you are therefore **guaranteed** that any exception happening in the validation process will be caught and turned into a friendly `ValidationError`, whatever the cause (`None` handling, known validation failures, unknown other errors). You therefore do not have to write the usual [if/else/try/except wrappers](./why_validation#explicit-traditional-way) to handle all cases.
 
 
 A couple important things to note:
 
- * the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as `with wrap_valid(...) as r:` and then `r.esults = `
- * there is no need to feed any result to that boolean flag. If you rely on *failure raiser*-style base functions, for example a `check_uniform_sampling` or a `assert_series_equal`, just can just call them and the wrapper will assume that no exception means success:
+ * the field name where you put the boolean flag does not matter, so if you prefer you can use alternate naming such as `with validator(...) as r:` and then `r.esults = `
+ * there is no need to feed any result to the validator. If you rely on *failure raiser*-style base functions, for example a `check_uniform_sampling` or a `assert_series_equal`, you can just call them and the wrapper will assume that no exception means success. In such case the `validation` alias might make more sense in terms of readability:
  
 ```python
-with wrap_valid('dataframe', df, instance_of=pd.DataFrame):
+with validation('dataframe', df, instance_of=pd.DataFrame):
     check_uniform_sampling(df)
     assert_series_equal(df['a'], ref_series)
 ```
@@ -137,10 +144,10 @@ with wrap_valid('dataframe', df, instance_of=pd.DataFrame):
 **Note on type checking with `isinstance`"**
 Although you *can* use the built-in `isinstance` method inside your validation code block, if you do it `valid8` will not be able to distinguish between `TypeError` and `ValueError`. Instead, please consider either 
 
- * using the `instance_of` parameter of `wrap_valid`:
+ * using the `instance_of` parameter of `validation`:
 
 ```python
-with wrap_valid('surface', surf, instance_of=int) as v:
+with validator('surface', surf, instance_of=int) as v:
     v.alid = surf > 0
 ```
     
@@ -149,7 +156,7 @@ with wrap_valid('surface', surf, instance_of=int) as v:
 ```python
 from valid8 import assert_instanceof
 
-with wrap_valid('surface', surf) as v:
+with validator('surface', surf) as v:
     assert_instance_of(surf, int)
     v.alid = surf > 0
 ```
@@ -158,14 +165,14 @@ with wrap_valid('surface', surf) as v:
 
 ## Customizing the `ValidationException`
 
-Various options are provided to customize the raised exception. These options are available both on `quick_valid`, `wrap_valid`, and even on valid8 function and class decorators that we'll see below (`@validate_arg`, `@validate_field`...). 
+Various options are provided to customize the raised exception. These options are available both on `validate`, `validator`/`validation`, and even on valid8 function and class decorators that we'll see below (`@validate_arg`, `@validate_field`...). 
 
 ### (a) custom message
 
 You can specify a custom error message that will be displayed at the beginning of the default message:
 
 ```python
-with wrap_valid('surface', surf, 
+with validation('surface', surf, 
                 help_msg="Surface should be a finite positive integer") as v:
     v.alid = surf > 0 and isfinite(surf)
 ```
@@ -186,7 +193,7 @@ Or even better, a custom error type, which is a good practice to ease internatio
 class InvalidSurface(ValidationError):
     help_msg = 'Surface should be a positive integer'
 
-quick_valid('surface', surf, instance_of=int, min_value=0, 
+validate('surface', surf, instance_of=int, min_value=0, 
             error_type=InvalidSurface)
 ``` 
 
@@ -206,7 +213,7 @@ Finally, the `help_msg` field acts as a string template that will receive any ad
 class InvalidSurface(ValidationError):
     help_msg = 'Surface should be > {minimum}, found {var_value}'
 
-quick_valid('surface', surf, instance_of=int, min_value=0, 
+validate('surface', surf, instance_of=int, min_value=0, 
             error_type=InvalidSurface, minimum=0)
 ```
 
@@ -223,15 +230,15 @@ Note: as shown in that last example, the value being validated is already sent t
 Obviously you can further customize your exception subclasses if you wish.
 
 
-### (d) `TypeError` or `ValueError` base
+### (d) `TypeError` or `ValueError`
 
 `ValidationError` does not by default inherit from `TypeError` or `ValueError`, because in the general case, `valid8` has no means of knowing. But you may have noticed in all of the output message examples shown above that one of the two is still appearing each time in the resulting exception. This is because `valid8` automatically guesses: when a validation error happens, it recursively looks at the type of the failure cause for a `TypeError` or `ValueError` (default if nothing is found). It then **dynamically** creates an appropriate exception type inheriting both from `ValidationError` and from either `TypeError` or `ValueError` according to what has been found. This dynamic type has some custom display methods that make it appear as follows:
 
 ```bash
-> quick_valid('surface', -1, instance_of=int, min_value=0)
+> validate('surface', -1, instance_of=int, min_value=0)
 ValidationError[ValueError]
 
-> quick_valid('surface', 1j, instance_of=int, min_value=0)
+> validate('surface', 1j, instance_of=int, min_value=0)
 ValidationError[TypeError]
 ```
 
@@ -247,7 +254,7 @@ If you create a custom subclass but do not inherit from `TypeError` nor `ValueEr
 
 ## Validating functions & classes
 
-In order to use the decorators presented in this section, you will have to provide them with a **base validation function** - as opposed to `quick_valid` where it was just a bunch of options, and `wrap_valid` where you could basically write any validation code inside the context manager.
+In order to use the decorators presented in this section, you will have to provide them with a **base validation function** - as opposed to `validate` where it was just a bunch of options, and `validation`/`validator` where you could basically write any validation code inside the context manager.
 
 The requirements for accepted base validation functions are extremely simple: any single-input function returning `True` or `None` in case of success is [accepted](./accepted). In order for you to get started quickly, you can even leverage the following existing tools:
 
@@ -479,13 +486,13 @@ InvalidSurface[ValueError]: Surface should be a multiple of 100 between 0 and 10
 
 ## Main features
 
- * **Separation of validation intent** (entry points `wrap_valid`, `@validate_arg`...) **from validation means** (base validation code / functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.
+ * **Separation of validation intent** (entry points `validate`, `validator`, `@validate_arg`...) **from validation means** (base validation code / functions). Entry points provide a clear and consistent behaviour matching your applicative intent, hiding the diversity of base validation functions that you rely on to do it.
  
  * Clear entry points to **serve most common needs** related with validation:
  
-    - *Inline validation*: two functions `quick_valid` and `wrap_valid` to perform validation anywhere in your code.
+    - *Inline validation*: two functions `validate` and `validator`/`validation` to perform validation anywhere in your code.
     
-    - *Function validation*: two decorators `@validate_arg` and `@validate_out`, as well as a more limited `@validate`, to add input and output validation to any function. A manual decorator `decorate_with_validation` provides the same functionality for retrofit purposes.
+    - *Function validation*: two decorators `@validate_arg` and `@validate_out`, as well as a more limited `@validate_io`, to add input and output validation to any function. A manual decorator `decorate_with_validation` provides the same functionality for retrofit purposes.
     
     - *Class validation*: one decorator `@validate_field` to add validation to class fields.
     

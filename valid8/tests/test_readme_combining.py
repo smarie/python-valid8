@@ -153,11 +153,11 @@ def test_unused_pytypes():
     from pytypes import typechecked
 
     # for value checking
-    from valid8 import validate, minlens, gt
+    from valid8 import validate_io, minlens, gt
 
     @typechecked
-    @validate(name=minlens(0),
-              surface=gt(0))
+    @validate_io(name=minlens(0),
+                 surface=gt(0))
     def build_house(name: str,
                     surface: Real,
                     nb_floors: Optional[Integral] = 1,
@@ -172,7 +172,7 @@ def test_unused_pytypes():
     build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate raises a Failure
+        build_house('test', -1, 2)  # Value validation: @validate_io raises a Failure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate raises a Failure
+        build_house('', 12, 2)  # Value validation: @validate_io raises a Failure
