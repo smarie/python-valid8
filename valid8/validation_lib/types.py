@@ -3,7 +3,9 @@ from valid8.base import Failure
 
 class HasWrongType(Failure, TypeError):
     """ Custom Failure raised by instance_of """
-    help_msg = 'Value should be an instance of {ref_type}'
+    def __init__(self, wrong_value, ref_type, help_msg: str = None):
+        help_msg = help_msg or 'Value should be an instance of {ref_type}'
+        super(HasWrongType, self).__init__(wrong_value=wrong_value, ref_type=ref_type, help_msg=help_msg)
 
 
 def instance_of(*args):
@@ -74,7 +76,9 @@ def instance_of(*args):
 
 class IsWrongType(Failure, TypeError):
     """ Custom Failure raised by subclass_of """
-    help_msg = 'Value should be a type that is a subclass of {ref_type}'
+    def __init__(self, wrong_value, ref_type, help_msg: str = None):
+        help_msg = help_msg or 'Value should be a type that is a subclass of {ref_type}'
+        super(IsWrongType, self).__init__(wrong_value=wrong_value, ref_type=ref_type, help_msg=help_msg)
 
 
 def subclass_of(*args):
