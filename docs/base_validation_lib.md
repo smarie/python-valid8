@@ -31,6 +31,9 @@ from valid8 import assert_valid, instance_of
 assert_valid('Foo', 'r', instance_of(str))
 ```
 
+Note that this function can also be used directly in inline codes, by using its 2-args version: `instance_of(x, str)`.
+
+
 ### subclass_of(ref_type)
 
 'subclass of' validation function generator. Returns a validation function to check that `is_subclass(x, ref_type)`.
@@ -39,6 +42,9 @@ assert_valid('Foo', 'r', instance_of(str))
 from valid8 import assert_valid, subclass_of
 assert_valid('Foo', bool, subclass_of(int))
 ```
+
+Note that this function can also be used directly in inline codes, by using its 2-args version: `subclass_of(c, int)`.
+
 
 ## Comparables
 
