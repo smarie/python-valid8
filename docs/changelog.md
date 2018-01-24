@@ -1,3 +1,16 @@
+### 3.3.0 - new features
+
+ * Inline validation:
+   * `validate` has several new arguments: `subclass_of`, `contains`, `subset_of`, `superset_of`, `length`, `equals`
+   * `validator` has a new argument: `subclass_of`
+   * New base function `assert_subclass_of`
+   * `instance_of` and `subclass_of` are now dual functions: they can both serve as a function generators or as a simple functions for inline validation for example inside a `validator` context manager.
+ * Decorators:
+   * 2 new function generators `has_length` and `contains`
+ * Bug fixes:
+   * Fixed bug [#11](https://github.com/smarie/python-valid8/issues/11) where `ValidationError` could not be correctly printed in case of a templating issue.
+ * New examples in the documentation
+
 ### 3.2.0 - new names and aliases for readability
 
  * `wrap_valid` context manager was renamed `validation` with alias `validator`. The deprecated old name remains accepted until next major release 4.x.

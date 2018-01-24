@@ -93,6 +93,8 @@ class Foo:
 
 ### (a) Inline - validate
 
+We use equality with the lowercase version to check lowercase:
+
 ```python
 from valid8 import validate
 validate('s', s, instance_of=str, min_len=1, equals=s.lower())
@@ -103,7 +105,7 @@ validate('s', s, instance_of=str, min_len=1, equals=s.lower())
 ```python
 from valid8 import validator
 with validator('s', s, instance_of=str) as v:
-    v.alid = (len(s) > 0) and (s == s.lower())
+    v.alid = (len(s) > 0) and s.islower()
 ```
 
 ### (c) Decorators - built-in lib
@@ -112,7 +114,7 @@ There is no built-in function to check that `s` is lowercase yet (only its type 
 
 ### (d) Decorators - mini-lambda
 
-We use the mini-lambda `s == s.lower()` function to check for positiveness here.
+We use the mini-lambda `s.islower()` function to check that s is lowercase here.
 
 ```python
 from mini_lambda import s
@@ -120,22 +122,22 @@ from valid8 import validate_arg, validate_out, validate_io, validate_field,
 from valid8 import instance_of
 
 # function input
-@validate_arg('s', instance_of(str), s == s.lower())
+@validate_arg('s', instance_of(str), s.islower())
 def my_function(s):
     pass
 
 # function output
-@validate_out(instance_of(str), s == s.lower())
+@validate_out(instance_of(str), s.islower())
 def my_function2():
     return -1
 
 # function input or output (several at a time possible, but no customization)
-@validate_io(s=[instance_of(str), s == s.lower()])
+@validate_io(s=[instance_of(str), s.islower()])
 def my_function3(s):
     pass
 
 # class fields (init args or descriptors/properties)
-@validate_field('s', instance_of(str), s == s.lower())
+@validate_field('s', instance_of(str), s.islower())
 class Foo:
     def __init__(self, s):
         self.s = s
@@ -179,7 +181,7 @@ with validator('x', l, instance_of=list) as v:
                 # the first element is a float between 0 and 1
                 and instance_of(item[0], Real) and (0 <= item[0] <= 1)
                 # the second element is a lowercase string of size 3
-                and instance_of(item[1], str) and len(item[1]) == 3 and item[1] == item[1].lower()
+                and instance_of(item[1], str) and len(item[1]) == 3 and item[1].islower()
              for item in l)
 ```
 
@@ -192,10 +194,13 @@ The best we can do is
 from valid8 import validate_arg, instance_of, on_all_, on_each_, has_length, and_, between
 
 @validate_arg('l', instance_of(list), on_all_(
-              instance_of(tuple), has_length(2),  # each item is a tuple of size 2
+             # each item is a tuple of size 2
+              instance_of(tuple), has_length(2),
               on_each_(
-                  and_(instance_of(Real), between(0, 1)),  # the first element is a float between 0 and 1
-                  and_(instance_of(str), has_length(3)),  # the 2d element is a string of len 3 BUT we cannot check lowercase
+                  # the first element is a float between 0 and 1
+                  and_(instance_of(Real), between(0, 1)),
+                  # the 2d element is a string of len 3 BUT we cannot check lowercase  
+                  and_(instance_of(str), has_length(3)),
               )
 ))
 def my_function(l):
@@ -208,18 +213,21 @@ Although this proves that the provided built-in library can tackle complex cases
 def is_valid_tuple(t):
     """ Custom validation function. We could also provide a callable """
 
-    # each item is a tuple of size 2
-    instance_of(t, tuple)  # reusing an entire method from the built-in lib when it supports direct calling mode
-    if len(t) != 2: raise WrongLength(t, ref_length=2)  # reusing a failure class from the built-in lib if the method does not support direct calls
+    # (a) each item is a tuple of size 2
+    # --you can reuse an entire method from the built-in lib when it supports direct calling mode
+    instance_of(t, tuple)  
+    # --otherwise you can reuse a failure class, there are many
+    if len(t) != 2: raise WrongLength(t, ref_length=2)  
 
-    # the first element is a float between 0 and 1
-    if not isinstance(t[0], Real): raise HasWrongType(t[0], Real)  # reusing a failure class from the built-in lib
-    if not (0 <= t[0] <= 1): raise NotInRange(t[0], min_value=0, max_value=1)  # reusing a failure class from the built-in lib
+    # (b) the first element is a float between 0 and 1
+    if not isinstance(t[0], Real): raise HasWrongType(t[0], Real)
+    if not (0 <= t[0] <= 1): raise NotInRange(t[0], min_value=0, max_value=1)
 
-    # the second element is a lowercase string of size 3
+    # (c) the second element is a lowercase string of size 3
     instance_of(t[1], str)
     if len(t[1]) != 3: raise WrongLength(t[1], ref_length=3)
-    if t[1].lower() != t[1]:
+    # -- finally you can write custom Failure types
+    if not t[1].islower():
         raise NotLowerCase(t[1])
 
 class NotLowerCase(Failure, ValueError):
@@ -236,6 +244,26 @@ def my_function(l):
     pass
 ```
 
+### (d) Decorators - mini_lambda
+
+```python
+from valid8 import validate_arg, instance_of, on_all_
+
+# just for fun: we create our custom mini_lambda variable named 't'
+from mini_lambda import InputVar, Len, Isinstance
+t = InputVar('t', tuple)
+
+@validate_arg('l', instance_of(list), on_all_(
+    # each item is a tuple of size 2
+    instance_of(tuple), Len(t) == 2,
+    # the first element is a float between 0 and 1
+    Isinstance(t[0], Real), (0 <= t[0]) & (t[0] <= 1),
+    # the 2d element is a lowercase string of len 3
+    Isinstance(t[1], str), Len(t[1]) == 3, t[1].islower()
+))
+def my_function(l):
+    pass
+```
 
 ## 4- `df` is a dataframe containing specific columns
 

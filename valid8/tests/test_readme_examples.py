@@ -72,13 +72,13 @@ def test_readme_examples_2():
     # inline 2
     from valid8 import validator
     with validator('s', s, instance_of=str) as v:
-        v.alid = (len(s) > 0) and (s == s.lower())
+        v.alid = (len(s) > 0) and s.islower()
 
     from mini_lambda import s
     from valid8 import validate_arg, validate_out, validate_io, validate_field, instance_of
 
     # function input
-    @validate_arg('s', instance_of(str), s == s.lower())
+    @validate_arg('s', instance_of(str), s.islower())
     def my_function(s):
         pass
 
@@ -89,12 +89,12 @@ def test_readme_examples_2():
         my_function(1)
 
     # function output
-    @validate_out(instance_of(str), s == s.lower())
+    @validate_out(instance_of(str), s.islower())
     def my_function2():
         return -1
 
     # function ins and outs
-    @validate_io(s=[instance_of(str), s == s.lower()])
+    @validate_io(s=[instance_of(str), s.islower()])
     def my_function3(s):
         pass
 
@@ -105,7 +105,7 @@ def test_readme_examples_2():
         my_function3(1)
 
     # class field
-    @validate_field('s', instance_of(str), s == s.lower())
+    @validate_field('s', instance_of(str), s.islower())
     class Foo:
         def __init__(self, s):
             self.s = s
@@ -149,7 +149,7 @@ def test_readme_examples_3():
                     # the first element is a float between 0 and 1
                     and instance_of(item[0], Real) and (0 <= item[0] <= 1)
                     # the second element is a lowercase string of size 3
-                    and instance_of(item[1], str) and len(item[1]) == 3 and item[1] == item[1].lower()
+                    and instance_of(item[1], str) and len(item[1]) == 3 and item[1].islower()
                  for item in l)
 
 
@@ -175,20 +175,21 @@ def test_readme_examples_3():
     def is_valid_tuple(t):
         """ Custom validation function. We could also provide a callable """
 
-        # Note: we could also use `validate` here but that is not mandatory
+        # (a) each item is a tuple of size 2
+        # --you can reuse an entire method from the built-in lib when it supports direct calling mode
+        instance_of(t, tuple)
+        # --otherwise you can reuse a failure class, there are many
+        if len(t) != 2: raise WrongLength(t, ref_length=2)
 
-        # each item is a tuple of size 2
-        instance_of(t, tuple)  # reusing an entire method from the built-in lib when it supports direct calling mode
-        if len(t) != 2: raise WrongLength(t, ref_length=2)  # reusing a failure class from the built-in lib
+        # (b) the first element is a float between 0 and 1
+        if not isinstance(t[0], Real): raise HasWrongType(t[0], Real)
+        if not (0 <= t[0] <= 1): raise NotInRange(t[0], min_value=0, max_value=1)
 
-        # the first element is a float between 0 and 1
-        if not isinstance(t[0], Real): raise HasWrongType(t[0], Real)  # reusing a failure class from the built-in lib
-        if not (0 <= t[0] <= 1): raise NotInRange(t[0], min_value=0, max_value=1)  # reusing a failure class from the built-in lib
-
-        # the second element is a lowercase string of size 3
+        # (c) the second element is a lowercase string of size 3
         instance_of(t[1], str)
         if len(t[1]) != 3: raise WrongLength(t[1], ref_length=3)
-        if t[1].lower() != t[1]:
+        # -- finally you can write custom Failure types
+        if not t[1].islower():
             raise NotLowerCase(t[1])
 
     class NotLowerCase(Failure, ValueError):
@@ -197,6 +198,28 @@ def test_readme_examples_3():
         help_msg = "Value is not a lowercase string: {wrong_value}"
 
     @validate_arg('l', instance_of(list), on_all_(is_valid_tuple))
+    def my_function(l):
+        pass
+
+    l = [(1, 'ras'), (0.2, 'abc')]
+    my_function(l)
+
+
+    # mini_lambda
+    from valid8 import validate_arg, instance_of, on_all_
+
+    # just for fun: we create our custom mini_lambda variable named 't'
+    from mini_lambda import InputVar, Len, Isinstance
+    t = InputVar('t', tuple)
+
+    @validate_arg('l', instance_of(list), on_all_(
+        # each item is a tuple of size 2
+        instance_of(tuple), Len(t) == 2,
+        # the first element is a float between 0 and 1
+        Isinstance(t[0], Real), (0 <= t[0]) & (t[0] <= 1),
+        # the 2d element is a lowercase string of len 3
+        Isinstance(t[1], str), Len(t[1]) == 3, t[1].islower()
+    ))
     def my_function(l):
         pass
 
