@@ -1,10 +1,11 @@
 import traceback
-from typing import Any, Union, Set
+from typing import Any, Union, Set, Iterable
 from warnings import warn
 
 from valid8.entry_points import Validator, ValidationError, NonePolicy
-from valid8.validation_lib.types import HasWrongType
-from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort
+from valid8.validation_lib.types import HasWrongType, IsWrongType
+from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
+    NotSubset, NotSuperset
 from valid8.validation_lib.comparables import TooSmall, TooBig
 from valid8.base import ValueIsNone
 
@@ -44,6 +45,35 @@ def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
                                help_msg='Value should be an instance of any of {ref_type}')
 
 
+def assert_subclass_of(typ, allowed_types: Union[type, Set[type]]):
+    """
+    An inlined version of subclass_of(var_types)(value) without 'return True': it does not return anything in case of
+    success, and raises a IsWrongType exception in case of failure.
+
+    Used in validate and validation/validator
+
+    :param typ: the type to check
+    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    match is enough to succeed. If None, type will not be enforced
+    :return:
+    """
+    if not isinstance(allowed_types, set):
+        # allowed_types is a single type
+        if not issubclass(typ, allowed_types):
+            raise IsWrongType(wrong_value=typ, ref_type=allowed_types)
+    else:
+        # allowed_types is a set
+        match = False
+        # test against each of the provided types
+        for ref in allowed_types:
+            if issubclass(typ, ref):
+                match = True
+                break
+        if not match:
+            raise IsWrongType(wrong_value=typ, ref_type=allowed_types,
+                              help_msg='Value should be a subclass of any of {ref_type}')
+
+
 class _QuickValidator(Validator):
     """
     Represents the Validator behind the `validate` function.
@@ -71,10 +101,11 @@ class _QuickValidator(Validator):
 
 
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
-def validate(name: str, value: Any,
-             instance_of: Union[type, Set[type]] = None, enforce_not_none: bool = True,
-             is_in: Set = None,
+def validate(name: str, value: Any, enforce_not_none: bool = True,
+             instance_of: Union[type, Set[type]] = None, subclass_of: Union[type, Set[type]] = None,
+             is_in: Set = None, subset_of: Set = None, contains: Union[Any, Iterable] = None, superset_of: Set = None,
              min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
+             length: int = None,
              min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
              error_type: 'Type[ValidationError]' = None,
              help_msg: str = None, **kw_context_args):
@@ -94,12 +125,18 @@ def validate(name: str, value: Any,
     :param value: the value to check
     :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
     match is enough to succeed. If None, type will not be enforced
+    :param subclass_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    match is enough to succeed. If None, type will not be enforced
     :param enforce_not_none: boolean, default True. Whether to enforce that var is not None.
-    :param is_in: an optional set of allowed values
+    :param is_in: an optional set of allowed values.
+    :param subset_of: an optional superset for the variable
+    :param contains: an optional value that the variable should contain (value in variable == True)
+    :param superset_of: an optional subset for the variable
     :param min_value: an optional minimum value
     :param min_strict: if True, only values strictly greater than `min_value` will be accepted
     :param max_value: an optional maximum value
     :param max_strict: if True, only values strictly lesser than `max_value` will be accepted
+    :param length: an optional strict length
     :param min_len: an optional minimum length
     :param min_len_strict: if True, only values with length strictly greater than `min_len` will be accepted
     :param max_len: an optional maximum length
@@ -121,8 +158,9 @@ def validate(name: str, value: Any,
         # the following corresponds to an inline version of
         # - _none_rejecter in base.py
         # - gt/lt in comparables.py
-        # - minlen/maxlen/is_in in collections.py
-        # - instance_of in types.py
+        # - is_in/contains/subset_of/superset_of/has_length/minlen/maxlen/is_in in collections.py
+        # - instance_of/subclass_of in types.py
+
 
         # TODO try (https://github.com/orf/inliner) to perform the inlining below automatically without code duplication
         # maybe not because below we skip the "return True" everywhere for performance
@@ -140,10 +178,30 @@ def validate(name: str, value: Any,
             if instance_of is not None:
                 assert_instance_of(value, instance_of)
 
+            if subclass_of is not None:
+                assert_subclass_of(value, subclass_of)
+
             if is_in is not None:
                 # inlined version of is_in(allowed_values=allowed_values)(value) without 'return True'
                 if value not in is_in:
                     raise NotInAllowedValues(wrong_value=value, allowed_values=is_in)
+
+            if contains is not None:
+                # inlined version of contains(ref_value=contains)(value) without 'return True'
+                if contains not in value:
+                    raise DoesNotContainValue(wrong_value=value, ref_value=contains)
+
+            if subset_of is not None:
+                # inlined version of is_subset(reference_set=subset_of)(value)
+                missing = value - subset_of
+                if len(missing) != 0:
+                    raise NotSubset(wrong_value=value, reference_set=subset_of, unsupported=missing)
+
+            if superset_of is not None:
+                # inlined version of is_superset(reference_set=superset_of)(value)
+                missing = superset_of - value
+                if len(missing) != 0:
+                    raise NotSuperset(wrong_value=value, reference_set=superset_of, missing=missing)
 
             if min_value is not None:
                 # inlined version of gt(min_value=min_value, strict=min_strict)(value) without 'return True'
@@ -162,6 +220,11 @@ def validate(name: str, value: Any,
                 else:
                     if value > max_value:
                         raise TooBig(wrong_value=value, max_value=max_value, strict=False)
+
+            if length is not None:
+                # inlined version of has_length() without 'return True'
+                if len(value) != length:
+                    raise WrongLength(wrong_value=value, ref_length=length)
 
             if min_len is not None:
                 # inlined version of minlen(min_length=min_len, strict=min_len_strict)(value) without 'return True'
@@ -253,6 +316,7 @@ class validator(Validator):
 
     """
     def __init__(self, name: str, value: Any, instance_of: Union[type, Set[type]] = None,
+                 subclass_of: Union[type, Set[type]] = None,
                  error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
         """
         Creates a context manager to wrap validation tasks. Any exception caught within this context will be wrapped
@@ -270,6 +334,8 @@ class validator(Validator):
         :param value: the value being validated
         :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types:
         one match is enough to succeed. If None, type will not be enforced
+        :param subclass_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+        match is enough to succeed. If None, type will not be enforced
         :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
         `ValidationError` will be raised with the provided `help_msg`
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
@@ -279,6 +345,9 @@ class validator(Validator):
         # First perform the type check if needed
         if instance_of is not None:
             validate(name=name, value=value, instance_of=instance_of)
+
+        if subclass_of is not None:
+            assert_subclass_of(value, subclass_of)
 
         validation_function = _Dummy_Callable_('<wrap_valid_contents>')
         super(validator, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
