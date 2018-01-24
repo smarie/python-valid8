@@ -3,7 +3,7 @@ from typing import Callable, Any, List, Union  # do not import Type for compatib
 
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
-    HelpMsgMixIn, is_error_of_type
+    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException
 from valid8.composition import ValidationFuncs, _process_validation_function_s
 
 
@@ -195,10 +195,15 @@ class ValidationError(HelpMsgMixIn, RootException):
 
     def __str__(self):
         """ Overrides the default exception message by relying on HelpMsgMixIn """
-        if self.append_details:
-            return self.get_help_msg(dotspace_ending=True, **self.__dict__) + self.get_details()
-        else:
-            return self.get_help_msg(**self.__dict__)
+        try:
+            if self.append_details:
+                return self.get_help_msg(dotspace_ending=True, **self.__dict__) + self.get_details()
+            else:
+                return self.get_help_msg(**self.__dict__)
+        except HelpMsgFormattingException as f:
+            return str(f)
+        except Exception as e:
+            return "Error while formatting help message: {}".format(e)
 
     def __repr__(self):
         """ Overrides the default exception representation """
