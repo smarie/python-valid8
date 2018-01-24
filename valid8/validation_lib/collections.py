@@ -15,7 +15,8 @@ class TooShort(Failure, ValueError):
 def minlen(min_length, strict: bool = False):
     """
     'Minimum length' validation_function generator.
-    Returns a validation_function to check that len(x) >= min_length (strict=False, default) or len(x) > min_length (strict=True)
+    Returns a validation_function to check that len(x) >= min_length (strict=False, default)
+    or len(x) > min_length (strict=True)
 
     :param min_length: minimum length for x
     :param strict: Boolean flag to switch between len(x) >= min_length (strict=False) and len(x) > min_length
@@ -92,7 +93,7 @@ class WrongLength(Failure, ValueError):
     """ Custom failure raised by has_length """
     def __init__(self, wrong_value, ref_length):
         help_msg = 'len(x) == {ref_length} does not hold for x={wrong_value}'
-        super(WrongLength, self).__init__(wrong_value=wrong_value, length=ref_length, help_msg=help_msg)
+        super(WrongLength, self).__init__(wrong_value=wrong_value, ref_length=ref_length, help_msg=help_msg)
 
 
 def has_length(ref_length):
@@ -177,6 +178,13 @@ def length_between(min_len, max_len, open_left: bool = False, open_right: bool =
     return length_between_
 
 
+class NotEqual(Failure, ValueError):
+    """ Custom Failure raised by ?? (only by validate for now) """
+    def __init__(self, wrong_value, ref_value):
+        help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
+        super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, help_msg=help_msg)
+
+
 class NotInAllowedValues(Failure, ValueError):
     """ Custom Failure raised by is_in """
     def __init__(self, wrong_value, allowed_values):
@@ -200,6 +208,7 @@ def is_in(allowed_values: Set):
             # raise Failure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
             raise NotInAllowedValues(wrong_value=x, allowed_values=allowed_values)
 
+    is_in_allowed_values.__name__ = 'is_in_{}'.format(allowed_values)
     return is_in_allowed_values
 
 
@@ -229,6 +238,7 @@ def is_subset(reference_set: Set):
             #                      'elements ' + str(missing))
             raise NotSubset(wrong_value=x, reference_set=reference_set, unsupported=missing)
 
+    is_subset_of.__name__ = 'is_subset_of_{}'.format(reference_set)
     return is_subset_of
 
 
@@ -254,6 +264,7 @@ def contains(ref_value):
         else:
             raise DoesNotContainValue(wrong_value=x, ref_value=ref_value)
 
+    contains_ref_value.__name__ = 'contains_{}'.format(ref_value)
     return contains_ref_value
 
 
@@ -283,6 +294,7 @@ def is_superset(reference_set: Set):
             #                       'elements ' + str(missing))
             raise NotSuperset(wrong_value=x, reference_set=reference_set, missing=missing)
 
+    is_superset_of.__name__ = 'is_superset_of_{}'.format(reference_set)
     return is_superset_of
 
 
@@ -294,10 +306,12 @@ class InvalidItemInSequence(WrappingFailure, ValueError):
 # TODO rename 'all_on_each'
 def on_all_(*validation_func):
     """
-    Generates a validation_function for collection inputs where each element of the input will be validated against the validation_functions
-    provided. For convenience, a list of validation_functions can be provided and will be replaced with an 'and_'.
+    Generates a validation_function for collection inputs where each element of the input will be validated against the
+    validation_functions provided. For convenience, a list of validation_functions can be provided and will be replaced
+    with an 'and_'.
 
-    Note that if you want to apply DIFFERENT validation_functions for each element in the input, you should rather use on_each_.
+    Note that if you want to apply DIFFERENT validation_functions for each element in the input, you should rather use
+    on_each_.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
     tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
@@ -311,9 +325,7 @@ def on_all_(*validation_func):
 
     def on_all_val(x):
         # validate all elements in x in turn
-        idx = -1
-        for x_elt in x:
-            idx += 1
+        for idx, x_elt in enumerate(x):
             try:
                 res = validation_function_func(x_elt)
             except Exception as e:
@@ -326,6 +338,7 @@ def on_all_(*validation_func):
                 raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=res)
         return True
 
+    on_all_val.__name__ = 'apply_<{}>_on_all_elts'.format(validation_function_func.__name__)
     return on_all_val
 
 
@@ -333,12 +346,15 @@ def on_all_(*validation_func):
 def on_each_(*validation_functions_collection):
     """
     Generates a validation_function for collection inputs where each element of the input will be validated against the
-    corresponding validation_function(s) in the validation_functions_collection. Validators inside the tuple can be provided as a list for
-    convenience, this will be replaced with an 'and_' operator if the list has more than one element.
+    corresponding validation_function(s) in the validation_functions_collection. Validators inside the tuple can be
+    provided as a list for convenience, this will be replaced with an 'and_' operator if the list has more than one
+    element.
 
-    Note that if you want to apply the SAME validation_functions to all elements in the input, you should rather use on_all_.
+    Note that if you want to apply the SAME validation_functions to all elements in the input, you should rather use
+    on_all_.
 
-    :param validation_functions_collection: a sequence of (base validation function or list of base validation functions to use).
+    :param validation_functions_collection: a sequence of (base validation function or list of base validation functions
+    to use).
     A base validation function may be a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or
     a list of several such elements. Nested lists are supported and indicate an implicit `and_` (such as the main list).
     Tuples indicate an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/)
@@ -347,7 +363,7 @@ def on_each_(*validation_functions_collection):
     """
     # create a tuple of validation functions.
     validation_function_funcs = tuple(_process_validation_function_s(validation_func)
-                            for validation_func in validation_functions_collection)
+                                      for validation_func in validation_functions_collection)
 
     # generate a validation function based on the tuple of validation_functions lists
     def on_each_val(x: Tuple):
@@ -371,4 +387,6 @@ def on_each_(*validation_functions_collection):
                     raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validation_function_func, validation_outcome=res)
             return True
 
+    on_each_val.__name__ = 'map_<{}>_on_elts' \
+                           ''.format('(' + ', '.join([f.__name__ for f in validation_function_funcs]) + ')')
     return on_each_val
