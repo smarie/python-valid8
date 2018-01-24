@@ -412,6 +412,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#has_lengthref_length" title="has_length(ref_length)" class="md-nav__link">
+    has_length(ref_length)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#minlenmin_length-strictboolfalse" title="minlen(min_length, strict:bool=False)" class="md-nav__link">
     minlen(min_length, strict:bool=False)
   </a>
@@ -456,6 +463,13 @@
           <li class="md-nav__item">
   <a href="#is_subsetreference_set" title="is_subset(reference_set)" class="md-nav__link">
     is_subset(reference_set)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containsref_value" title="contains(ref_value)" class="md-nav__link">
+    contains(ref_value)
   </a>
   
 </li>
@@ -698,6 +712,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#has_lengthref_length" title="has_length(ref_length)" class="md-nav__link">
+    has_length(ref_length)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#minlenmin_length-strictboolfalse" title="minlen(min_length, strict:bool=False)" class="md-nav__link">
     minlen(min_length, strict:bool=False)
   </a>
@@ -742,6 +763,13 @@
           <li class="md-nav__item">
   <a href="#is_subsetreference_set" title="is_subset(reference_set)" class="md-nav__link">
     is_subset(reference_set)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containsref_value" title="contains(ref_value)" class="md-nav__link">
+    contains(ref_value)
   </a>
   
 </li>
@@ -813,6 +841,7 @@
 </pre></div>
 
 
+<p>Note that this function can also be used directly in inline codes, by using its 2-args version: <code>instance_of(x, str)</code>.</p>
 <h3 id="subclass_ofref_type">subclass_of(ref_type)<a class="headerlink" href="#subclass_ofref_type" title="Permanent link">&para;</a></h3>
 <p>'subclass of' validation function generator. Returns a validation function to check that <code>is_subclass(x, ref_type)</code>.</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">subclass_of</span>
@@ -820,6 +849,7 @@
 </pre></div>
 
 
+<p>Note that this function can also be used directly in inline codes, by using its 2-args version: <code>subclass_of(c, int)</code>.</p>
 <h2 id="comparables">Comparables<a class="headerlink" href="#comparables" title="Permanent link">&para;</a></h2>
 <h3 id="gtmin_value-strictboolfalse">gt(min_value, strict:bool=False)<a class="headerlink" href="#gtmin_value-strictboolfalse" title="Permanent link">&para;</a></h3>
 <p>'Greater than' validation function generator. Returns a validation function to check that <code>x &gt;= min_value</code> (strict=False, default) or <code>x &gt; min_value</code> (strict=True).</p>
@@ -839,6 +869,8 @@
 <h3 id="is_multiple_ofref">is_multiple_of(ref)<a class="headerlink" href="#is_multiple_ofref" title="Permanent link">&para;</a></h3>
 <p>'Is multiple of' validation function generator. Returns a validation function to check that  x is a multiple of the reference (<code>x % ref == 0</code>).</p>
 <h2 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h2>
+<h3 id="has_lengthref_length">has_length(ref_length)<a class="headerlink" href="#has_lengthref_length" title="Permanent link">&para;</a></h3>
+<p>'length equals' validation function generator. Returns a validation_function to check that <code>len(x) == ref_length</code></p>
 <h3 id="minlenmin_length-strictboolfalse">minlen(min_length, strict:bool=False)<a class="headerlink" href="#minlenmin_length-strictboolfalse" title="Permanent link">&para;</a></h3>
 <p>'Minimum length' validation function generator. Returns a validation function to check that <code>len(x) &gt;= min_length</code> (strict=False, default) or <code>len(x) &gt; min_length</code> (strict=True).</p>
 <h3 id="minlensmin_length">minlens(min_length)<a class="headerlink" href="#minlensmin_length" title="Permanent link">&para;</a></h3>
@@ -853,6 +885,8 @@
 <p>'Values in' validation function generator. Returns a validation function to check that x is in the provided set <code>allowed_values</code>.</p>
 <h3 id="is_subsetreference_set">is_subset(reference_set)<a class="headerlink" href="#is_subsetreference_set" title="Permanent link">&para;</a></h3>
 <p>'Is subset' validation function generator. Returns a validation function to check that <code>x</code> is a subset of <code>reference_set</code>. That is, <code>len(x - reference_set) == 0</code>.</p>
+<h3 id="containsref_value">contains(ref_value)<a class="headerlink" href="#containsref_value" title="Permanent link">&para;</a></h3>
+<p>'Contains' validation_function generator. Returns a validation_function to check that <code>ref_value in x</code></p>
 <h3 id="is_supersetreference_set">is_superset(reference_set)<a class="headerlink" href="#is_supersetreference_set" title="Permanent link">&para;</a></h3>
 <p>'Is superset' validation function generator. Returns a validation function to check that <code>x</code> is a superset of <code>reference_set</code>. That is, <code>len(reference_set - x) == 0</code>.</p>
 <h3 id="on_all_validation-functions_for_all_elts">on_all_(*validation functions_for_all_elts)<a class="headerlink" href="#on_all_validation-functions_for_all_elts" title="Permanent link">&para;</a></h3>

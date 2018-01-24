@@ -788,10 +788,11 @@
 <p>The <code>validate</code> method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:</p>
 <ul>
 <li>value is not <code>None</code></li>
-<li>value is an instance of one type in a <code>var_types</code> set</li>
-<li>value is one of the elements in a <code>allowed_values</code> set </li>
-<li>value is greater/smaller than <code>min_value</code>/<code>max_value</code> (strict or not)</li>
-<li>value length is greater/smaller than <code>min_len</code> / <code>max_len</code> (strict or not).</li>
+<li>value is an <strong>instance</strong> of one type in a reference set, or is a <strong>subtype</strong> of a reference set</li>
+<li>value <strong>equals</strong> a reference item, </li>
+<li>value is <strong>contained</strong> in a set, <strong>contains</strong> a reference item, or is a <strong>sub/superset</strong> of a reference set </li>
+<li>value is <strong>greater/smaller</strong> than a reference (strict or not)</li>
+<li>value <strong>length</strong> is fixed, or is <strong>greater/smaller</strong> than a reference (strict or not).</li>
 </ul>
 <p>In case of failure, it raises the same kind of <code>ValidationError</code> objects than more elaborate validation methods provided below, so it is consistent with the rest of <code>valid8</code>. Besides, the exception <code>__cause__</code> is the same than the equivalent operators from the <a href="./base_validation_lib">valid8 base validation library</a>.</p>
 <p>For example:</p>

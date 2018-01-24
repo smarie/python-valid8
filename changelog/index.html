@@ -68,7 +68,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#320-new-names-and-aliases-for-readability" tabindex="1" class="md-skip">
+      <a href="#330-new-features" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -354,6 +354,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#330-new-features" title="3.3.0 - new features" class="md-nav__link">
+    3.3.0 - new features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#320-new-names-and-aliases-for-readability" title="3.2.0 - new names and aliases for readability" class="md-nav__link">
     3.2.0 - new names and aliases for readability
   </a>
@@ -430,6 +437,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#330-new-features" title="3.3.0 - new features" class="md-nav__link">
+    3.3.0 - new features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#320-new-names-and-aliases-for-readability" title="3.2.0 - new names and aliases for readability" class="md-nav__link">
     3.2.0 - new names and aliases for readability
   </a>
@@ -497,7 +511,20 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="320-new-names-and-aliases-for-readability">3.2.0 - new names and aliases for readability<a class="headerlink" href="#320-new-names-and-aliases-for-readability" title="Permanent link">&para;</a></h3>
+                <h3 id="330-new-features">3.3.0 - new features<a class="headerlink" href="#330-new-features" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Inline validation:</li>
+<li><code>validate</code> has several new arguments: <code>subclass_of</code>, <code>contains</code>, <code>subset_of</code>, <code>superset_of</code>, <code>length</code>, <code>equals</code></li>
+<li><code>validator</code> has a new argument: <code>subclass_of</code></li>
+<li>New base function <code>assert_subclass_of</code></li>
+<li><code>instance_of</code> and <code>subclass_of</code> are now dual functions: they can both serve as a function generators or as a simple functions for inline validation for example inside a <code>validator</code> context manager.</li>
+<li>Decorators:</li>
+<li>2 new function generators <code>has_length</code> and <code>contains</code></li>
+<li>Bug fixes:</li>
+<li>Fixed bug <a href="https://github.com/smarie/python-valid8/issues/11">#11</a> where <code>ValidationError</code> could not be correctly printed in case of a templating issue.</li>
+<li>New examples in the documentation</li>
+</ul>
+<h3 id="320-new-names-and-aliases-for-readability">3.2.0 - new names and aliases for readability<a class="headerlink" href="#320-new-names-and-aliases-for-readability" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>wrap_valid</code> context manager was renamed <code>validation</code> with alias <code>validator</code>. The deprecated old name remains accepted until next major release 4.x.</li>
 <li><code>quick_valid</code> function was renamed <code>validate</code>. The deprecated old name remains accepted until next major release 4.x.</li>
