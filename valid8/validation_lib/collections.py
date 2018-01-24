@@ -88,6 +88,31 @@ def maxlens(max_length_strict):
     return maxlen(max_length_strict, True)
 
 
+class WrongLength(Failure, ValueError):
+    """ Custom failure raised by has_length """
+    def __init__(self, wrong_value, ref_length):
+        help_msg = 'len(x) == {ref_length} does not hold for x={wrong_value}'
+        super(WrongLength, self).__init__(wrong_value=wrong_value, length=ref_length, help_msg=help_msg)
+
+
+def has_length(ref_length):
+    """
+    'length equals' validation function generator.
+    Returns a validation_function to check that `len(x) == ref_length`
+
+    :param ref_length:
+    :return:
+    """
+    def has_length_(x):
+        if len(x) == ref_length:
+            return True
+        else:
+            raise WrongLength(wrong_value=x, ref_length=ref_length)
+
+    has_length_.__name__ = 'length_equals_{}'.format(ref_length)
+    return has_length_
+
+
 class LengthNotInRange(Failure, ValueError):
     """ Custom Failure raised by length_between """
     def __init__(self, wrong_value, min_length, left_strict, max_length, right_strict):
@@ -205,6 +230,31 @@ def is_subset(reference_set: Set):
             raise NotSubset(wrong_value=x, reference_set=reference_set, unsupported=missing)
 
     return is_subset_of
+
+
+class DoesNotContainValue(Failure, ValueError):
+    """ Custom Failure raised by contains """
+    def __init__(self, wrong_value, ref_value):
+        help_msg = '{ref_value} in x does not hold for x={wrong_value}'
+        super(DoesNotContainValue, self).__init__(wrong_value=wrong_value, ref_value=ref_value,
+                                                  help_msg=help_msg)
+
+
+def contains(ref_value):
+    """
+    'Contains' validation_function generator.
+    Returns a validation_function to check that `ref_value in x`
+
+    :param ref_value: a value that must be present in x
+    :return:
+    """
+    def contains_ref_value(x):
+        if ref_value in x:
+            return True
+        else:
+            raise DoesNotContainValue(wrong_value=x, ref_value=ref_value)
+
+    return contains_ref_value
 
 
 class NotSuperset(Failure, ValueError):

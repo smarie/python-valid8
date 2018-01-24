@@ -86,6 +86,10 @@ Validates that x is odd (`x % 2 != 0`).
 
 ## Collections
 
+### has_length(ref_length)
+
+'length equals' validation function generator. Returns a validation_function to check that `len(x) == ref_length`
+
 ### minlen(min_length, strict:bool=False)
 
 'Minimum length' validation function generator. Returns a validation function to check that `len(x) >= min_length` (strict=False, default) or `len(x) > min_length` (strict=True).
@@ -113,6 +117,10 @@ Alias for maxlen in strict mode.
 ### is_subset(reference_set)
 
 'Is subset' validation function generator. Returns a validation function to check that `x` is a subset of `reference_set`. That is, `len(x - reference_set) == 0`.
+
+### contains(ref_value)
+
+'Contains' validation_function generator. Returns a validation_function to check that `ref_value in x`
 
 ### is_superset(reference_set)
 

@@ -2,7 +2,7 @@ import pytest
 
 from mini_lambda import make_lambda_friendly_method, _, x
 from valid8 import on_each_, is_even, maxlen, on_all_, is_subset, is_superset, is_in, Failure, minlen, TooShort, \
-    minlens, TooLong, length_between, maxlens, LengthNotInRange, lt
+    minlens, TooLong, length_between, maxlens, LengthNotInRange, lt, contains, has_length, WrongLength
 
 
 def test_is_in():
@@ -11,6 +11,13 @@ def test_is_in():
     is_in({'+', '-'})('+')
     with pytest.raises(Failure):
         is_in({'+', '-'})('*')
+
+
+def test_contains():
+    """ Checks that contains works """
+    contains('+')(['+', '-'])
+    with pytest.raises(Failure):
+        contains('*')(['+', '-'])
 
 
 def test_is_subset_is_superset():
@@ -52,6 +59,13 @@ def test_on_each():
     a((0, -1))
     with pytest.raises(Failure):
         a((0, 2))
+
+
+def test_haslen():
+    """ tests that the has_length() function works """
+    assert has_length(1)(['a'])
+    with pytest.raises(WrongLength):
+        has_length(1)([])
 
 
 def test_minlen():
