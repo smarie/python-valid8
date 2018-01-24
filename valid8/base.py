@@ -67,7 +67,8 @@ class HelpMsgFormattingException(Exception):
         self.help_msg = help_msg
         self.__cause__ = caught
 
-        msg = "Error while formatting help msg [{msg}], keyword [{kw}] was not found in the validation context" \
+        msg = "Error while formatting help msg, keyword [{kw}] was not found in the validation context. Help message to " \
+              "format was '{msg}'" \
               "".format(msg=help_msg, kw=caught.args[0])
         super(HelpMsgFormattingException, self).__init__(msg)
 
