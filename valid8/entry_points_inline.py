@@ -5,7 +5,7 @@ from warnings import warn
 from valid8.entry_points import Validator, ValidationError, NonePolicy
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
-    NotSubset, NotSuperset
+    NotSubset, NotSuperset, NotEqual
 from valid8.validation_lib.comparables import TooSmall, TooBig
 from valid8.base import ValueIsNone
 
@@ -101,7 +101,7 @@ class _QuickValidator(Validator):
 
 
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
-def validate(name: str, value: Any, enforce_not_none: bool = True,
+def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any = None,
              instance_of: Union[type, Set[type]] = None, subclass_of: Union[type, Set[type]] = None,
              is_in: Set = None, subset_of: Set = None, contains: Union[Any, Iterable] = None, superset_of: Set = None,
              min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
@@ -123,11 +123,12 @@ def validate(name: str, value: Any, enforce_not_none: bool = True,
 
     :param name: the applicative name of the checked value, that will be used in error messages
     :param value: the value to check
-    :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    :param enforce_not_none: boolean, default True. Whether to enforce that `value` is not None.
+    :param equals: an optional value to enforce.
+    :param instance_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
     match is enough to succeed. If None, type will not be enforced
-    :param subclass_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    :param subclass_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
     match is enough to succeed. If None, type will not be enforced
-    :param enforce_not_none: boolean, default True. Whether to enforce that var is not None.
     :param is_in: an optional set of allowed values.
     :param subset_of: an optional superset for the variable
     :param contains: an optional value that the variable should contain (value in variable == True)
@@ -175,6 +176,10 @@ def validate(name: str, value: Any, enforce_not_none: bool = True,
             # else do nothing and return
 
         else:
+            if equals is not None:
+                if value != equals:
+                    raise NotEqual(wrong_value=value, ref_value=equals)
+
             if instance_of is not None:
                 assert_instance_of(value, instance_of)
 
@@ -404,17 +409,20 @@ class validator(Validator):
                         self.main_function.name = ' ; '.join(wrapped_block_lines)
 
                     else:
+                        # We can put this back ONLY if we find a way to also work properly when the line is a multiline
+                        # Otherwise it is better not to try to be too smart here
+                        #
                         # -- There was no exception so we just output the line where self.eye.outcome is computed
-                        found = None
-                        for idx, line in enumerate(wrapped_block_lines[::-1]):
-                            if ('.' + self.eye.last_field_name_used) in line:
-                                found = line
-                                break
-                        if found is not None:
-                            self.main_function.name = found
-                        else:
-                            # not able to identify... dump the whole block
-                            self.main_function.name = ' ; '.join(wrapped_block_lines)
+                        # found = None
+                        # for idx, line in enumerate(wrapped_block_lines[::-1]):
+                        #     if ('.' + self.eye.last_field_name_used) in line:
+                        #         found = line
+                        #         break
+                        # if found is not None:
+                        #     self.main_function.name = found
+                        # else:
+                        #     # not able to identify... dump the whole block
+                        self.main_function.name = ' ; '.join(wrapped_block_lines)
 
                 except Exception as e:
                     warn('Error while inspecting source code at {}. No details will be added to the resulting '
