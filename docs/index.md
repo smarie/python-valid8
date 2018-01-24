@@ -53,10 +53,11 @@ Optional but recommended:
 The `validate` method is the most straightforward, but less flexible, tool in this toolbox. It provides you with ways to quickly validate one or several of:
 
  * value is not `None`
- * value is an instance of one type in a `var_types` set
- * value is one of the elements in a `allowed_values` set 
- * value is greater/smaller than `min_value`/`max_value` (strict or not)
- * value length is greater/smaller than `min_len` / `max_len` (strict or not).
+ * value is an **instance** of one type in a reference set, or is a **subtype** of a reference set
+ * value **equals** a reference item, 
+ * value is **contained** in a set, **contains** a reference item, or is a **sub/superset** of a reference set 
+ * value is **greater/smaller** than a reference (strict or not)
+ * value **length** is fixed, or is **greater/smaller** than a reference (strict or not).
 
 In case of failure, it raises the same kind of `ValidationError` objects than more elaborate validation methods provided below, so it is consistent with the rest of `valid8`. Besides, the exception `__cause__` is the same than the equivalent operators from the [valid8 base validation library](./base_validation_lib).
  
