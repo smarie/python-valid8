@@ -20,19 +20,19 @@
     
         
     <url>
-     <loc>/accepted/</loc>
+     <loc>/decorators/accepted/</loc>
      <lastmod>2018-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/base_validation_lib/</loc>
+     <loc>/decorators/base_validation_lib/</loc>
      <lastmod>2018-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/composition/</loc>
+     <loc>/decorators/composition/</loc>
      <lastmod>2018-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -48,11 +48,31 @@
     
 
     
+        
     <url>
-     <loc>/examples/</loc>
+     <loc>/examples/overview/</loc>
      <lastmod>2018-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
+    <url>
+     <loc>/examples/example1/</loc>
+     <lastmod>2018-01-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/examples/example2/</loc>
+     <lastmod>2018-01-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/examples/example3/</loc>
+     <lastmod>2018-01-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
     
