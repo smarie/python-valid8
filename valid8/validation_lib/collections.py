@@ -178,13 +178,6 @@ def length_between(min_len, max_len, open_left: bool = False, open_right: bool =
     return length_between_
 
 
-class NotEqual(Failure, ValueError):
-    """ Custom Failure raised by ?? (only by validate for now) """
-    def __init__(self, wrong_value, ref_value):
-        help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
-        super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, help_msg=help_msg)
-
-
 class NotInAllowedValues(Failure, ValueError):
     """ Custom Failure raised by is_in """
     def __init__(self, wrong_value, allowed_values):

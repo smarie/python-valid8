@@ -1,13 +1,13 @@
 import traceback
-from typing import Any, Union, Set, Iterable
+from typing import Any, Union, Set, Iterable, Callable
 from warnings import warn
 
-from valid8.entry_points import Validator, ValidationError, NonePolicy
+from valid8.base import ValueIsNone
+from valid8.entry_points import Validator, ValidationError, NonePolicy, assert_valid
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
-    NotSubset, NotSuperset, NotEqual
-from valid8.validation_lib.comparables import TooSmall, TooBig
-from valid8.base import ValueIsNone
+    NotSubset, NotSuperset
+from valid8.validation_lib.comparables import TooSmall, TooBig, NotEqual
 
 try:
     # noinspection PyUnresolvedReferences
@@ -107,8 +107,8 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
              min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
              length: int = None,
              min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
-             error_type: 'Type[ValidationError]' = None,
-             help_msg: str = None, **kw_context_args):
+             custom: Callable[[Any], Any] = None,
+             error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
     """
     A validation function for quick inline validation of `value`, with minimal capabilities:
 
@@ -142,6 +142,11 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     :param min_len_strict: if True, only values with length strictly greater than `min_len` will be accepted
     :param max_len: an optional maximum length
     :param max_len_strict: if True, only values with length strictly lesser than `max_len` will be accepted
+    :param custom: a custom base validation function or list of base validation functions to use. This is the same
+    syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
+    or a list of several such elements. Nested lists are supported and indicate an implicit `and_`. Tuples indicate an
+    implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used
+    instead of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
     `ValidationError` will be raised with the provided `help_msg`
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
@@ -252,6 +257,10 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     except Exception as e:
         raise _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,
                                                         help_msg=help_msg, **kw_context_args)
+
+    if custom is not None:
+        # traditional custom validator
+        assert_valid(name, value, custom, error_type=error_type, help_msg=help_msg, **kw_context_args)
 
 
 _QUICK_VALIDATOR = _QuickValidator()

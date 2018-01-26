@@ -3,6 +3,13 @@ from typing import Any
 from valid8.base import Failure
 
 
+class NotEqual(Failure, ValueError):
+    """ Custom Failure raised by ?? (only by validate for now) """
+    def __init__(self, wrong_value, ref_value):
+        help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
+        super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, help_msg=help_msg)
+
+
 class TooSmall(Failure, ValueError):
     """ Custom Failure raised by gt """
     def __init__(self, wrong_value, min_value, strict):
