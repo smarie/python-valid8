@@ -1,130 +1,17 @@
+from numbers import Integral, Real
+
 import pytest
 
 from valid8 import ValidationError
 
 
-def test_readme_examples_1():
-    """ Tests that the example 1 provided in the documentation works """
-
-    from numbers import Integral
-    x = 0
-
-    # inline 1
-    from valid8 import validate
-    validate('x', x, instance_of=Integral, min_value=0)
-
-    # inline 2
-    from valid8 import validator
-    with validator('x', x, instance_of=Integral) as v:
-        v.alid = x >= 0
-
-    # decorators
-    from valid8 import validate_arg, validate_out, validate_io, validate_field, instance_of, gt
-
-    # function input
-    @validate_arg('x', instance_of(Integral), gt(0))
-    def my_function(x):
-        pass
-
-    my_function(0)
-    with pytest.raises(ValueError):
-        my_function(-1)
-    with pytest.raises(TypeError):
-        my_function('')
-
-    # function output
-    @validate_out(instance_of(Integral), gt(0))
-    def my_function2():
-        x = 0
-        return x
-
-    # function ins and outs
-    @validate_io(x=[instance_of(Integral), gt(0)])
-    def my_function3(x):
-        pass
-
-    my_function3(0)
-    with pytest.raises(ValueError):
-        my_function3(-1)
-    with pytest.raises(TypeError):
-        my_function3('')
-
-    # class field
-    @validate_field('x', instance_of(Integral), gt(0))
-    class Foo:
-        def __init__(self, x):
-            self.x = x
-
-    Foo(0)
-    with pytest.raises(ValueError):
-        Foo(-1)
-    with pytest.raises(TypeError):
-        Foo('')
-
-
-def test_readme_examples_2():
-    s = 'lowww'
-
-    # inline 1
-    from valid8 import validate
-    validate('s', s, instance_of=str, min_len=1, equals=s.lower())
-
-    # inline 2
-    from valid8 import validator
-    with validator('s', s, instance_of=str) as v:
-        v.alid = (len(s) > 0) and s.islower()
-
-    from mini_lambda import s
-    from valid8 import validate_arg, validate_out, validate_io, validate_field, instance_of
-
-    # function input
-    @validate_arg('s', instance_of(str), s.islower())
-    def my_function(s):
-        pass
-
-    my_function('re')
-    with pytest.raises(ValueError):
-        my_function('Re')
-    with pytest.raises(TypeError):
-        my_function(1)
-
-    # function output
-    @validate_out(instance_of(str), s.islower())
-    def my_function2():
-        return -1
-
-    # function ins and outs
-    @validate_io(s=[instance_of(str), s.islower()])
-    def my_function3(s):
-        pass
-
-    my_function3('re')
-    with pytest.raises(ValueError):
-        my_function3('Re')
-    with pytest.raises(TypeError):
-        my_function3(1)
-
-    # class field
-    @validate_field('s', instance_of(str), s.islower())
-    class Foo:
-        def __init__(self, s):
-            self.s = s
-
-    Foo('re')
-    with pytest.raises(ValueError):
-        Foo('Re')
-    with pytest.raises(TypeError):
-        Foo(1)
-
-
-def test_readme_examples_3():
-    # list containing tuples of (float between 0 and 1, trigram (string of length 3)
+def test_readme_examples_4():
+    """ Tests that the example 4 provided in the documentation works (list of custom tuples) """
 
     l = [(1, 'ras'), (0.2, 'abc')]
 
-    # inline 1
+    # ---- inline 1
     from valid8 import validate
-    from numbers import Real
 
     # first validate the main type
     validate('l', l, instance_of=list)
@@ -135,14 +22,15 @@ def test_readme_examples_3():
         # the first element is a float between 0 and 1
         validate('l[{}][0]'.format(i), l[i][0], instance_of=Real, min_value=0, max_value=1)
         # the second element is a lowercase string of size 3
-        validate('l[{}][0]'.format(i), l[i][1], instance_of=str, length=3, equals=l[i][1].lower())
+        validate('l[{}][1]'.format(i), l[i][1], instance_of=str, length=3, equals=l[i][1].lower())
 
-    # inline 2
+    # ---- inline 2
     from valid8 import validator, instance_of
 
     l = [(1, 'ras'), (0.2, 'abc')]
 
-    with validator('x', l, instance_of=list) as v:
+    # all at once
+    with validator('l', l, instance_of=list) as v:
         v.alid = all(
                     # each item is a tuple of size 2
                     instance_of(item, tuple) and len(item) == 2
@@ -152,8 +40,43 @@ def test_readme_examples_3():
                     and instance_of(item[1], str) and len(item[1]) == 3 and item[1].islower()
                  for item in l)
 
+    # custom validation function
+    def check_valid_tuple(tup):
+        """ custom validation function - here in 'failure raiser' style (returning nothing) """
 
-    # function input
+        # each item is a tuple of size 2
+        if not isinstance(tup, tuple):
+            raise TypeError('item should be a tuple')
+        if len(tup) != 2:
+            raise ValueError('tuple length should be 2')
+
+        # the first element is a float between 0 and 1
+        if not isinstance(tup[0], Real):
+            raise TypeError('first element should be a Real')
+        if not (0 <= tup[0] <= 1):
+            raise ValueError('first element should be between 0 and 1')
+
+        # the second element is a lowercase string of size 3
+        if not isinstance(tup[1], str):
+            raise TypeError('second element should be a string')
+        if not (len(tup[1]) == 3 and tup[1].islower()):
+            raise ValueError('second element should be a lowercase string of length 3')
+
+    from valid8 import validate, validation
+
+    # first validate the main type
+    validate('l', l, instance_of=list)
+
+    # then validate (and use) the contents
+    for i, v in enumerate(l):
+        # each item is a valid tuple
+        with validation('l[{}]'.format(i), l[i]):
+            check_valid_tuple(l[i])
+
+        # here you can actually USE the current item
+
+
+    # ---- function input
     from valid8 import validate_arg, instance_of, on_all_, on_each_, has_length, and_, between
 
     @validate_arg('l', instance_of(list), on_all_(
@@ -205,7 +128,7 @@ def test_readme_examples_3():
     my_function(l)
 
 
-    # mini_lambda
+    # ---- mini_lambda
     from valid8 import validate_arg, instance_of, on_all_
 
     # just for fun: we create our custom mini_lambda variable named 't'

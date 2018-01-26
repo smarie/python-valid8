@@ -6,11 +6,17 @@ pages:
     - Why validation: why_validation.md
     #- Usage details: usage.md
     - For `valid8` decorators only:
-      - Accepted base validation functions: accepted.md
-      - Built-in base validation functions: base_validation_lib.md
-      - Composing base validation functions: composition.md
+      - Accepted base validation functions: decorators/accepted.md
+      - Built-in base validation functions: decorators/base_validation_lib.md
+      - Composing base validation functions: decorators/composition.md
     - valid8 + other tools: valid8_with_other.md
-    - Examples/Recipes: examples.md
+    - Examples/Recipes:
+      - Overview: examples/overview.md
+      - Example 1: examples/example1.md
+      - Example 2: examples/example2.md
+      - Example 3: examples/example3.md
+      #- Example 4: examples/example4.md
+      #- Example 5: examples/example5.md
     - Other validation libs: other_libs.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs

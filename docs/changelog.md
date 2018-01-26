@@ -1,3 +1,11 @@
+### 3.4.0 - new features
+
+ * Inline validation:
+   * `validate` has a new argument `custom` where you can provide a callable method, or a list (same than for the decorators)
+ * Examples:
+   * one page per example - now with a dedicated test in the sources
+ * mini-lambda support: now providing an `Instance_of` mini-lambda equivalent of `instance_of`, to raise proper `TypeError`. See example 3 for usage
+
 ### 3.3.0 - new features
 
  * Inline validation:
