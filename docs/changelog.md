@@ -57,6 +57,8 @@
  
  * improved documentation overall
 
+ * Now compliant with old versions of `typing` module: `typing.Type` is not imported explicitly anymore.
+
 ### 2.1.0 - new annotation @validate_field
  
  * @validate_field allows users to validate class fields, whether they are descriptors, properties, or constructor arguments. Check the documentation for details!
