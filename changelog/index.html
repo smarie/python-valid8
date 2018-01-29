@@ -587,24 +587,48 @@
                 
                 <h3 id="340-new-features">3.4.0 - new features<a class="headerlink" href="#340-new-features" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Inline validation:</li>
+<li>
+<p>Inline validation:</p>
+<ul>
 <li><code>validate</code> has a new argument <code>custom</code> where you can provide a callable method, or a list (same than for the decorators)</li>
-<li>Examples:</li>
+</ul>
+</li>
+<li>
+<p>Examples:</p>
+<ul>
 <li>one page per example - now with a dedicated test in the sources</li>
-<li>mini-lambda support: now providing an <code>Instance_of</code> mini-lambda equivalent of <code>instance_of</code>, to raise proper <code>TypeError</code>. See example 3 for usage</li>
+</ul>
+</li>
+<li>
+<p>mini-lambda support: now providing an <code>Instance_of</code> mini-lambda equivalent of <code>instance_of</code>, to raise proper <code>TypeError</code>. See example 3 for usage</p>
+</li>
 </ul>
 <h3 id="330-new-features">3.3.0 - new features<a class="headerlink" href="#330-new-features" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Inline validation:</li>
+<li>
+<p>Inline validation:</p>
+<ul>
 <li><code>validate</code> has several new arguments: <code>subclass_of</code>, <code>contains</code>, <code>subset_of</code>, <code>superset_of</code>, <code>length</code>, <code>equals</code></li>
 <li><code>validator</code> has a new argument: <code>subclass_of</code></li>
 <li>New base function <code>assert_subclass_of</code></li>
 <li><code>instance_of</code> and <code>subclass_of</code> are now dual functions: they can both serve as a function generators or as a simple functions for inline validation for example inside a <code>validator</code> context manager.</li>
-<li>Decorators:</li>
+</ul>
+</li>
+<li>
+<p>Decorators:</p>
+<ul>
 <li>2 new function generators <code>has_length</code> and <code>contains</code></li>
-<li>Bug fixes:</li>
+</ul>
+</li>
+<li>
+<p>Bug fixes:</p>
+<ul>
 <li>Fixed bug <a href="https://github.com/smarie/python-valid8/issues/11">#11</a> where <code>ValidationError</code> could not be correctly printed in case of a templating issue.</li>
-<li>New examples in the documentation</li>
+</ul>
+</li>
+<li>
+<p>New examples in the documentation</p>
+</li>
 </ul>
 <h3 id="320-new-names-and-aliases-for-readability">3.2.0 - new names and aliases for readability<a class="headerlink" href="#320-new-names-and-aliases-for-readability" title="Permanent link">&para;</a></h3>
 <ul>
@@ -626,12 +650,10 @@
 <ul>
 <li>
 <p>Added two new entry points that should be more useful and usable than <code>assert_valid</code> for inline validation:</p>
-</li>
-<li>
-<p><code>quick_valid</code> for limited but simple one-line validation (most common tasks)</p>
-</li>
-<li>
-<p><code>wrap_valid</code> for more flexible validation (a contextmanager so it takes 2 lines)</p>
+<ul>
+<li><code>quick_valid</code> for limited but simple one-line validation (most common tasks)</li>
+<li><code>wrap_valid</code> for more flexible validation (a contextmanager so it takes 2 lines)</li>
+</ul>
 </li>
 <li>
 <p><code>ValidationError</code> does not inherit from <code>ValueError</code> anymore. Instead an exception type is dynamically created with the appropriate base class (either <code>ValueError</code> or <code>TypeError</code>) when a validation exception is raised. This can be disabled by explicitly inheriting from one or the other in custom exception types.</p>
