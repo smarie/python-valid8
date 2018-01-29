@@ -1,22 +1,32 @@
 ### 3.4.0 - new features
 
  * Inline validation:
-   * `validate` has a new argument `custom` where you can provide a callable method, or a list (same than for the decorators)
+ 
+    - `validate` has a new argument `custom` where you can provide a callable method, or a list (same than for the decorators)
+   
  * Examples:
-   * one page per example - now with a dedicated test in the sources
+ 
+    - one page per example - now with a dedicated test in the sources
+   
  * mini-lambda support: now providing an `Instance_of` mini-lambda equivalent of `instance_of`, to raise proper `TypeError`. See example 3 for usage
 
 ### 3.3.0 - new features
 
  * Inline validation:
-   * `validate` has several new arguments: `subclass_of`, `contains`, `subset_of`, `superset_of`, `length`, `equals`
-   * `validator` has a new argument: `subclass_of`
-   * New base function `assert_subclass_of`
-   * `instance_of` and `subclass_of` are now dual functions: they can both serve as a function generators or as a simple functions for inline validation for example inside a `validator` context manager.
+ 
+    - `validate` has several new arguments: `subclass_of`, `contains`, `subset_of`, `superset_of`, `length`, `equals`
+    - `validator` has a new argument: `subclass_of`
+    - New base function `assert_subclass_of`
+    - `instance_of` and `subclass_of` are now dual functions: they can both serve as a function generators or as a simple functions for inline validation for example inside a `validator` context manager.
+   
  * Decorators:
-   * 2 new function generators `has_length` and `contains`
+ 
+    - 2 new function generators `has_length` and `contains`
+   
  * Bug fixes:
-   * Fixed bug [#11](https://github.com/smarie/python-valid8/issues/11) where `ValidationError` could not be correctly printed in case of a templating issue.
+ 
+    - Fixed bug [#11](https://github.com/smarie/python-valid8/issues/11) where `ValidationError` could not be correctly printed in case of a templating issue.
+   
  * New examples in the documentation
 
 ### 3.2.0 - new names and aliases for readability
@@ -40,8 +50,8 @@
 
  * Added two new entry points that should be more useful and usable than `assert_valid` for inline validation:
  
-   - `quick_valid` for limited but simple one-line validation (most common tasks)
-   - `wrap_valid` for more flexible validation (a contextmanager so it takes 2 lines)
+    - `quick_valid` for limited but simple one-line validation (most common tasks)
+    - `wrap_valid` for more flexible validation (a contextmanager so it takes 2 lines)
  
  * `ValidationError` does not inherit from `ValueError` anymore. Instead an exception type is dynamically created with the appropriate base class (either `ValueError` or `TypeError`) when a validation exception is raised. This can be disabled by explicitly inheriting from one or the other in custom exception types.
  
