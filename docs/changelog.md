@@ -1,3 +1,7 @@
+### 3.5.0 - improved PEP484-nonable detection
+
+ * Now relying on typing_inspect to check if an argument is nonable, with support of `TypeVar` and `Union` including nesting.
+
 ### 3.4.0 - new features
 
  * Inline validation:

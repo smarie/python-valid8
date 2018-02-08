@@ -1,5 +1,8 @@
 from abc import abstractmethod, ABCMeta
 
+from typing import Tuple, Any
+from typing_inspect import is_typevar, is_union_type, get_args
+
 
 class Boolean(metaclass=ABCMeta):
     """
@@ -53,53 +56,59 @@ except ImportError:
     pass
 
 
-def is_pep484_none_type(type_hint):
-    """ Returns True if the provided PEP484 type hint is the None type """
-    return (type_hint is type(None)) or (str(type_hint) == type(None).__name__)
+# def is_pep484_none_type(type_hint):
+#     """ Returns True if the provided PEP484 type hint is the None type """
+#     return (type_hint is type(None)) or (str(type_hint) == type(None).__name__)
 
 
-def is_pep484_union_type(type_hint):
-    """ Returns True if the provided PEP484 type hint is the Union type """
-    return str(type_hint).startswith('typing.Union')
+# def is_pep484_union_type(type_hint):
+#     """ Returns True if the provided PEP484 type hint is the Union type """
+#     return str(type_hint).startswith('typing.Union')
 
 
-def is_pep484_nonable(type_hint):
+def resolve_union_and_typevar(typ) -> Tuple[Any, ...]:
     """
-    Returns True if the provided PEP484 type hint is Nonable, meaning that it is either the None type or a union
-    containing the none type (recursive).
+    If typ is a TypeVar,
+     * if the typevar is bound, return resolve_union_and_typevar(bound)
+     * if the typevar has constraints, return a tuple containing all the types listed in the constraints (with
+     appropriate recursive call to resolve_union_and_typevar for each of them)
+     * otherwise return (object, )
 
-    The idea here is not to rely on a full pep484 type validation library but to do the minimum checks for Nonable
-    indeed we do not want to add a dependency, and we cannot do try/except to find which validation library is
-    available, that would lead to inconsistent behaviour according to targets
+    If typ is a Union, return a tuple containing all the types listed in the union (with
+     appropriate recursive call to resolve_union_and_typevar for each of them)
 
-    :param type_hint:
+    Otherwise return (typ, )
+
+    :param typ:
     :return:
     """
+    if is_typevar(typ):
+        if hasattr(typ, '__bound__') and typ.__bound__ is not None:
+            return resolve_union_and_typevar(typ.__bound__)
+        elif hasattr(typ, '__constraints__') and typ.__constraints__ is not None:
+            return tuple(typpp for c in typ.__constraints__ for typpp in resolve_union_and_typevar(c))
+        else:
+            return object,
+    elif is_union_type(typ):
+        # do not use typ.__args__, it may be wrong
+        # the solution below works even in typevar+config cases such as u = Union[T, str][Optional[int]]
+        return get_args(typ, evaluate=True)
+    else:
+        return typ,
 
-    # For reference - with enforce type checker that would be:
-    # --------------------------------------------------------
-    # from enforce.settings import Settings
-    # from enforce.validator import init_validator
-    # # use enforce to check if the type hint
-    # validator = init_validator(dict(foo=type_hint))
-    # validator.settings = Settings(enabled=True, group=None)
-    # return validator.validate(None, 'foo')
 
-    if type_hint is None:
-        # no type hint - we cannot say anything
-        return False
+def is_pep484_nonable(typ):
+    """
+    Checks if a given type is nonable, meaning that it explicitly or implicitly declares a Union with NoneType.
+    Nested TypeVars and Unions are supported.
 
-    elif is_pep484_none_type(type_hint):
+    :param typ:
+    :return:
+    """
+    # TODO rely on typing_inspect if there is an answer to https://github.com/ilevkivskyi/typing_inspect/issues/14
+    if typ is type(None):
         return True
-
-    elif is_pep484_union_type(type_hint):
-        try:
-            union_params = type_hint.__union_params__
-        except AttributeError:
-            union_params = type_hint.__args__
-        for element in union_params:
-            if is_pep484_nonable(element):
-                return True
-
-    # fallback
-    return False
+    elif is_typevar(typ) or is_union_type(typ):
+        return any(is_pep484_nonable(tt) for tt in resolve_union_and_typevar(typ))
+    else:
+        return False
