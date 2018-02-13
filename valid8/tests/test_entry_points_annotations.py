@@ -416,3 +416,28 @@ def test_decorate_manually():
 
     with pytest.raises(InputValidationError):
         my_func(9)
+
+
+def test_validate_tracebacks():
+    """ Tests that the traceback is reduced for instance_of checks """
+
+    from valid8 import validate_arg, instance_of
+    from mini_lambda import x
+
+    @validate_arg('foo', instance_of(int), x > 2)
+    def dofoo(foo):
+        pass
+
+    # cause is none for HasWrongType
+    with pytest.raises(ValidationError) as exc_info:
+        dofoo("hello")
+
+    e = exc_info.value
+    assert e.__cause__.__cause__ is None
+
+    # cause is not none otherwise
+    with pytest.raises(ValidationError) as exc_info:
+        dofoo(1)
+
+    e = exc_info.value
+    assert e.__cause__ is not None

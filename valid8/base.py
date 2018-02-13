@@ -16,6 +16,13 @@ class RootException(Exception):
     """ All exceptions defined within valid8 inherit from this class """
 
 
+def should_be_hidden_as_cause(exc):
+    """ Used everywhere to decide if some exception type should be displayed or hidden as the casue of an error """
+    # reduced traceback in case of HasWrongType (instance_of checks)
+    from valid8.validation_lib.types import HasWrongType
+    return isinstance(exc, HasWrongType)
+
+
 def get_callable_name(validation_callable: Callable) -> str:
     """
     Used internally to get the name to display concerning a validation function, in error messages for example.

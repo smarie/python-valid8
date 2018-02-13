@@ -1,3 +1,7 @@
+### 3.5.1 - Improved tracebacks
+
+ * Fixed [#14](https://github.com/smarie/python-valid8/issues/14)
+
 ### 3.5.0 - improved PEP484-nonable detection
 
  * Now relying on typing_inspect to check if an argument is nonable, with support of `TypeVar` and `Union` including nesting.

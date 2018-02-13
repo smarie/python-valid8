@@ -135,3 +135,24 @@ def test_readme_usage_wrap_valid_customization():
     assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
                      "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
                      "TypeError: '>' not supported between instances of 'complex' and 'int'."
+
+
+def test_validate_tracebacks():
+    """ Tests that the traceback is reduced for instance_of checks """
+
+    from valid8 import validate
+    x = "hello"
+
+    # cause is none for HasWrongType
+    with pytest.raises(ValidationError) as exc_info:
+        validate('x', x, instance_of=int)
+
+    e = exc_info.value
+    assert e.__cause__ is None
+
+    # cause is not none otherwise
+    with pytest.raises(ValidationError) as exc_info:
+        validate('x', x, equals=2)
+
+    e = exc_info.value
+    assert e.__cause__ is not None

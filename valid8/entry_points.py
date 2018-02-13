@@ -3,7 +3,7 @@ from typing import Callable, Any, List, Union  # do not import Type for compatib
 
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
-    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException
+    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause
 from valid8.composition import ValidationFuncs, _process_validation_function_s
 
 
@@ -189,9 +189,14 @@ class ValidationError(HelpMsgMixIn, RootException):
         # __str__ anyway
         super(ValidationError, self).__init__()
 
-        # automatically set the exception as the cause, so that we can forget to "raise from"
-        if isinstance(validation_outcome, Exception):
+        # automatically set the exception as the cause, so that we can forget to "raise from" (except when from None)
+        if isinstance(validation_outcome, Exception) and not should_be_hidden_as_cause(validation_outcome):
             self.__cause__ = validation_outcome
+            # possibly hide the cause of the cause
+            if hasattr(validation_outcome, '__cause__') and should_be_hidden_as_cause(validation_outcome.__cause__):
+                validation_outcome.__cause__ = None
+        else:
+            self.__cause__ = None
 
     def __str__(self):
         """ Overrides the default exception message by relying on HelpMsgMixIn """

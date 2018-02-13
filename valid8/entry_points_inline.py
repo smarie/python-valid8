@@ -90,7 +90,7 @@ class _QuickValidator(Validator):
                                                                     **kw_context_args)
         # disable displaying the annoying prefix
         err.display_prefix_for_exc_outcomes = False
-        raise err
+        return err
 
     def assert_valid(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None,
                      help_msg: str = None, **kw_context_args):
