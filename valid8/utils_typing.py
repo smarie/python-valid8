@@ -1,7 +1,9 @@
 from abc import abstractmethod, ABCMeta
 
 from typing import Tuple, Any
-from typing_inspect import is_typevar, is_union_type, get_args
+
+# for compliance with older versions we cant rely on typing_inspect
+from valid8._typing_inspect import is_typevar, is_union_type, get_args
 
 
 class Boolean(metaclass=ABCMeta):

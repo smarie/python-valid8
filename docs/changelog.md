@@ -1,3 +1,7 @@
+### 3.5.2 - support for older version of typing.py
+
+ * removed dependency to `typing_inspect` module so that the module also runs with very old versions of typing.py
+
 ### 3.5.1 - Improved tracebacks
 
  * Fixed [#14](https://github.com/smarie/python-valid8/issues/14)
