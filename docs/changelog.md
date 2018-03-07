@@ -1,3 +1,7 @@
+### 3.5.3 - fixed optionality detection bug
+
+ * internal custom copy of `typing_inspect` module was correct for old versions of python but created a bug on new versions of python: optionality detection was not working anymore when using `Optional[]`. Fixes [#16](https://github.com/smarie/python-valid8/issues/16) 
+
 ### 3.5.2 - support for older version of typing.py
 
  * removed dependency to `typing_inspect` module so that the module also runs with very old versions of typing.py
