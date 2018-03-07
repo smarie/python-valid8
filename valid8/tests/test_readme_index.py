@@ -42,9 +42,9 @@ def test_readme_usage_wrap_valid():
         with wrap_valid('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=1j]. " \
-                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                     "TypeError: '>' not supported between instances of 'complex' and 'int'."
+    assert str(e).startswith("Error validating [surface=1j]. " \
+                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
+                             "TypeError:")
 
     # alternate naming
     surf = -1

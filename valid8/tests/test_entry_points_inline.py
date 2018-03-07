@@ -109,9 +109,9 @@ def test_readme_usage_wrap_valid_customization():
         with wrap_valid('surface', surf, help_msg="Surface should be a finite positive integer") as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Surface should be a finite positive integer. Error validating [surface=1j]. " \
-                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                     "TypeError: '>' not supported between instances of 'complex' and 'int'."
+    assert str(e).startswith("Surface should be a finite positive integer. Error validating [surface=1j]. " \
+                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
+                             "TypeError:")
 
     # (B) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -132,9 +132,9 @@ def test_readme_usage_wrap_valid_customization():
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
-    assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
-                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                     "TypeError: '>' not supported between instances of 'complex' and 'int'."
+    assert str(e).startswith("Surface should be > 0, found 1j. Error validating [surface=1j]. " \
+                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
+                             "TypeError:")
 
 
 def test_validate_tracebacks():
