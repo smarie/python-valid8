@@ -1,3 +1,7 @@
+### 3.5.4 - Improved init
+
+ * The init file has been improved so as not to export symbols from other packages. Fixes [#15](https://github.com/smarie/python-valid8/issues/15)
+
 ### 3.5.3 - fixed optionality detection bug
 
  * internal custom copy of `typing_inspect` module was correct for old versions of python but created a bug on new versions of python: optionality detection was not working anymore when using `Optional[]`. Fixes [#16](https://github.com/smarie/python-valid8/issues/16) 
