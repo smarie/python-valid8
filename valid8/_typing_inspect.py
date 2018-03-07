@@ -100,8 +100,12 @@ def is_union_type(tp):
         is_union_type(Union[int, int]) == False
         is_union_type(Union[T, int]) == True
     """
-
-    return type(tp) is Union  # not _Union
+    try:
+        from typing import _Union
+        return type(tp) is _Union
+    except ImportError:
+        # very old typing module
+        return type(tp) is Union  # not _Union
 
 
 def is_typevar(tp):
