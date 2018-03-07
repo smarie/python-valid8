@@ -11,7 +11,7 @@ Example usage::
 # NOTE: This module must support Python 2.7 in addition to Python 3.x
 
 from typing import (
-    Callable, Union, TypeVar, GenericMeta, Tuple
+    Callable, CallableMeta, Union, TupleMeta, TypeVar, GenericMeta,
 )
 
 
@@ -67,7 +67,7 @@ def is_callable_type(tp):
         get_origin(tp) is Callable
     """
 
-    return type(tp) is Callable
+    return type(tp) is CallableMeta
 
 
 def is_tuple_type(tp):
@@ -89,7 +89,7 @@ def is_tuple_type(tp):
         get_origin(tp) is Tuple
     """
 
-    return type(tp) is Tuple
+    return type(tp) is TupleMeta
 
 
 def is_union_type(tp):
@@ -129,8 +129,8 @@ def is_classvar(tp):
     """
 
     try:
-        from typing import ClassVar
-        return type(tp) is ClassVar
+        from typing import _ClassVar
+        return type(tp) is _ClassVar
     except:
         return False
 
