@@ -149,6 +149,38 @@ class ValidationError(HelpMsgMixIn, RootException):
     they should subclass `WrappingFailure` instead of `Failure`. See `WrappingFailure` for details.
     """
 
+    @classmethod
+    def create_manually(cls, validation_function_name: str,
+                        var_name: str, var_value, validation_outcome: Any = None, help_msg: str = None,
+                        append_details: bool = True, **kw_context_args):
+        """
+        Creates an instance without using a Validator.
+
+        This method is not the primary way that errors are created - they should rather created by the validation entry
+        points. However it can be handy in rare edge cases.
+
+        :param validation_function_name:
+        :param var_name:
+        :param var_value:
+        :param validation_outcome:
+        :param help_msg:
+        :param append_details:
+        :param kw_context_args:
+        :return:
+        """
+        # create a dummy validator
+        def val_fun(x):
+            pass
+        val_fun.__name__ = validation_function_name
+        validator = Validator(val_fun, error_type=cls, help_msg=help_msg, **kw_context_args)
+
+        # create the exception
+        # e = cls(validator, var_value, var_name, validation_outcome=validation_outcome, help_msg=help_msg,
+        #         append_details=append_details, **kw_context_args)
+        e = validator._create_validation_error(var_name, var_value, validation_outcome, error_type=cls,
+                                               help_msg=help_msg, **kw_context_args)
+        return e
+
     def __init__(self, validator: 'Validator', var_value, var_name: str, validation_outcome: Any = None,
                  help_msg: str = None, append_details: bool = True, **kw_context_args):
         """
@@ -239,8 +271,27 @@ class ValidationError(HelpMsgMixIn, RootException):
         return contents
 
     def get_variable_str(self):
-        """ Utility method to get the variable value or 'var_name=value' if name is not None """
-        return ('' if self.var_name is None else (self.var_name + '=')) + str(self.var_value)
+        """
+        Utility method to get the variable value or 'var_name=value' if name is not None.
+        Note that values with large string representations will not get printed
+
+        :return:
+        """
+        if self.var_name is None:
+            prefix = ''
+        else:
+            prefix = self.var_name
+
+        suffix = str(self.var_value)
+        if len(suffix) == 0:
+            suffix = "''"
+        elif len(suffix) > self.__max_str_length_displayed__:
+            suffix = ''
+
+        if len(prefix) > 0 and len(suffix) > 0:
+            return prefix + '=' + suffix
+        else:
+            return prefix + suffix
 
     def get_what_txt(self):
         """

@@ -156,3 +156,23 @@ def test_validate_tracebacks():
 
     e = exc_info.value
     assert e.__cause__ is not None
+
+
+def test_validate_auto_disable_display():
+    """ Tests that objects that have a too big string representation do not get added in the error message """
+
+    # TODO test with a pandas object... one day, when we know how to install pandas in travis :)
+
+    class Foo:
+        def __str__(self):
+            return "x" * 101
+
+    o = Foo()
+
+    from valid8 import validate
+    with pytest.raises(ValidationError) as exc_info:
+        validate('o', o, equals=2)
+
+    e = exc_info.value
+    assert str(e) == "Error validating [o]. NotEqual: x == 2 does not hold for x=(too big for display). " \
+                     "(Actual value is too big to be printed in this message)."

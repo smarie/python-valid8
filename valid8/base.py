@@ -1,5 +1,6 @@
+import re
 from copy import copy
-from typing import Callable, Sequence, Any  # do not import Type for compatibility with earlier python 3.5
+from typing import Callable, Sequence, Any, Dict  # do not import Type for compatibility with earlier python 3.5
 
 from valid8.utils_string import end_with_dot_space
 
@@ -70,19 +71,34 @@ def is_error_of_type(exc, ref_type):
 
 
 class HelpMsgFormattingException(Exception):
-    def __init__(self, help_msg: str, caught: KeyError):
+    """
+    Exception raised when the help message cannot be formatted with the available context dictionary.
+    See `HelpMsgMixIn` for details.
+    """
+    def __init__(self, help_msg: str, caught: KeyError, context: Dict[str, Any]):
+        """
+        Constructor
+
+        :param help_msg:
+        :param caught:
+        :param context:
+        """
         self.help_msg = help_msg
         self.__cause__ = caught
 
-        msg = "Error while formatting help msg, keyword [{kw}] was not found in the validation context. Help message to " \
-              "format was '{msg}'" \
-              "".format(msg=help_msg, kw=caught.args[0])
+        msg = "Error while formatting help msg, keyword [{kw}] was not found in the validation context. Help message " \
+              "to format was '{msg}'. Context elements available: {ctx}" \
+              "".format(msg=help_msg, kw=caught.args[0], ctx=context)
         super(HelpMsgFormattingException, self).__init__(msg)
 
 
 class HelpMsgMixIn:
     """ A helper class providing the ability to store a help message in the class or in the instance, and to get a
     formatted help message """
+
+    __max_str_length_displayed__ = 100
+    """ objects with a string representation larger than this constant will not be printed in the error messages. 
+    Note that you can override this either on the class or on a particular instance. See `get_variable_str()` """
 
     help_msg = ''
     """ This class attribute holds the default help message used when no `help_msg` attribute is set at instance level 
@@ -105,12 +121,25 @@ class HelpMsgMixIn:
         context = self.get_context_for_help_msgs(kwargs)
 
         if self.help_msg is not None and len(self.help_msg) > 0:
+            # create a copy because we will modify it
+            context = copy(context)
+
             # first format if needed
             try:
-                help_msg = self.help_msg.format(**context)
+                help_msg = self.help_msg
+                variables = re.findall("{\S+}", help_msg)
+                for v in set(variables):
+                    v = v[1:-1]
+                    if v in context and len(str(context[v])) > self.__max_str_length_displayed__:
+                        new_name = '@@@@' + v + '@@@@'
+                        help_msg = help_msg.replace('{' + v + '}', '{' + new_name + '}')
+                        context[new_name] = "(too big for display)"
+
+                help_msg = help_msg.format(**context)
+
             except KeyError as e:
                 # no need to raise from e, __cause__ is set in the constructor
-                raise HelpMsgFormattingException(self.help_msg, e)
+                raise HelpMsgFormattingException(self.help_msg, e, context)
 
             # then add a trailing dot and space if needed
             if dotspace_ending:
@@ -223,7 +252,11 @@ class Failure(HelpMsgMixIn, RootException):
 
     def get_details(self):
         """ The function called to get the details appended to the help message when self.append_details is True """
-        return 'Wrong value: [{}]'.format(self.wrong_value)
+        strval = str(self.wrong_value)
+        if len(strval) > self.__max_str_length_displayed__:
+            return '(Actual value is too big to be printed in this message)'
+        else:
+            return 'Wrong value: [{}]'.format(self.wrong_value)
 
 
 class WrappingFailure(Failure):

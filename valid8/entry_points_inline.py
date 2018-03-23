@@ -1,5 +1,5 @@
 import traceback
-from typing import Any, Union, Set, Iterable, Callable
+from typing import Any, Union, Set, Iterable, Callable, Container
 from warnings import warn
 
 from valid8.base import ValueIsNone
@@ -103,7 +103,8 @@ class _QuickValidator(Validator):
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
 def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any = None,
              instance_of: Union[type, Set[type]] = None, subclass_of: Union[type, Set[type]] = None,
-             is_in: Set = None, subset_of: Set = None, contains: Union[Any, Iterable] = None, superset_of: Set = None,
+             is_in: Container = None, subset_of: Set = None, contains: Union[Any, Iterable] = None,
+             superset_of: Set = None,
              min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
              length: int = None,
              min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,

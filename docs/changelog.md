@@ -1,3 +1,10 @@
+# Changelog
+
+### 3.6.0 - Error messages improvements + create_manually class method in ValidationError
+
+ * values with string representation larger than 100 characters are not anymore displayed in the error messages by default. Fixes [#19](https://github.com/smarie/python-valid8/issues/19)
+ * new class method `ValidationError.create_manually` to create validation errors manually in some edge cases, without a validator entry point
+
 ### 3.5.5 - Fixed import * issue
 
  * Fixes [#18](https://github.com/smarie/python-valid8/issues/18)

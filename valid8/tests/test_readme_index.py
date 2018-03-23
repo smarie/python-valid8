@@ -181,7 +181,7 @@ def test_readme_index_usage_function():
         build_house('', 100)  # name is invalid
     e = exc_info.value
     assert str(e) == "name should be a non-empty string. " \
-                     "Error validating input [name=] for function [build_house]. " \
+                     "Error validating input [name=''] for function [build_house]. " \
                      "Validation function [and(instance_of_<class 'str'>, len(s) > 0)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value []. " \
                      "Successes: [\"instance_of_<class 'str'>\"] / Failures: {'len(s) > 0': 'False'}."
