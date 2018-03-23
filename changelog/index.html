@@ -89,7 +89,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#355-fixed-import-issue" tabindex="1" class="md-skip">
+      <a href="#changelog" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -417,6 +417,8 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
     
       <label class="md-nav__link md-nav__link--active" for="toc">
         Changelog
@@ -430,9 +432,18 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#360-error-messages-improvements-create_manually-class-method-in-validationerror" title="3.6.0 - Error messages improvements + create_manually class method in ValidationError" class="md-nav__link">
+    3.6.0 - Error messages improvements + create_manually class method in ValidationError
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#355-fixed-import-issue" title="3.5.5 - Fixed import * issue" class="md-nav__link">
@@ -564,9 +575,18 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#360-error-messages-improvements-create_manually-class-method-in-validationerror" title="3.6.0 - Error messages improvements + create_manually class method in ValidationError" class="md-nav__link">
+    3.6.0 - Error messages improvements + create_manually class method in ValidationError
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#355-fixed-import-issue" title="3.5.5 - Fixed import * issue" class="md-nav__link">
@@ -692,9 +712,13 @@
                   <a href="https://github.com/smarie/python-valid8/edit/master/docs/changelog.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Changelog</h1>
-                
-                <h3 id="355-fixed-import-issue">3.5.5 - Fixed import * issue<a class="headerlink" href="#355-fixed-import-issue" title="Permanent link">&para;</a></h3>
+                <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="360-error-messages-improvements-create_manually-class-method-in-validationerror">3.6.0 - Error messages improvements + create_manually class method in ValidationError<a class="headerlink" href="#360-error-messages-improvements-create_manually-class-method-in-validationerror" title="Permanent link">&para;</a></h3>
+<ul>
+<li>values with string representation larger than 100 characters are not anymore displayed in the error messages by default. Fixes <a href="https://github.com/smarie/python-valid8/issues/19">#19</a></li>
+<li>new class method <code>ValidationError.create_manually</code> to create validation errors manually in some edge cases, without a validator entry point</li>
+</ul>
+<h3 id="355-fixed-import-issue">3.5.5 - Fixed import * issue<a class="headerlink" href="#355-fixed-import-issue" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixes <a href="https://github.com/smarie/python-valid8/issues/18">#18</a></li>
 </ul>
