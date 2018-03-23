@@ -1,3 +1,7 @@
+### 3.5.5 - Fixed import * issue
+
+ * Fixes [#18](https://github.com/smarie/python-valid8/issues/18)
+
 ### 3.5.4 - Improved init
 
  * The init file has been improved so as not to export symbols from other packages. Fixes [#15](https://github.com/smarie/python-valid8/issues/15)
