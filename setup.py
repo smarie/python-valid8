@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['decorator']  # 'typing_inspect' is now copied internally so as to be compliant with very old versions of typing module
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs', 'numpy']
 EXTRAS_REQUIRE = {}
 
 # simple check

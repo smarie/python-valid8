@@ -41,3 +41,19 @@ def test_between():
 
     with pytest.raises(NotInRange):
         between(0, 1)(1.1)
+
+
+def test_numpy_nan():
+    """ Test that a numpy nan is correctly handled """
+
+    from valid8 import validate, gt, TooSmall, lt, TooBig
+    import numpy as np
+
+    with pytest.raises(TooSmall) as exc_info:
+        gt(5.1)(np.nan)
+
+    with pytest.raises(TooBig) as exc_info:
+        lt(5.1)(np.nan)
+
+    with pytest.raises(NotInRange) as exc_info:
+        between(5.1, 5.2)(np.nan)

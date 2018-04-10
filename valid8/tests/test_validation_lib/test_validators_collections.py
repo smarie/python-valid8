@@ -106,3 +106,42 @@ def test_length_between():
 
     with pytest.raises(LengthNotInRange):
         length_between(0, 1, open_left=True)([])
+
+
+def test_numpy_nan_like_lengths():
+    """ Test that a strange int length with bad behaviour is correctly handled """
+
+    class NanInt(int):
+        """
+        An int that behaves like numpy NaN (comparison always returns false)
+        """
+        def __le__(self, other):
+            return False
+
+        def __lt__(self, other):
+            return False
+
+        def __gt__(self, other):
+            return False
+
+        def __ge__(self, other):
+            return False
+
+    nanlength = NanInt()
+
+    class Foo:
+        def __len__(self):
+            return nanlength
+
+    f = Foo()
+
+    if isinstance(len(f), NanInt):
+        # in current version of python this does not happen, but the test is ready for future evolutions
+        with pytest.raises(TooShort) as exc_info:
+            minlen(0)(f)
+
+        with pytest.raises(TooLong) as exc_info:
+            maxlen(10)(f)
+
+        with pytest.raises(LengthNotInRange) as exc_info:
+            length_between(0, 10)(f)

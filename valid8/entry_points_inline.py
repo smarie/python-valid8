@@ -217,19 +217,19 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
             if min_value is not None:
                 # inlined version of gt(min_value=min_value, strict=min_strict)(value) without 'return True'
                 if min_strict:
-                    if value <= min_value:
+                    if not value > min_value:
                         raise TooSmall(wrong_value=value, min_value=min_value, strict=True)
                 else:
-                    if value < min_value:
+                    if not value >= min_value:
                         raise TooSmall(wrong_value=value, min_value=min_value, strict=False)
 
             if max_value is not None:
                 # inlined version of lt(max_value=max_value, strict=max_strict)(value) without 'return True'
                 if max_strict:
-                    if value >= max_value:
+                    if not value < max_value:
                         raise TooBig(wrong_value=value, max_value=max_value, strict=True)
                 else:
-                    if value > max_value:
+                    if not value <= max_value:
                         raise TooBig(wrong_value=value, max_value=max_value, strict=False)
 
             if length is not None:
@@ -240,19 +240,19 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
             if min_len is not None:
                 # inlined version of minlen(min_length=min_len, strict=min_len_strict)(value) without 'return True'
                 if min_len_strict:
-                    if len(value) <= min_len:
+                    if not len(value) > min_len:
                         raise TooShort(wrong_value=value, min_length=min_len, strict=True)
                 else:
-                    if len(value) < min_len:
+                    if not len(value) >= min_len:
                         raise TooShort(wrong_value=value, min_length=min_len, strict=False)
 
             if max_len is not None:
                 # inlined version of maxlen(max_length=max_len, strict=max_len_strict)(value) without 'return True'
                 if max_len_strict:
-                    if len(value) >= max_len:
+                    if not len(value) < max_len:
                         raise TooLong(wrong_value=value, max_length=max_len, strict=True)
                 else:
-                    if len(value) > max_len:
+                    if not len(value) <= max_len:
                         raise TooLong(wrong_value=value, max_length=max_len, strict=False)
 
     except Exception as e:

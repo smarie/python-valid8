@@ -185,3 +185,49 @@ def test_validate_auto_disable_display():
     e = exc_info.value
     assert str(e) == "Error validating [o]. NotEqual: x == 2 does not hold for x=(too big for display). " \
                      "(Actual value is too big to be printed in this message)."
+
+
+def test_numpy_nan():
+    """ Test that a numpy nan is correctly handled """
+
+    from valid8 import validate, gt, TooSmall, lt, TooBig
+    import numpy as np
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('np.nan', np.nan, min_value=5.1, max_value=5.2)
+
+
+def test_numpy_nan_like_lengths():
+    """ Test that a strange int length with bad behaviour is correctly handled """
+
+    # Actually the test below shows that in current versions of python it is not possible to create a len
+
+    from valid8 import validate
+
+    class NanInt(int):
+        """
+        An int that behaves like numpy NaN (comparison always returns false)
+        """
+
+        def __le__(self, other):
+            return False
+
+        def __lt__(self, other):
+            return False
+
+        def __gt__(self, other):
+            return False
+
+        def __ge__(self, other):
+            return False
+
+    nanlength = NanInt()
+
+    class Foo:
+        def __len__(self):
+            return nanlength
+
+    if isinstance(len(Foo()), NanInt):
+        # in current version of python this does not happen, but the test is ready for future evolutions
+        with pytest.raises(ValidationError) as exc_info:
+            validate('Foo()', Foo(), min_len=0, max_len=10)
