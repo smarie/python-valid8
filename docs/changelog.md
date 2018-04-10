@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.7.0 - Typos detection and np.nan handling
+
+ * Fixed typos detection: [#21](https://github.com/smarie/python-valid8/issues/21)
+ * Fixed np.nan handling: [#20](https://github.com/smarie/python-valid8/issues/20)
+
 ### 3.6.0 - Error messages improvements + create_manually class method in ValidationError
 
  * values with string representation larger than 100 characters are not anymore displayed in the error messages by default. Fixes [#19](https://github.com/smarie/python-valid8/issues/19)
