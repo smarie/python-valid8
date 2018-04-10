@@ -414,6 +414,10 @@ class Validator:
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        if help_msg is None and error_type is None and len(kw_context_args) > 0:
+            raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
+                             "".format(kw_context_args))
+
         self.none_policy = none_policy or NonePolicy.VALIDATE
 
         self.error_type = error_type or ValidationError

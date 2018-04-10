@@ -158,6 +158,15 @@ def test_validate_tracebacks():
     assert e.__cause__ is not None
 
 
+def test_typos_in_kwargs():
+    """ """
+
+    from valid8 import validate
+    a = 3
+    with pytest.raises(ValueError):
+        validate('a', a, minvalue=5.1, max_value=5.2)
+
+
 def test_validate_auto_disable_display():
     """ Tests that objects that have a too big string representation do not get added in the error message """
 
