@@ -262,9 +262,11 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     if custom is not None:
         # traditional custom validator
         assert_valid(name, value, custom, error_type=error_type, help_msg=help_msg, **kw_context_args)
-    elif len(kw_context_args) > 0:
-        raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
-                         "".format(kw_context_args))
+    else:
+        # basic (and not enough) check to verify that there was no typo leading an argument to be put in kw_context_args
+        if error_type is None and help_msg is None and len(kw_context_args) > 0:
+            raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
+                            "".format(kw_context_args))
 
 
 _QUICK_VALIDATOR = _QuickValidator()

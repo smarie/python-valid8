@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.7.2 - Bug fix
+
+ * Fixed [#23](https://github.com/smarie/python-valid8/issues/23)
+
 ### 3.7.1 - Bug fix
 
  * Fixed [#22](https://github.com/smarie/python-valid8/issues/22)
