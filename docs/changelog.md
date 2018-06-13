@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.7.1 - Bug fix
+
+ * Fixed [#22](https://github.com/smarie/python-valid8/issues/22)
+
 ### 3.7.0 - Typos detection and np.nan handling
 
  * Fixed typos detection: [#21](https://github.com/smarie/python-valid8/issues/21)

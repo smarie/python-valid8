@@ -1,7 +1,7 @@
 from typing import Set, Tuple
 
 from valid8.composition import _process_validation_function_s
-from valid8.base import Failure, WrappingFailure, result_is_success
+from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_name
 
 
 class TooShort(Failure, ValueError):
@@ -331,7 +331,7 @@ def on_all_(*validation_func):
                 raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=res)
         return True
 
-    on_all_val.__name__ = 'apply_<{}>_on_all_elts'.format(validation_function_func.__name__)
+    on_all_val.__name__ = 'apply_<{}>_on_all_elts'.format(get_callable_name(validation_function_func))
     return on_all_val
 
 
@@ -381,5 +381,5 @@ def on_each_(*validation_functions_collection):
             return True
 
     on_each_val.__name__ = 'map_<{}>_on_elts' \
-                           ''.format('(' + ', '.join([f.__name__ for f in validation_function_funcs]) + ')')
+                           ''.format('(' + ', '.join([get_callable_name(f) for f in validation_function_funcs]) + ')')
     return on_each_val
