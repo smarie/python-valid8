@@ -543,8 +543,7 @@ When this project grew, I found that its [embedded library of base validation fu
  * [decorator](http://decorator.readthedocs.io) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of wrapped methods.
  * Julien Danjou's [Definitive Guide to Python Exceptions](https://julien.danjou.info/blog/2016/python-exceptions-guide). It was of great inspiration and help to design `valid8`'s exception hierarchy.
 
-*Do you like this library ? You might also like [my other python libraries](https://github.com/smarie?utf8=%E2%9C%93&tab=repositories&q=&type=&language=python)* 
-
+*Do you like this library ? You might also like [my other python libraries](https://github.com/smarie/OVERVIEW#python)* 
 
 ## Want to contribute ?
 
