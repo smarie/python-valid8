@@ -417,6 +417,9 @@ class validator(Validator):
                         # -- that's a file
                         with open(self.src_file_path) as src:
                             lines = list(src)
+
+                    # retrieve the lines wrapped by the context manager, until the line that raises the exception.
+                    # note: it might not be the last line in the block of code wrapped by the context manager
                     wrapped_block_lines = [line.strip() for line in lines[self.src_file_line_nb:src_file_line_nb_end]]
 
                     if exc_val is not None:
