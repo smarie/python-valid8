@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.7.3 - python 3.7 support
+
+ * Fixed [#24](https://github.com/smarie/python-valid8/issues/24)
+
 ### 3.7.2 - Bug fix
 
  * Fixed [#23](https://github.com/smarie/python-valid8/issues/23)
