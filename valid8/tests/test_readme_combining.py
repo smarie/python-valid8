@@ -1,8 +1,8 @@
 import pytest
-from enforce.exceptions import RuntimeTypeError
 from pytypes import InputTypeError
 
 from valid8 import ValidationError, InputValidationError
+from valid8.tests.conftest import PY37
 
 
 def test_readme_index_combining_enforce():
@@ -13,6 +13,7 @@ def test_readme_index_combining_enforce():
     from typing import Tuple, Optional
     from enforce import runtime_validation, config
     config(dict(mode='covariant'))  # means that subclasses of required types are valid too
+    from enforce.exceptions import RuntimeTypeError
 
     # Imports - for value validation
     from mini_lambda import s, x, Len
@@ -46,6 +47,10 @@ def test_readme_index_combining_enforce():
 
     with pytest.raises(RuntimeTypeError):
         build_house('test', 100.1)  # RuntimeTypeError
+
+
+if PY37:
+    pytest.mark.skip("enforce does not work with python 3.7")(test_readme_index_combining_enforce)
 
 
 def test_readme_index_combining_autoclass():

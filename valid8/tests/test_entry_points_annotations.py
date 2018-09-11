@@ -1,6 +1,7 @@
 import pytest
 from typing import Optional
 
+from valid8.tests.conftest import PY37
 from valid8 import validate_io, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
     decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError, \
     ValidationError, validate_field, ClassFieldValidationError, skip_on_none
@@ -362,6 +363,10 @@ def test_validate_none_enforce():
     myfunc(84, None)     # OK because b is Nonable and c is optional with default value None
     with pytest.raises(RuntimeTypeError):
         myfunc(None, 0)  # RuntimeTypeError: a is None
+
+
+if PY37:
+    pytest.mark.skip("enforce does not work with python 3.7")(test_validate_none_enforce)
 
 
 def test_validate_none_pytypes():

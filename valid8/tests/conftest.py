@@ -9,6 +9,10 @@ from setuptools_scm.git import GitWorkdir
 sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 
+# Constant to use in the tests to skip some of them
+PY37 = sys.version_info[:3] >= (3, 7, 0)  # PEP 560
+
+
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item, call):
     """ adds the description field in the report, so that it may be used by the other two functions """
