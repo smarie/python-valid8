@@ -1,0 +1,836 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.7.3">
+    
+    
+      
+        <title>Example 4 - valid8</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.8d40d89b.css">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <a href="#4-l-is-a-list-of-custom-tuples" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="valid8" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                valid8
+              </span>
+              <span class="md-header-nav__topic">
+                Example 4
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </span>
+    valid8
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home and usage" class="md-nav__link">
+      Home and usage
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../why_validation/" title="Why validation" class="md-nav__link">
+      Why validation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      For `valid8` decorators only
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        For `valid8` decorators only
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../decorators/accepted/" title="Accepted base validation functions" class="md-nav__link">
+      Accepted base validation functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../decorators/base_validation_lib/" title="Built-in base validation functions" class="md-nav__link">
+      Built-in base validation functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../decorators/composition/" title="Composing base validation functions" class="md-nav__link">
+      Composing base validation functions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../valid8_with_other/" title="valid8 + other tools" class="md-nav__link">
+      valid8 + other tools
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples/Recipes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples/Recipes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../example1/" title="Example 1" class="md-nav__link">
+      Example 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../example2/" title="Example 2" class="md-nav__link">
+      Example 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../example3/" title="Example 3" class="md-nav__link">
+      Example 3
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Example 4
+      </label>
+    
+    <a href="./" title="Example 4" class="md-nav__link md-nav__link--active">
+      Example 4
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4-l-is-a-list-of-custom-tuples" title="4- l is a list of custom tuples" class="md-nav__link">
+    4- l is a list of custom tuples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-inline-validate" title="(a) Inline - validate" class="md-nav__link">
+    (a) Inline - validate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-inline-with-validator" title="(b) Inline - with validator" class="md-nav__link">
+    (b) Inline - with validator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-decorators-built-in-lib" title="(c) Decorators - built-in lib" class="md-nav__link">
+    (c) Decorators - built-in lib
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-decorators-mini_lambda" title="(d) Decorators - mini_lambda" class="md-nav__link">
+    (d) Decorators - mini_lambda
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../other_libs/" title="Other validation libs" class="md-nav__link">
+      Other validation libs
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4-l-is-a-list-of-custom-tuples" title="4- l is a list of custom tuples" class="md-nav__link">
+    4- l is a list of custom tuples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-inline-validate" title="(a) Inline - validate" class="md-nav__link">
+    (a) Inline - validate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-inline-with-validator" title="(b) Inline - with validator" class="md-nav__link">
+    (b) Inline - with validator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-decorators-built-in-lib" title="(c) Decorators - built-in lib" class="md-nav__link">
+    (c) Decorators - built-in lib
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-decorators-mini_lambda" title="(d) Decorators - mini_lambda" class="md-nav__link">
+    (d) Decorators - mini_lambda
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/examples/example4.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Example 4</h1>
+                
+                <h2 id="4-l-is-a-list-of-custom-tuples">4- <code>l</code> is a list of custom tuples<a class="headerlink" href="#4-l-is-a-list-of-custom-tuples" title="Permanent link">&para;</a></h2>
+<h3 id="a-inline-validate">(a) Inline - <code>validate</code><a class="headerlink" href="#a-inline-validate" title="Permanent link">&para;</a></h3>
+<p>It is not possible to use <code>validate</code> to check all the tuples inside <code>l</code> at once, but it can be used in a <code>for</code> loop to validate each tuple. Note that we correctly set the name of each item that is validated, so that users get informative errors:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+
+<span class="c1"># first validate the main type</span>
+<span class="n">validate</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="c1"># then validate (and use) the contents</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="c1"># each item is a tuple of size 2</span>
+    <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;l[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>    <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>    <span class="n">instance_of</span><span class="o">=</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># the first element is a float between 0 and 1</span>
+    <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;l[{}][0]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+             <span class="n">max_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># the second element is a lowercase string of size 3 </span>
+    <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;l[{}][1]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+             <span class="n">equals</span><span class="o">=</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+    <span class="c1"># here you can actually USE the current item</span>
+</pre></div>
+
+
+<h3 id="b-inline-with-validator">(b) Inline - <code>with validator</code><a class="headerlink" href="#b-inline-with-validator" title="Permanent link">&para;</a></h3>
+<p>You <em>can</em> perform the whole validation at once with <code>validator</code> as shown here:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span><span class="p">,</span> <span class="n">instance_of</span>
+<span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="c1"># each item is a tuple of size 2</span>
+                <span class="n">instance_of</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                <span class="c1"># the first element is a float between 0 and 1</span>
+                <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># the second element is a lowercase string of size 3</span>
+                <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
+             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span>
+</pre></div>
+
+
+<p>But it might not really make sense if you actually wish to <strong>use</strong> the tuples :). In that case it is much more readable and convenient to write a custom validation function <code>check_valid_tuple</code> first. Below is an example in "failure raiser" mode: the function does not return False in case of failure but rather raises more informative errors.</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">check_valid_tuple</span><span class="p">(</span><span class="n">tup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; custom validation function - here in &#39;failure raiser&#39; style (returning nothing) &quot;&quot;&quot;</span>
+
+    <span class="c1"># each item is a tuple of size 2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tup</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;item should be a tuple&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;tuple length should be 2&#39;</span><span class="p">)</span>
+
+    <span class="c1"># the first element is a float between 0 and 1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;first element should be a Real&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;first element should be between 0 and 1&#39;</span><span class="p">)</span>
+
+    <span class="c1"># the second element is a lowercase string of size 3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;second element should be a string&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second element should be a lowercase string of length 3&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>We can then use it with a <code>validation</code> context manager:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">validation</span>
+
+<span class="c1"># first validate the main type</span>
+<span class="n">validate</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="c1"># then validate (and use) the contents</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="c1"># each item is a valid tuple</span>
+    <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;l[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+        <span class="n">check_valid_tuple</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># here you can actually USE the current item</span>
+</pre></div>
+
+
+<p>Note that if you choose to use a PEP484 type checker such as <a href="https://github.com/Stewori/pytypes">pytypes</a>, your custom validation function can be much more compact, as the tuple length and tuple elements types are described in the compact PEP484 type hint <code>Tuple[Real, str]</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">pytypes</span> <span class="kn">import</span> <span class="n">typechecked</span>
+
+<span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">check_valid_tuple</span><span class="p">(</span><span class="n">tup</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot; custom validation function - note the PEP484 type hint above &quot;&quot;&quot;</span>
+
+    <span class="c1"># the first element is a float between 0 and 1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;first element should be between 0 and 1&#39;</span><span class="p">)</span>
+
+    <span class="c1"># the second element is a lowercase string of size 3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second element should be a lowercase string of length 3&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="c-decorators-built-in-lib">(c) Decorators - built-in lib<a class="headerlink" href="#c-decorators-built-in-lib" title="Permanent link">&para;</a></h3>
+<p>For readability we only show one decorator here, see <a href="#c-decorators-built-in-lib">this previous example</a> for other decorators and additional comments.</p>
+<p>There is no built-in function to check that <code>l[i][1]</code> is lowercase yet.
+The best we can do is </p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">on_all_</span><span class="p">,</span> <span class="n">on_each_</span><span class="p">,</span> <span class="n">has_length</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">between</span>
+
+<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">list</span><span class="p">),</span> <span class="n">on_all_</span><span class="p">(</span>
+             <span class="c1"># each item is a tuple of size 2</span>
+              <span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">has_length</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+              <span class="n">on_each_</span><span class="p">(</span>
+                  <span class="c1"># the first element is a float between 0 and 1</span>
+                  <span class="n">and_</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="n">Real</span><span class="p">),</span> <span class="n">between</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                  <span class="c1"># the 2d element is a string of len 3 BUT we cannot check lowercase  </span>
+                  <span class="n">and_</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">has_length</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span>
+              <span class="p">)</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<p>Although this proves that the provided built-in library can tackle complex cases, it also shows the limits of performing all validation directly in the decorator. In this case it is much more readable to create a custom function <code>is_valid_tuple</code>, and it allows you to actually check the lowercase part:</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Custom validation function. We could also provide a callable &quot;&quot;&quot;</span>
+
+    <span class="c1"># (a) each item is a tuple of size 2</span>
+    <span class="c1"># --you can reuse an entire method from the built-in lib when it supports direct calling mode</span>
+    <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>  
+    <span class="c1"># --otherwise you can reuse a failure class, there are many</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span> <span class="k">raise</span> <span class="n">WrongLength</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ref_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  
+
+    <span class="c1"># (b) the first element is a float between 0 and 1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">):</span> <span class="k">raise</span> <span class="n">HasWrongType</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span> <span class="k">raise</span> <span class="n">NotInRange</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># (c) the second element is a lowercase string of size 3</span>
+    <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span> <span class="k">raise</span> <span class="n">WrongLength</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ref_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c1"># -- finally you can write custom Failure types</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">NotLowerCase</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">NotLowerCase</span><span class="p">(</span><span class="n">Failure</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Example custom exception class used in custom validation function. `Failure` base class provides some </span>
+<span class="sd">    mechanisms to easily build the help message (same mechanisms than ValidationError)&quot;&quot;&quot;</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s2">&quot;Value is not a lowercase string: {wrong_value}&quot;</span>
+</pre></div>
+
+
+<p>And finally you would use your custom function in the decorator:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">list</span><span class="p">),</span> <span class="n">on_all_</span><span class="p">(</span><span class="n">is_valid_tuple</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<h3 id="d-decorators-mini_lambda">(d) Decorators - mini_lambda<a class="headerlink" href="#d-decorators-mini_lambda" title="Permanent link">&para;</a></h3>
+<p>For readability we only show one decorator here, see <a href="#c-decorators-built-in-lib">this previous example</a> for other decorators and additional comments.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">on_all_</span>
+
+<span class="c1"># just for fun: we create our custom mini_lambda variable named &#39;t&#39;</span>
+<span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span><span class="p">,</span> <span class="n">Isinstance</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">InputVar</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+
+<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">list</span><span class="p">),</span> <span class="n">on_all_</span><span class="p">(</span>
+    <span class="c1"># each item is a tuple of size 2</span>
+    <span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="c1"># the first element is a float between 0 and 1</span>
+    <span class="n">Isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="c1"># the 2d element is a lowercase string of len 3</span>
+    <span class="n">Isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../example3/" title="Example 3" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Example 3
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../other_libs/" title="Other validation libs" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Other validation libs
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.b438e6c5.js"></script>
+      
+      <script>app.initialize({version:"0.17.3",url:{base:"../.."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
