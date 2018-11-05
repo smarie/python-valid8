@@ -16,8 +16,8 @@ from valid8 import Boolean
  * [Example 1](./example1): `x` is a positive integer. This is the most simple example.
  * [Example 2](./example2): `s` is a lowercase non-empty string. In this example we start to see the limits of built-in functions and parameters, but are still able to find workarounds without writing custom functions.
  * [Example 3](./example3): `t` is a custom tuple. In this example it becomes clearly easier/more readable to write a custom function and use it in the validation tools
- * [Example 4](./example4): `l` is a list of custom tuples. This is to demonstrate iterative validation on container objects. (**TODO**)
+ * [Example 4](./example4): `l` is a list of custom tuples. This is to demonstrate iterative validation on container objects.
  * [Example 5](./example5): `df` is a dataframe containing specific columns (**TODO**)
- * [Example 6](./example6): `x` and `y` should be such that either `x` is `A` or `B` and `y` is `None`, or `x` is `C` and `y` is a positive integer. This example demonstrates how to use the validation tools for combination of variables
+ * [Example 6](./example6): `x` and `y` should be such that either `x` is `A` or `B` and `y` is `None`, or `x` is `C` and `y` is a positive integer. This example demonstrates how to use the validation tools for combination of variables (**TODO**)
 
 Note: we deliberately do not use any `help_msg` or `error_type` customization in any of the examples to focus on the validation core. See [here](./index#customizing-the-validationexception) for details on how to customize these examples.
