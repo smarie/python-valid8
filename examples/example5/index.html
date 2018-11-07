@@ -464,6 +464,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#with-validator-dedicated-validation-lib" title="with validator + dedicated validation lib" class="md-nav__link">
+    with validator + dedicated validation lib
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -613,6 +620,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#with-validator-dedicated-validation-lib" title="with validator + dedicated validation lib" class="md-nav__link">
+    with validator + dedicated validation lib
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -693,7 +707,7 @@
                 
                 
                 <h1 id="example-5-df-is-a-dataframe-containing-specific-columns">Example 5 - <code>df</code> is a dataframe containing specific columns<a class="headerlink" href="#example-5-df-is-a-dataframe-containing-specific-columns" title="Permanent link">&para;</a></h1>
-<p>For example we want to check that 'foo' and 'bar' are present</p>
+<p>For example we want to check that 'foo' and 'bar' are present.</p>
 <h2 id="1-example-values-to-validate">1- Example values to validate<a class="headerlink" href="#1-example-values-to-validate" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
@@ -702,7 +716,7 @@
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
 
 <span class="c1"># Invalid</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in column name</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in name</span>
 </pre></div>
 
 
@@ -712,15 +726,17 @@
 <li>type can be checked with <code>instance_of</code></li>
 <li>required columns can be checked by verifying that the set of actual columns is a superset of the required columns.</li>
 </ul>
+<p>Since this validation is simple, we show below how it can be done with <code>valid8</code> alone. But to go further we rather recommend <a href="#with-validator-dedicated validation lib">to combine it with another library</a></p>
 <h3 id="validate-built-ins"><code>validate</code> + built-ins<a class="headerlink" href="#validate-built-ins" title="Permanent link">&para;</a></h3>
-<p><code>validate</code> can not perform everything at once without a <a href="#better-custom-function">custom validation function</a>, but you can easily validate each element:</p>
+<p><code>validate</code> provides both type and superset validation built-in, but they do not apply to the same element so we have to call it twice:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="c1"># type validation</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
 <span class="c1"># columns validation</span>
 <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
-         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;DataFrame should contain mandatory columns {c}. Found {var_value}&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">required_cols</span><span class="p">)</span>
+         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;DataFrame should contain mandatory columns {c}. </span>
+         <span class="n">Found</span> <span class="p">{</span><span class="n">var_value</span><span class="p">}</span><span class="s2">&quot;, c=required_cols)</span>
 </pre></div>
 
 
@@ -731,7 +747,8 @@
 
 
 <p>yields:</p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error <span class="k">while</span> formatting <span class="nb">help</span> msg, keyword <span class="o">[</span>hoho<span class="o">]</span> was not found in the validation context. 
+<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error <span class="k">while</span> formatting <span class="nb">help</span> msg, 
+keyword <span class="o">[</span>hoho<span class="o">]</span> was not found in the validation context. 
 Help message to format was <span class="s1">&#39;Just kidding {hoho}&#39;</span>. 
 Context elements available: <span class="o">{</span>
    <span class="s1">&#39;display_prefix_for_exc_outcomes&#39;</span>: False, 
@@ -740,7 +757,8 @@ Context elements available: <span class="o">{</span>
    <span class="s1">&#39;var_value&#39;</span>: <span class="o">{</span><span class="s1">&#39;fo&#39;</span>, <span class="s1">&#39;bar&#39;</span><span class="o">}</span>, 
    <span class="s1">&#39;var_name&#39;</span>: <span class="s1">&#39;df columns&#39;</span>, 
    <span class="s1">&#39;validation_outcome&#39;</span>: NotSuperset<span class="o">(</span><span class="nv">append_details</span><span class="o">=</span>True,wrong_value<span class="o">={</span><span class="s1">&#39;fo&#39;</span>, <span class="s1">&#39;bar&#39;</span><span class="o">}</span>,reference_set<span class="o">={</span><span class="s1">&#39;foo&#39;</span>, <span class="s1">&#39;bar&#39;</span><span class="o">}</span>,missing<span class="o">={</span><span class="s1">&#39;foo&#39;</span><span class="o">}</span>,help_msg<span class="o">=</span>x superset of <span class="o">{</span>reference_set<span class="o">}</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">={</span>wrong_value<span class="o">}</span>. Missing elements: <span class="o">{</span>missing<span class="o">})</span>, 
-   <span class="s1">&#39;help_msg&#39;</span>: <span class="s1">&#39;Just kidding {hoho}&#39;</span><span class="o">}</span>
+   <span class="s1">&#39;help_msg&#39;</span>: <span class="s1">&#39;Just kidding {hoho}&#39;</span>
+<span class="o">}</span>
 </pre></div>
 
 
@@ -760,7 +778,7 @@ Context elements available: <span class="o">{</span>
 
 
 <ul>
-<li>or with a "failure raising" approach, less compact but with more explicit error messages:</li>
+<li>or with a "failure raising" approach, less compact (and not really more explicit error messages):</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 
@@ -773,10 +791,13 @@ Context elements available: <span class="o">{</span>
 </pre></div>
 
 
+<h3 id="with-validator-dedicated-validation-lib"><code>with validator</code> + dedicated validation lib<a class="headerlink" href="#with-validator-dedicated-validation-lib" title="Permanent link">&para;</a></h3>
 <p>Of course in real world examples you will want to validate much more things. So you will typically rely on a dedicated library for dataframe validation, and you will use <code>valid8</code> only for its primary target: having a strong control about exceptions readability and exceptions types (for i18n). For example:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">my_pandas_validator</span> <span class="kn">import</span> <span class="n">assert_df_minimum_size</span><span class="p">,</span> <span class="n">assert_index_is_unique</span><span class="p">,</span> <span class="n">assert_index_is_sorted</span><span class="p">,</span> <span class="n">assert_column_present_with_correct_type</span> 
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">my_pandas_validator</span> <span class="kn">import</span> <span class="n">assert_df_minimum_size</span><span class="p">,</span> <span class="n">assert_index_is_unique</span><span class="p">,</span> \
+    <span class="n">assert_index_is_sorted</span><span class="p">,</span> <span class="n">assert_column_present_with_correct_type</span> 
 
-<span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidInputDataFrame</span><span class="p">):</span>
+<span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
+                <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidInputDataFrame</span><span class="p">):</span>
     <span class="n">assert_df_minimum_size</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_nb_rows</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">assert_index_is_unique</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_index_is_sorted</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -807,7 +828,8 @@ Context elements available: <span class="o">{</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">mini_lambda.pandas_</span> <span class="kn">import</span> <span class="n">df</span>
 
-<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">required_cols</span> <span class="o">-</span> <span class="n">Set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> 
+              <span class="n">Len</span><span class="p">(</span><span class="n">required_cols</span> <span class="o">-</span> <span class="n">Set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
@@ -834,7 +856,8 @@ Context elements available: <span class="o">{</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">mini_lambda.pandas_</span> <span class="kn">import</span> <span class="n">df</span>
 
-<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">required_cols</span> <span class="o">-</span> <span class="n">Set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> 
+                <span class="n">Len</span><span class="p">(</span><span class="n">required_cols</span> <span class="o">-</span> <span class="n">Set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
