@@ -1,6 +1,6 @@
 # Example 5 - `df` is a dataframe containing specific columns
 
-For example we want to check that 'foo' and 'bar' are present
+For example we want to check that 'foo' and 'bar' are present.
 
 ## 1- Example values to validate
 
@@ -12,9 +12,8 @@ df = pd.DataFrame(data={'foo': [1, 2], 'bar': [None, "hello"]})
 df = pd.DataFrame(data={'a': [1, 2], 'foo': ['r', 't'], 'bar': [None, "hello"]})
 
 # Invalid
-df = pd.DataFrame(data={'fo': [1, 2], 'bar': [None, "hello"]})  # typo in column name
+df = pd.DataFrame(data={'fo': [1, 2], 'bar': [None, "hello"]})  # typo in name
 ```
-
 
 ## 2- Inline validation
 
@@ -23,9 +22,11 @@ Principles:
  * type can be checked with `instance_of`
  * required columns can be checked by verifying that the set of actual columns is a superset of the required columns.
 
+Since this validation is simple, we show below how it can be done with `valid8` alone. But to go further we rather recommend [to combine it with another library](#with-validator-dedicated validation lib)
+
 ### `validate` + built-ins
 
-`validate` can not perform everything at once without a [custom validation function](#better-custom-function), but you can easily validate each element:
+`validate` provides both type and superset validation built-in, but they do not apply to the same element so we have to call it twice:
 
 ```python
 from valid8 import validate
@@ -34,7 +35,8 @@ validate('df', df, instance_of=pd.DataFrame)
 # columns validation
 required_cols = {'foo', 'bar'}
 validate('df columns', set(df.columns), superset_of=required_cols, 
-         help_msg="DataFrame should contain mandatory columns {c}. Found {var_value}", c=required_cols)
+         help_msg="DataFrame should contain mandatory columns {c}. 
+         Found {var_value}", c=required_cols)
 ```
 
 Note: you see in this example a reminder that the help message is formatted by `valid8` using [str.format()](https://docs.python.org/3.5/library/string.html#custom-string-formatting). You can use in this help message any custom keyword argument (such as `c` above) or any of the already-available variables. The best way to see what is available is to write a wrong help message with an unexistent variable name in the string template:
@@ -47,7 +49,8 @@ validate('df columns', set(df.columns), superset_of=required_cols,
 yields:
 
 ```bash
-ValidationError[ValueError]: Error while formatting help msg, keyword [hoho] was not found in the validation context. 
+ValidationError[ValueError]: Error while formatting help msg, 
+keyword [hoho] was not found in the validation context. 
 Help message to format was 'Just kidding {hoho}'. 
 Context elements available: {
    'display_prefix_for_exc_outcomes': False, 
@@ -56,7 +59,8 @@ Context elements available: {
    'var_value': {'fo', 'bar'}, 
    'var_name': 'df columns', 
    'validation_outcome': NotSuperset(append_details=True,wrong_value={'fo', 'bar'},reference_set={'foo', 'bar'},missing={'foo'},help_msg=x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}), 
-   'help_msg': 'Just kidding {hoho}'}
+   'help_msg': 'Just kidding {hoho}'
+}
 ```
 
 ### `with validator` + built-ins
@@ -75,7 +79,7 @@ with validator('df', df, instance_of=pd.DataFrame) as v:
     v.alid = len(missing) == 0
 ```
 
- * or with a "failure raising" approach, less compact but with more explicit error messages:
+ * or with a "failure raising" approach, less compact (and not really more explicit error messages):
 
 ```python
 from valid8 import validation
@@ -88,12 +92,16 @@ with validation('df', df, instance_of=pd.DataFrame):
         raise ValueError('missing dataFrame columns: ' + str(missing))
 ```
 
+### `with validator` + dedicated validation lib
+
 Of course in real world examples you will want to validate much more things. So you will typically rely on a dedicated library for dataframe validation, and you will use `valid8` only for its primary target: having a strong control about exceptions readability and exceptions types (for i18n). For example:
 
 ```python
-from my_pandas_validator import assert_df_minimum_size, assert_index_is_unique, assert_index_is_sorted, assert_column_present_with_correct_type 
+from my_pandas_validator import assert_df_minimum_size, assert_index_is_unique, \
+    assert_index_is_sorted, assert_column_present_with_correct_type 
 
-with validation('df', df, instance_of=pd.DataFrame, error_type=InvalidInputDataFrame):
+with validation('df', df, instance_of=pd.DataFrame, 
+                error_type=InvalidInputDataFrame):
     assert_df_minimum_size(df, min_nb_rows=10)
     assert_index_is_unique(df)
     assert_index_is_sorted(df)
@@ -129,7 +137,8 @@ from valid8 import validate_arg, instance_of
 from mini_lambda import Set, Len
 from mini_lambda.pandas_ import df
 
-@validate_arg('df', instance_of(pd.DataFrame), Len(required_cols - Set(df.columns)) > 0)
+@validate_arg('df', instance_of(pd.DataFrame), 
+              Len(required_cols - Set(df.columns)) > 0)
 def my_function(df):
     pass
 ```
@@ -165,7 +174,8 @@ from valid8 import validate_field, instance_of
 from mini_lambda import Set, Len
 from mini_lambda.pandas_ import df
 
-@validate_field('df', instance_of(pd.DataFrame), Len(required_cols - Set(df.columns)) > 0)
+@validate_field('df', instance_of(pd.DataFrame), 
+                Len(required_cols - Set(df.columns)) > 0)
 class Foo:
     def __init__(self, df):
         self.df = df
