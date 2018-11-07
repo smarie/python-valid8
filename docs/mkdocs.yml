@@ -16,7 +16,7 @@ pages:
       - Example 2: examples/example2.md
       - Example 3: examples/example3.md
       - Example 4: examples/example4.md
-      #- Example 5: examples/example5.md
+      - Example 5: examples/example5.md
     - Other validation libs: other_libs.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs
