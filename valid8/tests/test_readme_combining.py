@@ -1,5 +1,4 @@
 import pytest
-from pytypes import InputTypeError
 
 from valid8 import ValidationError, InputValidationError
 from valid8.tests.conftest import PY37
@@ -155,7 +154,7 @@ def test_unused_pytypes():
     from valid8 import Boolean
     from numbers import Real, Integral
     from typing import Optional
-    from pytypes import typechecked
+    from pytypes import typechecked, InputTypeError
 
     # for value checking
     from valid8 import validate_io, minlens, gt
@@ -181,3 +180,13 @@ def test_unused_pytypes():
 
     with pytest.raises(ValidationError):
         build_house('', 12, 2)  # Value validation: @validate_io raises a Failure
+
+# TODO uncomment. It has been commented because this failing test seems to have a strange impact on the other tests (the one with context manager and stack trace getting)
+# def test_readme_combining_checktypes():
+#     """ Tests that the checktypes library can play well in valid8 """
+#
+#     from valid8 import validate
+#     from checktypes import checktype
+#     PositiveInt = checktype('PositiveInt', int, lambda x: x > 0)
+#     x = -1
+#     validate('x', x, custom=PositiveInt.validate)

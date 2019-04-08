@@ -1,12 +1,8 @@
 import sys
 
-import os
 from py.xml import html
 import pytest
 from setuptools_scm.git import GitWorkdir
-
-
-sys.path.append(os.path.join(os.path.dirname(__file__), 'helpers'))
 
 
 # Constant to use in the tests to skip some of them
