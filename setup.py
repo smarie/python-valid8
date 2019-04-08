@@ -15,7 +15,7 @@ INSTALL_REQUIRES = ['decorator']  # 'typing_inspect' is now copied internally so
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
 TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs', 'numpy', 'autoclass',
-                 'checktypes']
+                 'checktypes', 'pytest-cases']
 EXTRAS_REQUIRE = {}
 
 # simple check

@@ -1,40 +1,38 @@
-from valid8.utils_init import __remove_all_external_symbols, __get_all_submodules_symbols
+from valid8.utils_typing import Boolean, is_pep484_nonable
 
-__PACKAGE_NAME = 'valid8'
-__SUBMODULES_TO_EXPORT = ['base',  'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
-                          'validation_lib', 'utils_string', 'utils_typing']
+from valid8.base import Failure
+from valid8.composition import CompositionFailure, AtLeastOneFailed, and_, DidNotFail, not_, AllValidatorsFailed, or_, \
+    XorTooManySuccess, xor_, not_all, failure_raiser, fail_on_none, skip_on_none
 
+from valid8.entry_points import NonePolicy, NoneArgPolicy, ValidationError, Validator, assert_valid, is_valid
+from valid8.entry_points_annotations import InvalidNameError, InputValidationError, InputValidator, \
+    OutputValidationError, ClassFieldValidationError, validate_arg, validate_field, validate_io, validate_out, \
+    decorate_with_validation, decorate_with_validators
+from valid8.entry_points_inline import validate, validation, validator, wrap_valid, assert_instance_of
 
-# (1) allow users to do
-#     import <package> as p and then p.<symbol>
-__all__ = __get_all_submodules_symbols(__PACKAGE_NAME, __SUBMODULES_TO_EXPORT)
-# Note: this is one way to do it, but it would be simpler to check the names in globals() at the end of this file.
+from valid8.validation_lib import *
+from valid8 import validation_lib
 
-# (2) allow users to do
-#     from <package> import <symbol>
-#
-# The following works, but unfortunately IDE like pycharm do not understand
-from valid8.utils_string import *
-from valid8.utils_typing import *
+__all__ = [
+    # submodules
+    'base', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
+    'validation_lib', 'utils_string', 'utils_typing',
 
-from valid8.base import *
-from valid8.composition import *
+    # symbols
+    # -- utils_typing
+    'Boolean', 'is_pep484_nonable',
+    # -- base
+    'Failure',
+    # -- composition
+    'CompositionFailure', 'AtLeastOneFailed', 'and_', 'DidNotFail', 'not_', 'AllValidatorsFailed', 'or_',
+    'XorTooManySuccess', 'xor_', 'not_all', 'failure_raiser', 'fail_on_none', 'skip_on_none',
+    # -- entry_points
+    'NonePolicy', 'NoneArgPolicy', 'ValidationError', 'Validator', 'assert_valid', 'is_valid',
+    # -- entry_points_annotations
+    'InvalidNameError', 'InputValidationError', 'InputValidator', 'OutputValidationError', 'ClassFieldValidationError',
+    'validate_arg', 'validate_field', 'validate_io', 'validate_out', 'decorate_with_validation',
+    'decorate_with_validators',
+    # -- entry_points_inline
+    'validate', 'validation', 'validator', 'wrap_valid', 'assert_instance_of'
 
-from valid8.validation_lib.types import *
-from valid8.validation_lib.collections import *
-from valid8.validation_lib.comparables import *
-from valid8.validation_lib.numbers import *
-
-from valid8.entry_points import *
-from valid8.entry_points_annotations import *
-from valid8.entry_points_inline import *
-
-# remove all symbols that were imported above but do not belong in this package
-__remove_all_external_symbols(__PACKAGE_NAME, globals())
-
-# Otherwise exhaustive list would be required, which is sad
-# ...
-
-# print(__all__)
-# print(globals().keys())
-# print('Done')
+] + validation_lib.__all__

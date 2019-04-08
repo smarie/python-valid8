@@ -2,7 +2,7 @@ from inspect import isfunction
 
 import pytest
 
-from valid8.tests.readme_examples import test_example3_cases
+from tests.readme.examples import test_example3_cases
 from valid8.tests.helpers.utils import append_all_custom_variants
 
 cases = vars(test_example3_cases)
