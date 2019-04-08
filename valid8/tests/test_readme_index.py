@@ -69,7 +69,7 @@ def test_readme_usage_wrap_valid():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "Validation function [assert_instance_of(surf, int)] raised " \
+                     "Validation function [assert_instance_of(surf, int) ; v.alid = surf > 0] raised " \
                      "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
 
 
