@@ -1,3 +1,6 @@
+"""
+This conftest adds a source link to all tests in the various test reports
+"""
 import sys
 
 from py.xml import html

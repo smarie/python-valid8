@@ -21,7 +21,9 @@ trap "cleanup" INT TERM EXIT
 # First the raw for coverage
 echo -e "\n\n****** Running tests ******\n\n"
 if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
-   # full
+   # full. add the ci_tools/ to path so that the conftest.py is found.
+   export PATH=${TRAVIS_BUILD_DIR}/ci_tools/:${PATH}
+   echo PATH
    python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
 else
    # faster - skip coverage and html report
