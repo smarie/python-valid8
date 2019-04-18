@@ -31,6 +31,7 @@ install:
     if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then
       echo "No need to install enforce pytypes checktypes"
     else
+      pip install autoclass
       pip install enforce
       pip install pytypes
       pip install checktypes
