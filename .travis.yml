@@ -87,7 +87,7 @@ deploy:
 
   # Create a github release on tags
   - provider: script
-    script: python ci_tools/github_release.py -s $GITHUB_TOKEN --repo-slug smarie/python-azureml-client -cf ./docs/changelog.md -d https://smarie.github.io/python-azureml-client/changelog/ $TRAVIS_TAG
+    script: python ci_tools/github_release.py -s $GITHUB_TOKEN --repo-slug smarie/python-valid8 -cf ./docs/changelog.md -d https://smarie.github.io/python-valid8/changelog/ $TRAVIS_TAG
     skip_cleanup: true
     on:
       tags: true
