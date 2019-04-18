@@ -29,7 +29,8 @@ install:
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
   - |
     if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then
-      echo "No need to install enforce pytypes checktypes"
+      echo "No need to install enforce pytypes checktypes BUT need to install future"
+      pip install future
     else
       pip install autoclass
       pip install enforce
