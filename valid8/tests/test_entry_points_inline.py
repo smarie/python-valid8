@@ -1,15 +1,24 @@
+import sys
+
 import pytest
-from valid8 import ValidationError
+from valid8 import ValidationError, wrap_valid, validate, validate_arg, is_multiple_of, InputValidationError
+
+try:
+    from math import isfinite
+except ImportError:
+    def isfinite(x):
+        return True
 
 
 def test_validate_():
     """ Tests the validate function """
 
-    from valid8 import validate
-
     # nominal
     surf = 2
     validate('surface', surf, instance_of=int, min_value=0)
+    validate('surface', surf, instance_of=[int], min_value=0)
+    validate('surface', surf, instance_of={int, str}, min_value=0)
+    validate('surface', surf, instance_of=(t for t in {int, str}), min_value=0)
 
     # error wrong value
     surf = -1
@@ -22,17 +31,14 @@ def test_validate_():
     # error wrong type
     surf = 1j
     with pytest.raises(ValidationError) as exc_info:
-        validate('surface', surf, instance_of=int, min_value=0)
+        validate('surface', surf, instance_of=(t for t in {int}), min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
+                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
 
 def test_readme_usage_validate__customization():
     """ Tests the various customization options for validate """
-
-    from valid8 import validate
-    from math import isfinite
 
     surf = 1j
 
@@ -42,7 +48,7 @@ def test_readme_usage_validate__customization():
                  help_msg="Surface should be a positive integer")
     e = exc_info.value
     assert str(e) == "Surface should be a positive integer. Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
+                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
     # (B) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -63,14 +69,11 @@ def test_readme_usage_validate__customization():
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
+                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
 
 def test_wrap_valid():
     """ Tests the validation context manager """
-
-    from valid8 import wrap_valid
-    from math import isfinite
 
     # nominal
     surf = 2
@@ -92,15 +95,15 @@ def test_wrap_valid():
         with wrap_valid('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
+    with pytest.raises(TypeError) as typ_err_info:
+        1j > 0
+    t = typ_err_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                     "TypeError: '>' not supported between instances of 'complex' and 'int'."
+                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised %s: %s." \
+                     "" % (t.__class__.__name__, t)
 
 
 def test_readme_usage_wrap_valid_customization():
-
-    from valid8 import wrap_valid
-    from math import isfinite
 
     surf = 1j
 
@@ -138,9 +141,8 @@ def test_readme_usage_wrap_valid_customization():
 
 
 def test_validate_tracebacks():
-    """ Tests that the traceback is reduced for instance_of checks """
+    """ Tests that the traceback is reduced for all validate() checks """
 
-    from valid8 import validate
     x = "hello"
 
     # cause is none for HasWrongType
@@ -150,18 +152,17 @@ def test_validate_tracebacks():
     e = exc_info.value
     assert e.__cause__ is None
 
-    # cause is not none otherwise
+    # cause is none for all others
     with pytest.raises(ValidationError) as exc_info:
         validate('x', x, equals=2)
 
     e = exc_info.value
-    assert e.__cause__ is not None
+    assert e.__cause__ is None
 
 
 def test_typos_in_kwargs():
     """ """
 
-    from valid8 import validate
     a = 3
     with pytest.raises(ValueError):
         validate('a', a, minvalue=5.1, max_value=5.2)
@@ -178,7 +179,6 @@ def test_validate_auto_disable_display():
 
     o = Foo()
 
-    from valid8 import validate
     with pytest.raises(ValidationError) as exc_info:
         validate('o', o, equals=2)
 
@@ -190,7 +190,6 @@ def test_validate_auto_disable_display():
 def test_numpy_nan():
     """ Test that a numpy nan is correctly handled """
 
-    from valid8 import validate, gt, TooSmall, lt, TooBig
     import numpy as np
 
     with pytest.raises(ValidationError) as exc_info:
@@ -201,8 +200,6 @@ def test_numpy_nan_like_lengths():
     """ Test that a strange int length with bad behaviour is correctly handled """
 
     # Actually the test below shows that in current versions of python it is not possible to create a len
-
-    from valid8 import validate
 
     class NanInt(int):
         """
@@ -233,25 +230,9 @@ def test_numpy_nan_like_lengths():
             validate('Foo()', Foo(), min_len=0, max_len=10)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints not supported in python 2")
 def test_function_setter_name_in_valid8_error_message():
     """ Tests that the correct function name appears in the valid8 error message """
 
-    from autoclass import autoclass
-    from pytypes import typechecked
-    from valid8 import validate_arg, is_multiple_of, InputValidationError
-    from mini_lambda import s, x, Len
-
-    @typechecked
-    @autoclass
-    class House:
-        @validate_arg('name', Len(s) > 0)
-        @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100))
-        def __init__(self, name: str, surface: int = 100):
-            pass
-
-    o = House('helo')
-
-    with pytest.raises(InputValidationError) as exc_info:
-        o.surface = 150
-
-    assert "Error validating input [surface=150] for function [surface]" in str(exc_info.value)
+    from ._test_pep384 import test_function_setter_name_in_valid8_error_message
+    test_function_setter_name_in_valid8_error_message()

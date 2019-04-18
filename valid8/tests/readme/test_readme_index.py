@@ -2,7 +2,8 @@ import traceback
 
 import pytest
 
-from valid8 import InputValidationError, ValidationError, failure_raiser
+from valid8.tests.helpers.math import isfinite
+from valid8 import InputValidationError, ValidationError, failure_raiser, wrap_valid, validate
 
 
 def test_readme_index_usage_quick():
@@ -21,9 +22,6 @@ def test_readme_index_usage_quick():
 
 def test_readme_usage_wrap_valid():
     """ Tests that the example under index/usage/validation works """
-
-    from valid8 import wrap_valid
-    from math import isfinite
 
     surf = -1
 
@@ -60,7 +58,7 @@ def test_readme_usage_wrap_valid():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
+                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
     from valid8 import assert_instance_of
     with pytest.raises(ValidationError) as exc_info:
@@ -70,13 +68,10 @@ def test_readme_usage_wrap_valid():
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
                      "Validation function [assert_instance_of(surf, int) ; v.alid = surf > 0] raised " \
-                     "HasWrongType: Value should be an instance of <class 'int'>. Wrong value: [1j]."
+                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
 
 def test_readme_usage_customization():
-
-    from valid8 import validate, wrap_valid
-    from math import isfinite
 
     surf = -1
 
@@ -125,15 +120,13 @@ def test_readme_usage_customization():
     with pytest.raises(ValidationError) as exc_info:
         validate('surface', -1, instance_of=int, min_value=0)
     e = exc_info.value
-    assert traceback.format_exception_only(type(e), e)[0] == \
-           "valid8.entry_points.ValidationError[ValueError]: Error validating [surface=-1]. " \
-           "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].\n"
-    assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[ValueError]'>"
+    assert str(e) == "Error validating [surface=-1]. TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+    assert repr(e.__class__) == "<class 'valid8.entry_points.ValidationError[ValueError]'>"
 
     with pytest.raises(ValidationError) as exc_info:
         validate('surface', 1j, instance_of=int, min_value=0)
     e = exc_info.value
-    assert repr(type(e)) == "<class 'valid8.entry_points.ValidationError[TypeError]'>"
+    assert repr(e.__class__) == "<class 'valid8.entry_points.ValidationError[TypeError]'>"
 
 
 # deprecated
@@ -180,9 +173,10 @@ def test_readme_index_usage_function():
     e = exc_info.value
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \
-                     "Validation function [and(instance_of_<class 'str'>, len(s) > 0)] raised " \
+                     "Validation function [and(instance_of_%s, len(s) > 0)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value []. " \
-                     "Successes: [\"instance_of_<class 'str'>\"] / Failures: {'len(s) > 0': 'False'}."
+                     "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'False'}." \
+                     "" % (repr(str), repr(str))
 
     from mini_lambda import s, x, l, Len
     from valid8 import validate_arg, validate_out, instance_of, is_multiple_of
@@ -216,7 +210,7 @@ def test_readme_index_usage_class_fields():
                     help_msg='name should be a non-empty string')
     @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
                     help_msg='Surface should be a multiple of 100 between 0 and 10000.')
-    class House:
+    class House(object):
         def __init__(self, name, surface=None):
             self.name = name
             self.surface = surface

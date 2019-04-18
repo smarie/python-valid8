@@ -1,4 +1,7 @@
-from numbers import Integral
+try:  # python 3.5+
+    from numbers import Integral
+except ImportError:
+    pass
 
 from valid8.base import Failure
 
@@ -8,7 +11,8 @@ class IsNotEven(Failure, ValueError):
     help_msg = 'Value should be even'
 
 
-def is_even(x: Integral):
+def is_even(x  # type: Integral
+            ):
     """ Validates that x is even (`x % 2 == 0`) """
     if x % 2 == 0:
         return True
@@ -21,7 +25,8 @@ class IsNotOdd(Failure, ValueError):
     help_msg = 'Value should be odd'
 
 
-def is_odd(x: Integral):
+def is_odd(x  # type: Integral
+           ):
     """ Validates that x is odd (`x % 2 != 0`) """
     if x % 2 != 0:
         return True

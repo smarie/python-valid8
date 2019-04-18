@@ -1,4 +1,7 @@
-from typing import Any
+try:  # python 3.5+
+    from typing import Any
+except ImportError:
+    pass
 
 from valid8.base import Failure
 
@@ -18,7 +21,9 @@ class TooSmall(Failure, ValueError):
         super(TooSmall, self).__init__(wrong_value=wrong_value, min_value=min_value, symbol=symbol, help_msg=help_msg)
 
 
-def gt(min_value: Any, strict: bool = False):
+def gt(min_value,    # type: Any
+       strict=False  # type: bool
+       ):
     """
     'Greater than' validation_function generator.
     Returns a validation_function to check that x >= min_value (strict=False, default) or x > min_value (strict=True)
@@ -48,7 +53,8 @@ def gt(min_value: Any, strict: bool = False):
     return gt_
 
 
-def gts(min_value_strict: Any):
+def gts(min_value_strict  # type: Any
+        ):
     """ Alias for 'greater than' validation_function generator in strict mode """
     return gt(min_value_strict, True)
 
@@ -61,7 +67,9 @@ class TooBig(Failure, ValueError):
         super(TooBig, self).__init__(wrong_value=wrong_value, max_value=max_value, symbol=symbol, help_msg=help_msg)
 
 
-def lt(max_value: Any, strict: bool = False):
+def lt(max_value,    # type: Any
+       strict=False  # type: bool
+       ):
     """
     'Lesser than' validation_function generator.
     Returns a validation_function to check that x <= max_value (strict=False, default) or x < max_value (strict=True)
@@ -91,7 +99,8 @@ def lt(max_value: Any, strict: bool = False):
     return lt_
 
 
-def lts(max_value_strict: Any):
+def lts(max_value_strict  # type: Any
+        ):
     """ Alias for 'lesser than' validation_function generator in strict mode """
     return lt(max_value_strict, True)
 
@@ -106,7 +115,11 @@ class NotInRange(Failure, ValueError):
                                          max_value=max_value, right_symbol=right_symbol, help_msg=help_msg)
 
 
-def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: bool = False):
+def between(min_val,          # type: Any
+            max_val,          # type: Any
+            open_left=False,  # type: bool
+            open_right=False  # type: bool
+            ):
     """
     'Is between' validation_function generator.
     Returns a validation_function to check that min_val <= x <= max_val (default). open_right and open_left flags allow

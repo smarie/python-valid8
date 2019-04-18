@@ -1,20 +1,30 @@
 from abc import abstractmethod
 from collections import OrderedDict
+from sys import version_info
 
-from typing import Callable, Union, List, Tuple  # do not import Type for compatibility with earlier python 3.5
+from makefun import with_signature
 
 from valid8.base import Failure, result_is_success, get_callable_names, get_callable_name, _failure_raiser, \
     WrappingFailure, _none_accepter, _none_rejecter, _LambdaExpression
 
+try:  # python 3.5+
+    from typing import Callable, Union, List, Tuple
+    try:  # python 3.5.3-
+        from typing import Type
+    except ImportError:
+        pass
 
-CallableAndFailureTuple = Tuple[Union[Callable, _LambdaExpression], Union[str, 'Type[Failure]']]
-""" Represents the allowed construct to define a failure raiser from a validation function: a tuple """
+    CallableAndFailureTuple = Tuple[Union[Callable, _LambdaExpression], Union[str, 'Type[Failure]']]
+    """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
 
-ValidationFunc = Union[Callable, _LambdaExpression, CallableAndFailureTuple]
-""" Represents the 'typing' type for a single validation function """
+    ValidationFunc = Union[Callable, _LambdaExpression, CallableAndFailureTuple]
+    """ Represents the 'typing' type for a single validation function """
 
-ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
-""" Represents the 'typing' type for 'validation_func' arguments in the various methods """
+    ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
+    """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
+except ImportError:
+    pass
+
 
 supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of ' \
                    'several such elements. Nested lists are supported and indicate an implicit `and_` (such as the ' \
@@ -23,8 +33,10 @@ supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callabl
                    'callables, they will be transformed to functions automatically.'
 
 
-def _process_validation_function_s(validation_func: ValidationFuncs, auto_and_wrapper: bool = True) \
-        -> Union[Callable, List[Callable]]:
+def _process_validation_function_s(validation_func,       # type: ValidationFuncs
+                                   auto_and_wrapper=True  # type: bool
+                                   ):
+    # type: (...) -> Union[Callable, List[Callable]]
     """
     This function handles the various ways that users may enter 'validation functions', so as to output a single
     callable method. Setting "auto_and_wrapper" to False allows callers to get a list of callables instead.
@@ -111,7 +123,11 @@ def _process_validation_function_s(validation_func: ValidationFuncs, auto_and_wr
 class CompositionFailure(Failure):
     """ Root failure of all composition operators """
 
-    def __init__(self, validators, value, cause: Exception=None):
+    def __init__(self,
+                 validators,
+                 value,
+                 cause=None  # type: Exception
+                 ):
         """
         Constructor from a list of validators and a value.
         The constructor will replay the validation process in order to get all the results and attach them in
@@ -191,18 +207,22 @@ class CompositionFailure(Failure):
         return successes, failures
 
     @abstractmethod
-    def get_what(self) -> str:
+    def get_what(self):
+        # type: (...) -> str
         pass
 
 
 class AtLeastOneFailed(CompositionFailure):
     """ Raised by the and_ operator when at least one of the inner validators failed validation """
 
-    def get_what(self) -> str:
+    def get_what(self):
+        # type: (...) -> str
         return 'At least one validation function failed validation'
 
 
-def and_(*validation_func: ValidationFuncs) -> Callable:
+def and_(*validation_func  # type: ValidationFuncs
+         ):
+    # type: (...) -> Callable
     """
     An 'and' validator: it returns `True` if all of the provided validators return `True`, or raises a
     `AtLeastOneFailed` failure on the first `False` received or `Exception` caught.
@@ -245,7 +265,10 @@ class DidNotFail(WrappingFailure):
     help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
 
-def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
+def not_(validation_func,  # type: ValidationFuncs
+         catch_all=False   # type: bool
+         ):
+    # type: (...) -> Callable
     """
     Generates the inverse of the provided validation functions: when the validator returns `False` or raises a
     `Failure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
@@ -293,11 +316,14 @@ def not_(validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
 class AllValidatorsFailed(CompositionFailure):
     """ Raised by the or_ and xor_ operator when all inner validators failed validation """
 
-    def get_what(self) -> str:
+    def get_what(self):
+        # type: (...) -> str
         return 'No validation function succeeded validation'
 
 
-def or_(*validation_func: ValidationFuncs) -> Callable:
+def or_(*validation_func  # type: ValidationFuncs
+        ):
+    # type: (...) -> Callable
     """
     An 'or' validator: returns `True` if at least one of the provided validators returns `True`. All exceptions will be
     silently caught. In case of failure, a global `AllValidatorsFailed` failure will be raised, together with details
@@ -338,11 +364,14 @@ def or_(*validation_func: ValidationFuncs) -> Callable:
 class XorTooManySuccess(CompositionFailure):
     """ Raised by the xor_ operator when more than one validation function succeeded """
 
-    def get_what(self) -> str:
+    def get_what(self):
+        # type: (...) -> str
         return 'Too many validation functions (more than 1) succeeded validation'
 
 
-def xor_(*validation_func: ValidationFuncs) -> Callable:
+def xor_(*validation_func  # type: ValidationFuncs
+         ):
+    # type: (...) -> Callable
     """
     A 'xor' validation function: returns `True` if exactly one of the provided validators returns `True`. All exceptions
     will be silently caught. In case of failure, a global `XorTooManySuccess` or `AllValidatorsFailed` will be raised,
@@ -389,20 +418,33 @@ def xor_(*validation_func: ValidationFuncs) -> Callable:
         return xor_v_
 
 
-def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(*validation_func: ValidationFuncs,
+                  catch_all: bool = False) -> Callable"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def not_all(*validation_func,  # type: ValidationFuncs
+            **kwargs
+            ):
+    # type: (...) -> Callable
     """
     An alias for not_(and_(validators)).
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
+        are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
+        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
-    a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
-    'ok' result
+        a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
+        'ok' result
     :return:
     """
+    catch_all = pop_kwargs(kwargs, [('catch_all', False)])
 
     # in case this is a list, create a 'and_' around it (otherwise and_ will return the validation function without
     # wrapping it)
@@ -410,8 +452,22 @@ def not_all(*validation_func: ValidationFuncs, catch_all: bool = False) -> Calla
     return not_(main_validator, catch_all=catch_all)
 
 
-def failure_raiser(*validation_func: ValidationFuncs, failure_type: 'Type[WrappingFailure]' = None,
-                   help_msg: str = None, **kw_context_args) -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(*validation_func: ValidationFuncs,
+                  failure_type: 'Type[WrappingFailure]' = None,
+                  help_msg: str = None,
+                  **kw_context_args
+                  ) -> Callable"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def failure_raiser(*validation_func,   # type: ValidationFuncs
+                   **kwargs
+                   ):
+    # type: (...) -> Callable
     """
     This function is automatically used if you provide a tuple `(<function>, <msg>_or_<Failure_type>)`, to any of the
     methods in this page or to one of the `valid8` decorators. It transforms the provided `<function>` into a failure
@@ -425,13 +481,20 @@ def failure_raiser(*validation_func: ValidationFuncs, failure_type: 'Type[Wrappi
     :param failure_type: a subclass of `WrappingFailure` that should be raised in case of failure
     :param help_msg: a string help message for the raised `WrappingFailure`. Optional (default = WrappingFailure with
     no help message).
+    :param kw_context_args
     :return:
     """
+    failure_type, help_msg = pop_kwargs(kwargs, [('failure_type', None), ('help_msg', None)], allow_others=True)
+    # the rest of keyword arguments is used as context.
+    kw_context_args = kwargs
+
     main_func = _process_validation_function_s(list(validation_func))
     return _failure_raiser(main_func, failure_type=failure_type,  help_msg=help_msg, **kw_context_args)
 
 
-def skip_on_none(*validation_func: ValidationFuncs) -> Callable:
+def skip_on_none(*validation_func  # type: ValidationFuncs
+                 ):
+    # type: (...) -> Callable
     """
     This function is automatically used if you use `none_policy=SKIP`, you will probably never need to use it
     explicitly. If wraps the provided function (or implicit `and_` between provided functions) so that `None` values
@@ -448,7 +511,9 @@ def skip_on_none(*validation_func: ValidationFuncs) -> Callable:
     return _none_accepter(validation_func)
 
 
-def fail_on_none(*validation_func: ValidationFuncs) -> Callable:
+def fail_on_none(*validation_func  # type: ValidationFuncs
+                 ):
+    # type: (...) -> Callable
     """
     This function is automatically used if you use `none_policy=FAIL`, you will probably never need to use it
     explicitly.  If wraps the provided function (or implicit `and_` between provided functions) so that `None` values
@@ -463,3 +528,32 @@ def fail_on_none(*validation_func: ValidationFuncs) -> Callable:
     """
     validation_func = _process_validation_function_s(list(validation_func))
     return _none_rejecter(validation_func)
+
+
+def pop_kwargs(kwargs,
+               names_with_defaults,  # type: List[Tuple[str, Any]]
+               allow_others=False
+               ):
+    """
+    Internal utility method to extract optional arguments from kwargs.
+
+    :param kwargs:
+    :param names_with_defaults:
+    :param allow_others: if False (default) then an error will be raised if kwargs still contains something at the end.
+    :return:
+    """
+    all_arguments = []
+    for name, default_ in names_with_defaults:
+        try:
+            val = kwargs.pop(name)
+        except KeyError:
+            val = default_
+        all_arguments.append(val)
+
+    if not allow_others and len(kwargs) > 0:
+        raise ValueError("Unsupported arguments: %s" % kwargs)
+
+    if len(names_with_defaults) == 1:
+        return all_arguments[0]
+    else:
+        return all_arguments

@@ -1,7 +1,8 @@
 import pytest
+from functools import partial
 
-from valid8 import InputValidationError, ValidationError
-
+from valid8 import InputValidationError, ValidationError, assert_valid, is_valid, Validator
+from valid8.tests.helpers.math import isfinite, inf
 
 # This test file corresponds to usage.md that is actually not used anymore. But we leave it as it can do no harm
 
@@ -9,8 +10,6 @@ from valid8 import InputValidationError, ValidationError
 def test_tutorial():
 
     # 1. age: finite
-    from math import isfinite, inf
-
     def hello(age):
         assert isfinite(age)
         print('Hello, {}-years-old fella !'.format(age))
@@ -77,9 +76,6 @@ def test_usage_ensure_valid():
 
     is_multiple_of, is_multiple_of_3 = create_base_functions()
 
-    from valid8 import assert_valid
-    from math import isfinite, inf
-    from functools import partial
     from mini_lambda import s
 
     # (1) Existing function
@@ -127,9 +123,6 @@ def test_usage_is_valid():
 
     is_multiple_of, is_multiple_of_3 = create_base_functions()
 
-    from valid8 import is_valid
-    from math import isfinite, inf
-    from functools import partial
     from mini_lambda import s
 
     # (1) Existing function
@@ -168,13 +161,11 @@ def test_usage_validators():
     is_multiple_of, is_multiple_of_3 = create_base_functions()
     gt_0, gt_1, gt_2, gt_3 = create_base_functions_2()
 
-    from valid8 import Validator
-    from functools import partial
-    from math import isfinite, inf
     from mini_lambda import s
 
     validate_is_finite = Validator(isfinite)
-    validate_is_superclass_of_bool = Validator(partial(issubclass, bool))
+    _is_subclass_of_bool = partial(issubclass, bool)
+    validate_is_superclass_of_bool = Validator(_is_subclass_of_bool)
     validate_is_multiple_of_3 = Validator(is_multiple_of_3)
     validate_is_lowercase = Validator(lambda s: s.islower())
     validate_starts_with_a = Validator(s.lower().startswith('a'))
@@ -197,9 +188,8 @@ def test_usage_validators():
     with pytest.raises(ValidationError) as exc_info:
         validate_is_superclass_of_bool('typ', str)
     e = exc_info.value
-    assert str(e) == "Error validating [typ=<class 'str'>]: " \
-                     "validation function [functools.partial(<built-in function issubclass>, <class 'bool'>)] " \
-                     "returned [False]."
+    assert str(e) == "Error validating [typ=%s]: validation function [%s] returned [False]." \
+                     "" % (repr(str), repr(_is_subclass_of_bool))
 
     validate_is_multiple_of_3('val', 21)  # ok
     with pytest.raises(ValidationError) as exc_info:
@@ -253,10 +243,9 @@ def test_usage_validators():
 def create_base_functions():
 
     # Existing - already ok
-    from math import isfinite
     is_finite = isfinite
+
     # Existing + Functools Partial
-    from functools import partial
     is_superclass_of_bool = partial(issubclass, bool)
     """ Checks that c is a superclass of the bool type """
 
@@ -322,7 +311,6 @@ def create_base_functions_2():
 def test_usage_validate_annotation():
     """ """
     from valid8 import validate_io
-    from math import isfinite, inf
 
     @validate_io(arg2=isfinite, arg3=isfinite)
     def myfunc(arg1, arg2, arg3):

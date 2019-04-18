@@ -6,6 +6,8 @@ pypandoc
 
 # --- to install
 requests
+makefun
+decopatch
 
 # --- to run the tests
 pytest  #$PYTEST_VERSION

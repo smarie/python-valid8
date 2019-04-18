@@ -1,17 +1,22 @@
-import traceback
-from typing import Any, Union, Set, Iterable, Callable, Container
+import sys
 from warnings import warn
 
-from valid8.base import ValueIsNone
+from linecache import getline
+
+from valid8.base import ValueIsNone, raise_
 from valid8.entry_points import Validator, ValidationError, NonePolicy, assert_valid
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
     NotSubset, NotSuperset
 from valid8.validation_lib.comparables import TooSmall, TooBig, NotEqual
 
-try:
+try:  # python 3.5+
     # noinspection PyUnresolvedReferences
-    from typing import Type
+    from typing import Any, Union, Set, Iterable, Callable, Container
+    try:  # python 3.5.3-
+        from typing import Type
+    except ImportError:
+        pass
 except ImportError:
     pass
 
@@ -94,34 +99,63 @@ class _QuickValidator(Validator):
     def __init__(self):
         super(_QuickValidator, self).__init__(validate)
 
-    def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
-                                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+    def _create_validation_error(self,
+                                 name,                     # type: str
+                                 value,                    # type: Any
+                                 validation_outcome=None,  # type: Any
+                                 error_type=None,          # type: Type[ValidationError]
+                                 help_msg=None,            # type: str
+                                 **kw_context_args):
         err = super(_QuickValidator, self)._create_validation_error(name=name, value=value,
                                                                     validation_outcome=validation_outcome,
                                                                     error_type=error_type, help_msg=help_msg,
                                                                     **kw_context_args)
+
+        # remove all causes - this is a quick validator
+        err.__cause__ = None
+
         # disable displaying the annoying prefix
         err.display_prefix_for_exc_outcomes = False
         return err
 
-    def assert_valid(self, name: str, value: Any, error_type: 'Type[ValidationError]' = None,
-                     help_msg: str = None, **kw_context_args):
+    def assert_valid(self,
+                     name,             # type: str
+                     value,            # type: Any
+                     error_type=None,  # type: Type[ValidationError]
+                     help_msg=None,    # type: str
+                     **kw_context_args):
         raise NotImplementedError('This is a special validator object that is not able to perform validation')
 
-    def is_valid(self, value: Any):
+    def is_valid(self,
+                 value  # type: Any
+                 ):
         raise NotImplementedError('This is a special validator object that is not able to perform validation')
 
 
 # TODO same none_policy than the rest of valid8 ? Probably not, it would slightly decrease performance no?
-def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any = None,
-             instance_of: Union[type, Set[type]] = None, subclass_of: Union[type, Set[type]] = None,
-             is_in: Container = None, subset_of: Set = None, contains: Union[Any, Iterable] = None,
-             superset_of: Set = None,
-             min_value: Any = None, min_strict: bool = False, max_value: Any = None, max_strict: bool = False,
-             length: int = None,
-             min_len: int = None, min_len_strict: bool = False, max_len: int = None, max_len_strict: bool = False,
-             custom: Callable[[Any], Any] = None,
-             error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+def validate(name,                   # type: str
+             value,                  # type: Any
+             enforce_not_none=True,  # type: bool
+             equals=None,            # type: Any
+             instance_of=None,       # type: Union[type, Iterable[type]]
+             subclass_of=None,       # type: Union[type, Iterable[type]]
+             is_in=None,             # type: Container
+             subset_of=None,         # type: Set
+             contains = None,        # type: Union[Any, Iterable]
+             superset_of=None,       # type: Set
+             min_value=None,         # type: Any
+             min_strict=False,       # type: bool
+             max_value=None,         # type: Any
+             max_strict=False,       # type: bool
+             length=None,            # type: int
+             min_len=None,           # type: int
+             min_len_strict=False,   # type: bool
+             max_len=None,           # type: int
+             max_len_strict=False,   # type: bool
+             custom=None,            # type: Callable[[Any], Any]
+             error_type=None,        # type: Type[ValidationError]
+             help_msg=None,          # type: str
+             **kw_context_args):
     """
     A validation function for quick inline validation of `value`, with minimal capabilities:
 
@@ -139,9 +173,9 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     :param enforce_not_none: boolean, default True. Whether to enforce that `value` is not None.
     :param equals: an optional value to enforce.
     :param instance_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
-    match is enough to succeed. If None, type will not be enforced
+        match is enough to succeed. If None, type will not be enforced
     :param subclass_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
-    match is enough to succeed. If None, type will not be enforced
+        match is enough to succeed. If None, type will not be enforced
     :param is_in: an optional set of allowed values.
     :param subset_of: an optional superset for the variable
     :param contains: an optional value that the variable should contain (value in variable == True)
@@ -156,15 +190,15 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     :param max_len: an optional maximum length
     :param max_len_strict: if True, only values with length strictly lesser than `max_len` will be accepted
     :param custom: a custom base validation function or list of base validation functions to use. This is the same
-    syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
-    or a list of several such elements. Nested lists are supported and indicate an implicit `and_`. Tuples indicate an
-    implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used
-    instead of callables, they will be transformed to functions automatically.
+        syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
+        or a list of several such elements. Nested lists are supported and indicate an implicit `and_`. Tuples indicate
+        an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be
+        used instead of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
-    `ValidationError` will be raised with the provided `help_msg`
+        `ValidationError` will be raised with the provided `help_msg`
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
     :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-    to format the help message
+        to format the help message
     :return: nothing in case of success. Otherwise, raises a ValidationError
     """
 
@@ -173,17 +207,17 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
     is_in = is_in or (kw_context_args.pop('allowed_values') if 'allowed_values' in kw_context_args else None)
 
     try:
-
         # the following corresponds to an inline version of
         # - _none_rejecter in base.py
         # - gt/lt in comparables.py
         # - is_in/contains/subset_of/superset_of/has_length/minlen/maxlen/is_in in collections.py
         # - instance_of/subclass_of in types.py
 
-
-        # TODO try (https://github.com/orf/inliner) to perform the inlining below automatically without code duplication
-        # maybe not because below we skip the "return True" everywhere for performance
-        # Another alternative would be to compile code with https://github.com/AlanCristhian/statically
+        # try (https://github.com/orf/inliner) to perform the inlining below automatically without code duplication ?
+        # > maybe not because quite dangerous (AST mod) and below we skip the "return True" everywhere for performance
+        #
+        # Another alternative: easy Cython compiling https://github.com/AlanCristhian/statically
+        # > but this is not py2 compliant
 
         if value is None:
             # inlined version of _none_rejecter in base.py
@@ -279,7 +313,7 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
         # basic (and not enough) check to verify that there was no typo leading an argument to be put in kw_context_args
         if error_type is None and help_msg is None and len(kw_context_args) > 0:
             raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
-                            "".format(kw_context_args))
+                             "".format(kw_context_args))
 
 
 _QUICK_VALIDATOR = _QuickValidator()
@@ -289,7 +323,7 @@ quick_valid = validate
 """ Legacy, deprecated alias. Will disappear in 4.x """
 
 
-class WrappingValidatorEye:
+class WrappingValidatorEye(object):
     """ Represents the object where users may put the validation outcome inside a validation context manager.
     You may set any field on this object, it will be put in the 'outcome' field """
 
@@ -315,7 +349,7 @@ class WrappingValidatorEye:
             super(WrappingValidatorEye, self).__setattr__('outcome', value)
 
 
-class _Dummy_Callable_:
+class _Dummy_Callable_(object):
     """ A dummy callable whose name can be configured """
     def __init__(self, name):
         self.name = name
@@ -348,9 +382,14 @@ class validator(Validator):
     ```
 
     """
-    def __init__(self, name: str, value: Any, instance_of: Union[type, Set[type]] = None,
-                 subclass_of: Union[type, Set[type]] = None,
-                 error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+    def __init__(self,
+                 name,              # type: str
+                 value,             # type: Any
+                 instance_of=None,  # type: Union[type, Iterable[type]]
+                 subclass_of=None,  # type: Union[type, Iterable[type]]
+                 error_type=None,   # type: Type[ValidationError]
+                 help_msg=None,     # type: str
+                 **kw_context_args):
         """
         Creates a context manager to wrap validation tasks. Any exception caught within this context will be wrapped
         by a ValidationError and raised.
@@ -366,14 +405,14 @@ class validator(Validator):
         :param name: the name of the variable being validated
         :param value: the value being validated
         :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types:
-        one match is enough to succeed. If None, type will not be enforced
+            one match is enough to succeed. If None, type will not be enforced
         :param subclass_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
-        match is enough to succeed. If None, type will not be enforced
+            match is enough to succeed. If None, type will not be enforced
         :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
-        `ValidationError` will be raised with the provided `help_msg`
+            `ValidationError` will be raised with the provided `help_msg`
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-        to format the help message
+            to format the help message
         """
         # First perform the type check if needed
         if instance_of is not None:

@@ -1,7 +1,5 @@
+import sys
 from numbers import Real
-from typing import Tuple
-
-from pytypes import typechecked
 
 
 def inline_validate_1(t):
@@ -51,24 +49,9 @@ def is_valid_tuple(t):
            and instance_of(t[1], str) and len(t[1]) == 3 and t[1].islower()
 
 
-@typechecked
-def is_valid_tuple_pep(t: Tuple[Real, str]):
-    """ custom validation function - note the PEP484 type hint above """
-    return len(t) == 2 and (0 <= t[0] <= 1) and len(t[1]) == 3 and t[1].islower()
-
-
-@typechecked
-def check_valid_tuple_pep(t: Tuple[Real, str]):
-    """ custom validation function - note the PEP484 type hint above """
-
-    # the first element is a float between 0 and 1
-    if not (0 <= t[0] <= 1):
-        raise ValueError('first elt should be between 0 and 1,found ' + str(t[0]))
-
-    # the second element is a lowercase string of size 3
-    if not (len(t[1]) == 3 and t[1].islower()):
-        raise ValueError('second elt should be a lowercase string of length 3,'
-                         'found ' + str(t[1]))
+if sys.version_info >= (3, 5):
+    from ._tests_pep384 import ex3_is_valid_tuple_pep as is_valid_tuple_pep
+    from ._tests_pep384 import ex3_check_valid_tuple_pep as check_valid_tuple_pep
 
 
 def check_valid_tuple(t):
@@ -150,7 +133,7 @@ def function_input_builtin_stdlib(value):
 def function_input_mini_lambda(value):
     from mini_lambda import InputVar, Len
     from valid8 import validate_arg, instance_of
-    from valid8.validation_lib.mini_lambda import Instance_of
+    from valid8.validation_lib.mini_lambda_ import Instance_of
 
     # just for fun: we create our custom mini_lambda variable named 't'
     t = InputVar('t', tuple)
@@ -186,7 +169,7 @@ def class_field_builtin_stdlib(value):
 def class_field_mini_lambda(value):
     from mini_lambda import InputVar, Len
     from valid8 import validate_field, instance_of
-    from valid8.validation_lib.mini_lambda import Instance_of
+    from valid8.validation_lib.mini_lambda_ import Instance_of
 
     # just for fun: we create our custom mini_lambda variable named 't'
     t = InputVar('t', tuple)
@@ -204,22 +187,5 @@ def class_field_mini_lambda(value):
     Foo(value)
 
 
-def pep484(value):
-    from typing import Tuple
-    from pytypes import typechecked
-    from mini_lambda import InputVar, Len
-    from valid8 import validate_arg
-
-    # we need a mini_lambda variable named 't'
-    t = InputVar('t', tuple)
-
-    @typechecked
-    @validate_arg('t',  # the first element is a float between 0 and 1
-                  (0 <= t[0]) & (t[0] <= 1),
-                  # the 2d element is a lowercase string of len 3
-                  Len(t[1]) == 3, t[1].islower()
-                  )
-    def my_function(t: Tuple[Real, str]):
-        pass
-
-    my_function(value)
+if sys.version_info >= (3, 5):
+    from ._tests_pep384 import ex3_pep484 as pep484

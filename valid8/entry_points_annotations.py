@@ -1,13 +1,30 @@
-from inspect import signature, Signature, ismethod
+import sys
+from inspect import ismethod, isclass
+from sys import version_info
 
-from typing import Callable, Any, List, Union  # do not import Type for compatibility with some python 3.5
+from decopatch import class_decorator, function_decorator, DECORATED
 
-from decorator import decorate
+try:  # python 3.5+
+    from typing import Callable, Any, List, Union
+    try:  # python 3.5.3-
+        from typing import Type
+    except ImportError:
+        pass
+    from valid8.composition import ValidationFuncs
+except ImportError:
+    pass
 
+try:
+    from inspect import signature, Signature
+except ImportError:
+    from funcsigs import signature, Signature
+
+from makefun import with_signature, wraps
+
+from valid8.utils_decoration import apply_on_each_func_args_sig
 from valid8.utils_typing import is_pep484_nonable
-from valid8.utils_decoration import create_function_decorator__robust_to_args, apply_on_each_func_args_sig
 from valid8.base import get_callable_name
-from valid8.composition import ValidationFuncs
+from valid8.composition import pop_kwargs
 from valid8.entry_points import ValidationError, Validator, NonePolicy, NoneArgPolicy
 
 
@@ -73,14 +90,29 @@ class ClassFieldValidationError(ValidationError):
         return self.validator.validated_field_name + '=' + str(self.var_value)
 
 
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(self,
+                  validated_func: Callable, 
+                  *validation_func: ValidationFuncs,
+                  error_type: 'Type[ValidationError]' = None,
+                  help_msg: str = None,
+                  none_policy: int = None,
+                  **kw_context_args):"""
+else:
+    new_sig = None
+
+
 class FuncValidator(Validator):
     """
     Represents a special kind of `Validator` responsible to validate a function input or output
     """
 
-    def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: 'Type[InputValidationError]' = None, help_msg: str = None, none_policy: int = None,
-                 **kw_context_args):
+    @with_signature(new_sig)
+    def __init__(self,
+                 validated_func,    # type: Callable
+                 *validation_func,  # type: ValidationFuncs
+                 **kwargs):
         """
 
         :param validated_func: the function whose input is being validated.
@@ -98,6 +130,11 @@ class FuncValidator(Validator):
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
+                                                                ('help_msg', None),
+                                                                ('none_policy', None)], allow_others=True)
+        # the rest of keyword arguments is used as context.
+        kw_context_args = kwargs
 
         # store this additional info about the function been validated
         self.validated_func = validated_func
@@ -121,9 +158,11 @@ class InputValidator(FuncValidator):
     Represents a special kind of `Validator` responsible to validate a function input.
     """
 
-    def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: 'Type[InputValidationError]' = None, help_msg: str = None, none_policy: int = None,
-                 **kw_context_args):
+    @with_signature(new_sig)
+    def __init__(self,
+                 validated_func,    # type: Callable,
+                 *validation_func,  # type: ValidationFuncs
+                 **kwargs):
         """
 
         :param validated_func: the function whose input is being validated.
@@ -141,6 +180,11 @@ class InputValidator(FuncValidator):
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
+                                                                ('help_msg', None),
+                                                                ('none_policy', None)], allow_others=True)
+        # the rest of keyword arguments is used as context.
+        kw_context_args = kwargs
 
         # super constructor with default error type 'InputValidationError'
         error_type = error_type or InputValidationError
@@ -154,9 +198,11 @@ class InputValidator(FuncValidator):
 class OutputValidator(FuncValidator):
     """ Represents a special kind of `Validator` responsible to validate a function output. """
 
-    def __init__(self, validated_func: Callable, *validation_func: ValidationFuncs,
-                 error_type: 'Type[OutputValidationError]' = None, help_msg: str = None, none_policy: int = None,
-                 **kw_context_args):
+    @with_signature(new_sig)
+    def __init__(self,
+                 validated_func,    # type: Callable
+                 *validation_func,  # type: ValidationFuncs
+                 **kwargs):
         """
 
         :param validated_func: the function whose input is being validated.
@@ -174,6 +220,12 @@ class OutputValidator(FuncValidator):
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
+                                                                ('help_msg', None),
+                                                                ('none_policy', None)], allow_others=True)
+        # the rest of keyword arguments is used as context.
+        kw_context_args = kwargs
+
         # store this additional info
         self.validated_func = validated_func
 
@@ -185,14 +237,35 @@ class OutputValidator(FuncValidator):
         super(OutputValidator, self).__init__(validated_func, *validation_func, none_policy=none_policy,
                                               error_type=error_type, help_msg=help_msg, **kw_context_args)
 
-    def __call__(self, value: Any, error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):
+    def __call__(self,
+                 value,            # type: Any
+                 error_type=None,  # type: Type[ValidationError]
+                 help_msg=None,    # type: str
+                 **kw_context_args):
         super(OutputValidator, self).__call__('result', value, error_type=error_type, help_msg=help_msg,
                                               **kw_context_args)
 
-    def assert_valid(self, value: Any, error_type: 'Type[ValidationError]' = None,
-                     help_msg: str = None, **kw_context_args):
+    def assert_valid(self,
+                     value,            # type: Any
+                     error_type=None,  # type: Type[ValidationError]
+                     help_msg=None,    # type: str
+                     **kw_context_args):
         super(OutputValidator, self).assert_valid('result', value, error_type=error_type, help_msg=help_msg,
                                                   **kw_context_args)
+
+
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(self,
+                  validated_class: Callable,
+                  validated_field_name: str,
+                  *validation_func: ValidationFuncs,
+                  error_type: 'Type[ClassFieldValidationError]' = None,
+                  help_msg: str = None,
+                  none_policy: int = None,
+                  **kw_context_args):"""
+else:
+    new_sig = None
 
 
 class ClassFieldValidator(Validator):
@@ -201,9 +274,12 @@ class ClassFieldValidator(Validator):
     As opposed to other validators, the name of the field is hardcoded.
     """
 
-    def __init__(self, validated_class: Callable, validated_field_name: str, *validation_func: ValidationFuncs,
-                 error_type: 'Type[ClassFieldValidationError]' = None, help_msg: str = None, none_policy: int = None,
-                 **kw_context_args):
+    @with_signature(new_sig)
+    def __init__(self,
+                 validated_class,       # type: Callable,
+                 validated_field_name,  # type: str
+                 *validation_func,      # type: ValidationFuncs
+                 **kwargs):
         """
 
         :param validated_class: the class whose field is being validated.
@@ -222,6 +298,11 @@ class ClassFieldValidator(Validator):
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
         to format the help message
         """
+        error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
+                                                                ('help_msg', None),
+                                                                ('none_policy', None)], allow_others=True)
+        # the rest of keyword arguments is used as context.
+        kw_context_args = kwargs
 
         # store this additional info about the function been validated
         self.validated_class = validated_class
@@ -235,7 +316,9 @@ class ClassFieldValidator(Validator):
         super(ClassFieldValidator, self).__init__(*validation_func, none_policy=none_policy,
                                                   error_type=error_type, help_msg=help_msg, **kw_context_args)
 
-    def _get_name_for_errors(self, name: str):
+    def _get_name_for_errors(self,
+                             name  # type: str
+                             ):
         """ Overriden so use the hardcoded name """
         return self.validated_field_name
 
@@ -251,9 +334,26 @@ class ClassFieldValidator(Validator):
         return self.validated_class.__name__
 
 
-def validate_field(field_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                   error_type: 'Type[InputValidationError]' = None, none_policy: int = None, **kw_context_args) \
-        -> 'Type':
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(cls, 
+                  field_name,
+                  *validation_func: ValidationFuncs,
+                  help_msg: str = None,
+                  error_type: 'Type[InputValidationError]' = None,
+                  none_policy: int = None,
+                  **kw_context_args) -> 'Type':"""
+else:
+    new_sig = None
+
+
+@class_decorator(flat_mode_decorated_name='cls')
+@with_signature(new_sig)
+def validate_field(cls,
+                   field_name,
+                   *validation_func,  # type: ValidationFuncs
+                   **kwargs):
+    # type: (...) -> Callable
     """
     A class decorator. It goes through all class variables and for all of those that are descriptors with a __set__,
     it wraps the descriptors' setter function with a `validate_arg` annotation
@@ -264,19 +364,17 @@ def validate_field(field_name, *validation_func: ValidationFuncs, help_msg: str 
     :param error_type:
     :param none_policy:
     :param kw_context_args:
-    :return:
+    :return
     """
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate_field will never be used as is (without a call), but it does
-    # not cost much and may be of interest in the future
-
-    return create_function_decorator__robust_to_args(decorate_cls_with_validation, field_name,
-                                                     *validation_func,
-                                                     help_msg=help_msg, error_type=error_type, none_policy=none_policy,
-                                                     **kw_context_args)
+    return decorate_cls_with_validation(cls, field_name, *validation_func, **kwargs)
 
 
-def validate_io(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validation_funcs: ValidationFuncs):
+@function_decorator
+def validate_io(f=DECORATED,
+                none_policy=None,      # type: int
+                _out_=None,            # type: ValidationFuncs
+                **kw_validation_funcs  # type: ValidationFuncs
+                ):
     """
     A function decorator to add input validation prior to the function execution. It should be called with named
     arguments: for each function arg name, provide a single validation function or a list of validation functions to
@@ -311,33 +409,46 @@ def validate_io(none_policy: int=None, _out_: ValidationFuncs=None, **kw_validat
     ```
 
     :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
-    possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
+        possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
     :param _out_: a validation function or list of validation functions to apply to the function output. See
-    kw_validation_funcs for details about the syntax.
+        kw_validation_funcs for details about the syntax.
     :param kw_validation_funcs: keyword arguments: for each of the function's input names, the validation function or
-    list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
-    implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
-    [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will
-    be transformed to functions automatically.
+        list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
+        a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
+        implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
+        will be transformed to functions automatically.
     :return: the decorated function, that will perform input validation before executing the function's code everytime
-    it is executed.
+        it is executed.
     """
-
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
-    # cost much and may be of interest in the future
-
-    return create_function_decorator__robust_to_args(decorate_several_with_validation, none_policy=none_policy,
-                                                     _out_=_out_, **kw_validation_funcs)
+    return decorate_several_with_validation(f, none_policy=none_policy, _out_=_out_, **kw_validation_funcs)
 
 
 # alidate = validate
 # """ an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
 
 
-def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                 error_type: 'Type[InputValidationError]' = None, none_policy: int = None, **kw_context_args) -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(f, 
+                  arg_name, 
+                  *validation_func: ValidationFuncs, 
+                  help_msg: str = None,
+                  error_type: 'Type[InputValidationError]' = None, 
+                  none_policy: int = None, 
+                  **kw_context_args) -> Callable:"""
+else:
+    new_sig = None
+
+
+@function_decorator(flat_mode_decorated_name='f')
+@with_signature(new_sig)
+def validate_arg(f,
+                 arg_name,
+                 *validation_func,  # type: ValidationFuncs
+                 **kwargs
+                 ):
+    # type: (...) -> Callable
     """
     A decorator to apply function input validation for the given argument name, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -345,32 +456,38 @@ def validate_arg(arg_name, *validation_func: ValidationFuncs, help_msg: str = No
 
     :param arg_name:
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
+        are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
+        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
-    ValidationError will be raised with the provided help_msg
+        ValidationError will be raised with the provided help_msg
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
     :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various
-    possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
+        possibilities. Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_VALIDATE`.
     :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-    to format the help message
+        to format the help message
     :return: a function decorator, able to transform a function into a function that will perform input validation
-    before executing the function's code everytime it is executed.
+        before executing the function's code everytime it is executed.
     """
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
-    # cost much and may be of interest in the future
-    return create_function_decorator__robust_to_args(decorate_with_validation, arg_name,
-                                                     *validation_func,
-                                                     help_msg=help_msg, error_type=error_type, none_policy=none_policy,
-                                                     **kw_context_args)
+    return decorate_with_validation(f, arg_name, *validation_func, **kwargs)
 
 
-def validate_out(*validation_func: ValidationFuncs, help_msg: str = None,
-                 error_type: 'Type[OutputValidationError]' = None, none_policy: int = None, **kw_context_args) \
-        -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(*validation_func: ValidationFuncs, 
+                  help_msg: str = None,
+                  error_type: 'Type[OutputValidationError]' = None, 
+                  none_policy: int = None, 
+                  **kw_context_args) -> Callable:"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def validate_out(*validation_func,  # type: ValidationFuncs
+                 **kwargs):
+    # type: (...) -> Callable
     """
     A decorator to apply function output validation to this function's output, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -386,45 +503,63 @@ def validate_out(*validation_func: ValidationFuncs, help_msg: str = None,
     :return: a function decorator, able to transform a function into a function that will perform input validation
     before executing the function's code everytime it is executed.
     """
-    # this is a general technique for decorators, to properly handle both cases of being called with arguments or not
-    # this is really not needed in our case since @validate_io will never be used as is (without a call), but it does not
-    # cost much and may be of interest in the future
-    return create_function_decorator__robust_to_args(decorate_with_validation, _OUT_KEY,
-                                                     *validation_func,
-                                                     help_msg=help_msg, error_type=error_type, none_policy=none_policy,
-                                                     **kw_context_args)
+    def decorate(f):
+        return decorate_with_validation(f, _OUT_KEY, *validation_func, **kwargs)
+    return decorate
 
 
 _OUT_KEY = '_out_'
 """ The reserved key for output validation """
 
 
-def decorate_cls_with_validation(cls, field_name: str, *validation_func: ValidationFuncs, help_msg: str = None,
-                                 error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
-                                 none_policy: int = None, **kw_context_args) -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(cls, 
+                  field_name: str, 
+                  *validation_func: ValidationFuncs, 
+                  help_msg: str = None,
+                  error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
+                  none_policy: int = None, 
+                  **kw_context_args) -> Callable:"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def decorate_cls_with_validation(cls,
+                                 field_name,        # type: str
+                                 *validation_func,  # type: ValidationFuncs
+                                 **kwargs):
+    # type: (...) -> Type[Any]
     """
     This method is equivalent to decorating a class with the `@validate_field` decorator but can be used a posteriori.
 
     :param cls: the class to decorate
     :param field_name: the name of the argument to validate or _OUT_KEY for output validation
     :param validation_func: the validation function or
-    list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
-    implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
-    [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will
-    be transformed to functions automatically.
+        list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
+        a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
+        implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
+        will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
-    ValidationError will be raised with the provided help_msg
+        ValidationError will be raised with the provided help_msg
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
     :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various possibilities.
-    Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_REJECT`.
+        Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_REJECT`.
     :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-    to format the help message
+        to format the help message
     :return: the decorated function, that will perform input validation (using `_assert_input_is_valid`) before
-    executing the function's code everytime it is executed.
+        executing the function's code everytime it is executed.
     """
-    if type(cls) is not type:
-        raise TypeError('decorated cls should be a type')
+    error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
+                                                            ('help_msg', None),
+                                                            ('none_policy', None)], allow_others=True)
+    # the rest of keyword arguments is used as context.
+    kw_context_args = kwargs
+
+    if not isclass(cls):
+        raise TypeError('decorated cls should be a class')
 
     if hasattr(cls, field_name):
         # ** A class field with that name exist. Is it a descriptor ?
@@ -461,7 +596,7 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
                                  "validation to it. See https://docs.python.org/3.6/howto/descriptor.html".
                                  format(field_name, cls.__name__))
             # extract the correct name
-            descriptor_arg_name = list(func_sig.parameters.items())[nb_args-1][0]
+            descriptor_arg_name = list(func_sig.parameters.items())[-1][0]
 
             # do the same than in decorate_with_validation but with a class field validator
             # new_setter = decorate_with_validation(func, descriptor_arg_name, *validation_func, help_msg=help_msg,
@@ -484,7 +619,8 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
                 # properties are special beasts 2
                 setattr(cls, field_name, var.setter(new_setter))
             else:
-                type(var).__set__ = new_setter
+                # do not use type() for python 2 compat
+                var.__class__.__set__ = new_setter
 
         elif (hasattr(var, '__get__') and callable(var.__get__)) \
             or (hasattr(var, '__delete__') and callable(var.__delete__)):
@@ -506,9 +642,18 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
 
         # try to annotate the generated constructor
         try:
-            cls.__init__ = decorate_with_validation(cls.__init__, field_name, *validation_func, help_msg=help_msg,
+            init_func = cls.__init__
+            if sys.version_info < (3, 0):
+                try:
+                    # python 2 - we have to access the inner `im_func`
+                    init_func = cls.__init__.im_func
+                except AttributeError:
+                    pass
+
+            cls.__init__ = decorate_with_validation(init_func, field_name, *validation_func, help_msg=help_msg,
                                                     _constructor_of_cls_=cls,
                                                     error_type=error_type, none_policy=none_policy, **kw_context_args)
+
         except InvalidNameError:
             # the field was not found
 
@@ -522,8 +667,12 @@ def decorate_cls_with_validation(cls, field_name: str, *validation_func: Validat
     return cls
 
 
-def decorate_several_with_validation(func, _out_: ValidationFuncs = None, none_policy: int = None,
-                                     **validation_funcs: ValidationFuncs) -> Callable:
+def decorate_several_with_validation(func,
+                                     _out_=None,         # type: ValidationFuncs
+                                     none_policy=None,   # type: int
+                                     **validation_funcs  # type: ValidationFuncs
+                                     ):
+    # type: (...) -> Callable
     """
     This method is equivalent to applying `decorate_with_validation` once for each of the provided arguments of
     the function `func` as well as output `_out_`. validation_funcs keyword arguments are validation functions for each
@@ -551,31 +700,55 @@ def decorate_several_with_validation(func, _out_: ValidationFuncs = None, none_p
     return func
 
 
-def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, help_msg: str = None,
-                             error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
-                             none_policy: int = None, _constructor_of_cls_: 'Type'=None, **kw_context_args) -> Callable:
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(func, 
+                  arg_name: str, 
+                  *validation_func: ValidationFuncs, 
+                  help_msg: str = None,
+                  error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
+                  none_policy: int = None, 
+                  _constructor_of_cls_: 'Type'=None, 
+                  **kw_context_args) -> Callable:"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def decorate_with_validation(func,
+                             arg_name,          # type: str
+                             *validation_func,  # type: ValidationFuncs
+                             **kwargs):
+    # type: (...) -> Callable
     """
-    This method is equivalent to decorating a function with the `@validate_io`, `@validate_arg` or `@validate_out`
-    decorators, but can be used a posteriori.
+    This method is the inner method used in `@validate_io`, `@validate_arg` and `@validate_out`.
+    It can be used if you with to perform decoration manually without a decorator.
 
     :param func:
     :param arg_name: the name of the argument to validate or _OUT_KEY for output validation
     :param validation_func: the validation function or
-    list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
-    implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
-    [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will
-    be transformed to functions automatically.
+        list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
+        a tuple(callable, failure_type), or a list of several such elements. Nested lists are supported and indicate an
+        implicit `and_` (such as the main list). Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
+        will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
-    ValidationError will be raised with the provided help_msg
+        ValidationError will be raised with the provided help_msg
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
     :param none_policy: describes how None values should be handled. See `NoneArgPolicy` for the various possibilities.
-    Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_REJECT`.
+        Default is `NoneArgPolicy.ACCEPT_IF_OPTIONAl_ELSE_REJECT`.
     :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-    to format the help message
+        to format the help message
     :return: the decorated function, that will perform input validation (using `_assert_input_is_valid`) before
-    executing the function's code everytime it is executed.
+        executing the function's code everytime it is executed.
     """
+    error_type, help_msg, none_policy, _constructor_of_cls_ = pop_kwargs(kwargs, [('error_type', None),
+                                                                                  ('help_msg', None),
+                                                                                  ('none_policy', None),
+                                                                                  ('_constructor_of_cls_', None)],
+                                                                         allow_others=True)
+    # the rest of keyword arguments is used as context.
+    kw_context_args = kwargs
 
     none_policy = none_policy or NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
 
@@ -600,7 +773,9 @@ def decorate_with_validation(func, arg_name, *validation_func: ValidationFuncs, 
     return decorate_with_validators(func, func_signature=func_sig, **{arg_name: new_validator})
 
 
-def _get_final_none_policy_for_validator(is_nonable: bool, none_policy: NoneArgPolicy):
+def _get_final_none_policy_for_validator(is_nonable,   # type: bool
+                                         none_policy   # type: NoneArgPolicy
+                                         ):
     """
     Depending on none_policy and of the fact that the target parameter is nonable or not, returns a corresponding
     NonePolicy
@@ -629,11 +804,34 @@ class InvalidNameError(ValueError):
     pass
 
 
-def _create_function_validator(validated_func: Callable, s: Signature, arg_name: str,
-                               *validation_func: ValidationFuncs, help_msg: str = None,
-                               error_type: 'Type[InputValidationError]' = None, none_policy: int = None,
-                               validated_class: 'Type'=None, validated_class_field_name: str=None,
-                               **kw_context_args):
+# Python 3+: load the 'more explicit api'
+if version_info >= (3, 0):
+    new_sig = """(validated_func: Callable, 
+                  s: Signature, 
+                  arg_name: str,
+                  *validation_func: ValidationFuncs,
+                  help_msg: str = None,
+                  error_type: 'Type[InputValidationError]' = None, 
+                  none_policy: int = None,
+                  validated_class: 'Type'=None, 
+                  validated_class_field_name: str=None,
+                  **kw_context_args):"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def _create_function_validator(validated_func,    # type: Callable
+                               s,                 # type: Signature
+                               arg_name,          # type: str
+                               *validation_func,  # type: ValidationFuncs
+                               **kwargs):
+
+    error_type, help_msg, none_policy, validated_class, validated_class_field_name = \
+        pop_kwargs(kwargs, [('error_type', None), ('help_msg', None), ('none_policy', None),
+                            ('validated_class', None), ('validated_class_field_name', None)], allow_others=True)
+    # the rest of keyword arguments is used as context.
+    kw_context_args = kwargs
 
     # if the function is a valid8 wrapper, rather refer to the __wrapped__ function.
     if hasattr(validated_func, '__wrapped__') and hasattr(validated_func.__wrapped__, '__validators__'):
@@ -675,7 +873,10 @@ def _create_function_validator(validated_func: Callable, s: Signature, arg_name:
                                    error_type=error_type, help_msg=help_msg, **kw_context_args)
 
 
-def decorate_with_validators(func, func_signature: Signature = None, **validators: Validator):
+def decorate_with_validators(func,
+                             func_signature=None,  # type: Signature
+                             **validators          # type: Validator
+                             ):
     """
     Utility method to decorate the provided function with the provided input and output Validator objects. Since this
     method takes Validator objects as argument, it is for advanced users.
@@ -717,37 +918,39 @@ def decorate_with_validators(func, func_signature: Signature = None, **validator
             try:
                 func.__validators__ = validators
             except AttributeError:
-                raise ValueError('The function that you are trying to decorate is not a function, it is maybe a method?'
-                                 ' Try to decorate its __func__ field instead')
+                raise ValueError("Error - Could not add validators list to function '%s'" % func)
 
         # either reuse or recompute function signature
         func_signature = func_signature or signature(func)
 
-        # we used @functools.wraps(), but we now use 'decorate()' to have a wrapper that has the same signature
-        def validating_wrapper(f, *args, **kwargs):
+        # create a wrapper with the same signature
+        @wraps(func)
+        def validating_wrapper(*args, **kwargs):
             """ This is the wrapper that will be called everytime the function is called """
 
             # (a) Perform input validation by applying `_assert_input_is_valid` on all received arguments
-            apply_on_each_func_args_sig(f, args, kwargs, func_signature,
+            apply_on_each_func_args_sig(func, args, kwargs, func_signature,
                                         func_to_apply=_assert_input_is_valid,
-                                        func_to_apply_params_dict=f.__validators__)
+                                        func_to_apply_params_dict=func.__validators__)
 
             # (b) execute the function as usual
-            res = f(*args, **kwargs)
+            res = func(*args, **kwargs)
 
             # (c) validate output if needed
-            if _OUT_KEY in f.__validators__:
-                for validator in f.__validators__[_OUT_KEY]:
+            if _OUT_KEY in func.__validators__:
+                for validator in func.__validators__[_OUT_KEY]:
                     validator.assert_valid(res)
 
             return res
 
-        decorated_function = decorate(func, validating_wrapper)
-        return decorated_function
+        return validating_wrapper
 
 
-def _assert_input_is_valid(input_value: Any, validators: List[InputValidator], validated_func: Callable,
-                           input_name: str):
+def _assert_input_is_valid(input_value,     # type: Any
+                           validators,      # type: List[InputValidator]
+                           validated_func,  # type: Callable
+                           input_name       # type: str
+                           ):
     """
     Called by the `validating_wrapper` in the first step (a) `apply_on_each_func_args` for each function input before
     executing the function. It simply delegates to the validator. The signature of this function is hardcoded to
@@ -756,7 +959,7 @@ def _assert_input_is_valid(input_value: Any, validators: List[InputValidator], v
     :param input_value: the value to validate
     :param validator: the Validator object that will be applied on input_value_to_validate
     :param validated_func: the function for which this validation is performed. This is not used since the Validator
-    knows it already, but we should not change the signature here.
+        knows it already, but we should not change the signature here.
     :param input_name: the name of the function input that is being validated
     :return: Nothing
     """

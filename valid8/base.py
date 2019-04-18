@@ -1,8 +1,16 @@
+import sys
+
 import re
 from copy import copy
-from typing import Callable, Sequence, Any, Dict  # do not import Type for compatibility with earlier python 3.5
 
-from valid8.utils_string import end_with_dot_space
+try:
+    from typing import Callable, Sequence, Any, Dict
+    try:  # python 3.5.3-
+        from typing import Type
+    except ImportError:
+        pass
+except ImportError:
+    pass
 
 try:
     # if mini_lambda is here, use this class
@@ -11,6 +19,8 @@ except ImportError:
     # otherwise define a dummy class
     class _LambdaExpression:
         pass
+
+from valid8.utils_string import end_with_dot_space
 
 
 class RootException(Exception):
@@ -42,7 +52,9 @@ def should_be_hidden_as_cause(exc):
     return isinstance(exc, (HasWrongType, IsWrongType))
 
 
-def get_callable_name(validation_callable: Callable) -> str:
+def get_callable_name(validation_callable  # type: Callable
+                      ):
+    # type: (...) -> str
     """
     Used internally to get the name to display concerning a validation function, in error messages for example.
 
@@ -52,14 +64,17 @@ def get_callable_name(validation_callable: Callable) -> str:
     return validation_callable.__name__ if hasattr(validation_callable, '__name__') else str(validation_callable)
 
 
-def get_callable_names(validation_callables: Sequence[Callable]) -> str:
+def get_callable_names(validation_callables  # type: Sequence[Callable]
+                       ):
+    # type: (...) -> str
     return ', '.join([get_callable_name(val) for val in validation_callables])
 
 
 SUCCESS_CONDITIONS = 'in {None, True}'  # was used in some error messages
 
 
-def result_is_success(validation_result) -> bool:
+def result_is_success(validation_result):
+    # type: (...) -> bool
     """
     Helper function to check if some results returned by a validation function mean success or failure.
 
@@ -93,7 +108,11 @@ class HelpMsgFormattingException(Exception):
     Exception raised when the help message cannot be formatted with the available context dictionary.
     See `HelpMsgMixIn` for details.
     """
-    def __init__(self, help_msg: str, caught: KeyError, context: Dict[str, Any]):
+    def __init__(self,
+                 help_msg,  # type: str
+                 caught,    # type: KeyError
+                 context    # type: Dict[str, Any]
+                 ):
         """
         Constructor
 
@@ -110,7 +129,7 @@ class HelpMsgFormattingException(Exception):
         super(HelpMsgFormattingException, self).__init__(msg)
 
 
-class HelpMsgMixIn:
+class HelpMsgMixIn(object):
     """ A helper class providing the ability to store a help message in the class or in the instance, and to get a
     formatted help message """
 
@@ -123,7 +142,10 @@ class HelpMsgMixIn:
     (for example through the constructor). Subclasses may wish to override this class attribute, or to define a 
     different behaviour by overriding `get_help_msg` """
 
-    def get_help_msg(self, dotspace_ending: bool = False, **kwargs) -> str:
+    def get_help_msg(self,
+                     dotspace_ending=False,  # type: bool
+                     **kwargs):
+        # type: (...) -> str
         """
         The method used to get the formatted help message according to kwargs. By default it returns the 'help_msg'
         attribute, whether it is defined at the instance level or at the class level.
@@ -225,7 +247,11 @@ class Failure(HelpMsgMixIn, RootException):
     they should subclass `WrappingFailure` instead of `Failure`. See `WrappingFailure` for details.
     """
 
-    def __init__(self, wrong_value: Any, help_msg: str = None, append_details: bool=True, **kw_context_args):
+    def __init__(self,
+                 wrong_value,           # type: Any
+                 help_msg=None,         # type: str
+                 append_details=True,   # type: bool
+                 **kw_context_args):
         """
         Creates a Failure associated with failed validation of `wrong_value`. Contextual information may be provided as
         keyword arguments, and will be stored as fields in the created exception instance. An optional help message can
@@ -306,7 +332,11 @@ class WrappingFailure(Failure):
     `validation_outcome`, and `**kw_context_args`. See `Failure` for details.
     """
 
-    def __init__(self, wrapped_func: Callable, wrong_value: Any, validation_outcome: Any=False, help_msg: str = None,
+    def __init__(self,
+                 wrapped_func,              # type: Callable
+                 wrong_value,               # type: Any
+                 validation_outcome=False,  # type: Any
+                 help_msg=None,             # type: str
                  **kw_context_args):
         """
         Creates a WrappingFailure associated with failed validation of `wrong_value` by `wrapped_func`. Additional
@@ -369,8 +399,11 @@ class WrappingFailure(Failure):
         return context_dict
 
 
-def _failure_raiser(validation_callable: Callable, failure_type: 'Type[WrappingFailure]' = None, help_msg: str = None,
-                    **kw_context_args) -> Callable:
+def _failure_raiser(validation_callable,   # type: Callable
+                    failure_type=None,     # type: Type[WrappingFailure]
+                    help_msg=None,         # type: str
+                    **kw_context_args):
+    # type: (...) -> Callable
     """
     Wraps the provided validation function so that in case of failure it raises the given failure_type or a WrappingFailure
     with the given help message.
@@ -438,7 +471,9 @@ class ValueIsNone(Failure, TypeError):
     help_msg = "The value must be non-None"
 
 
-def _none_accepter(validation_callable: Callable) -> Callable:
+def _none_accepter(validation_callable  # type: Callable
+                   ):
+    # type: (...) -> Callable
     """
     Wraps the given validation callable to accept None values silently. When a None value is received by the wrapper,
     it is not passed to the validation_callable and instead this function will return True. When any other value is
@@ -467,7 +502,9 @@ def _none_accepter(validation_callable: Callable) -> Callable:
     return accept_none
 
 
-def _none_rejecter(validation_callable: Callable) -> Callable:
+def _none_rejecter(validation_callable  # type: Callable
+                   ):
+    # type: (...) -> Callable
     """
     Wraps the given validation callable to reject None values. When a None value is received by the wrapper,
     it is not passed to the validation_callable and instead this function will raise a WrappingFailure. When any other value is

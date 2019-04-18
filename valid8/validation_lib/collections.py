@@ -1,4 +1,7 @@
-from typing import Set, Tuple
+try:  # python 3.5+
+    from typing import Set, Tuple
+except ImportError:
+    pass
 
 from valid8.composition import _process_validation_function_s
 from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_name
@@ -12,7 +15,9 @@ class TooShort(Failure, ValueError):
         super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, symbol=symbol, help_msg=help_msg)
 
 
-def minlen(min_length, strict: bool = False):
+def minlen(min_length,
+           strict=False  # type: bool
+           ):
     """
     'Minimum length' validation_function generator.
     Returns a validation_function to check that len(x) >= min_length (strict=False, default)
@@ -55,7 +60,9 @@ class TooLong(Failure, ValueError):
         super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, symbol=symbol, help_msg=help_msg)
 
 
-def maxlen(max_length, strict: bool = False):
+def maxlen(max_length,
+           strict=False  # type: bool
+           ):
     """
     'Maximum length' validation_function generator.
     Returns a validation_function to check that len(x) <= max_length (strict=False, default) or len(x) < max_length (strict=True)
@@ -124,7 +131,11 @@ class LengthNotInRange(Failure, ValueError):
                                                max_length=max_length, right_symbol=right_symbol, help_msg=help_msg)
 
 
-def length_between(min_len, max_len, open_left: bool = False, open_right: bool = False):
+def length_between(min_len,
+                   max_len,
+                   open_left=False,  # type: bool
+                   open_right=False  # type: bool
+                   ):
     """
     'Is length between' validation_function generator.
     Returns a validation_function to check that `min_len <= len(x) <= max_len (default)`. `open_right` and `open_left`
@@ -186,7 +197,8 @@ class NotInAllowedValues(Failure, ValueError):
                                                  help_msg=help_msg)
 
 
-def is_in(allowed_values: Set):
+def is_in(allowed_values  # type: Set
+          ):
     """
     'Values in' validation_function generator.
     Returns a validation_function to check that x is in the provided set of allowed values
@@ -213,7 +225,8 @@ class NotSubset(Failure, ValueError):
                                         help_msg=help_msg)
 
 
-def is_subset(reference_set: Set):
+def is_subset(reference_set  # type: Set
+              ):
     """
     'Is subset' validation_function generator.
     Returns a validation_function to check that x is a subset of reference_set
@@ -269,7 +282,8 @@ class NotSuperset(Failure, ValueError):
                                           help_msg=help_msg)
 
 
-def is_superset(reference_set: Set):
+def is_superset(reference_set  # type: Set
+                ):
     """
     'Is superset' validation_function generator.
     Returns a validation_function to check that x is a superset of reference_set
@@ -359,7 +373,8 @@ def on_each_(*validation_functions_collection):
                                       for validation_func in validation_functions_collection)
 
     # generate a validation function based on the tuple of validation_functions lists
-    def on_each_val(x: Tuple):
+    def on_each_val(x  # type: Tuple
+                    ):
         if len(validation_function_funcs) != len(x):
             raise Failure('on_each_: x does not have the same number of elements than validation_functions_collection.')
         else:
@@ -370,14 +385,18 @@ def on_each_(*validation_functions_collection):
                 try:
                     res = validation_function_func(elt)
                 except Exception as e:
-                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validation_function_func, validation_outcome=e)
+                    raise InvalidItemInSequence(wrong_value=elt,
+                                                wrapped_func=validation_function_func,
+                                                validation_outcome=e)
 
                 if not result_is_success(res):
                     # one validation_function was unhappy > raise
                     # raise Failure('on_each_(' + str(validation_functions_collection) + '): _validation_function [' + str(idx)
                     #               + '] (' + str(validation_functions_collection[idx]) + ') failed validation for '
                     #                       'input ' + str(x[idx]))
-                    raise InvalidItemInSequence(wrong_value=elt, wrapped_func=validation_function_func, validation_outcome=res)
+                    raise InvalidItemInSequence(wrong_value=elt,
+                                                wrapped_func=validation_function_func,
+                                                validation_outcome=res)
             return True
 
     on_each_val.__name__ = 'map_<{}>_on_elts' \

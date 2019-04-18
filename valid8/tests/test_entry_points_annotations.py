@@ -1,10 +1,10 @@
-import pytest
-from typing import Optional
+import sys
 
-from valid8.tests.conftest import PY37
-from valid8 import validate_io, InputValidationError, is_even, gt, not_, is_multiple_of, or_, xor_, and_, \
-    decorate_with_validation, lt, not_all, Failure, validate_arg, NonePolicy, validate_out, OutputValidationError, \
-    ValidationError, validate_field, ClassFieldValidationError, skip_on_none
+import pytest
+
+from valid8 import validate_io, InputValidationError, is_even, gt, decorate_with_validation, lt, Failure, \
+    validate_arg, NonePolicy, validate_out, OutputValidationError, ValidationError, validate_field, \
+    ClassFieldValidationError
 
 
 def test_validate_field():
@@ -12,7 +12,7 @@ def test_validate_field():
 
     from mini_lambda import x
 
-    class SurfaceField:
+    class SurfaceField(object):
         """ An example descriptor implementing everything (although only one of the three methods is required) """
 
         def __init__(self, value=None):
@@ -28,7 +28,8 @@ def test_validate_field():
             self.val = None
 
     @validate_field('x', x <= 42, help_msg="x must be smaller or equal to 42")
-    class House:
+    class House(object):
+        """ Note that descriptors only work in new-style classes"""
         x = SurfaceField(10)
         y = 5
         def foo(self):
@@ -67,7 +68,8 @@ def test_validate_field_property():
         del self.__x
 
     @validate_field('x', x <= 42, help_msg="x must be smaller or equal to 42")
-    class House:
+    class House(object):
+        """ properties seem to only work in new-style classes """
         x = property(getx, setx, delx, "I'm the 'x' property.")
         y = 5
         def foo(self):
@@ -117,7 +119,8 @@ def test_validate_field_custom_type():
                     error_type=InvalidNameError)
     @validate_field('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
                     error_type=InvalidSurfaceError)
-    class House:
+    class House(object):
+        """Properties work only with new-style classes"""
         def __init__(self, name, surface=None):
             self.name = name
             self.surface = surface
@@ -338,26 +341,29 @@ def test_validate_mini_lambda():
 
     @validate_io(name=(0 < Len(s)) & (Len(s) <= 10),
                  age=(x > 0) & (Int(x) == x))
-    def hello_world(name: str, age: float):
+    def hello_world(name, age):
         print('Hello, ' + name + ' your age is ' + str(age))
 
     hello_world('john', 20)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 5), reason="type hint annotations are not supported in python 2")
+@pytest.mark.skipif(sys.version_info > (3, 6), reason="enforce does not work with python 3.7")
 def test_validate_none_enforce():
     """ Tests that a None will be caught by enforce: no need for not_none validator """
 
     from enforce import runtime_validation, config
     from enforce.exceptions import RuntimeTypeError
-    from numbers import Integral
 
     # we're not supposed to do that but if your python environment is a bit clunky, that might help
     config(dict(mode='covariant'))
 
-    @runtime_validation
-    @validate_io(a=[is_even, gt(1)], b=is_even, c=is_even)
-    def myfunc(a: Integral, b: Optional[int], c=None):
-        print('hello')
+    from ._test_pep384 import create_for_test_validate_none_enforce
+    myfunc = create_for_test_validate_none_enforce()
+
+    # decorate manually (reverse order)
+    myfunc = validate_io(a=[is_even, gt(1)], b=is_even, c=is_even)(myfunc)
+    myfunc = runtime_validation(myfunc)
 
     # -- check that the validation works
     myfunc(84, None)     # OK because b is Nonable and c is optional with default value None
@@ -365,10 +371,7 @@ def test_validate_none_enforce():
         myfunc(None, 0)  # RuntimeTypeError: a is None
 
 
-if PY37:
-    pytest.mark.skip("enforce does not work with python 3.7")(test_validate_none_enforce)
-
-
+@pytest.mark.skipif(sys.version_info < (3, 5), reason="type hint annotations are not supported in python 2")
 def test_validate_none_pytypes():
     """ Tests that a None will be caught by pytypes: no need for not_none validator """
 
@@ -379,10 +382,12 @@ def test_validate_none_pytypes():
     # we're not supposed to do that but if your python environment is a bit clunky, that might help
     # config(dict(mode='covariant'))
 
-    @typechecked
-    @validate_io(a=[is_even, gt(1)], b=is_even)
-    def myfunc(a: Integral, b = None):
-        print('hello')
+    from ._test_pep384 import create_for_test_validate_none_pytypes
+    myfunc = create_for_test_validate_none_pytypes()
+
+    # decorate manually (reverse order)
+    myfunc = validate_io(a=[is_even, gt(1)], b=is_even)(myfunc)
+    myfunc = typechecked(myfunc)
 
     # -- check that the validation works
     myfunc(84, None)  # OK because b has no type annotation nor not_none validator
@@ -394,7 +399,7 @@ def test_validate_none_is_allowed():
     """ Tests that a None input is allowed by default and that in this case the validators are not executed """
 
     @validate_io(a=is_even)
-    def myfunc(a = None, b = int):
+    def myfunc(a=None, b=int):
         print('hello')
 
     # -- check that the validation works

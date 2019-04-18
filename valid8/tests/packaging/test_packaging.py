@@ -5,9 +5,12 @@ import valid8 as v
 submodules = ['composition', 'validation_lib']
 
 
+exceptions_list = ['pop_kwargs']
+
 def get_all_symbols(submodule):
+    import valid8 as v
     m = getattr(v, submodule)
-    return [s for s, v in vars(m).items() if not s.startswith('_')
+    return [s for s, v in vars(m).items() if not s.startswith('_') and s not in exceptions_list
             and getattr(v, '__module__', None) == 'valid8.%s' % submodule]
 
 
