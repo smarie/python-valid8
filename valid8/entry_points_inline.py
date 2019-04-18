@@ -16,7 +16,9 @@ except ImportError:
     pass
 
 
-def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
+def assert_instance_of(value,
+                       allowed_types  # type: Union[type, Iterable[type]]
+                       ):
     """
     An inlined version of instance_of(var_types)(value) without 'return True': it does not return anything in case of
     success, and raises a HasWrongType exception in case of failure.
@@ -25,27 +27,33 @@ def assert_instance_of(value, allowed_types: Union[type, Set[type]]):
 
     :param value: the value to check
     :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
-    match is enough to succeed. If None, type will not be enforced
+        match is enough to succeed. If None, type will not be enforced
     :return:
     """
-    if not isinstance(allowed_types, set):
-        # ref_type is a single type
-        if not isinstance(value, allowed_types):
-            raise HasWrongType(wrong_value=value, ref_type=allowed_types)
-    else:
-        # ref_type is a set
-        match = False
-        # test against each of the provided types
-        for ref in allowed_types:
-            if isinstance(value, ref):
-                match = True
-                break
-        if not match:
+    try:
+        # isinstance does not allow anything else than tuples when several are provided
+        allowed_types = tuple(allowed_types)
+    except TypeError:
+        pass
+
+    if not isinstance(value, allowed_types):
+        try:
+            # more than 1 ?
+            allowed_types[1]
             raise HasWrongType(wrong_value=value, ref_type=allowed_types,
                                help_msg='Value should be an instance of any of {ref_type}')
+        except IndexError:
+            # 1
+            allowed_types = allowed_types[0]
+        except TypeError:
+            # 1
+            pass
+        raise HasWrongType(wrong_value=value, ref_type=allowed_types)
 
 
-def assert_subclass_of(typ, allowed_types: Union[type, Set[type]]):
+def assert_subclass_of(typ,
+                       allowed_types  # type: Union[type, Iterable[type]]
+                       ):
     """
     An inlined version of subclass_of(var_types)(value) without 'return True': it does not return anything in case of
     success, and raises a IsWrongType exception in case of failure.
@@ -53,25 +61,29 @@ def assert_subclass_of(typ, allowed_types: Union[type, Set[type]]):
     Used in validate and validation/validator
 
     :param typ: the type to check
-    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
-    match is enough to succeed. If None, type will not be enforced
+    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types:
+        one match is enough to succeed. If None, type will not be enforced
     :return:
     """
-    if not isinstance(allowed_types, set):
-        # allowed_types is a single type
-        if not issubclass(typ, allowed_types):
-            raise IsWrongType(wrong_value=typ, ref_type=allowed_types)
-    else:
-        # allowed_types is a set
-        match = False
-        # test against each of the provided types
-        for ref in allowed_types:
-            if issubclass(typ, ref):
-                match = True
-                break
-        if not match:
+    try:
+        # issubclass does not allow anything else than tuples when several are provided
+        allowed_types = tuple(allowed_types)
+    except TypeError:
+        pass
+
+    if not issubclass(typ, allowed_types):
+        try:
+            # more than 1 ?
+            allowed_types[1]
             raise IsWrongType(wrong_value=typ, ref_type=allowed_types,
                               help_msg='Value should be a subclass of any of {ref_type}')
+        except IndexError:
+            # 1
+            allowed_types = allowed_types[0]
+        except TypeError:
+            # 1
+            pass
+        raise IsWrongType(wrong_value=typ, ref_type=allowed_types)
 
 
 class _QuickValidator(Validator):
