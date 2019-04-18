@@ -149,7 +149,7 @@ def is_union_type(tp):
         return type(tp) is _Union
     except ImportError:
         # SMA: support for very old typing module <=3.5.3
-        return type(tp) is Union  # not _Union
+        return type(tp) is Union or type(tp) is type(Union)  # not _Union
 
 
 def is_typevar(tp):
@@ -338,14 +338,26 @@ def get_args(tp, evaluate=None):
         is_generic_type(tp) or is_union_type(tp) or
         is_callable_type(tp) or is_tuple_type(tp)
     ):
-        tree = tp._subs_tree()
-        if isinstance(tree, tuple) and len(tree) > 1:
-            if not evaluate:
-                return tree[1:]
-            res = _eval_args(tree[1:])
-            if get_origin(tp) is Callable and res[0] is not Ellipsis:
-                res = (list(res[:-1]), res[-1])
-            return res
+        try:
+            tree = tp._subs_tree()
+        except AttributeError:
+            # even older python!
+            if is_union_type(tp):
+                return tp.__union_params__
+            elif is_generic_type(tp):
+                return tp.__parameters__
+            elif is_callable_type(tp):
+                return tp.__args__, tp.__result__
+            elif is_tuple_type(tp):
+                return tp.__tuple_params__
+        else:
+            if isinstance(tree, tuple) and len(tree) > 1:
+                if not evaluate:
+                    return tree[1:]
+                res = _eval_args(tree[1:])
+                if get_origin(tp) is Callable and res[0] is not Ellipsis:
+                    res = (list(res[:-1]), res[-1])
+                return res
     return ()
 
 
