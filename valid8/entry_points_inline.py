@@ -378,8 +378,14 @@ class validator(Validator):
 
     def __enter__(self):
         # extract the source file and line number where the calling 'with validator()' line is
-        stack = traceback.extract_stack()
-        self.src_file_path, self.src_file_line_nb, *_ = stack[-2]
+        # inspect.stack is extremely slow, the fastest is sys._getframe or inspect.currentframe().
+        # See https://gist.github.com/JettJones/c236494013f22723c1822126df944b12
+        # stack = traceback.extract_stack()
+        # self.src_file_path = stack[-2][0]
+        # self.src_file_line_nb = stack[-2][1]
+        entry_frame = sys._getframe(1)
+        self.entry_file_path = entry_frame.f_code.co_filename
+        self.entry_line_nb = entry_frame.f_lineno
 
         # return the object to collect validation results
         return self.eye
@@ -391,36 +397,69 @@ class validator(Validator):
         if result is not None and result is not True:
             # *** We should raise a Validation Error ***
 
-            # extract the source file and line number where the calling 'with validator()' line is
-            stack = traceback.extract_stack()
-            src_file_path, src_file_line_nb_end, *_ = stack[-2]
+            # and where the exit happened
+            # stack = traceback.extract_stack(limit=2)
+            # exit_line_nb = stack[-2][1]
+            exit_frame = sys._getframe(1)
+            exit_file_path = exit_frame.f_code.co_filename
+            exit_line_nb = exit_frame.f_lineno
 
-            if src_file_path != self.src_file_path:
-                warn('Error identifying the source file where validator/validation was used - no string representation will '
-                     'be available')
+            if exit_file_path != self.entry_file_path:
+                warn('Error identifying the source file where validator/validation was used - no string '
+                     'representation will be available')
             else:
                 # read the lines in the source corresponding to the contents
                 try:
-                    if self.src_file_path == '<input>':
-                        # -- that's the interpreter history
+                    if self.entry_file_path.startswith('<'):
+                        # interactive interpreter...
+
+                        # `inspect` does not work yet for interactive interpreters see https://bugs.python.org/issue12920
+                        # from inspect import getsourcelines
+                        # lines = getsourcelines(exit_frame.f_code)[0]
+                        # wrapped_block_lines = [l.strip() for l in
+                        #                        lines[(self.entry_line_nb - exit_frame.f_code.co_firstlineno):
+                        #                              (exit_frame.f_lineno - exit_frame.f_code.co_firstlineno + 1)]]
+
+                        # In PyCharm it seems to be a specific console, no idea on how to get it
+                        # from code import InteractiveConsole
+
+                        # On iPython/jupyter there is something...
+                        # try:
+                        #     from IPython.core.history import HistoryAccessor
+                        #     h = HistoryAccessor(profile='default')
+                        #     # lines = h.get_range_by_str("%s-%s" % )
+                        #     print("TO DO %s" % h.get_range_by_str(""))
+                        # except ImportError:
+                        #     pass
+                        # this is supposed to work too on iPython
                         # code inspired from 'findsource' function in
                         #    https://github.com/uqfoundation/dill/blob/master/dill/source.py
-                        # TODO test it and make it work on windows as it doesn't (even with pyreadline installed)
-                        import readline
+                        try:
+                            import readline
+                        except ImportError:
+                            err = sys.exc_info()[1].args[0]
+                            if sys.platform[:3] == 'win':
+                                err += ", please install 'pyreadline'"
+                            raise IOError(err)
                         lbuf = readline.get_current_history_length()
                         lines = [readline.get_history_item(i) + '\n' for i in range(1, lbuf)]
-                        # print('history! yes {} {}'.format(self.src_file_line_nb, lbuf))
+                        # print('history! yes {} {}'.format(self.entry_line_nb, lbuf))
                         # for line in lines:
                         #     print(line)
-                        src_file_line_nb_end = len(lines)
-                    else:
-                        # -- that's a file
-                        with open(self.src_file_path) as src:
-                            lines = list(src)
+                        exit_line_nb = len(lines)
 
-                    # retrieve the lines wrapped by the context manager, until the line that raises the exception.
-                    # note: it might not be the last line in the block of code wrapped by the context manager
-                    wrapped_block_lines = [line.strip() for line in lines[self.src_file_line_nb:src_file_line_nb_end]]
+                        # retrieve the lines wrapped by the context manager, until the line that raises the exception.
+                        # note: it might not be the last line in the block of code wrapped by the context manager
+                        wrapped_block_lines = [line.strip()
+                                               for line in lines[self.entry_line_nb:exit_line_nb]]
+                    else:
+                        # -- that's a normal code file
+                        # with open(self.entry_file_path) as src:
+                        #     lines = list(src)
+
+                        # faster: use linecache https://docs.python.org/3/library/linecache.html
+                        wrapped_block_lines = [getline(self.entry_file_path, i + 1).strip()
+                                               for i in range(self.entry_line_nb, exit_line_nb)]
 
                     if exc_val is not None:
                         # -- There was an exception, we dont know where: output the full code in self.main_function.name
@@ -444,7 +483,7 @@ class validator(Validator):
 
                 except Exception as e:
                     warn('Error while inspecting source code at {}. No details will be added to the resulting '
-                         'exception. Caught {}'.format(self.src_file_path, e))
+                         'exception. Caught {}'.format(self.entry_file_path, e))
 
             raise self._create_validation_error(self.name, self.value, validation_outcome=result)
 
