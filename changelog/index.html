@@ -460,6 +460,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#400-python-27-support-minor-improvements" title="4.0.0 - python 2.7 support + minor improvements" class="md-nav__link">
+    4.0.0 - python 2.7 support + minor improvements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#373-python-37-support" title="3.7.3 - python 3.7 support" class="md-nav__link">
     3.7.3 - python 3.7 support
   </a>
@@ -631,6 +638,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#400-python-27-support-minor-improvements" title="4.0.0 - python 2.7 support + minor improvements" class="md-nav__link">
+    4.0.0 - python 2.7 support + minor improvements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#373-python-37-support" title="3.7.3 - python 3.7 support" class="md-nav__link">
     3.7.3 - python 3.7 support
   </a>
@@ -790,6 +804,24 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="400-python-27-support-minor-improvements">4.0.0 - python 2.7 support + minor improvements<a class="headerlink" href="#400-python-27-support-minor-improvements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Python 2.7 is now supported. This fixes <a href="https://github.com/smarie/python-valid8/issues/25">#25</a>.</p>
+</li>
+<li>
+<p>Dependencies updated: now <code>makefun</code> is used instead of <code>decorator</code> to create signature-preserving wrappers. <code>decopatch</code> is also used to create all the decorators consistently.</p>
+</li>
+<li>
+<p><code>assert_instance_of</code> and <code>assert_subclass_of</code> (used in the <code>validate</code> inline entry point) were improved so as to benefit from python 3's capability to compare with several classes, and so that users can provide the reference classes as an iterable rather than a set. Fixes <a href="https://github.com/smarie/python-valid8/issues/26">#26</a>.</p>
+</li>
+<li>
+<p>More compact tracebacks for <code>validate</code> method: removed exception causes.</p>
+</li>
+<li>
+<p>Fixed type inspection for old python 3.5 versions.</p>
+</li>
+</ul>
 <h3 id="373-python-37-support">3.7.3 - python 3.7 support<a class="headerlink" href="#373-python-37-support" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixed <a href="https://github.com/smarie/python-valid8/issues/24">#24</a></li>
