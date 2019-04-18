@@ -1,5 +1,17 @@
 # Changelog
 
+### 4.0.0 - python 2.7 support + minor improvements
+
+ * Python 2.7 is now supported. This fixes [#25](https://github.com/smarie/python-valid8/issues/25).
+
+ * Dependencies updated: now `makefun` is used instead of `decorator` to create signature-preserving wrappers. `decopatch` is also used to create all the decorators consistently.
+
+ * `assert_instance_of` and `assert_subclass_of` (used in the `validate` inline entry point) were improved so as to benefit from python 3's capability to compare with several classes, and so that users can provide the reference classes as an iterable rather than a set. Fixes [#26](https://github.com/smarie/python-valid8/issues/26).
+
+ * More compact tracebacks for `validate` method: removed exception causes.
+
+ * Fixed type inspection for old python 3.5 versions.
+
 ### 3.7.3 - python 3.7 support
 
  * Fixed [#24](https://github.com/smarie/python-valid8/issues/24)
