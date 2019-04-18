@@ -500,8 +500,8 @@ class Validator:
 
         # check the result
         if not result_is_success(res):
-            raise self._create_validation_error(name, value, validation_outcome=res, error_type=error_type,
-                                                help_msg=help_msg, **kw_context_args)
+            raise_(self._create_validation_error(name, value, validation_outcome=res, error_type=error_type,
+                                                 help_msg=help_msg, **kw_context_args))
 
     def _create_validation_error(self, name: str, value: Any, validation_outcome: Any = None,
                                  error_type: 'Type[ValidationError]' = None, help_msg: str = None, **kw_context_args):

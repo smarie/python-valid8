@@ -268,8 +268,9 @@ def validate(name: str, value: Any, enforce_not_none: bool = True, equals: Any =
                         raise TooLong(wrong_value=value, max_length=max_len, strict=False)
 
     except Exception as e:
-        raise _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,
+        err = _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,
                                                         help_msg=help_msg, **kw_context_args)
+        raise_(err)
 
     if custom is not None:
         # traditional custom validator
@@ -497,7 +498,7 @@ class validator(Validator):
                     warn('Error while inspecting source code at {}. No details will be added to the resulting '
                          'exception. Caught {}'.format(self.entry_file_path, e))
 
-            raise self._create_validation_error(self.name, self.value, validation_outcome=result)
+            raise_(self._create_validation_error(self.name, self.value, validation_outcome=result))
 
 
 validation = validator

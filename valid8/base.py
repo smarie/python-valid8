@@ -17,11 +17,29 @@ class RootException(Exception):
     """ All exceptions defined within valid8 inherit from this class """
 
 
+if sys.version_info < (3, 0):
+    from future.utils import raise_with_traceback
+
+    def raise_(exc):
+        try:
+            cause = exc.__cause__
+        except AttributeError:
+            raise exc
+        else:
+            if cause is not None:
+                raise_with_traceback(exc)
+            else:
+                raise exc
+else:
+    def raise_(exc):
+        raise exc
+
+
 def should_be_hidden_as_cause(exc):
     """ Used everywhere to decide if some exception type should be displayed or hidden as the casue of an error """
     # reduced traceback in case of HasWrongType (instance_of checks)
-    from valid8.validation_lib.types import HasWrongType
-    return isinstance(exc, HasWrongType)
+    from valid8.validation_lib.types import HasWrongType, IsWrongType
+    return isinstance(exc, (HasWrongType, IsWrongType))
 
 
 def get_callable_name(validation_callable: Callable) -> str:
@@ -66,7 +84,7 @@ def is_error_of_type(exc, ref_type):
     """
     if isinstance(exc, ref_type):
         return True
-    elif exc.__cause__ is not None:
+    elif hasattr(exc, '__cause__') and exc.__cause__ is not None:
         return is_error_of_type(exc.__cause__, ref_type)
 
 
