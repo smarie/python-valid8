@@ -22,7 +22,7 @@ trap "cleanup" INT TERM EXIT
 echo -e "\n\n****** Running tests ******\n\n"
 if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
    # copy the conftest.py file before executing.
-   cp ci_tools/conftest.py valid8/tests/
+   # cp ci_tools/conftest.py valid8/tests/
    # Note: an alternative could be to add ci_tools/ at the end of the below command but not sure it will be applied on all tests.
    python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
 else
