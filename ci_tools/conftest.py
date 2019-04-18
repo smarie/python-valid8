@@ -1,15 +1,9 @@
 """
 This conftest adds a source link to all tests in the various test reports
 """
-import sys
-
 from py.xml import html
 import pytest
 from setuptools_scm.git import GitWorkdir
-
-
-# Constant to use in the tests to skip some of them
-PY37 = sys.version_info[:3] >= (3, 7, 0)  # PEP 560
 
 
 @pytest.mark.hookwrapper
