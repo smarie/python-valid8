@@ -358,7 +358,7 @@ def test_validate_none_enforce():
     # we're not supposed to do that but if your python environment is a bit clunky, that might help
     config(dict(mode='covariant'))
 
-    from ._test_pep384 import create_for_test_validate_none_enforce
+    from ._test_pep484 import create_for_test_validate_none_enforce
     myfunc = create_for_test_validate_none_enforce()
 
     # decorate manually (reverse order)
@@ -382,7 +382,7 @@ def test_validate_none_pytypes():
     # we're not supposed to do that but if your python environment is a bit clunky, that might help
     # config(dict(mode='covariant'))
 
-    from ._test_pep384 import create_for_test_validate_none_pytypes
+    from ._test_pep484 import create_for_test_validate_none_pytypes
     myfunc = create_for_test_validate_none_pytypes()
 
     # decorate manually (reverse order)

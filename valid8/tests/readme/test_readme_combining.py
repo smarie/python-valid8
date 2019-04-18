@@ -10,7 +10,7 @@ from valid8 import ValidationError, InputValidationError
 def test_readme_index_combining_enforce():
     """ Tests that the examples provided in the index page under Combining/Enforce are correct """
 
-    from ._tests_pep384 import test_readme_combining_enforce
+    from ._tests_pep484 import test_readme_combining_enforce
     test_readme_combining_enforce()
 
 
@@ -119,7 +119,7 @@ def test_unused_pytypes():
     # for value checking
     from valid8 import validate_io, minlens, gt
 
-    from ._tests_pep384 import create_for_test_unused_pytypes
+    from ._tests_pep484 import create_for_test_unused_pytypes
     build_house = create_for_test_unused_pytypes()
     build_house = validate_io(name=minlens(0), surface=gt(0))(build_house)
     build_house = typechecked(build_house)

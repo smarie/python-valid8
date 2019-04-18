@@ -100,4 +100,4 @@ def class_field_mini_lambda(value):
 
 
 if sys.version_info >= (3, 0):
-    from ._tests_pep384 import ex1_pep484 as pep484
+    from ._tests_pep484 import ex1_pep484 as pep484

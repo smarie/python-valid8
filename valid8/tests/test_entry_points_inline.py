@@ -234,5 +234,5 @@ def test_numpy_nan_like_lengths():
 def test_function_setter_name_in_valid8_error_message():
     """ Tests that the correct function name appears in the valid8 error message """
 
-    from ._test_pep384 import test_function_setter_name_in_valid8_error_message
+    from ._test_pep484 import test_function_setter_name_in_valid8_error_message
     test_function_setter_name_in_valid8_error_message()

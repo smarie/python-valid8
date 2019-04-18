@@ -50,8 +50,8 @@ def is_valid_tuple(t):
 
 
 if sys.version_info >= (3, 5):
-    from ._tests_pep384 import ex3_is_valid_tuple_pep as is_valid_tuple_pep
-    from ._tests_pep384 import ex3_check_valid_tuple_pep as check_valid_tuple_pep
+    from ._tests_pep484 import ex3_is_valid_tuple_pep as is_valid_tuple_pep
+    from ._tests_pep484 import ex3_check_valid_tuple_pep as check_valid_tuple_pep
 
 
 def check_valid_tuple(t):
@@ -188,4 +188,4 @@ def class_field_mini_lambda(value):
 
 
 if sys.version_info >= (3, 5):
-    from ._tests_pep384 import ex3_pep484 as pep484
+    from ._tests_pep484 import ex3_pep484 as pep484
