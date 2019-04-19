@@ -1,5 +1,22 @@
 # `valid8` + other tools
 
+## Other validation styles
+
+The [checktypes](https://pypi.org/project/checktypes/) package provides a way to easily embed your validation requirements as classes, for easy reuse.
+
+```python
+from valid8 import validate
+from checktypes import checktype
+PositiveInt = checktype('PositiveInt', int, lambda x: x > 0)
+
+x = 1
+validate('x', x, custom=PositiveInt.validate)
+
+x = -1
+validate('x', x, custom=PositiveInt.validate)  # ValidationError
+```
+
+
 ## For functions and classes
 
 ### PEP484 type checkers
