@@ -138,13 +138,22 @@ def test_unused_pytypes():
         build_house('', 12, 2)  # Value validation: @validate_io raises a Failure
 
 
-# TODO uncomment. It has been commented because this failing test seems to have a strange impact on the other tests
-#  (the one with context manager and stack trace getting)
-# def test_readme_combining_checktypes():
-#     """ Tests that the checktypes library can play well in valid8 """
-#
-#     from valid8 import validate
-#     from checktypes import checktype
-#     PositiveInt = checktype('PositiveInt', int, lambda x: x > 0)
-#     x = -1
-#     validate('x', x, custom=PositiveInt.validate)
+@pytest.mark.skipif(sys.version_info < (3, 7), reason="checktypes does not seem to work on old python versions "
+                                                      "see https://gitlab.com/yahya-abou-imran/checktypes/issues/2")
+def test_readme_combining_checktypes():
+    """ Tests that the checktypes library can play well in valid8 """
+
+    from valid8 import validate
+    from checktypes import checktype
+    PositiveInt = checktype('PositiveInt', int, lambda x: x > 0)
+
+    x = 1
+    validate('x', x, custom=PositiveInt.validate)
+
+    with pytest.raises(ValidationError) as exc_info:
+        x = -1
+        validate('x', x, custom=PositiveInt.validate)
+
+    e = exc_info.value
+    assert str(e) == "Error validating [x=-1]. Validation function [validate] raised ValueError: expected " \
+                     "'PositiveInt' but got -1."
