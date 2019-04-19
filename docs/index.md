@@ -14,10 +14,6 @@
  
 All entry points raise consistent `ValidationError` including all contextual details, with dynamic inheritance of `ValueError`/`TypeError` as appropriate.
 
-!!! warning "Name changes in version 3.x"
-    In version 3.x several name changes were introduced to improve readability. The old names will stay valid until version 4.x, except for `@validate` that is discontinued starting in 3.2 (renamed `@validate_io`).
-
-
 ## Do I need a validation library ?
 
 Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.

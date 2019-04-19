@@ -1,9 +1,7 @@
-import traceback
-
 import pytest
 
 from valid8.tests.helpers.math import isfinite
-from valid8 import InputValidationError, ValidationError, failure_raiser, wrap_valid, validate
+from valid8 import InputValidationError, ValidationError, failure_raiser, validator, validate
 
 
 def test_readme_index_usage_quick():
@@ -20,13 +18,13 @@ def test_readme_index_usage_quick():
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
 
 
-def test_readme_usage_wrap_valid():
+def test_readme_usage_validator():
     """ Tests that the example under index/usage/validation works """
 
     surf = -1
 
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf) as v:
+        with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]: " \
@@ -35,7 +33,7 @@ def test_readme_usage_wrap_valid():
     surf = 1j
 
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf) as v:
+        with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e).startswith("Error validating [surface=1j]. " \
@@ -45,7 +43,7 @@ def test_readme_usage_wrap_valid():
     # alternate naming
     surf = -1
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf) as r:
+        with validator('surface', surf) as r:
             r.esults = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]: " \
@@ -54,7 +52,7 @@ def test_readme_usage_wrap_valid():
     # type validation
     surf = 1j
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf, instance_of=int) as v:
+        with validator('surface', surf, instance_of=int) as v:
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
@@ -62,7 +60,7 @@ def test_readme_usage_wrap_valid():
 
     from valid8 import assert_instance_of
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf) as v:
+        with validator('surface', surf) as v:
             assert_instance_of(surf, int)
             v.alid = surf > 0
     e = exc_info.value
@@ -85,7 +83,7 @@ def test_readme_usage_customization():
 
     # (A) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf, help_msg="Surface should be a finite positive integer") as v:
+        with validator('surface', surf, help_msg="Surface should be a finite positive integer") as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e) == "Surface should be a finite positive integer. Error validating [surface=-1]: " \

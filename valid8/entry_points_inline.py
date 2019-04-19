@@ -319,10 +319,6 @@ def validate(name,                   # type: str
 _QUICK_VALIDATOR = _QuickValidator()
 
 
-quick_valid = validate
-""" Legacy, deprecated alias. Will disappear in 4.x """
-
-
 class WrappingValidatorEye(object):
     """ Represents the object where users may put the validation outcome inside a validation context manager.
     You may set any field on this object, it will be put in the 'outcome' field """
@@ -542,6 +538,3 @@ class validator(Validator):
 
 validation = validator
 """ Alias for validation, more readable when using the returned object to store boolean results """
-
-wrap_valid = validator
-""" Legacy, deprecated alias. Will disappear in 4.x """

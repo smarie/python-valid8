@@ -424,10 +424,6 @@ def validate_io(f=DECORATED,
     return decorate_several_with_validation(f, none_policy=none_policy, _out_=_out_, **kw_validation_funcs)
 
 
-# alidate = validate
-# """ an alias for the @validate decorator, to use as follows : import valid8 as v : @v.alidate(...) """
-
-
 # Python 3+: load the 'more explicit api'
 if version_info >= (3, 0):
     new_sig = """(f, 

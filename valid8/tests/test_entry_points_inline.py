@@ -1,7 +1,7 @@
 import sys
 
 import pytest
-from valid8 import ValidationError, wrap_valid, validate, validate_arg, is_multiple_of, InputValidationError
+from valid8 import ValidationError, validate, validator
 
 try:
     from math import isfinite
@@ -72,18 +72,18 @@ def test_readme_usage_validate__customization():
                      "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
 
 
-def test_wrap_valid():
+def test_validator_context_manager():
     """ Tests the validation context manager """
 
     # nominal
     surf = 2
-    with wrap_valid('surface', surf) as v:
+    with validator('surface', surf) as v:
         v.alid = surf > 0 and isfinite(surf)
 
     # wrong value (no inner exception)
     surf = -1
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf) as v:
+        with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]: " \
@@ -92,7 +92,7 @@ def test_wrap_valid():
     # wrong type (inner exception)
     with pytest.raises(ValidationError) as exc_info:
         surf = 1j
-        with wrap_valid('surface', surf) as v:
+        with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     with pytest.raises(TypeError) as typ_err_info:
@@ -103,13 +103,13 @@ def test_wrap_valid():
                      "" % (t.__class__.__name__, t)
 
 
-def test_readme_usage_wrap_valid_customization():
+def test_readme_usage_validator_customization():
 
     surf = 1j
 
     # (A) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf, help_msg="Surface should be a finite positive integer") as v:
+        with validator('surface', surf, help_msg="Surface should be a finite positive integer") as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert str(e).startswith("Surface should be a finite positive integer. Error validating [surface=1j]. " \
@@ -121,7 +121,7 @@ def test_readme_usage_wrap_valid_customization():
         help_msg = 'Surface should be a positive integer'
 
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf, error_type=InvalidSurface) as v:
+        with validator('surface', surf, error_type=InvalidSurface) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
@@ -131,7 +131,7 @@ def test_readme_usage_wrap_valid_customization():
         help_msg = 'Surface should be > {minimum}, found {var_value}'
 
     with pytest.raises(ValidationError) as exc_info:
-        with wrap_valid('surface', surf, error_type=InvalidSurface, minimum=0) as v:
+        with validator('surface', surf, error_type=InvalidSurface, minimum=0) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
