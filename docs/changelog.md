@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.0.1 - better mini-lambda compliance
+
+ * Adapted code to leverage latest `mini_lambda`. Fixes [#27](https://github.com/smarie/python-valid8/issues/27).
+
 ### 4.0.0 - python 2.7 support + minor improvements
 
  * Python 2.7 is now supported. This fixes [#25](https://github.com/smarie/python-valid8/issues/25).
