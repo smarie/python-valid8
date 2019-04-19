@@ -862,10 +862,6 @@
 <li>class fields validation. </li>
 </ul>
 <p>All entry points raise consistent <code>ValidationError</code> including all contextual details, with dynamic inheritance of <code>ValueError</code>/<code>TypeError</code> as appropriate.</p>
-<div class="admonition warning">
-<p class="admonition-title">Name changes in version 3.x</p>
-<p>In version 3.x several name changes were introduced to improve readability. The old names will stay valid until version 4.x, except for <code>@validate</code> that is discontinued starting in 3.2 (renamed <code>@validate_io</code>).</p>
-</div>
 <h2 id="do-i-need-a-validation-library">Do I need a validation library ?<a class="headerlink" href="#do-i-need-a-validation-library" title="Permanent link">&para;</a></h2>
 <p>Type and Value Validation in python is not straightforward. However it is key to smooth user experience for all of our libraries and applications. Good validation leads to less user frustration, but should not be at the cost of the developer's overall efficiency.</p>
 <p>I searched and found tons of good and less good libraries <a href="#other-validation-libraries">out there</a>, but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in <a href="https://smarie.github.io/python-autoclass/">autoclass</a>. I therefore propose this library to the open source community, at least to create a reference and maybe one day reach a satisfying solution for a significant amount of developers.</p>
