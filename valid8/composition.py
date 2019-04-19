@@ -5,7 +5,7 @@ from sys import version_info
 from makefun import with_signature
 
 from valid8.base import Failure, result_is_success, get_callable_names, get_callable_name, _failure_raiser, \
-    WrappingFailure, _none_accepter, _none_rejecter, _LambdaExpression
+    WrappingFailure, _none_accepter, _none_rejecter, as_function
 
 try:  # python 3.5+
     from typing import Callable, Union, List, Tuple
@@ -14,14 +14,21 @@ try:  # python 3.5+
     except ImportError:
         pass
 
-    CallableAndFailureTuple = Tuple[Union[Callable, _LambdaExpression], Union[str, 'Type[Failure]']]
+    try:
+        from mini_lambda import x
+        CallableType = Union[Callable, type(x)]
+    except ImportError:
+        CallableType = Callable
+
+    CallableAndFailureTuple = Tuple[CallableType, Union[str, 'Type[Failure]']]
     """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
 
-    ValidationFunc = Union[Callable, _LambdaExpression, CallableAndFailureTuple]
+    ValidationFunc = Union[CallableType, CallableAndFailureTuple]
     """ Represents the 'typing' type for a single validation function """
 
     ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
     """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
+
 except ImportError:
     pass
 
@@ -46,7 +53,7 @@ def _process_validation_function_s(validation_func,       # type: ValidationFunc
      * List[<ValidationFunc>(s)]. The list must not be empty.
 
     <ValidationFunc> may either be
-     * a callable or a mini-lambda expression (instance of _LambdaExpression - in which case it is automatically
+     * a callable or a mini-lambda expression (instance of LambdaExpression - in which case it is automatically
      'closed').
      * a Tuple[callable or mini-lambda expression ; failure_type]. Where failure type should be a subclass of
      valid8.Failure. In which case the tuple will be replaced with a _failure_raiser(callable, failure_type)
@@ -79,12 +86,11 @@ def _process_validation_function_s(validation_func,       # type: ValidationFunc
     # now validation_func is a non-empty list
     final_list = []
     for v in validation_func:
-        if isinstance(v, _LambdaExpression):
-            # special case of a _LambdaExpression: automatically convert to a function
-            # note: we have to do it before anything else (such as .index) otherwise we may get failures
-            final_list.append(v.as_function())
+        # special case of a LambdaExpression: automatically convert to a function
+        # note: we have to do it before anything else (such as .index) otherwise we may get failures
+        v = as_function(v)
 
-        elif isinstance(v, tuple):
+        if isinstance(v, tuple):
             # convert all the tuples to failure raisers
             if len(v) == 2:
                 if isinstance(v[1], str):
