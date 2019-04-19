@@ -56,12 +56,12 @@ def _process_validation_function_s(validation_func,       # type: ValidationFunc
     `or_` or `xor_`.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_`. Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
+        are supported and indicate an implicit `and_`. Tuples indicate an implicit
+        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :param auto_and_wrapper: if True (default), this function returns a single callable that is a and_() of all
-    functions. Otherwise a list is returned.
+        functions. Otherwise a list is returned.
     :return:
     """
 

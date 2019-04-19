@@ -13,12 +13,23 @@ except ImportError:
     pass
 
 try:
-    # if mini_lambda is here, use this class
-    from mini_lambda.main import _LambdaExpression
+    # mini lambda 2.1.0
+    from mini_lambda import as_function
 except ImportError:
-    # otherwise define a dummy class
-    class _LambdaExpression:
-        pass
+    try:
+        # mini lambda <= 2.0.1
+        from mini_lambda.main import _LambdaExpression
+
+        def as_function(f):
+            if isinstance(f, _LambdaExpression):
+                return f.as_function()
+            else:
+                return f
+    except ImportError:
+        # otherwise this is identity
+        def as_function(f):
+            return f
+
 
 from valid8.utils_string import end_with_dot_space
 
@@ -421,8 +432,7 @@ def _failure_raiser(validation_callable,   # type: Callable
         raise ValueError('Only one of failure_type and help_msg can be set at the same time')
 
     # convert mini-lambdas to functions if needed
-    if isinstance(validation_callable, _LambdaExpression):
-        validation_callable = validation_callable.as_function()
+    validation_callable = as_function(validation_callable)
 
     # create wrapper
     # option (a) use the `decorate()` helper method to preserve name and signature of the inner object
