@@ -460,6 +460,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#410-validate-instancesubclass-fix" title="4.1.0 - validate instance/subclass fix" class="md-nav__link">
+    4.1.0 - validate instance/subclass fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#401-better-mini-lambda-compliance" title="4.0.1 - better mini-lambda compliance" class="md-nav__link">
     4.0.1 - better mini-lambda compliance
   </a>
@@ -645,6 +652,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#410-validate-instancesubclass-fix" title="4.1.0 - validate instance/subclass fix" class="md-nav__link">
+    4.1.0 - validate instance/subclass fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#401-better-mini-lambda-compliance" title="4.0.1 - better mini-lambda compliance" class="md-nav__link">
     4.0.1 - better mini-lambda compliance
   </a>
@@ -818,6 +832,10 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="410-validate-instancesubclass-fix">4.1.0 - <code>validate</code> instance/subclass fix<a class="headerlink" href="#410-validate-instancesubclass-fix" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>assert_instance_of</code> and <code>assert_subclass_of</code> (used in the <code>validate</code> inline entry point) fixed so as to support <code>Enum</code> types. Fixed <a href="https://github.com/smarie/python-valid8/issues/28">#28</a>. <strong>Important</strong>: only <code>tuple</code> are now supported when several types are provided in <code>validate</code>'s <code>instance_of</code> and <code>subclass_of</code> arguments. This is to has a closer behaviour to the python stdlib.</li>
+</ul>
 <h3 id="401-better-mini-lambda-compliance">4.0.1 - better mini-lambda compliance<a class="headerlink" href="#401-better-mini-lambda-compliance" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Adapted code to leverage latest <code>mini_lambda</code>. Fixes <a href="https://github.com/smarie/python-valid8/issues/27">#27</a>.</li>
