@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.1.0 - `validate` instance/subclass fix
+
+ * `assert_instance_of` and `assert_subclass_of` (used in the `validate` inline entry point) fixed so as to support `Enum` types. Fixed [#28](https://github.com/smarie/python-valid8/issues/28). **Important**: only `tuple` are now supported when several types are provided in `validate`'s `instance_of` and `subclass_of` arguments. This is to has a closer behaviour to the python stdlib.
+
 ### 4.0.1 - better mini-lambda compliance
 
  * Adapted code to leverage latest `mini_lambda`. Fixes [#27](https://github.com/smarie/python-valid8/issues/27).
