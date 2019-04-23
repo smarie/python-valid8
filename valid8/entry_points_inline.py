@@ -1,4 +1,5 @@
 import sys
+from inspect import isclass
 from warnings import warn
 
 from linecache import getline
@@ -12,7 +13,7 @@ from valid8.validation_lib.comparables import TooSmall, TooBig, NotEqual
 
 try:  # python 3.5+
     # noinspection PyUnresolvedReferences
-    from typing import Any, Union, Set, Iterable, Callable, Container
+    from typing import Any, Union, Set, Iterable, Callable, Container, Tuple
     try:  # python 3.5.3-
         from typing import Type
     except ImportError:
@@ -22,7 +23,7 @@ except ImportError:
 
 
 def assert_instance_of(value,
-                       allowed_types  # type: Union[type, Iterable[type]]
+                       allowed_types  # type: Union[Type, Tuple[Type]]
                        ):
     """
     An inlined version of instance_of(var_types)(value) without 'return True': it does not return anything in case of
@@ -31,16 +32,10 @@ def assert_instance_of(value,
     Used in validate and validation/validator
 
     :param value: the value to check
-    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    :param allowed_types: the type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
         match is enough to succeed. If None, type will not be enforced
     :return:
     """
-    try:
-        # isinstance does not allow anything else than tuples when several are provided
-        allowed_types = tuple(allowed_types)
-    except TypeError:
-        pass
-
     if not isinstance(value, allowed_types):
         try:
             # more than 1 ?
@@ -57,7 +52,7 @@ def assert_instance_of(value,
 
 
 def assert_subclass_of(typ,
-                       allowed_types  # type: Union[type, Iterable[type]]
+                       allowed_types  # type: Union[Type, Tuple[Type]]
                        ):
     """
     An inlined version of subclass_of(var_types)(value) without 'return True': it does not return anything in case of
@@ -66,16 +61,10 @@ def assert_subclass_of(typ,
     Used in validate and validation/validator
 
     :param typ: the type to check
-    :param allowed_types: the type(s) to enforce. If a set of types is provided it is considered alternate types:
+    :param allowed_types: the type(s) to enforce. If a tuple of types is provided it is considered alternate types:
         one match is enough to succeed. If None, type will not be enforced
     :return:
     """
-    try:
-        # issubclass does not allow anything else than tuples when several are provided
-        allowed_types = tuple(allowed_types)
-    except TypeError:
-        pass
-
     if not issubclass(typ, allowed_types):
         try:
             # more than 1 ?
@@ -137,8 +126,8 @@ def validate(name,                   # type: str
              value,                  # type: Any
              enforce_not_none=True,  # type: bool
              equals=None,            # type: Any
-             instance_of=None,       # type: Union[type, Iterable[type]]
-             subclass_of=None,       # type: Union[type, Iterable[type]]
+             instance_of=None,       # type: Union[Type, Tuple[Type]]
+             subclass_of=None,       # type: Union[Type, Tuple[Type]]
              is_in=None,             # type: Container
              subset_of=None,         # type: Set
              contains = None,        # type: Union[Any, Iterable]
@@ -172,9 +161,9 @@ def validate(name,                   # type: str
     :param value: the value to check
     :param enforce_not_none: boolean, default True. Whether to enforce that `value` is not None.
     :param equals: an optional value to enforce.
-    :param instance_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    :param instance_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
         match is enough to succeed. If None, type will not be enforced
-    :param subclass_of: optional type(s) to enforce. If a set of types is provided it is considered alternate types: one
+    :param subclass_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
         match is enough to succeed. If None, type will not be enforced
     :param is_in: an optional set of allowed values.
     :param subset_of: an optional superset for the variable
@@ -381,8 +370,8 @@ class validator(Validator):
     def __init__(self,
                  name,              # type: str
                  value,             # type: Any
-                 instance_of=None,  # type: Union[type, Iterable[type]]
-                 subclass_of=None,  # type: Union[type, Iterable[type]]
+                 instance_of=None,  # type: Union[Type, Tuple[Type]]
+                 subclass_of=None,  # type: Union[Type, Tuple[Type]]
                  error_type=None,   # type: Type[ValidationError]
                  help_msg=None,     # type: str
                  **kw_context_args):
@@ -400,9 +389,9 @@ class validator(Validator):
 
         :param name: the name of the variable being validated
         :param value: the value being validated
-        :param instance_of: the type(s) to enforce. If a set of types is provided it is considered alternate types:
+        :param instance_of: the type(s) to enforce. If a tuple of types is provided it is considered alternate types:
             one match is enough to succeed. If None, type will not be enforced
-        :param subclass_of: the type(s) to enforce. If a set of types is provided it is considered alternate types: one
+        :param subclass_of: the type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
             match is enough to succeed. If None, type will not be enforced
         :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
             `ValidationError` will be raised with the provided `help_msg`

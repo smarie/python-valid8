@@ -16,9 +16,8 @@ def test_validate_():
     # nominal
     surf = 2
     validate('surface', surf, instance_of=int, min_value=0)
-    validate('surface', surf, instance_of=[int], min_value=0)
-    validate('surface', surf, instance_of={int, str}, min_value=0)
-    validate('surface', surf, instance_of=(t for t in {int, str}), min_value=0)
+    validate('surface', surf, instance_of=(int, ), min_value=0)
+    validate('surface', surf, instance_of=(int, str), min_value=0)
 
     # error wrong value
     surf = -1
@@ -31,7 +30,8 @@ def test_validate_():
     # error wrong type
     surf = 1j
     with pytest.raises(ValidationError) as exc_info:
-        validate('surface', surf, instance_of=(t for t in {int}), min_value=0)
+        # note: we use a length-1 tuple on purpose to see if the error msg takes length into account
+        validate('surface', surf, instance_of=(int, ), min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
                      "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
@@ -236,3 +236,14 @@ def test_function_setter_name_in_valid8_error_message():
 
     from ._test_pep484 import test_function_setter_name_in_valid8_error_message
     test_function_setter_name_in_valid8_error_message()
+
+
+def test_enum_isinstance():
+    """Tests that enum can be used in validate/instance_of"""
+    from enum import Enum
+
+    class MyEnum(Enum):
+        a = 1
+        b = 2
+
+    validate('a', MyEnum.a, instance_of=MyEnum)
