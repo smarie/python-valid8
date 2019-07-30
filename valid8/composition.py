@@ -29,6 +29,9 @@ try:  # python 3.5+
     ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
     """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
 
+except TypeError:
+    # this happens with python 3.5.2: typing has an issue.
+    pass
 except ImportError:
     pass
 
