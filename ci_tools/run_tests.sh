@@ -24,7 +24,9 @@ if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
    # copy the conftest.py file before executing.
    # cp ci_tools/conftest.py valid8/tests/
    # Note: an alternative could be to add ci_tools/ at the end of the below command but not sure it will be applied on all tests.
-   python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
+
+   coverage run --source valid8 -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html -v valid8/tests/
+   # python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
 else
    # faster - skip coverage and html report
    python -m pytest --junitxml=reports/junit/junit.xml -v valid8/tests/
