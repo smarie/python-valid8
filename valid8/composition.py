@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from collections import OrderedDict
-from sys import version_info
 
 from makefun import with_signature
 
@@ -29,11 +28,14 @@ try:  # python 3.5+
     ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
     """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
 
+    use_typing = True
+
 except TypeError:
     # this happens with python 3.5.2: typing has an issue.
-    pass
+    use_typing = False
+
 except ImportError:
-    pass
+    use_typing = False
 
 
 supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of ' \
@@ -428,7 +430,7 @@ def xor_(*validation_func  # type: ValidationFuncs
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(*validation_func: ValidationFuncs,
                   catch_all: bool = False) -> Callable"""
 else:
@@ -462,7 +464,7 @@ def not_all(*validation_func,  # type: ValidationFuncs
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(*validation_func: ValidationFuncs,
                   failure_type: 'Type[WrappingFailure]' = None,
                   help_msg: str = None,

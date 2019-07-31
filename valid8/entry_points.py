@@ -1,6 +1,5 @@
 import sys
 from copy import copy
-from sys import version_info
 
 from makefun import with_signature
 from six import with_metaclass
@@ -12,8 +11,9 @@ try:  # python 3.5+
     except ImportError:
         pass
     from valid8.composition import ValidationFuncs
+    use_typing = True
 except ImportError:
-    pass
+    use_typing = False
 
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
@@ -370,7 +370,7 @@ def add_base_type_dynamically(error_type, additional_type):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(self,
                   *validation_func: ValidationFuncs,
                   error_type: 'Type[ValidationError]' = None,
@@ -653,7 +653,7 @@ class Validator(object):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(name: str,
                   value: Any,
                   *validation_func: ValidationFuncs,
@@ -712,7 +712,7 @@ def assert_valid(name,              # type: str
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(value, 
                   *validation_func: Union[Callable, List[Callable]], 
                   none_policy: int=None):"""

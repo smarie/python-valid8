@@ -1,6 +1,5 @@
 import sys
 from inspect import ismethod, isclass
-from sys import version_info
 
 from decopatch import class_decorator, function_decorator, DECORATED
 
@@ -11,8 +10,9 @@ try:  # python 3.5+
     except ImportError:
         pass
     from valid8.composition import ValidationFuncs
+    use_typing = True
 except ImportError:
-    pass
+    use_typing = False
 
 try:
     from inspect import signature, Signature
@@ -91,7 +91,7 @@ class ClassFieldValidationError(ValidationError):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(self,
                   validated_func: Callable, 
                   *validation_func: ValidationFuncs,
@@ -255,7 +255,7 @@ class OutputValidator(FuncValidator):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(self,
                   validated_class: Callable,
                   validated_field_name: str,
@@ -335,7 +335,7 @@ class ClassFieldValidator(Validator):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(cls, 
                   field_name,
                   *validation_func: ValidationFuncs,
@@ -425,7 +425,7 @@ def validate_io(f=DECORATED,
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(f, 
                   arg_name, 
                   *validation_func: ValidationFuncs, 
@@ -470,7 +470,7 @@ def validate_arg(f,
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(*validation_func: ValidationFuncs, 
                   help_msg: str = None,
                   error_type: 'Type[OutputValidationError]' = None, 
@@ -509,7 +509,7 @@ _OUT_KEY = '_out_'
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(cls, 
                   field_name: str, 
                   *validation_func: ValidationFuncs, 
@@ -697,7 +697,7 @@ def decorate_several_with_validation(func,
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(func, 
                   arg_name: str, 
                   *validation_func: ValidationFuncs, 
@@ -801,7 +801,7 @@ class InvalidNameError(ValueError):
 
 
 # Python 3+: load the 'more explicit api'
-if version_info >= (3, 0):
+if use_typing:
     new_sig = """(validated_func: Callable, 
                   s: Signature, 
                   arg_name: str,
