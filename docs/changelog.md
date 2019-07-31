@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.1.2 - Bugfix for python 3.5.2
+
+Fixed [#30](https://github.com/smarie/python-valid8/issues/30) again.
+
 ### 4.1.1 - Bugfix for python 3.5.2
 
 Fixed [#30](https://github.com/smarie/python-valid8/issues/30).
