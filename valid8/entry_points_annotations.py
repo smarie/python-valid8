@@ -8,9 +8,10 @@ try:  # python 3.5+
     try:  # python 3.5.3-
         from typing import Type
     except ImportError:
-        pass
-    from valid8.composition import ValidationFuncs
-    use_typing = True
+        use_typing = False
+    else:
+        from valid8.composition import ValidationFuncs
+        use_typing = sys.version_info > (3, 0)
 except ImportError:
     use_typing = False
 

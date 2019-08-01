@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from collections import OrderedDict
+from sys import version_info
 
 from makefun import with_signature
 
@@ -11,24 +12,24 @@ try:  # python 3.5+
     try:  # python 3.5.3-
         from typing import Type
     except ImportError:
-        pass
+        use_typing = False
+    else:
+        try:
+            from mini_lambda import x
+            CallableType = Union[Callable, type(x)]
+        except ImportError:
+            CallableType = Callable
 
-    try:
-        from mini_lambda import x
-        CallableType = Union[Callable, type(x)]
-    except ImportError:
-        CallableType = Callable
+        CallableAndFailureTuple = Tuple[CallableType, Union[str, 'Type[Failure]']]
+        """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
 
-    CallableAndFailureTuple = Tuple[CallableType, Union[str, 'Type[Failure]']]
-    """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
+        ValidationFunc = Union[CallableType, CallableAndFailureTuple]
+        """ Represents the 'typing' type for a single validation function """
 
-    ValidationFunc = Union[CallableType, CallableAndFailureTuple]
-    """ Represents the 'typing' type for a single validation function """
+        ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
+        """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
 
-    ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
-    """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
-
-    use_typing = True
+        use_typing = version_info > (3, 0)
 
 except TypeError:
     # this happens with python 3.5.2: typing has an issue.
