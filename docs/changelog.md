@@ -2,7 +2,7 @@
 
 ### 4.1.2 - Bugfix for python 3.5.2
 
-Fixed [#30](https://github.com/smarie/python-valid8/issues/30) again.
+Fixed [#30](https://github.com/smarie/python-valid8/issues/30) again, and fixed issue with python 2 appearing with the fix.
 
 ### 4.1.1 - Bugfix for python 3.5.2
 
