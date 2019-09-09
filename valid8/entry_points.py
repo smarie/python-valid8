@@ -29,16 +29,17 @@ class NonePolicy(object):
     __slots__ = []
 
     SKIP = 1
-    """ If this policy is selected, None values will aways be valid (validation routines will not be executed) """
+    """ If this policy is selected, None values will always be valid (validation routines will not be executed) """
     FAIL = 2
-    """ If this policy is selected, None values will aways be invalid (validation routines will not be executed) """
+    """ If this policy is selected, None values will always be invalid (validation routines will not be executed) """
     VALIDATE = 3
     """ If this policy is selected, None values will be treated exactly like other values and follow the same 
     validation process."""
 
 
 class NoneArgPolicy(NonePolicy):
-    """ This enumeration extends `NonePolicy` to add policies specific to function input validation used in @validate... decorators """
+    """ This enumeration extends `NonePolicy` to add policies specific to function input validation used in
+    @validate... decorators """
 
     __slots__ = []
 
