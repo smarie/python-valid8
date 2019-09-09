@@ -117,11 +117,11 @@ def test_unused_pytypes():
     from pytypes import typechecked, InputTypeError
 
     # for value checking
-    from valid8 import validate_io, minlens, gt
+    from valid8 import validate_io, non_empty, gt
 
     from ._tests_pep484 import create_for_test_unused_pytypes
     build_house = create_for_test_unused_pytypes()
-    build_house = validate_io(name=minlens(0), surface=gt(0))(build_house)
+    build_house = validate_io(name=non_empty, surface=gt(0))(build_house)
     build_house = typechecked(build_house)
 
     build_house('test', 12, 2)  # validation OK

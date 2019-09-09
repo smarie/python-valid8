@@ -7,6 +7,40 @@ from valid8.composition import _process_validation_function_s
 from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_name
 
 
+class Empty(Failure, ValueError):
+    """ Custom Failure raised by non_empty """
+    def __init__(self, wrong_value):
+        help_msg = 'len(x) > 0 does not hold for x={wrong_value}'
+        super(Empty, self).__init__(wrong_value=wrong_value, help_msg=help_msg)
+
+
+def non_empty(x):
+    """
+    'non empty' validation function. Raises a `Empty` error in case of validation failure.
+    """
+    if len(x) > 0:
+        return True
+    else:
+        raise Empty(wrong_value=x)
+
+
+class NotEmpty(Failure, ValueError):
+    """ Custom Failure raised by non_empty """
+    def __init__(self, wrong_value):
+        help_msg = 'len(x) == 0 does not hold for x={wrong_value}'
+        super(NotEmpty, self).__init__(wrong_value=wrong_value, help_msg=help_msg)
+
+
+def empty(x):
+    """
+    'is empty' validation function. Raises a `NotEmpty` error in case of validation failure.
+    """
+    if len(x) == 0:
+        return True
+    else:
+        raise NotEmpty(wrong_value=x)
+
+
 class TooShort(Failure, ValueError):
     """ Custom Failure raised by minlen """
     def __init__(self, wrong_value, min_length):

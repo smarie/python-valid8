@@ -1,7 +1,7 @@
 import sys
 
 import pytest
-from valid8 import ValidationError, validate, validator
+from valid8 import ValidationError, validate, validator, NotEmpty, Empty
 
 try:
     from math import isfinite
@@ -228,6 +228,20 @@ def test_numpy_nan_like_lengths():
         # in current version of python this does not happen, but the test is ready for future evolutions
         with pytest.raises(ValidationError) as exc_info:
             validate('Foo()', Foo(), min_len=0, max_len=10)
+
+
+def test_empty_not_empty():
+    validate('x', [], empty=True)
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('x', [1], empty=True)
+    assert isinstance(exc_info.value.validation_outcome, NotEmpty)
+
+    validate('x', [1], empty=False)
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('x', [], empty=False)
+    assert isinstance(exc_info.value.validation_outcome, Empty)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints not supported in python 2")

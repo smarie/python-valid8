@@ -2,7 +2,7 @@ import pytest
 
 from mini_lambda import make_lambda_friendly_method, _, x
 from valid8 import on_each_, is_even, maxlen, on_all_, is_subset, is_superset, is_in, Failure, minlen, TooShort, \
-    TooLong, length_between, LengthNotInRange, lt, contains, has_length, WrongLength
+    TooLong, length_between, LengthNotInRange, lt, contains, has_length, WrongLength, empty, NotEmpty, non_empty, Empty
 
 
 def test_is_in():
@@ -82,11 +82,18 @@ def test_maxlen():
         maxlen(1)(['a', 'a'])
 
 
-def test_maxlens():
-    """ tests that the maxlens() function works """
-    with pytest.raises(TooLong):
-        maxlens(1)(['a'])
-    assert maxlens(3)(['a', 'a'])
+def test_empty():
+    """ tests that the empty() function works """
+    assert empty([])
+    with pytest.raises(NotEmpty):
+        empty(['a', 'a'])
+
+
+def test_nonempty():
+    """ tests that the non_empty() function works """
+    assert non_empty(['a', 'a'])
+    with pytest.raises(Empty):
+        non_empty([])
 
 
 def test_length_between():

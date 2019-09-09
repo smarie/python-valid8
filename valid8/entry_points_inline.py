@@ -7,7 +7,7 @@ from valid8.base import ValueIsNone, raise_
 from valid8.entry_points import Validator, ValidationError, NonePolicy, assert_valid
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
-    NotSubset, NotSuperset
+    NotSubset, NotSuperset, NotEmpty, Empty
 from valid8.validation_lib.comparables import TooSmall, TooBig, NotEqual
 
 try:  # python 3.5+
@@ -136,6 +136,7 @@ def validate(name,                   # type: str
              max_value=None,         # type: Any
              max_strict=False,       # type: bool
              length=None,            # type: int
+             empty=None,             # type: bool
              min_len=None,           # type: int
              max_len=None,           # type: int
              custom=None,            # type: Callable[[Any], Any]
@@ -169,6 +170,7 @@ def validate(name,                   # type: str
     :param min_strict: if True, only values strictly greater than `min_value` will be accepted
     :param max_value: an optional maximum value
     :param max_strict: if True, only values strictly lesser than `max_value` will be accepted
+    :param empty: if `True` should be empty, if `False` should be non-empty. Default: `None` (not checked)
     :param length: an optional strict length
     :param min_len: an optional minimum length
     :param max_len: an optional maximum length
@@ -260,6 +262,15 @@ def validate(name,                   # type: str
                 else:
                     if not value <= max_value:
                         raise TooBig(wrong_value=value, max_value=max_value, strict=False)
+
+            if empty:
+                # inlined version of empty() without 'return True'
+                if len(value) > 0:
+                    raise NotEmpty(wrong_value=value)
+            elif empty is not None:
+                # inlined version of not_empty() without 'return True'
+                if len(value) == 0:
+                    raise Empty(wrong_value=value)
 
             if length is not None:
                 # inlined version of has_length() without 'return True'
