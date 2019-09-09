@@ -16,7 +16,7 @@ class Empty(Failure, ValueError):
 
 def non_empty(x):
     """
-    'non empty' validation function. Raises a `Empty` error in case of validation failure.
+    'non empty' validation function. Raises a `Empty` error in case of failure.
     """
     if len(x) > 0:
         return True
@@ -33,7 +33,7 @@ class NotEmpty(Failure, ValueError):
 
 def empty(x):
     """
-    'is empty' validation function. Raises a `NotEmpty` error in case of validation failure.
+    'is empty' validation function. Raises a `NotEmpty` error in case of failure.
     """
     if len(x) == 0:
         return True

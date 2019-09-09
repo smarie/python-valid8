@@ -86,25 +86,25 @@ Validates that x is odd (`x % 2 != 0`).
 
 ## Collections
 
+### empty
+
+'empty' validation function. Raises a `NotEmpty` error in case of failure.
+
+### non_empty
+
+'non empty' validation function. Raises a `Empty` error in case of failure.
+
 ### has_length(ref_length)
 
 'length equals' validation function generator. Returns a validation_function to check that `len(x) == ref_length`
 
-### minlen(min_length, strict:bool=False)
+### minlen(min_length)
 
-'Minimum length' validation function generator. Returns a validation function to check that `len(x) >= min_length` (strict=False, default) or `len(x) > min_length` (strict=True).
+'Minimum length' validation function generator. Returns a validation function to check that `len(x) >= min_length`.
 
-### minlens(min_length)
+### maxlen(max_length)
 
-Alias for minlen in strict mode.
-
-### maxlen(max_length, strict:bool=False)
-
-'Maximum length' validation function generator. Returns a validation function to check that `len(x) <= max_length` (strict=False, default) or `len(x) < max_length` (strict=True).
-
-### maxlens(max_length)
-
-Alias for maxlen in strict mode.
+'Maximum length' validation function generator. Returns a validation function to check that `len(x) <= max_length`.
 
 ### length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
 
