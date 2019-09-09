@@ -287,13 +287,13 @@ def test_validate_custom_validators_with_exception():
     def gt_ex1(x):
         """ A validator raising a custom exception in case of failure """
         if not x >= 1:
-            raise Failure('x >= 1 does not hold for x={val}'.format(val=x))
+            raise Failure(x, 'x >= 1 does not hold for x={val}'.format(val=x))
 
     def is_mod(ref):
         """ A validator generator, with parameters and which raises a custom exception """
         def is_mod(x):
             if x % ref != 0:
-                raise Failure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
+                raise Failure(x, 'x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
         return is_mod
 
     @validate_io(a=[gt_ex1, lt(12), is_mod(5)])
@@ -311,7 +311,7 @@ def test_validate_custom_validators_with_exception():
                      "Validation function [and(gt_ex1, lesser_than_12, is_mod)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [0]. " \
                      "Successes: ['lesser_than_12', 'is_mod'] / " \
-                     "Failures: {'gt_ex1': 'Failure: Wrong value: [x >= 1 does not hold for x=0]'}."
+                     "Failures: {'gt_ex1': 'Failure: x >= 1 does not hold for x=0. Wrong value: 0'}."
 
     with pytest.raises(InputValidationError) as exc_info:
         print(2)
@@ -321,7 +321,7 @@ def test_validate_custom_validators_with_exception():
                      "Validation function [and(gt_ex1, lesser_than_12, is_mod)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [3]. " \
                      "Successes: ['gt_ex1', 'lesser_than_12'] / " \
-                     "Failures: {'is_mod': 'Failure: Wrong value: [x % 5 == 0 does not hold for x=3]'}."
+                     "Failures: {'is_mod': 'Failure: x % 5 == 0 does not hold for x=3. Wrong value: 3'}."
 
     with pytest.raises(InputValidationError) as exc_info:
         print(3)
@@ -331,7 +331,7 @@ def test_validate_custom_validators_with_exception():
                      "Validation function [and(gt_ex1, lesser_than_12, is_mod)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [15]. " \
                      "Successes: ['gt_ex1', 'is_mod'] / " \
-                     "Failures: {'lesser_than_12': 'TooBig: x <= 12 does not hold for x=15. Wrong value: [15]'}."
+                     "Failures: {'lesser_than_12': 'TooBig: x <= 12 does not hold for x=15. Wrong value: 15'}."
 
 
 def test_validate_mini_lambda():

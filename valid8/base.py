@@ -311,7 +311,7 @@ class Failure(HelpMsgMixIn, RootException):
         if len(strval) > self.__max_str_length_displayed__:
             return '(Actual value is too big to be printed in this message)'
         else:
-            return 'Wrong value: [{}]'.format(self.wrong_value)
+            return 'Wrong value: %s' % repr(self.wrong_value)
 
 
 class WrappingFailure(Failure):

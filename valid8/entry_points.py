@@ -301,7 +301,6 @@ class ValidationError(HelpMsgMixIn, RootException):
                        ''.format(what=self.get_what_txt(), val=self.validator.get_main_function_name(),
                                  result=self.validation_outcome)
 
-        # return 'Wrong value: [{}]'.format(self.var_value)
         return contents
 
     def get_variable_str(self):

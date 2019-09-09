@@ -73,7 +73,7 @@ results in
 
 ```bash
 ValidationError[ValueError]: Error validating [surface=-1]. \
-   TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
+   TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1.
 ```
 
 Note that the resulting exception object contains much of the available information (`var_name`, `var_value`, `validation_outcome`) as fields.
@@ -201,7 +201,7 @@ yields for `surf = -1`
 ```bash
 InvalidSurface[ValueError]: Surface should be a positive integer. \
    Error validating [surface=-1]. \
-   TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
+   TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1.
 ```
 
 ### (c) message templating
@@ -221,7 +221,7 @@ yields
 ```bash
 InvalidSurface[ValueError]: Surface should be > 0, found -1. \
    Error validating [surface=-1]. \
-   TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1].
+   TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1.
 ```
 
 Note: as shown in that last example, the value being validated is already sent to the help message string to format under the `'var_value'` key, so you do not need to pass it. 

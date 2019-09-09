@@ -374,7 +374,8 @@ def on_each_(*validation_functions_collection):
     def on_each_val(x  # type: Tuple
                     ):
         if len(validation_function_funcs) != len(x):
-            raise Failure('on_each_: x does not have the same number of elements than validation_functions_collection.')
+            raise Failure(x, 'on_each_: x does not have the same number of elements than '
+                             '`validation_functions_collection`.')
         else:
             # apply each validation_function on the input with the same position in the collection
             idx = -1

@@ -15,7 +15,7 @@ def test_readme_index_usage_quick():
         validate('surface', surf, instance_of=int, min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
 
 
 def test_readme_usage_validator():
@@ -56,7 +56,7 @@ def test_readme_usage_validator():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
+                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
 
     from valid8 import assert_instance_of
     with pytest.raises(ValidationError) as exc_info:
@@ -66,7 +66,7 @@ def test_readme_usage_validator():
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
                      "Validation function [assert_instance_of(surf, int) ; v.alid = surf > 0] raised " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: [1j]." % repr(int)
+                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
 
 
 def test_readme_usage_customization():
@@ -79,7 +79,7 @@ def test_readme_usage_customization():
     #                 help_msg="Surface should be a positive integer")
     # e = exc_info.value
     # assert str(e) == "Surface should be a positive integer. Error validating [surface=-1]. " \
-    #                  "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+    #                  "TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
 
     # (A) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
@@ -99,7 +99,7 @@ def test_readme_usage_customization():
     assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be a positive integer. " \
                      "Error validating [surface=-1]. " \
-                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
 
     # (C) custom error types with templating
     class InvalidSurface(ValidationError):
@@ -112,13 +112,13 @@ def test_readme_usage_customization():
     assert isinstance(e, InvalidSurface)
     assert type(e).__name__ == "InvalidSurface[ValueError]"
     assert str(e) == "Surface should be > 0, found -1. Error validating [surface=-1]. " \
-                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+                     "TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
 
     # (D) ValueError/TypeError
     with pytest.raises(ValidationError) as exc_info:
         validate('surface', -1, instance_of=int, min_value=0)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=-1]. TooSmall: x >= 0 does not hold for x=-1. Wrong value: [-1]."
+    assert str(e) == "Error validating [surface=-1]. TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
     assert repr(e.__class__) == "<class 'valid8.entry_points.ValidationError[ValueError]'>"
 
     with pytest.raises(ValidationError) as exc_info:
@@ -142,7 +142,7 @@ def test_readme_index_usage_basic():
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
                      'Validation function [is_multiple_of_100] raised ' \
-                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
+                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1.'
 
     # (2) native mini_lambda support to define validation functions
     from mini_lambda import x
@@ -281,7 +281,7 @@ def test_readme_index_usage_customization():
         assert_valid('surface', None, x > 0, none_policy=NonePolicy.FAIL)
     e = exc_info.value
     assert str(e) == 'Error validating [surface=None]. Validation function [reject_none(x > 0)] raised ' \
-                     'ValueIsNone: The value must be non-None. Wrong value: [None].'
+                     'ValueIsNone: The value must be non-None. Wrong value: None.'
 
     # *** (4) TEST: custom Failure (not ValidationError) message. Does it have any interest ? ***
     with pytest.raises(ValidationError) as exc_info:
@@ -291,7 +291,7 @@ def test_readme_index_usage_customization():
                      'Validation function [is_multiple_of_100] raised ' \
                      'WrappingFailure: Surface should be a multiple of 100. ' \
                      'Function [is_multiple_of_100] raised ' \
-                     '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]].'
+                     '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1].'
 
     # (4) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
@@ -311,7 +311,7 @@ def test_readme_index_usage_customization():
     assert str(e) == 'Surface should be a positive number. ' \
                      'Error validating [surface=-1]. ' \
                      'Validation function [is_multiple_of_100] raised ' \
-                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1].'
+                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1.'
 
     # (6) custom error types with templating
     class InvalidSurface(ValidationError):
@@ -341,7 +341,7 @@ def test_readme_index_usage_composition():
                      "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'False', " \
-                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
 
     # (8) ... with a global custom error type. Oh by the way this supports templating
     class InvalidSurface(ValidationError):
@@ -358,7 +358,7 @@ def test_readme_index_usage_composition():
                      "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'False', " \
-                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: [-1]'}."
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
 
     # (9) ... and possible user-friendly intermediate failure messages
     with pytest.raises(ValidationError) as exc_info:
@@ -374,7 +374,7 @@ def test_readme_index_usage_composition():
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
                      "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
-                     "Wrong value: [-1]].'}."
+                     "Wrong value: -1].'}."
 
     # *********** other even more complex tests ***********
 
@@ -396,4 +396,4 @@ def test_readme_index_usage_composition():
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
                      "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100, found -1. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
-                     "Wrong value: [-1]].'}."
+                     "Wrong value: -1].'}."
