@@ -1,5 +1,11 @@
 # Changelog
 
+### 4.2.0 - validation lib improvements
+
+ * Removed the useless 'strict' length validators: removed `min_len_strict` and `max_len_strict` in `validate` entry point, and removed `strict` argument in `validation_lib`'s `minlen` and `maxlen`. Indeed length is an integer by python framework definition, so it is always more compact to do +1 or -1 to the number. Fixes [#29](https://github.com/smarie/python-valid8/issues/29).
+
+ * New `empty` and `non_empty` built-in validators in `validation_lib`. New `empty` argument in `validate`. Fixes [#31](https://github.com/smarie/python-valid8/issues/31).
+
 ### 4.1.2 - Bugfix for python 3.5.2
 
 Fixed [#30](https://github.com/smarie/python-valid8/issues/30) again, and fixed issue with python 2 appearing with the fix.
