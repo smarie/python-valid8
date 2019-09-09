@@ -137,9 +137,7 @@ def validate(name,                   # type: str
              max_strict=False,       # type: bool
              length=None,            # type: int
              min_len=None,           # type: int
-             min_len_strict=False,   # type: bool
              max_len=None,           # type: int
-             max_len_strict=False,   # type: bool
              custom=None,            # type: Callable[[Any], Any]
              error_type=None,        # type: Type[ValidationError]
              help_msg=None,          # type: str
@@ -153,8 +151,7 @@ def validate(name,                   # type: str
        * if `allowed_values` is provided, `value` should be in that set
        * if `min_value` (resp. `max_value`) is provided, `value` should be greater than it. Comparison is not strict by
        default and can be set to strict by setting `min_strict`, resp. `max_strict`, to `True`
-       * if `min_len` (resp. `max_len`) is provided, `len(value)` should be greater than it. Comparison is not strict by
-       default and can be set to strict by setting `min_len_strict`, resp. `max_len_strict`, to `True`
+       * if `min_len` (resp. `max_len`) is provided, `len(value)` should be greater than it. Comparison is not strict.
 
     :param name: the applicative name of the checked value, that will be used in error messages
     :param value: the value to check
@@ -174,9 +171,7 @@ def validate(name,                   # type: str
     :param max_strict: if True, only values strictly lesser than `max_value` will be accepted
     :param length: an optional strict length
     :param min_len: an optional minimum length
-    :param min_len_strict: if True, only values with length strictly greater than `min_len` will be accepted
     :param max_len: an optional maximum length
-    :param max_len_strict: if True, only values with length strictly lesser than `max_len` will be accepted
     :param custom: a custom base validation function or list of base validation functions to use. This is the same
         syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
         or a list of several such elements. Nested lists are supported and indicate an implicit `and_`. Tuples indicate
@@ -272,22 +267,14 @@ def validate(name,                   # type: str
                     raise WrongLength(wrong_value=value, ref_length=length)
 
             if min_len is not None:
-                # inlined version of minlen(min_length=min_len, strict=min_len_strict)(value) without 'return True'
-                if min_len_strict:
-                    if not len(value) > min_len:
-                        raise TooShort(wrong_value=value, min_length=min_len, strict=True)
-                else:
-                    if not len(value) >= min_len:
-                        raise TooShort(wrong_value=value, min_length=min_len, strict=False)
+                # inlined version of minlen(min_length=min_len)(value) without 'return True'
+                if len(value) < min_len:
+                    raise TooShort(wrong_value=value, min_length=min_len)
 
             if max_len is not None:
-                # inlined version of maxlen(max_length=max_len, strict=max_len_strict)(value) without 'return True'
-                if max_len_strict:
-                    if not len(value) < max_len:
-                        raise TooLong(wrong_value=value, max_length=max_len, strict=True)
-                else:
-                    if not len(value) <= max_len:
-                        raise TooLong(wrong_value=value, max_length=max_len, strict=False)
+                # inlined version of maxlen(max_length=max_len)(value) without 'return True'
+                if len(value) > max_len:
+                    raise TooLong(wrong_value=value, max_length=max_len)
 
     except Exception as e:
         err = _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,

@@ -9,91 +9,55 @@ from valid8.base import Failure, WrappingFailure, result_is_success, get_callabl
 
 class TooShort(Failure, ValueError):
     """ Custom Failure raised by minlen """
-    def __init__(self, wrong_value, min_length, strict):
-        symbol = '>' if strict else '>='
-        help_msg = 'len(x) {symbol} {min_length} does not hold for x={wrong_value}'
-        super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, symbol=symbol, help_msg=help_msg)
+    def __init__(self, wrong_value, min_length):
+        help_msg = 'len(x) >= {min_length} does not hold for x={wrong_value}'
+        super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, help_msg=help_msg)
 
 
-def minlen(min_length,
-           strict=False  # type: bool
+def minlen(min_length
            ):
     """
     'Minimum length' validation_function generator.
-    Returns a validation_function to check that len(x) >= min_length (strict=False, default)
-    or len(x) > min_length (strict=True)
+    Returns a validation_function to check that len(x) >= min_length
 
     :param min_length: minimum length for x
-    :param strict: Boolean flag to switch between len(x) >= min_length (strict=False) and len(x) > min_length
-    (strict=True)
     :return:
     """
-    if strict:
-        def minlen_(x):
-            if len(x) > min_length:
-                return True
-            else:
-                # raise Failure('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
-                raise TooShort(wrong_value=x, min_length=min_length, strict=True)
-    else:
-        def minlen_(x):
-            if len(x) >= min_length:
-                return True
-            else:
-                # raise Failure('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
-                raise TooShort(wrong_value=x, min_length=min_length, strict=False)
+    def minlen_(x):
+        if len(x) >= min_length:
+            return True
+        else:
+            raise TooShort(wrong_value=x, min_length=min_length)
 
-    minlen_.__name__ = 'length_{}greater_than_{}'.format('strictly_' if strict else '', min_length)
+    minlen_.__name__ = 'length_greater_than_%s' % min_length
     return minlen_
-
-
-def minlens(min_length_strict):
-    """ Alias for 'Minimum length' validation_function generator in strict mode """
-    return minlen(min_length_strict, True)
 
 
 class TooLong(Failure, ValueError):
     """ Custom Failure raised by maxlen """
-    def __init__(self, wrong_value, max_length, strict):
-        symbol = '<' if strict else '<='
-        help_msg = 'len(x) {symbol} {max_length} does not hold for x={wrong_value}'
-        super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, symbol=symbol, help_msg=help_msg)
+    def __init__(self, wrong_value, max_length):
+        help_msg = 'len(x) <= {max_length} does not hold for x={wrong_value}'
+        super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, help_msg=help_msg)
 
 
 def maxlen(max_length,
-           strict=False  # type: bool
            ):
     """
     'Maximum length' validation_function generator.
-    Returns a validation_function to check that len(x) <= max_length (strict=False, default) or len(x) < max_length (strict=True)
+    Returns a validation_function to check that len(x) <= max_length
 
     :param max_length: maximum length for x
-    :param strict: Boolean flag to switch between len(x) <= max_length (strict=False) and len(x) < max_length
-    (strict=True)
     :return:
     """
-    if strict:
-        def maxlen_(x):
-            if len(x) < max_length:
-                return True
-            else:
-                # raise Failure('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
-                raise TooLong(wrong_value=x, max_length=max_length, strict=True)
-    else:
-        def maxlen_(x):
-            if len(x) <= max_length:
-                return True
-            else:
-                # raise Failure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
-                raise TooLong(wrong_value=x, max_length=max_length, strict=False)
+    def maxlen_(x):
+        if len(x) <= max_length:
+            return True
+        else:
+            # raise Failure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
+            raise TooLong(wrong_value=x, max_length=max_length)
 
-    maxlen_.__name__ = 'length_{}lesser_than_{}'.format('strictly_' if strict else '', max_length)
+    maxlen_.__name__ = 'length_lesser_than_%s' % max_length
     return maxlen_
-
-
-def maxlens(max_length_strict):
-    """ Alias for 'Maximum length' validation_function generator in strict mode """
-    return maxlen(max_length_strict, True)
 
 
 class WrongLength(Failure, ValueError):
