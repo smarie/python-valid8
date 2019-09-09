@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.2.1 - Minor error message fix
+
+Error messages improvements: removed the brackets in `Wrong value: [...]` for the `Failure` details. Fixed [#32](https://github.com/smarie/python-valid8/issues/32).
+
 ### 4.2.0 - validation lib improvements
 
  * Removed the useless 'strict' length validators: removed `min_len_strict` and `max_len_strict` in `validate` entry point, and removed `strict` argument in `validation_lib`'s `minlen` and `maxlen`. Indeed length is an integer by python framework definition, so it is always more compact to do +1 or -1 to the number. Fixes [#29](https://github.com/smarie/python-valid8/issues/29).
