@@ -104,9 +104,6 @@ def test_length_between():
     with pytest.raises(LengthNotInRange):
         length_between(0, 1)(['a', 'a'])
 
-    with pytest.raises(LengthNotInRange):
-        length_between(0, 1, open_left=True)([])
-
 
 def test_numpy_nan_like_lengths():
     """ Test that a strange int length with bad behaviour is correctly handled """
