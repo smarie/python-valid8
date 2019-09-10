@@ -472,7 +472,7 @@ class Validator(object):
             raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
                              "".format(kw_context_args))
 
-        self.none_policy = none_policy or NonePolicy.VALIDATE
+        self.none_policy = none_policy if none_policy is not None else NonePolicy.VALIDATE
 
         self.error_type = error_type or ValidationError
         if not issubclass(self.error_type, ValidationError):

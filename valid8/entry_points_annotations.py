@@ -601,7 +601,8 @@ def decorate_cls_with_validation(cls,
             #                                       _clazz_field_name_=field_name, **kw_context_args)
 
             # --create the new validator
-            none_policy = none_policy or NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
+            if none_policy is None:
+                none_policy = NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
             new_validator = _create_function_validator(func, func_sig, descriptor_arg_name, *validation_func,
                                                        none_policy=none_policy, error_type=error_type,
                                                        help_msg=help_msg,
@@ -747,7 +748,8 @@ def decorate_with_validation(func,
     # the rest of keyword arguments is used as context.
     kw_context_args = kwargs
 
-    none_policy = none_policy or NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
+    if none_policy is None:
+        none_policy = NoneArgPolicy.SKIP_IF_NONABLE_ELSE_VALIDATE
 
     # retrieve target function signature
     func_sig = signature(func)
