@@ -879,9 +879,9 @@ def decorate_with_validators(func,
     method takes Validator objects as argument, it is for advanced users.
 
     :param func: the function to decorate. It might already be decorated, this method will check it and wont create
-    another wrapper in this case, simply adding the validators to the existing wrapper
+        another wrapper in this case, simply adding the validators to the existing wrapper
     :param func_signature: the function's signature if it is already known (internal calls), otherwise it will be found
-    again by inspection
+        again by inspection
     :param validators: a dictionary of arg_name (or _out_) => Validator or list of Validator
     :return:
     """
