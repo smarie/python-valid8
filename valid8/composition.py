@@ -179,7 +179,7 @@ class CompositionFailure(Failure):
                 failures_for_print[name] = str(failure)
 
         if need_to_print_value:
-            value_str = ' for value %s' % repr(self.wrong_value)
+            value_str = ' for value <%s>' % repr(self.wrong_value)
         else:
             value_str = ''
 
