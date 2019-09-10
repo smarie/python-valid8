@@ -39,7 +39,7 @@ def test_not_not_all():
         a(84)  # 84 is invalid (not even)
     e = exc_info.value
     assert str(e) == 'is_even validated value 84 with success, therefore the not() is a failure. ' \
-                     'Function [is_even] returned [True] for value [84].'
+                     'Function [is_even] returned [True] for value 84.'
 
     with pytest.raises(DidNotFail):
         b(6)   # 6 is invalid (is even and it is a multiple of 3)

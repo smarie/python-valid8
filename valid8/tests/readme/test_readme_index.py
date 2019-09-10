@@ -172,7 +172,7 @@ def test_readme_index_usage_function():
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \
                      "Validation function [and(instance_of_%s, len(s) > 0)] raised " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value []. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value <''>. " \
                      "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'False'}." \
                      "" % (repr(str), repr(str))
 
@@ -339,7 +339,7 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
                      "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
                      "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'False', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
 
@@ -355,7 +355,7 @@ def test_readme_index_usage_composition():
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
                      "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value [-1]. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'False', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
@@ -371,7 +371,7 @@ def test_readme_index_usage_composition():
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
-                     "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
+                     "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
                      "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: -1].'}."
@@ -393,7 +393,7 @@ def test_readme_index_usage_composition():
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
-                     "Function [(x >= 0) & (x < 10000)] returned [False] for value [-1].', " \
+                     "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
                      "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100, found -1. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: -1].'}."
