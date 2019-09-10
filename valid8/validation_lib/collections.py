@@ -9,9 +9,7 @@ from valid8.base import Failure, WrappingFailure, result_is_success, get_callabl
 
 class Empty(Failure, ValueError):
     """ Custom Failure raised by non_empty """
-    def __init__(self, wrong_value):
-        help_msg = 'len(x) > 0 does not hold for x={wrong_value}'
-        super(Empty, self).__init__(wrong_value=wrong_value, help_msg=help_msg)
+    help_msg = 'len(x) > 0 does not hold for x={wrong_value}'
 
 
 def non_empty(x):
@@ -26,9 +24,7 @@ def non_empty(x):
 
 class NotEmpty(Failure, ValueError):
     """ Custom Failure raised by non_empty """
-    def __init__(self, wrong_value):
-        help_msg = 'len(x) == 0 does not hold for x={wrong_value}'
-        super(NotEmpty, self).__init__(wrong_value=wrong_value, help_msg=help_msg)
+    help_msg = 'len(x) == 0 does not hold for x={wrong_value}'
 
 
 def empty(x):
@@ -43,9 +39,10 @@ def empty(x):
 
 class TooShort(Failure, ValueError):
     """ Custom Failure raised by minlen """
-    def __init__(self, wrong_value, min_length):
-        help_msg = 'len(x) >= {min_length} does not hold for x={wrong_value}'
-        super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, help_msg=help_msg)
+    help_msg = 'len(x) >= {min_length} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, min_length, **kwargs):
+        super(TooShort, self).__init__(wrong_value=wrong_value, min_length=min_length, **kwargs)
 
 
 def minlen(min_length
@@ -69,9 +66,10 @@ def minlen(min_length
 
 class TooLong(Failure, ValueError):
     """ Custom Failure raised by maxlen """
-    def __init__(self, wrong_value, max_length):
-        help_msg = 'len(x) <= {max_length} does not hold for x={wrong_value}'
-        super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, help_msg=help_msg)
+    help_msg = 'len(x) <= {max_length} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, max_length, **kwargs):
+        super(TooLong, self).__init__(wrong_value=wrong_value, max_length=max_length, **kwargs)
 
 
 def maxlen(max_length,
@@ -96,9 +94,10 @@ def maxlen(max_length,
 
 class WrongLength(Failure, ValueError):
     """ Custom failure raised by has_length """
-    def __init__(self, wrong_value, ref_length):
-        help_msg = 'len(x) == {ref_length} does not hold for x={wrong_value}'
-        super(WrongLength, self).__init__(wrong_value=wrong_value, ref_length=ref_length, help_msg=help_msg)
+    help_msg = 'len(x) == {ref_length} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, ref_length, **kwargs):
+        super(WrongLength, self).__init__(wrong_value=wrong_value, ref_length=ref_length, **kwargs)
 
 
 def has_length(ref_length):
@@ -189,10 +188,11 @@ def length_between(min_len,
 
 class NotInAllowedValues(Failure, ValueError):
     """ Custom Failure raised by is_in """
-    def __init__(self, wrong_value, allowed_values):
-        help_msg = 'x in {allowed_values} does not hold for x={wrong_value}'
+    help_msg = 'x in {allowed_values} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, allowed_values, **kwargs):
         super(NotInAllowedValues, self).__init__(wrong_value=wrong_value, allowed_values=allowed_values,
-                                                 help_msg=help_msg)
+                                                 **kwargs)
 
 
 def is_in(allowed_values  # type: Set
@@ -217,10 +217,11 @@ def is_in(allowed_values  # type: Set
 
 class NotSubset(Failure, ValueError):
     """ Custom Failure raised by is_subset """
-    def __init__(self, wrong_value, reference_set, unsupported):
-        help_msg = 'x subset of {reference_set} does not hold for x={wrong_value}. Unsupported elements: {unsupported}'
+    help_msg = 'x subset of {reference_set} does not hold for x={wrong_value}. Unsupported elements: {unsupported}'
+
+    def __init__(self, wrong_value, reference_set, unsupported, **kwargs):
         super(NotSubset, self).__init__(wrong_value=wrong_value, reference_set=reference_set, unsupported=unsupported,
-                                        help_msg=help_msg)
+                                        **kwargs)
 
 
 def is_subset(reference_set  # type: Set
@@ -248,10 +249,10 @@ def is_subset(reference_set  # type: Set
 
 class DoesNotContainValue(Failure, ValueError):
     """ Custom Failure raised by contains """
-    def __init__(self, wrong_value, ref_value):
-        help_msg = '{ref_value} in x does not hold for x={wrong_value}'
-        super(DoesNotContainValue, self).__init__(wrong_value=wrong_value, ref_value=ref_value,
-                                                  help_msg=help_msg)
+    help_msg = '{ref_value} in x does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, ref_value, **kwargs):
+        super(DoesNotContainValue, self).__init__(wrong_value=wrong_value, ref_value=ref_value, **kwargs)
 
 
 def contains(ref_value):
@@ -274,10 +275,11 @@ def contains(ref_value):
 
 class NotSuperset(Failure, ValueError):
     """ Custom Failure raised by is_superset """
-    def __init__(self, wrong_value, reference_set, missing):
-        help_msg = 'x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}'
+    help_msg = 'x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}'
+
+    def __init__(self, wrong_value, reference_set, missing, **kwargs):
         super(NotSuperset, self).__init__(wrong_value=wrong_value, reference_set=reference_set, missing=missing,
-                                          help_msg=help_msg)
+                                          **kwargs)
 
 
 def is_superset(reference_set  # type: Set

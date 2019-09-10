@@ -163,9 +163,9 @@ class ValidationError(HelpMsgMixIn, RootException):
 
     ```python
     class ConditionWasNotMet(Failure):
-        def __init__(self, var_value, condition):
-            help_msg = "x={var_value} does not meet {condition}"
-            super(ConditionWasNotMet, self).__init__(var_value=var_value, condition=condition, help_msg=help_msg)
+        help_msg = "x={var_value} does not meet {condition}"
+        def __init__(self, var_value, condition, **kwargs):
+            super(ConditionWasNotMet, self).__init__(var_value=var_value, condition=condition, **kwargs)
     ```
 
     Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then

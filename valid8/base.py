@@ -249,9 +249,9 @@ class Failure(HelpMsgMixIn, RootException):
 
     ```python
     class ConditionWasNotMet(Failure):
-        def __init__(self, wrong_value, condition):
-            help_msg = "x={wrong_value} does not meet {condition}"
-            super(ConditionWasNotMet, self).__init__(wrong_value=wrong_value, condition=condition, help_msg=help_msg)
+        help_msg = "x={wrong_value} does not meet {condition}"
+        def __init__(self, wrong_value, condition, **kwargs):
+            super(ConditionWasNotMet, self).__init__(wrong_value=wrong_value, condition=condition, **kwargs)
     ```
 
     Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then

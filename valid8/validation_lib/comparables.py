@@ -8,17 +8,19 @@ from valid8.base import Failure
 
 class NotEqual(Failure, ValueError):
     """ Custom Failure raised by ?? (only by validate for now) """
-    def __init__(self, wrong_value, ref_value):
-        help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
-        super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, help_msg=help_msg)
+    help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, ref_value, **kwargs):
+        super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, **kwargs)
 
 
 class TooSmall(Failure, ValueError):
     """ Custom Failure raised by gt """
-    def __init__(self, wrong_value, min_value, strict):
+    help_msg = 'x {symbol} {min_value} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, min_value, strict, **kwargs):
         symbol = '>' if strict else '>='
-        help_msg = 'x {symbol} {min_value} does not hold for x={wrong_value}'
-        super(TooSmall, self).__init__(wrong_value=wrong_value, min_value=min_value, symbol=symbol, help_msg=help_msg)
+        super(TooSmall, self).__init__(wrong_value=wrong_value, min_value=min_value, symbol=symbol, **kwargs)
 
 
 def gt(min_value,    # type: Any
@@ -61,10 +63,11 @@ def gts(min_value_strict  # type: Any
 
 class TooBig(Failure, ValueError):
     """ Custom Failure raised by lt """
-    def __init__(self, wrong_value, max_value, strict):
+    help_msg = 'x {symbol} {max_value} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, max_value, strict, **kwargs):
         symbol = '<' if strict else '<='
-        help_msg = 'x {symbol} {max_value} does not hold for x={wrong_value}'
-        super(TooBig, self).__init__(wrong_value=wrong_value, max_value=max_value, symbol=symbol, help_msg=help_msg)
+        super(TooBig, self).__init__(wrong_value=wrong_value, max_value=max_value, symbol=symbol, **kwargs)
 
 
 def lt(max_value,    # type: Any
@@ -107,12 +110,13 @@ def lts(max_value_strict  # type: Any
 
 class NotInRange(Failure, ValueError):
     """ Custom Failure raised by between """
-    def __init__(self, wrong_value, min_value, left_strict, max_value, right_strict):
+    help_msg = '{min_value} {left_symbol} x {right_symbol} {max_value} does not hold for x={wrong_value}'
+
+    def __init__(self, wrong_value, min_value, left_strict, max_value, right_strict, **kwargs):
         left_symbol = '<' if left_strict else '<='
         right_symbol = '<' if right_strict else '<='
-        help_msg = '{min_value} {left_symbol} x {right_symbol} {max_value} does not hold for x={wrong_value}'
         super(NotInRange, self).__init__(wrong_value=wrong_value, min_value=min_value, left_symbol=left_symbol,
-                                         max_value=max_value, right_symbol=right_symbol, help_msg=help_msg)
+                                         max_value=max_value, right_symbol=right_symbol, **kwargs)
 
 
 def between(min_val,          # type: Any
