@@ -15,7 +15,7 @@ from valid8.validation_lib import *
 
 __all__ = [
     # submodules
-    'base', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
+    'base', 'checkers_syntax', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
     'validation_lib', 'utils_string', 'utils_typing',
 
     # symbols

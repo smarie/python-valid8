@@ -4,31 +4,19 @@ from sys import version_info
 
 from makefun import with_signature
 
-from valid8.base import Failure, result_is_success, get_callable_names, get_callable_name, _failure_raiser, \
-    WrappingFailure, _none_accepter, _none_rejecter, as_function
+from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_names, get_callable_name, \
+    _failure_raiser, _none_accepter, _none_rejecter
+from valid8.checkers_syntax import _make_checker_callables
+
 
 try:  # python 3.5+
-    from typing import Callable, Union, List, Tuple
+    from typing import Callable, Union, List, Tuple, Iterable, Mapping, Any
     try:  # python 3.5.3-
         from typing import Type
     except ImportError:
         use_typing = False
     else:
-        try:
-            from mini_lambda import x
-            CallableType = Union[Callable, type(x)]
-        except ImportError:
-            CallableType = Callable
-
-        CallableAndFailureTuple = Tuple[CallableType, Union[str, 'Type[Failure]']]
-        """ Represents the allowed construct to define a failure raiser from a validation function: a tuple """
-
-        ValidationFunc = Union[CallableType, CallableAndFailureTuple]
-        """ Represents the 'typing' type for a single validation function """
-
-        ValidationFuncs = Union[ValidationFunc, List['ValidationFuncs']]  # recursion is used here ('forward reference')
-        """ Represents the 'typing' type for 'validation_func' arguments in the various methods """
-
+        from valid8.checkers_syntax import ValidationFuncs
         use_typing = version_info > (3, 0)
 
 except TypeError:
@@ -39,99 +27,6 @@ except ImportError:
     use_typing = False
 
 
-supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of ' \
-                   'several such elements. Nested lists are supported and indicate an implicit `and_` (such as the ' \
-                   'main list). Tuples indicate an implicit `_failure_raiser`. ' \
-                   '[mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of ' \
-                   'callables, they will be transformed to functions automatically.'
-
-
-def _process_validation_function_s(validation_func,       # type: ValidationFuncs
-                                   auto_and_wrapper=True  # type: bool
-                                   ):
-    # type: (...) -> Union[Callable, List[Callable]]
-    """
-    This function handles the various ways that users may enter 'validation functions', so as to output a single
-    callable method. Setting "auto_and_wrapper" to False allows callers to get a list of callables instead.
-
-    valid8 supports the following expressions for 'validation functions'
-     * <ValidationFunc>
-     * List[<ValidationFunc>(s)]. The list must not be empty.
-
-    <ValidationFunc> may either be
-     * a callable or a mini-lambda expression (instance of LambdaExpression - in which case it is automatically
-     'closed').
-     * a Tuple[callable or mini-lambda expression ; failure_type]. Where failure type should be a subclass of
-     valid8.Failure. In which case the tuple will be replaced with a _failure_raiser(callable, failure_type)
-
-    When the contents provided does not match the above, this function raises a ValueError. Otherwise it produces a
-    list of callables, that will typically be turned into a `and_` in the nominal case except if this is called inside
-    `or_` or `xor_`.
-
-    :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-        are supported and indicate an implicit `and_`. Tuples indicate an implicit
-        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-        of callables, they will be transformed to functions automatically.
-    :param auto_and_wrapper: if True (default), this function returns a single callable that is a and_() of all
-        functions. Otherwise a list is returned.
-    :return:
-    """
-
-    # handle the case where validation_func is not yet a list or is empty or none
-    if validation_func is None:
-        raise ValueError('mandatory validation_func is None')
-
-    elif not isinstance(validation_func, list):
-        # so not use list() because we do not want to convert tuples here.
-        validation_func = [validation_func]
-
-    elif len(validation_func) == 0:
-        raise ValueError('provided validation_func list is empty')
-
-    # now validation_func is a non-empty list
-    final_list = []
-    for v in validation_func:
-        # special case of a LambdaExpression: automatically convert to a function
-        # note: we have to do it before anything else (such as .index) otherwise we may get failures
-        v = as_function(v)
-
-        if isinstance(v, tuple):
-            # convert all the tuples to failure raisers
-            if len(v) == 2:
-                if isinstance(v[1], str):
-                    final_list.append(_failure_raiser(v[0], help_msg=v[1]))
-                elif isinstance(v[1], type) and issubclass(v[1], WrappingFailure):
-                    final_list.append(_failure_raiser(v[0], failure_type=v[1]))
-                else:
-                    raise TypeError('base validation function(s) not compliant with the allowed syntax. Base validation'
-                                    ' function(s) can be {}. Found [{}].'.format(supported_syntax, str(v)))
-            else:
-                raise TypeError('base validation function(s) not compliant with the allowed syntax. Base validation'
-                                ' function(s) can be {}. Found [{}].'.format(supported_syntax, str(v)))
-
-        elif callable(v):
-            # use the validator directly
-            final_list.append(v)
-
-        elif isinstance(v, list):
-            # a list is an implicit and_, make it explicit
-            final_list.append(and_(*v))
-
-        else:
-            raise TypeError('base validation function(s) not compliant with the allowed syntax. Base validation'
-                            ' function(s) can be {}. Found [{}].'.format(supported_syntax, str(v)))
-
-    # return what is required:
-    if auto_and_wrapper:
-        # a single callable doing the 'and'
-        return and_(*final_list)
-    else:
-        # or the list (typically for use inside or_(), xor_()...)
-        return final_list
-
-
-# ----------- we cant move these in another file since and_() is very tied to the above function.
 class CompositionFailure(Failure):
     """ Root failure of all composition operators """
 
@@ -240,35 +135,36 @@ def and_(*validation_func  # type: ValidationFuncs
     `AtLeastOneFailed` failure on the first `False` received or `Exception` caught.
 
     Note that an implicit `and_` is performed if you provide a list of validators to any of the entry points
-    (`validate`, `validation`/`validator`, `@validate_arg`, `@validate_out`, `@validate_field` ...)
+    (`validator`/`validation`, `@validate_arg`, `@validate_field` ...). For `validate` you need to use an explicit
+    one in `custom=<f>`.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :return:
     """
+    validation_funcs = _make_checker_callables(*validation_func)
 
-    validation_func = _process_validation_function_s(list(validation_func), auto_and_wrapper=False)
-
-    if len(validation_func) == 1:
-        return validation_func[0]  # simplification for single validator case: no wrapper
+    if len(validation_funcs) == 1:
+        return validation_funcs[0]  # simplification for single validator case: no wrapper
     else:
         def and_v_(x):
-            for validator in validation_func:
+            for validator in validation_funcs:
                 try:
                     res = validator(x)
                 except Exception as e:
                     # one validator was unhappy > raise
-                    raise AtLeastOneFailed(validation_func, x, cause=e)
+                    raise AtLeastOneFailed(validation_funcs, x, cause=e)
                 if not result_is_success(res):
                     # one validator was unhappy > raise
-                    raise AtLeastOneFailed(validation_func, x)
+                    raise AtLeastOneFailed(validation_funcs, x)
 
             return True
 
-        and_v_.__name__ = 'and({})'.format(get_callable_names(validation_func))
+        and_v_.__name__ = 'and({})'.format(get_callable_names(validation_funcs))
         return and_v_
 
 
@@ -277,10 +173,10 @@ class DidNotFail(WrappingFailure):
     help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
 
-def not_(validation_func,  # type: ValidationFuncs
+def not_(validation_func,  # type: CheckerCallable
          catch_all=False   # type: bool
          ):
-    # type: (...) -> Callable
+    # type: (...) -> CheckerCallable
     """
     Generates the inverse of the provided validation functions: when the validator returns `False` or raises a
     `Failure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
@@ -289,17 +185,13 @@ def not_(validation_func,  # type: ValidationFuncs
     (`catch_all=False`). To change this behaviour you can turn the `catch_all` parameter to `True`, in which case all
     exceptions will be caught instead of just `Failure`s.
 
-    Note that you may use `not_all(<validation_functions_list>)` as a shortcut for
-    `not_(and_(<validation_functions_list>))`
+    Note that the argument is a **single** callable. You may use `not_all(<validation_functions_list>)` as a shortcut for
+    `not_(and_(<validation_functions_list>))` to support several validation functions in the 'not'.
 
-    :param validation_func: the base validation function. A callable, a tuple(callable, help_msg_str),
-    a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
-    :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
-    a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
-    'ok' result
+    :param validation_func: the base validation function. A callable.
+    :param catch_all: an optional boolean flag. By default, only `Failure` error types are silently caught and turned
+        into a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
+        'ok' result
     :return:
     """
 
@@ -342,14 +234,15 @@ def or_(*validation_func  # type: ValidationFuncs
     about all validation results.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :return:
     """
 
-    validation_func = _process_validation_function_s(list(validation_func), auto_and_wrapper=False)
+    validation_func = _make_checker_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validator case
@@ -390,14 +283,15 @@ def xor_(*validation_func  # type: ValidationFuncs
     together with details about the various validation results.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :return:
     """
 
-    validation_func = _process_validation_function_s(list(validation_func), auto_and_wrapper=False)
+    validation_func = _make_checker_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validation function case
@@ -447,9 +341,10 @@ def not_all(*validation_func,  # type: ValidationFuncs
     An alias for not_(and_(validators)).
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-        are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
         a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
@@ -486,21 +381,25 @@ def failure_raiser(*validation_func,   # type: ValidationFuncs
     raiser, raising a subclass of `Failure` in case of failure (either not returning `True` or raising an exception)
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :param failure_type: a subclass of `WrappingFailure` that should be raised in case of failure
-    :param help_msg: a string help message for the raised `WrappingFailure`. Optional (default = WrappingFailure with
-    no help message).
-    :param kw_context_args
+    :param help_msg: an optional string help message for the raised `WrappingFailure` or <failure_type>. If `None`
+        (default) the default `help_msg` from the `WrappingFailure` or <failure_type> will be used.
+    :param kw_context_args:
     :return:
     """
     failure_type, help_msg = pop_kwargs(kwargs, [('failure_type', None), ('help_msg', None)], allow_others=True)
     # the rest of keyword arguments is used as context.
     kw_context_args = kwargs
 
-    main_func = _process_validation_function_s(list(validation_func))
+    # create a single validation function from the possibly several provided
+    main_func = and_(*validation_func)
+
+    # finally create the failure raiser
     return _failure_raiser(main_func, failure_type=failure_type,  help_msg=help_msg, **kw_context_args)
 
 
@@ -513,13 +412,14 @@ def skip_on_none(*validation_func  # type: ValidationFuncs
     are not validated and the code continues executing.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :return:
     """
-    validation_func = _process_validation_function_s(list(validation_func))
+    validation_func = and_(*validation_func)
     return _none_accepter(validation_func)
 
 
@@ -532,13 +432,14 @@ def fail_on_none(*validation_func  # type: ValidationFuncs
     are not validated and instead a `ValueIsNone` failure is raised.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :return:
     """
-    validation_func = _process_validation_function_s(list(validation_func))
+    validation_func = and_(*validation_func)
     return _none_rejecter(validation_func)
 
 

@@ -19,7 +19,7 @@ except ImportError:
 from valid8.utils_string import end_with_dot
 from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
     HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_
-from valid8.composition import _process_validation_function_s, pop_kwargs
+from valid8.composition import and_, pop_kwargs
 
 
 class NonePolicy(object):
@@ -449,10 +449,11 @@ class Validator(object):
         `None` values. See `NonePolicy` for details about the possible options.
 
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-            tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested
-            lists are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-            `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used
-            instead of callables, they will be transformed to functions automatically.
+            tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+            or a list of several such elements.
+            Tuples indicate an implicit `_failure_raiser`.
+            [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+            of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
             ValidationError will be raised with the provided help_msg
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
@@ -483,7 +484,7 @@ class Validator(object):
         self.kw_context_args = kw_context_args
 
         # replace validation_func lists with explicit 'and_' if needed, and tuples with _failure_raiser()
-        main_val_func = _process_validation_function_s(list(validation_func))
+        main_val_func = and_(*validation_func)
 
         # finally wrap in a none handler according to the policy
         self.main_function = _add_none_handler(main_val_func, none_policy=self.none_policy)
@@ -686,9 +687,10 @@ def assert_valid(name,              # type: str
     Note: this is a friendly alias for `_validator(base_validator_s)(value)`
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-        tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-        are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-        `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param name: the name of the variable to validate. It will be used in error messages
     :param value: the value to validate
@@ -715,7 +717,7 @@ def assert_valid(name,              # type: str
 # Python 3+: load the 'more explicit api'
 if use_typing:
     new_sig = """(value, 
-                  *validation_func: Union[Callable, List[Callable]], 
+                  *validation_func: ValidationFuncs, 
                   none_policy: int=None):"""
 else:
     new_sig = None
@@ -723,7 +725,7 @@ else:
 
 @with_signature(new_sig)
 def is_valid(value,
-             *validation_func,  # type: Union[Callable, List[Callable]]
+             *validation_func,  # type: ValidationFuncs
              **kwargs
              ):
     # type: (...) -> bool
@@ -742,15 +744,16 @@ def is_valid(value,
     Note: this is a friendly alias for `return _validator(validator_func, return_bool=True)(value)`
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
+        or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
+        of callables, they will be transformed to functions automatically.
     :param value: the value to validate
     :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
-    Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
-    the same validation process. Note that errors raised by NonePolicy.FAIL will be caught and transformed into a
-    returned value of False
+        Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
+        the same validation process. Note that errors raised by NonePolicy.FAIL will be caught and transformed into a
+        returned value of False
     :return: True if validation was a success, False otherwise
     """
     none_policy = pop_kwargs(kwargs, [('none_policy', None)])

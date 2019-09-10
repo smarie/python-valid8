@@ -1,23 +1,27 @@
 import pytest
 
-from valid8.composition import _process_validation_function_s, or_, AllValidatorsFailed, xor_, XorTooManySuccess, and_
-from valid8 import not_, is_even, gt, AtLeastOneFailed, not_all, is_multiple_of, DidNotFail, Failure, IsNotEven
+from valid8.composition import _make_checker_callables, or_, AllValidatorsFailed, xor_, XorTooManySuccess, and_
+from valid8 import not_, is_even, gt, AtLeastOneFailed, not_all, is_multiple_of, DidNotFail
 
 
 def test_empty_validators_list():
     """ Validates that an empty list of validators leads to a ValueError """
 
     with pytest.raises(ValueError) as exc_info:
-        _process_validation_function_s([])
+        _make_checker_callables([])
+
+
+def test_either_single_list_or_several_items():
+    """ Validates that passing two lists can not work"""
+
+    with pytest.raises(ValueError) as exc_info:
+        _make_checker_callables([is_even, gt(5)], [gt(5)])
 
 
 def test_list_implicit_and():
     """ Asserts that a list of validators leads to a 'and_' and behaves correctly """
-    main = _process_validation_function_s([is_even, gt(1)])
-
-    assert main(2) is True
-    with pytest.raises(AtLeastOneFailed):
-        main(3)
+    processed = _make_checker_callables([is_even, gt(1)])
+    assert len(processed) == 2
 
 
 def test_not_not_all():
@@ -59,6 +63,10 @@ def test_validate_or():
 
     # empty list error
     with pytest.raises(ValueError):
+        or_()
+
+    # empty list error 2
+    with pytest.raises(ValueError):
         or_([])
 
     # single element simplification
@@ -85,6 +93,10 @@ def test_validate_xor():
 
     # empty list error
     with pytest.raises(ValueError):
+        xor_()
+
+    # empty list error 2
+    with pytest.raises(ValueError):
         xor_([])
 
     # single element simplification
@@ -109,12 +121,12 @@ def test_validate_and():
 
     # empty list error
     with pytest.raises(ValueError):
-        and_([])
+        and_()
 
     # single element simplification
     assert and_([is_even]) == is_even
 
-    # list with nested list (implicit and_)
+    # nominal
     a=and_(is_even, gt(1))
 
     # -- check that the validation works

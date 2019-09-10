@@ -3,7 +3,7 @@ try:  # python 3.5+
 except ImportError:
     pass
 
-from valid8.composition import _process_validation_function_s
+from valid8.composition import and_
 from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_name
 
 
@@ -285,14 +285,14 @@ def on_all_(*validation_func):
     on_each_.
 
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
-    tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. Nested lists
-    are supported and indicate an implicit `and_` (such as the main list). Tuples indicate an implicit
-    `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
-    of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str), a tuple(callable, failure_type), a tuple(callable, help_msg, failure_type)
+        or a list of several such elements. Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables,
+        they will be transformed to functions automatically.
     :return:
     """
     # create the validation functions
-    validation_function_func = _process_validation_function_s(list(validation_func))
+    validation_function_func = and_(*validation_func)
 
     def on_all_val(x):
         # validate all elements in x in turn
@@ -325,16 +325,16 @@ def on_each_(*validation_functions_collection):
     on_all_.
 
     :param validation_functions_collection: a sequence of (base validation function or list of base validation functions
-    to use).
-    A base validation function may be a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or
-    a list of several such elements. Nested lists are supported and indicate an implicit `and_` (such as the main list).
-    Tuples indicate an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/)
-    expressions can be used instead of callables, they will be transformed to functions automatically.
+        to use).
+        A base validation function may be a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
+        tuple(callable, help_msg_str, failure_type) or a list of several such elements. Tuples indicate an implicit
+        `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables,
+        they will be transformed to functions automatically.
     :return:
     """
     # create a tuple of validation functions.
-    validation_function_funcs = tuple(_process_validation_function_s(validation_func)
-                                      for validation_func in validation_functions_collection)
+    validation_function_funcs = tuple(and_(validation_func) for validation_func in validation_functions_collection)
 
     # generate a validation function based on the tuple of validation_functions lists
     def on_each_val(x  # type: Tuple

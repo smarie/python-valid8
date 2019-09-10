@@ -416,21 +416,16 @@ def _failure_raiser(validation_callable,   # type: Callable
                     **kw_context_args):
     # type: (...) -> Callable
     """
-    Wraps the provided validation function so that in case of failure it raises the given failure_type or a WrappingFailure
-    with the given help message.
+    Wraps the provided validation function so that in case of failure it raises the given `failure_type` or a
+    `WrappingFailure` with the given help message.
 
     :param validation_callable:
     :param failure_type: an optional subclass of `WrappingFailure` that should be raised in case of failure, instead of
-    `WrappingFailure`.
-    :param help_msg: an optional string help message for the raised `WrappingFailure` (if no failure_type is provided)
+        `WrappingFailure`.
+    :param help_msg: an optional string help message for the raised failure.
     :param kw_context_args: optional context arguments for the custom failure message
     :return:
     """
-
-    # check failure type
-    if failure_type is not None and help_msg is not None:
-        raise ValueError('Only one of failure_type and help_msg can be set at the same time')
-
     # convert mini-lambdas to functions if needed
     validation_callable = as_function(validation_callable)
 

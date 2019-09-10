@@ -176,9 +176,10 @@ def validate(name,                   # type: str
     :param max_len: an optional maximum length
     :param custom: a custom base validation function or list of base validation functions to use. This is the same
         syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
-        or a list of several such elements. Nested lists are supported and indicate an implicit `and_`. Tuples indicate
-        an implicit `_failure_raiser`. [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be
-        used instead of callables, they will be transformed to functions automatically.
+        tuple(callable, help_msg_str, failure_type) or a list of several such elements.
+        Tuples indicate an implicit `_failure_raiser`.
+        [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
+        will be transformed to functions automatically.
     :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
         `ValidationError` will be raised with the provided `help_msg`
     :param help_msg: an optional help message to be used in the raised error in case of validation failure.
