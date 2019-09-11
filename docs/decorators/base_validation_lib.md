@@ -1,6 +1,6 @@
 # Base validation functions library
 
-Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](./usage) for details.
+Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](../usage.md) for details.
 
 A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal
 
@@ -106,9 +106,9 @@ Validates that x is odd (`x % 2 != 0`).
 
 'Maximum length' validation function generator. Returns a validation function to check that `len(x) <= max_length`.
 
-### length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
+### length_between(min_len, max_len)
 
-'Is length between' validation_function generator. Returns a validation_function to check that `min_len <= len(x) <= max_len (default)`. `open_right` and `open_left` flags allow to transform each side into strict mode. For example setting `open_left=True` will enforce `min_len < len(x) <= max_len`.
+'Is length between' validation_function generator. Returns a validation_function to check that `min_len <= len(x) <= max_len (default)`.
 
 ### is_in(allowed_values)
 
