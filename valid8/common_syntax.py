@@ -73,7 +73,7 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
 
     If `vf_definition` is a single <validation_func> callable, it is returned directly (no wrapping)
 
-    >>> vf = lambda x: x + 1 == 0
+    >>> def vf(x): return x + 1 == 0
     >>> assert _make_validation_func_callable(vf) is vf
 
     If `vf_definition` is a tuple such as (<validation_func>, <err_msg>), (<validation_func>, <failure_type>),
@@ -82,11 +82,10 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
     >>> class MyFailure(WrappingFailure):
     ...     pass
     >>> vf_with_details = _make_validation_func_callable((vf, 'blah', MyFailure))
-    >>> vf_with_details('hello')                                                     # doctest: +NORMALIZE_WHITESPACE
+    >>> vf_with_details('hello')
     Traceback (most recent call last):
     ...
-    common_syntax.MyFailure: blah. Function [<lambda>] raised [TypeError: can only concatenate str (not "int") to str]
-        for value 'hello'.
+    MyFailure: blah. Function [vf] raised [TypeError: can...
 
     Notes:
 
@@ -189,11 +188,10 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
     >>> several_vfs = _make_validation_func_callables([is_big, (is_minus_1, 'not minus 1!', MyFailure)])
     >>> assert len(several_vfs) == 2
     >>> assert several_vfs[0] is is_big
-    >>> several_vfs[1]('hello')      # doctest: +NORMALIZE_WHITESPACE
+    >>> several_vfs[1]('hello')
     Traceback (most recent call last):
     ...
-    common_syntax.MyFailure: not minus 1!. Function [is_minus_1] raised
-       [TypeError: can only concatenate str (not "int") to str] for value 'hello'.
+    MyFailure: not minus 1!. Function [is_minus_1] raised [TypeError: can...
 
     If a single `vf_definition` is provided AND it is a non-tuple iterable (typically a list),
     `_make_validation_func_callables(vf_definition)` is equivalent to `_make_validation_func_callables(*vf_definition)`
@@ -208,10 +206,10 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
 
     >>> vfs = _make_validation_func_callables({'x should be big': is_big,
     ...                                        'x should be minus 1': (is_minus_1, MyFailure)})
-    >>> vfs[0](2)                                                                    # doctest: +NORMALIZE_WHITESPACE
+    >>> vfs[0](2)
     Traceback (most recent call last):
     ...
-    valid8.base.WrappingFailure: x should be big. Function [is_big] returned [False] for value 2.
+    WrappingFailure: x should be big. Function [is_big] returned [False] for value 2.
 
     :param vf_definition: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
