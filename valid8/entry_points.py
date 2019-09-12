@@ -458,7 +458,7 @@ class Validator(object):
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
             or a list of several such elements.
-            Tuples indicate an implicit `_failure_raiser`.
+            Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -490,7 +490,7 @@ class Validator(object):
 
         self.kw_context_args = kw_context_args
 
-        # replace validation_func lists with explicit 'and_' if needed, and tuples with _failure_raiser()
+        # replace validation_func lists with explicit 'and_' if needed, and tuples with failure_raiser()
         main_val_func = and_(*validation_func)
 
         # finally wrap in a none handler according to the policy
@@ -696,7 +696,7 @@ def assert_valid(name,              # type: str
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param name: the name of the variable to validate. It will be used in error messages
@@ -753,7 +753,7 @@ def is_valid(value,
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param value: the value to validate

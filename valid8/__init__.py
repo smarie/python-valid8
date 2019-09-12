@@ -1,8 +1,8 @@
 from valid8.utils_typing import Boolean, is_pep484_nonable
 
-from valid8.base import Failure, WrappingFailure
+from valid8.base import Failure, WrappingFailure, failure_raiser
 from valid8.composition import CompositionFailure, AtLeastOneFailed, and_, DidNotFail, not_, AllValidatorsFailed, or_, \
-    XorTooManySuccess, xor_, not_all, failure_raiser, fail_on_none, skip_on_none
+    XorTooManySuccess, xor_, not_all, fail_on_none, skip_on_none
 
 from valid8.entry_points import NonePolicy, NoneArgPolicy, ValidationError, Validator, assert_valid, is_valid
 from valid8.entry_points_annotations import InvalidNameError, InputValidationError, InputValidator, \
@@ -33,10 +33,10 @@ __all__ = [
     # -- utils_typing
     'Boolean', 'is_pep484_nonable',
     # -- base
-    'Failure', 'WrappingFailure',
+    'Failure', 'WrappingFailure', 'failure_raiser',
     # -- composition
     'CompositionFailure', 'AtLeastOneFailed', 'and_', 'DidNotFail', 'not_', 'AllValidatorsFailed', 'or_',
-    'XorTooManySuccess', 'xor_', 'not_all', 'failure_raiser', 'fail_on_none', 'skip_on_none',
+    'XorTooManySuccess', 'xor_', 'not_all', 'fail_on_none', 'skip_on_none',
     # -- entry_points
     'NonePolicy', 'NoneArgPolicy', 'ValidationError', 'Validator', 'assert_valid', 'is_valid',
     # -- entry_points_annotations

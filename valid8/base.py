@@ -11,6 +11,20 @@ try:
         from typing import Type
     except ImportError:
         pass
+    else:
+        # 1. the lowest-level user or 3d party-provided validation functions
+        ValidationCallable = Callable[[Any], Any]
+        try:
+            # noinspection PyUnresolvedReferences
+            from mini_lambda import y
+            ValidationCallableOrLambda = Union[ValidationCallable, type(y)]
+            """A base validation function is a callable with signature (val), returning `True` or `None` in case of 
+            success. Mini-lambda expressions are supported too."""
+        except ImportError:
+            ValidationCallableOrLambda = ValidationCallable
+            """A base validation function is a callable with signature (val), returning `True` or `None` in case of 
+            success"""
+
 except ImportError:
     pass
 
@@ -66,7 +80,7 @@ def should_be_hidden_as_cause(exc):
     return isinstance(exc, (HasWrongType, IsWrongType))
 
 
-def get_callable_name(validation_callable  # type: Callable
+def get_callable_name(validation_callable  # type: ValidationCallable
                       ):
     # type: (...) -> str
     """
@@ -78,7 +92,7 @@ def get_callable_name(validation_callable  # type: Callable
     return validation_callable.__name__ if hasattr(validation_callable, '__name__') else str(validation_callable)
 
 
-def get_callable_names(validation_callables  # type: Sequence[Callable]
+def get_callable_names(validation_callables  # type: Iterable[ValidationCallable]
                        ):
     # type: (...) -> str
     return ', '.join([get_callable_name(val) for val in validation_callables])
@@ -348,7 +362,7 @@ class WrappingFailure(Failure):
     """
 
     def __init__(self,
-                 wrapped_func,              # type: Callable
+                 wrapped_func,              # type: ValidationCallable
                  wrong_value,               # type: Any
                  validation_outcome=False,  # type: Any
                  help_msg=None,             # type: str
@@ -414,14 +428,16 @@ class WrappingFailure(Failure):
         return context_dict
 
 
-def _failure_raiser(validation_callable,   # type: Callable
-                    failure_type=None,     # type: Type[WrappingFailure]
-                    help_msg=None,         # type: str
-                    **kw_context_args):
-    # type: (...) -> Callable
+def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
+                   failure_type=None,     # type: Type[WrappingFailure]
+                   help_msg=None,         # type: str
+                   **kw_context_args):
+    # type: (...) -> ValidationCallable
     """
     Wraps the provided validation function so that in case of failure it raises the given `failure_type` or a
     `WrappingFailure` with the given help message.
+
+    mini-lambda functions are automatically transformed to functions.
 
     :param validation_callable:
     :param failure_type: an optional subclass of `WrappingFailure` that should be raised in case of failure, instead of
@@ -480,15 +496,18 @@ class ValueIsNone(Failure, TypeError):
     help_msg = "The value must be non-None"
 
 
-def _none_accepter(validation_callable  # type: Callable
+def _none_accepter(validation_callable  # type: ValidationCallable
                    ):
-    # type: (...) -> Callable
+    # type: (...) -> ValidationCallable
     """
     Wraps the given validation callable to accept None values silently. When a None value is received by the wrapper,
     it is not passed to the validation_callable and instead this function will return True. When any other value is
     received the validation_callable is called as usual.
 
     Note: the created wrapper has the same same than the validation callable for more user-friendly error messages
+
+    Important: mini-lambda expressions are NOT transformed into function. Indeed this function is internal only
+    and is always called after `_make_validation_funcs`
 
     :param validation_callable:
     :return:
@@ -511,13 +530,16 @@ def _none_accepter(validation_callable  # type: Callable
     return accept_none
 
 
-def _none_rejecter(validation_callable  # type: Callable
+def _none_rejecter(validation_callable  # type: ValidationCallable
                    ):
-    # type: (...) -> Callable
+    # type: (...) -> ValidationCallable
     """
     Wraps the given validation callable to reject None values. When a None value is received by the wrapper,
-    it is not passed to the validation_callable and instead this function will raise a WrappingFailure. When any other value is
-    received the validation_callable is called as usual.
+    it is not passed to the validation_callable and instead this function will raise a WrappingFailure. When any other
+    value is received the validation_callable is called as usual.
+
+    Important: mini-lambda expressions are NOT transformed into function. Indeed this function is internal only
+    and is always called after `_make_validation_funcs`
 
     :param validation_callable:
     :return:

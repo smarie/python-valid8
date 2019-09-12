@@ -183,7 +183,7 @@ def validate(name,                   # type: str
     :param custom: a custom base validation function or list of base validation functions to use. This is the same
         syntax than for valid8 decorators. A callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type),
         tuple(callable, help_msg_str, failure_type) or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
         will be transformed to functions automatically.
     :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a

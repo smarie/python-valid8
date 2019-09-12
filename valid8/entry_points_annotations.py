@@ -123,7 +123,7 @@ class FuncValidator(Validator):
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
             or a list of several such elements.
-            Tuples indicate an implicit `_failure_raiser`.
+            Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -174,7 +174,7 @@ class InputValidator(FuncValidator):
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
             or a list of several such elements.
-            Tuples indicate an implicit `_failure_raiser`.
+            Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -215,7 +215,7 @@ class OutputValidator(FuncValidator):
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
             or a list of several such elements.
-            Tuples indicate an implicit `_failure_raiser`.
+            Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -294,7 +294,7 @@ class ClassFieldValidator(Validator):
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
             or a list of several such elements.
-            Tuples indicate an implicit `_failure_raiser`.
+            Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -370,7 +370,7 @@ def validate_field(cls,
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -431,7 +431,7 @@ def validate_io(f=DECORATED,
     :param kw_validation_funcs: keyword arguments: for each of the function's input names, the validation function or
         list of validation functions to use. A validation function may be a callable, a tuple(callable, help_msg_str),
         a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type) or a list of several such
-        elements. Tuples indicate an implicit `_failure_raiser`.
+        elements. Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they
         will be transformed to functions automatically.
     :return: the decorated function, that will perform input validation before executing the function's code everytime
@@ -470,7 +470,7 @@ def validate_arg(f,
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -509,7 +509,7 @@ def validate_out(*validation_func,  # type: ValidationFuncs
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -558,7 +558,7 @@ def decorate_cls_with_validation(cls,
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
@@ -751,7 +751,7 @@ def decorate_with_validation(func,
     :param validation_func: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
         or a list of several such elements.
-        Tuples indicate an implicit `_failure_raiser`.
+        Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
     :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
