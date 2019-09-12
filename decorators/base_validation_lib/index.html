@@ -450,8 +450,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" class="md-nav__link">
-    length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
+  <a href="#length_betweenmin_len-max_len" class="md-nav__link">
+    length_between(min_len, max_len)
   </a>
   
 </li>
@@ -836,8 +836,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" class="md-nav__link">
-    length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)
+  <a href="#length_betweenmin_len-max_len" class="md-nav__link">
+    length_between(min_len, max_len)
   </a>
   
 </li>
@@ -909,7 +909,7 @@
                 
                 
                 <h1 id="base-validation-functions-library">Base validation functions library<a class="headerlink" href="#base-validation-functions-library" title="Permanent link">&para;</a></h1>
-<p>Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="./usage">Usage</a> for details.</p>
+<p>Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="../../usage/">Usage</a> for details.</p>
 <p>A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal</p>
 <div class="codehilite"><pre><span></span><span class="c1"># get the list of submodules containing base validation functions</span>
 <span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="p">)</span>
@@ -970,8 +970,8 @@
 <p>'Minimum length' validation function generator. Returns a validation function to check that <code>len(x) &gt;= min_length</code>.</p>
 <h3 id="maxlenmax_length">maxlen(max_length)<a class="headerlink" href="#maxlenmax_length" title="Permanent link">&para;</a></h3>
 <p>'Maximum length' validation function generator. Returns a validation function to check that <code>len(x) &lt;= max_length</code>.</p>
-<h3 id="length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse">length_between(min_len, max_len, open_left:bool=False, open_right:bool=False)<a class="headerlink" href="#length_betweenmin_len-max_len-open_leftboolfalse-open_rightboolfalse" title="Permanent link">&para;</a></h3>
-<p>'Is length between' validation_function generator. Returns a validation_function to check that <code>min_len &lt;= len(x) &lt;= max_len (default)</code>. <code>open_right</code> and <code>open_left</code> flags allow to transform each side into strict mode. For example setting <code>open_left=True</code> will enforce <code>min_len &lt; len(x) &lt;= max_len</code>.</p>
+<h3 id="length_betweenmin_len-max_len">length_between(min_len, max_len)<a class="headerlink" href="#length_betweenmin_len-max_len" title="Permanent link">&para;</a></h3>
+<p>'Is length between' validation_function generator. Returns a validation_function to check that <code>min_len &lt;= len(x) &lt;= max_len (default)</code>.</p>
 <h3 id="is_inallowed_values">is_in(allowed_values)<a class="headerlink" href="#is_inallowed_values" title="Permanent link">&para;</a></h3>
 <p>'Values in' validation function generator. Returns a validation function to check that x is in the provided set <code>allowed_values</code>.</p>
 <h3 id="is_subsetreference_set">is_subset(reference_set)<a class="headerlink" href="#is_subsetreference_set" title="Permanent link">&para;</a></h3>

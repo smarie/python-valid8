@@ -840,7 +840,11 @@
 <p><a href="https://pypi.python.org/pypi/valid8/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/valid8.svg" /></a> <a href="https://travis-ci.org/smarie/python-valid8"><img alt="Build Status" src="https://travis-ci.org/smarie/python-valid8.svg?branch=master" /></a> <a href="https://smarie.github.io/python-valid8/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-valid8/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-valid8"><img alt="codecov" src="https://codecov.io/gh/smarie/python-valid8/branch/master/graph/badge.svg" /></a></p>
 <p><a href="https://smarie.github.io/python-valid8/"><img alt="Documentation" src="https://img.shields.io/badge/doc-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/valid8/"><img alt="PyPI" src="https://img.shields.io/pypi/v/valid8.svg" /></a> <a href="https://pepy.tech/project/valid8"><img alt="Downloads" src="https://pepy.tech/badge/valid8" /></a> <a href="https://pepy.tech/project/valid8"><img alt="Downloads per week" src="https://pepy.tech/badge/valid8/week" /></a> <a href="https://github.com/smarie/python-valid8/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/smarie/python-valid8.svg" /></a></p>
 <p><em>"valid8ing is not a crime" ;-)</em></p>
-<p><code>valid8</code> provides user-friendly tools for </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As of <code>valid8</code> version <code>5.0.0</code> all functions in the built-in validation library are not exposed anymore at the package root, in order to speed up imports. So instead of <code>from valid8 import is_even</code> you should now do <code>from valid8.validation_lib import is_even</code>.</p>
+</div>
+<p><code>valid8</code> provides user-friendly tools for 3 kind of "entry points":</p>
 <ul>
 <li>general-purpose inline validation, </li>
 <li>function inputs/outputs validation </li>
