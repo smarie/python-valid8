@@ -106,7 +106,8 @@ class CompositionFailure(Failure):
             name = get_callable_name(validator)
             try:
                 res = validator(value)
-                if result_is_success(res):
+                # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+                if (res is None) or (res is True):
                     successes.append(name)
                 else:
                     failures[validator] = res
@@ -161,7 +162,8 @@ def and_(*validation_func  # type: ValidationFuncs
                 except Exception as e:
                     # one validator was unhappy > raise
                     raise AtLeastOneFailed(validation_funcs, x, cause=e)
-                if not result_is_success(res):
+                # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+                if (res is not None) and (res is not True):
                     # one validator was unhappy > raise
                     raise AtLeastOneFailed(validation_funcs, x)
 
@@ -201,7 +203,8 @@ def not_(validation_func,  # type: ValidationCallable
     def not_v_(x):
         try:
             res = validation_func(x)
-            if not result_is_success(res):  # inverse the result
+            # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+            if (res is not None) and (res is not True):  # inverse the result
                 return True
 
         except Failure:
@@ -255,7 +258,8 @@ def or_(*validation_func  # type: ValidationFuncs
                 # noinspection PyBroadException
                 try:
                     res = validator(x)
-                    if result_is_success(res):
+                    # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+                    if (res is None) or (res is True):
                         # we can return : one validator was happy
                         return True
                 except Exception:
@@ -305,7 +309,8 @@ def xor_(*validation_func  # type: ValidationFuncs
                 # noinspection PyBroadException
                 try:
                     res = val_func(x)
-                    if result_is_success(res):
+                    # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+                    if (res is None) or (res is True):
                         ok_validators.append(val_func)
                 except Exception:
                     pass

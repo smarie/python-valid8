@@ -304,7 +304,8 @@ def on_all_(*validation_func):
                 raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func,
                                             validation_outcome=e)
 
-            if not result_is_success(res):
+            # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+            if (res is not None) and (res is not True):
                 # one element of x was not valid > raise
                 # raise Failure('on_all_(' + str(validation_func) + '): failed validation for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
@@ -357,7 +358,8 @@ def on_each_(*validation_functions_collection):
                                                 wrapped_func=validation_function_func,
                                                 validation_outcome=e)
 
-                if not result_is_success(res):
+                # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+                if (res is not None) and (res is not True):
                     # one validation_function was unhappy > raise
                     raise InvalidItemInSequence(wrong_value=elt,
                                                 wrapped_func=validation_function_func,

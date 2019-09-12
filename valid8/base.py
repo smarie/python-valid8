@@ -115,7 +115,9 @@ def result_is_success(validation_result  # type: Any
     :param validation_result:
     :return:
     """
-    return validation_result in {None, True}
+    # WARNING: if you change this definition, do not forget to do a search on all occurences of `result_is_success` in
+    # the code base, and replace all inlined versions accordingly
+    return (validation_result is None) or (validation_result is True)
 
 
 def is_error_of_type(exc, ref_type):
@@ -465,7 +467,8 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
             # no need to raise from e since the __cause__ is already set in the constructor: we can safely commonalize
             res = e
 
-        if not result_is_success(res):
+        # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+        if (res is not None) and (res is not True):
             typ = failure_type or WrappingFailure
             exc = typ(wrapped_func=validation_callable, wrong_value=x, validation_outcome=res,
                       help_msg=help_msg, **kw_context_args)

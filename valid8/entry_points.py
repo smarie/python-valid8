@@ -568,7 +568,8 @@ class Validator(object):
             res = e
 
         # check the result
-        if not result_is_success(res):
+        # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+        if (res is not None) and (res is not True):
             raise_(self._create_validation_error(name, value, validation_outcome=res, error_type=error_type,
                                                  help_msg=help_msg, **kw_context_args))
 
@@ -654,7 +655,8 @@ class Validator(object):
             res = self.main_function(value)
 
             # return a boolean indicating if success or failure
-            return result_is_success(res)
+            # return result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+            return (res is None) or (res is True)
 
         except Exception:
             # caught exception means failure > return False
