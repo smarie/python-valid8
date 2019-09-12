@@ -4,8 +4,10 @@ from sys import version_info
 from valid8.base import _failure_raiser, WrappingFailure, as_function
 
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Callable, Union, List, Tuple, Iterable, Mapping, Any
     try:  # python 3.5.3-
+        # noinspection PyUnresolvedReferences
         from typing import Type
     except ImportError:
         use_typing = False
@@ -27,7 +29,7 @@ try:  # python 3.5+
                                          Tuple[ValidationCallableOrLambda, str],
                                          Tuple[ValidationCallableOrLambda, Type[WrappingFailure]],
                                          Tuple[ValidationCallableOrLambda, str, Type[WrappingFailure]]
-        ]
+                                         ]
         """Defines a checker from a base checker function together with optional error message and failure type 
         (in which case a failure raiser is created to wrap that function)"""
 
@@ -38,10 +40,10 @@ try:  # python 3.5+
         OneOrSeveralVFDefinitions = Union[ValidationFuncDefinition,
                                           Iterable[ValidationFuncDefinition],
                                           Mapping[VFDefinitionElement, Union[VFDefinitionElement,
-                                                                                  Tuple[VFDefinitionElement, ...]]]]
+                                                                             Tuple[VFDefinitionElement, ...]]]]
         """Several validators can be provided as a singleton, iterable, or dict-like. In that case the value can be a 
-        single variable or a tuple, and it will be combined with the key to form the validator. So you can use any of the 
-        elements defining a validators as the key."""
+        single variable or a tuple, and it will be combined with the key to form the validator. So you can use any of 
+        the elements defining a validators as the key."""
 
         # shortcut name used everywhere. Less explicit
         ValidationFuncs = OneOrSeveralVFDefinitions
@@ -121,10 +123,11 @@ def _make_validation_func_callable(checker_def  # type: ValidationFuncDefinition
         # check help msg and failure type
         if failure_type is not None:
             failure_type_ok = False
+            # noinspection PyBroadException
             try:
                 if issubclass(failure_type, WrappingFailure):
                     failure_type_ok = True
-            except:
+            except:  # noqa: E722
                 pass
         else:
             failure_type_ok = True

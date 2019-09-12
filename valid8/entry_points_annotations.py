@@ -4,12 +4,15 @@ from inspect import ismethod, isclass
 from decopatch import class_decorator, function_decorator, DECORATED
 
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Callable, Any, List, Union
     try:  # python 3.5.3-
+        # noinspection PyUnresolvedReferences
         from typing import Type
     except ImportError:
         use_typing = False
     else:
+        # noinspection PyUnresolvedReferences
         from valid8.composition import ValidationFuncs
         use_typing = sys.version_info > (3, 0)
 except ImportError:
@@ -596,6 +599,7 @@ def decorate_cls_with_validation(cls,
                 nb_args = 2
             elif ismethod(var.__set__):
                 # bound method: normal. Let's access to the underlying function
+                # noinspection PyUnresolvedReferences
                 func = var.__set__.__func__
                 nb_args = 3
             else:
@@ -640,7 +644,7 @@ def decorate_cls_with_validation(cls,
                 var.__class__.__set__ = new_setter
 
         elif (hasattr(var, '__get__') and callable(var.__get__)) \
-            or (hasattr(var, '__delete__') and callable(var.__delete__)):
+                or (hasattr(var, '__delete__') and callable(var.__delete__)):
             # this is a descriptor but it does not have any setter method: impossible to validate
             raise ValueError("Class field '{}' is a valid class descriptor for class '{}' but it does not implement "
                              "__set__ so it is not possible to add validation to it. See "
@@ -663,6 +667,7 @@ def decorate_cls_with_validation(cls,
             if sys.version_info < (3, 0):
                 try:
                     # python 2 - we have to access the inner `im_func`
+                    # noinspection PyUnresolvedReferences
                     init_func = cls.__init__.im_func
                 except AttributeError:
                     pass
@@ -893,7 +898,7 @@ def _create_function_validator(validated_func,    # type: Callable
 
 def decorate_with_validators(func,
                              func_signature=None,  # type: Signature
-                             **validators          # type: Validator
+                             **validators          # type: Union[Validator, List[Validator]]
                              ):
     """
     Utility method to decorate the provided function with the provided input and output Validator objects. Since this
@@ -956,14 +961,16 @@ def decorate_with_validators(func,
 
             # (c) validate output if needed
             if _OUT_KEY in func.__validators__:
-                for validator in func.__validators__[_OUT_KEY]:
-                    validator.assert_valid(res)
+                for _v in func.__validators__[_OUT_KEY]:
+                    # noinspection PyArgumentList
+                    _v.assert_valid(res)  # indeed OutputValidator's assert_valid signature has one less argument
 
             return res
 
         return validating_wrapper
 
 
+# noinspection PyUnusedLocal
 def _assert_input_is_valid(input_value,     # type: Any
                            validators,      # type: List[InputValidator]
                            validated_func,  # type: Callable
@@ -975,8 +982,8 @@ def _assert_input_is_valid(input_value,     # type: Any
     correspond to `apply_on_each_func_args`'s behaviour and should therefore not be changed.
 
     :param input_value: the value to validate
-    :param validator: the Validator object that will be applied on input_value_to_validate
-    :param validated_func: the function for which this validation is performed. This is not used since the Validator
+    :param validators: the Validators that will be applied on input_value_to_validate
+    :param validated_func: the function for which this validation is performed. This is not used, since the Validator
         knows it already, but we should not change the signature here.
     :param input_name: the name of the function input that is being validated
     :return: Nothing

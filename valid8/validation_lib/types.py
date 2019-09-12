@@ -3,7 +3,7 @@ from valid8.base import Failure
 
 class HasWrongType(Failure, TypeError):
     """ Custom Failure raised by instance_of """
-    help_msg ="Value should be an instance of {ref_type}"
+    help_msg = "Value should be an instance of {ref_type}"
 
     def __init__(self,
                  wrong_value,
@@ -54,6 +54,7 @@ def instance_of(*args):
         if not isinstance(ref_type, set):
             # ref_type is a single type
             def instance_of_ref(x):
+                # noinspection PyTypeHints
                 if isinstance(x, ref_type):
                     return True
                 else:
@@ -61,13 +62,13 @@ def instance_of(*args):
         else:
             # ref_type is a set
             def instance_of_ref(x):
-                match = False
+                _match = False
                 # test against each of the provided types
-                for ref in ref_type:
-                    if isinstance(x, ref):
-                        match = True
+                for _ref in ref_type:
+                    if isinstance(x, _ref):
+                        _match = True
                         break
-                if match:
+                if _match:
                     return True
                 else:
                     raise HasWrongType(wrong_value=x, ref_type=ref_type,
@@ -130,6 +131,7 @@ def subclass_of(*args):
         ref_type = args[0]
         if not isinstance(ref_type, set):
             def subclass_of_ref(x):
+                # noinspection PyTypeHints
                 if issubclass(x, ref_type):
                     return True
                 else:
@@ -137,13 +139,13 @@ def subclass_of(*args):
         else:
             # ref_type is a set
             def subclass_of_ref(x):
-                match = False
+                _match = False
                 # test against each of the provided types
-                for ref in ref_type:
-                    if issubclass(x, ref):
-                        match = True
+                for _ref in ref_type:
+                    if issubclass(x, _ref):
+                        _match = True
                         break
-                if match:
+                if _match:
                     return True
                 else:
                     raise IsWrongType(wrong_value=x, ref_type=ref_type,

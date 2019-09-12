@@ -4,8 +4,10 @@ import re
 from copy import copy
 
 try:
-    from typing import Callable, Sequence, Any, Dict
+    # noinspection PyUnresolvedReferences
+    from typing import Callable, Iterable, Any, Dict, Union
     try:  # python 3.5.3-
+        # noinspection PyUnresolvedReferences
         from typing import Type
     except ImportError:
         pass
@@ -17,7 +19,8 @@ try:
     from mini_lambda import as_function
 except ImportError:
     try:
-        # mini lambda <= 2.0.1
+        # mini lambda <= 2.0.1 backwards compliance
+        # noinspection PyProtectedMember,PyUnresolvedReferences
         from mini_lambda.main import _LambdaExpression
 
         def as_function(f):
@@ -26,7 +29,7 @@ except ImportError:
             else:
                 return f
     except ImportError:
-        # otherwise this is identity
+        # no mini lambda: this is the identity function
         def as_function(f):
             return f
 
@@ -84,7 +87,8 @@ def get_callable_names(validation_callables  # type: Sequence[Callable]
 SUCCESS_CONDITIONS = 'in {None, True}'  # was used in some error messages
 
 
-def result_is_success(validation_result):
+def result_is_success(validation_result  # type: Any
+                      ):
     # type: (...) -> bool
     """
     Helper function to check if some results returned by a validation function mean success or failure.
@@ -178,7 +182,7 @@ class HelpMsgMixIn(object):
             # first format if needed
             try:
                 help_msg = self.help_msg
-                variables = re.findall("{\S+}", help_msg)
+                variables = re.findall("{\\S+}", help_msg)
                 for v in set(variables):
                     v = v[1:-1]
                     if v in context and len(str(context[v])) > self.__max_str_length_displayed__:

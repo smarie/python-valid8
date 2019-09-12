@@ -65,15 +65,16 @@ else:
         # Creating a new one and not modifying in-place for thread safety.
         new_arguments = []
 
+        # noinspection PyProtectedMember
         for name, param in bound_values._signature.parameters.items():
             try:
                 new_arguments.append((name, arguments[name]))
             except KeyError:
-                if param.default is not param._empty:
+                if param.default is not param.empty:
                     val = param.default
-                elif param.kind is param._VAR_POSITIONAL:
+                elif param.kind is param.VAR_POSITIONAL:
                     val = ()
-                elif param.kind is param._VAR_KEYWORD:
+                elif param.kind is param.VAR_KEYWORD:
                     val = {}
                 else:
                     # BoundArguments was likely created by bind_partial

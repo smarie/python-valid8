@@ -1,4 +1,5 @@
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Any
 except ImportError:
     pass

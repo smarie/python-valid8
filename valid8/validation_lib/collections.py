@@ -1,4 +1,5 @@
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Set, Tuple
 except ImportError:
     pass
@@ -300,13 +301,15 @@ def on_all_(*validation_func):
             try:
                 res = validation_function_func(x_elt)
             except Exception as e:
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=e)
+                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func,
+                                            validation_outcome=e)
 
             if not result_is_success(res):
                 # one element of x was not valid > raise
                 # raise Failure('on_all_(' + str(validation_func) + '): failed validation for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func, validation_outcome=res)
+                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func,
+                                            validation_outcome=res)
         return True
 
     on_all_val.__name__ = 'apply_<{}>_on_all_elts'.format(get_callable_name(validation_function_func))
@@ -356,9 +359,6 @@ def on_each_(*validation_functions_collection):
 
                 if not result_is_success(res):
                     # one validation_function was unhappy > raise
-                    # raise Failure('on_each_(' + str(validation_functions_collection) + '): _validation_function [' + str(idx)
-                    #               + '] (' + str(validation_functions_collection[idx]) + ') failed validation for '
-                    #                       'input ' + str(x[idx]))
                     raise InvalidItemInSequence(wrong_value=elt,
                                                 wrapped_func=validation_function_func,
                                                 validation_outcome=res)

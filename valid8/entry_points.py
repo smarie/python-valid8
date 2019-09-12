@@ -5,13 +5,18 @@ from makefun import with_signature
 from six import with_metaclass
 
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Callable, Any, List, Union
     try:  # python 3.5.3-
+        # noinspection PyUnresolvedReferences
         from typing import Type
     except ImportError:
         use_typing = False
     else:
-        from valid8.composition import ValidationFuncs
+        # noinspection PyUnresolvedReferences
+        from valid8.base import ValidationCallable
+        # noinspection PyUnresolvedReferences
+        from valid8.common_syntax import ValidationFuncs
         use_typing = sys.version_info > (3, 0)
 except ImportError:
     use_typing = False
@@ -78,10 +83,10 @@ def get_none_policy_text(none_policy,   # type: int
         raise ValueError('Invalid none_policy ' + str(none_policy))
 
 
-def _add_none_handler(validation_callable,  # type: Callable
+def _add_none_handler(validation_callable,  # type: ValidationCallable
                       none_policy           # type: int
                       ):
-    # type: (...) -> Callable
+    # type: (...) -> ValidationCallable
     """
     Adds a wrapper or nothing around the provided validation_callable, depending on the selected policy
 
@@ -179,7 +184,7 @@ class ValidationError(HelpMsgMixIn, RootException):
                         var_value,
                         validation_outcome=None,   # type: Any
                         help_msg=None,             # type: str
-                        append_details=True,       # type: bool
+                        # append_details=True,       # type: bool
                         **kw_context_args):
         """
         Creates an instance without using a Validator.
@@ -192,11 +197,11 @@ class ValidationError(HelpMsgMixIn, RootException):
         :param var_value:
         :param validation_outcome:
         :param help_msg:
-        :param append_details:
         :param kw_context_args:
         :return:
         """
         # create a dummy validator
+        # noinspection PyUnusedLocal
         def val_fun(x):
             pass
         val_fun.__name__ = validation_function_name
@@ -205,6 +210,7 @@ class ValidationError(HelpMsgMixIn, RootException):
         # create the exception
         # e = cls(validator, var_value, var_name, validation_outcome=validation_outcome, help_msg=help_msg,
         #         append_details=append_details, **kw_context_args)
+        # noinspection PyProtectedMember
         e = validator._create_validation_error(var_name, var_value, validation_outcome, error_type=cls,
                                                help_msg=help_msg, **kw_context_args)
         return e
@@ -290,11 +296,12 @@ class ValidationError(HelpMsgMixIn, RootException):
             prefix = 'Validation function [{val}] raised ' if self.display_prefix_for_exc_outcomes else ''
 
             # new: we now remove  "Root validator was [{validator}]", users can get it through e.validator
-            contents = ('Error validating {what}. ' + prefix + '{exception}: {details}')\
-                         .format(what=self.get_what_txt(),
-                                 val=self.validator.get_main_function_name(),
-                                 exception=type(self.validation_outcome).__name__,
-                                 details=end_with_dot(str(self.validation_outcome)))
+            contents = ('Error validating {what}. ' + prefix + '{exception}: {details}').format(
+                what=self.get_what_txt(),
+                val=self.validator.get_main_function_name(),
+                exception=type(self.validation_outcome).__name__,
+                details=end_with_dot(str(self.validation_outcome))
+            )
 
         else:
             contents = 'Error validating {what}: validation function [{val}] returned [{result}].' \
@@ -359,15 +366,15 @@ def add_base_type_dynamically(error_type, additional_type):
     :return:
     """
     # the new type created dynamically, with the same name
-    class new_error_type(with_metaclass(MetaReprForValidator, error_type, additional_type, object)):
+    class NewErrorType(with_metaclass(MetaReprForValidator, error_type, additional_type, object)):
         pass
 
-    new_error_type.__name__ = error_type.__name__ + '[' + additional_type.__name__ + ']'
+    NewErrorType.__name__ = error_type.__name__ + '[' + additional_type.__name__ + ']'
     if sys.version_info >= (3, 0):
-        new_error_type.__qualname__ = error_type.__qualname__ + '[' + additional_type.__qualname__+ ']'
-    new_error_type.__module__ = error_type.__module__
+        NewErrorType.__qualname__ = error_type.__qualname__ + '[' + additional_type.__qualname__ + ']'
+    NewErrorType.__module__ = error_type.__module__
 
-    return new_error_type
+    return NewErrorType
 
 
 # Python 3+: load the 'more explicit api'

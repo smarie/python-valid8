@@ -48,6 +48,7 @@ class Boolean(object):
 Boolean.register(bool)
 
 try:
+    # noinspection PyUnresolvedReferences
     import numpy as np
     Boolean.register(np.bool_)
 except ImportError:
@@ -102,7 +103,7 @@ try:
         :return:
         """
         # TODO rely on typing_inspect if there is an answer to https://github.com/ilevkivskyi/typing_inspect/issues/14
-        if typ is type(None):
+        if typ is type(None):  # noqa: E721
             return True
         elif is_typevar(typ) or is_union_type(typ):
             return any(is_pep484_nonable(tt) for tt in resolve_union_and_typevar(typ))
@@ -110,6 +111,7 @@ try:
             return False
 
 except ImportError:
+    # noinspection SpellCheckingInspection,PyUnusedLocal
     def is_pep484_nonable(typ):
         """
         When type hints do not exist, this method always return False

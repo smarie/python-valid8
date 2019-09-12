@@ -14,10 +14,12 @@ try:  # python 3.5+
     # noinspection PyUnresolvedReferences
     from typing import Any, Union, Set, Iterable, Callable, Container, Tuple
     try:  # python 3.5.3-
+        # noinspection PyUnresolvedReferences
         from typing import Type
     except ImportError:
         pass
     else:
+        # noinspection PyUnresolvedReferences
         from valid8.common_syntax import ValidationFuncs
 except ImportError:
     pass
@@ -40,6 +42,7 @@ def assert_instance_of(value,
     if not isinstance(value, allowed_types):
         try:
             # more than 1 ?
+            # noinspection PyStatementEffect
             allowed_types[1]
             raise HasWrongType(wrong_value=value, ref_type=allowed_types,
                                help_msg='Value should be an instance of any of {ref_type}')
@@ -69,6 +72,7 @@ def assert_subclass_of(typ,
     if not issubclass(typ, allowed_types):
         try:
             # more than 1 ?
+            # noinspection PyStatementEffect
             allowed_types[1]
             raise IsWrongType(wrong_value=typ, ref_type=allowed_types,
                               help_msg='Value should be a subclass of any of {ref_type}')
@@ -131,7 +135,7 @@ def validate(name,                   # type: str
              subclass_of=None,       # type: Union[Type, Tuple[Type, ...]]
              is_in=None,             # type: Container
              subset_of=None,         # type: Set
-             contains = None,        # type: Union[Any, Iterable]
+             contains=None,          # type: Union[Any, Iterable]
              superset_of=None,       # type: Set
              min_value=None,         # type: Any
              min_strict=False,       # type: bool
@@ -160,10 +164,10 @@ def validate(name,                   # type: str
     :param value: the value to check
     :param enforce_not_none: boolean, default True. Whether to enforce that `value` is not None.
     :param equals: an optional value to enforce.
-    :param instance_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
-        match is enough to succeed. If None, type will not be enforced
-    :param subclass_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
-        match is enough to succeed. If None, type will not be enforced
+    :param instance_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types:
+        one match is enough to succeed. If None, type will not be enforced
+    :param subclass_of: optional type(s) to enforce. If a tuple of types is provided it is considered alternate types:
+        one match is enough to succeed. If None, type will not be enforced
     :param is_in: an optional set of allowed values.
     :param subset_of: an optional superset for the variable
     :param contains: an optional value that the variable should contain (value in variable == True)
@@ -291,6 +295,7 @@ def validate(name,                   # type: str
                     raise TooLong(wrong_value=value, max_length=max_len)
 
     except Exception as e:
+        # noinspection PyProtectedMember
         err = _QUICK_VALIDATOR._create_validation_error(name, value, validation_outcome=e, error_type=error_type,
                                                         help_msg=help_msg, **kw_context_args)
         raise_(err)
@@ -334,7 +339,7 @@ class WrappingValidatorEye(object):
             super(WrappingValidatorEye, self).__setattr__('outcome', value)
 
 
-class _Dummy_Callable_(object):
+class _DummyCallable(object):
     """ A dummy callable whose name can be configured """
     def __init__(self, name):
         self.name = name
@@ -391,8 +396,8 @@ class validator(Validator):
         :param value: the value being validated
         :param instance_of: the type(s) to enforce. If a tuple of types is provided it is considered alternate types:
             one match is enough to succeed. If None, type will not be enforced
-        :param subclass_of: the type(s) to enforce. If a tuple of types is provided it is considered alternate types: one
-            match is enough to succeed. If None, type will not be enforced
+        :param subclass_of: the type(s) to enforce. If a tuple of types is provided it is considered alternate types:
+            one match is enough to succeed. If None, type will not be enforced
         :param error_type: a subclass of `ValidationError` to raise in case of validation failure. By default a
             `ValidationError` will be raised with the provided `help_msg`
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
@@ -406,9 +411,9 @@ class validator(Validator):
         if subclass_of is not None:
             assert_subclass_of(value, subclass_of)
 
-        validation_function = _Dummy_Callable_('<wrap_valid_contents>')
+        validation_function = _DummyCallable('<wrap_valid_contents>')
         super(validator, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
-                                         none_policy=NonePolicy.VALIDATE, **kw_context_args)
+                                        none_policy=NonePolicy.VALIDATE, **kw_context_args)
         self.name = name
         self.value = value
         self.eye = WrappingValidatorEye()
@@ -420,6 +425,7 @@ class validator(Validator):
         # stack = traceback.extract_stack()
         # self.src_file_path = stack[-2][0]
         # self.src_file_line_nb = stack[-2][1]
+        # noinspection PyProtectedMember
         entry_frame = sys._getframe(1)
         self.entry_file_path = entry_frame.f_code.co_filename
         self.entry_line_nb = entry_frame.f_lineno
@@ -437,6 +443,7 @@ class validator(Validator):
             # and where the exit happened
             # stack = traceback.extract_stack(limit=2)
             # exit_line_nb = stack[-2][1]
+            # noinspection PyProtectedMember
             exit_frame = sys._getframe(1)
             exit_file_path = exit_frame.f_code.co_filename
             exit_line_nb = exit_frame.f_lineno
@@ -450,7 +457,7 @@ class validator(Validator):
                     if self.entry_file_path.startswith('<'):
                         # interactive interpreter...
 
-                        # `inspect` does not work yet for interactive interpreters see https://bugs.python.org/issue12920
+                        # `inspect` doesnt work yet for interactive interpreters see https://bugs.python.org/issue12920
                         # from inspect import getsourcelines
                         # lines = getsourcelines(exit_frame.f_code)[0]
                         # wrapped_block_lines = [l.strip() for l in
@@ -472,6 +479,7 @@ class validator(Validator):
                         # code inspired from 'findsource' function in
                         #    https://github.com/uqfoundation/dill/blob/master/dill/source.py
                         try:
+                            # noinspection PyUnresolvedReferences
                             import readline
                         except ImportError:
                             err = sys.exc_info()[1].args[0]

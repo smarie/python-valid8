@@ -10,12 +10,16 @@ from valid8.common_syntax import _make_validation_func_callables
 
 
 try:  # python 3.5+
+    # noinspection PyUnresolvedReferences
     from typing import Callable, Union, List, Tuple, Iterable, Mapping, Any
     try:  # python 3.5.3-
         from typing import Type
     except ImportError:
         use_typing = False
     else:
+        # noinspection PyUnresolvedReferences
+        from valid8.base import ValidationCallable
+        # noinspection PyUnresolvedReferences
         from valid8.common_syntax import ValidationFuncs
         use_typing = version_info > (3, 0)
 
@@ -173,10 +177,10 @@ class DidNotFail(WrappingFailure):
     help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
 
-def not_(validation_func,  # type: CheckerCallable
+def not_(validation_func,  # type: ValidationCallable
          catch_all=False   # type: bool
          ):
-    # type: (...) -> CheckerCallable
+    # type: (...) -> ValidationCallable
     """
     Generates the inverse of the provided validation functions: when the validator returns `False` or raises a
     `Failure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
@@ -185,8 +189,8 @@ def not_(validation_func,  # type: CheckerCallable
     (`catch_all=False`). To change this behaviour you can turn the `catch_all` parameter to `True`, in which case all
     exceptions will be caught instead of just `Failure`s.
 
-    Note that the argument is a **single** callable. You may use `not_all(<validation_functions_list>)` as a shortcut for
-    `not_(and_(<validation_functions_list>))` to support several validation functions in the 'not'.
+    Note that the argument is a **single** callable. You may use `not_all(<validation_functions_list>)` as a shortcut
+    for `not_(and_(<validation_functions_list>))` to support several validation functions in the 'not'.
 
     :param validation_func: the base validation function. A callable.
     :param catch_all: an optional boolean flag. By default, only `Failure` error types are silently caught and turned
