@@ -33,7 +33,7 @@ __all__ = [
     # -- utils_typing
     'Boolean', 'is_pep484_nonable',
     # -- base
-    'Failure', 'WrappingFailure', 'failure_raiser',
+    'Failure', 'ValidationFailed', 'failure_raiser',
     # -- composition
     'CompositionFailure', 'AtLeastOneFailed', 'and_', 'DidNotFail', 'not_', 'AllValidatorsFailed', 'or_',
     'XorTooManySuccess', 'xor_', 'not_all', 'fail_on_none', 'skip_on_none',

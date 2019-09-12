@@ -174,7 +174,7 @@ class ValidationError(HelpMsgMixIn, RootException):
     ```
 
     Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then
-    they should subclass `WrappingFailure` instead of `Failure`. See `WrappingFailure` for details.
+    they should subclass `ValidationFailed` instead of `Failure`. See `ValidationFailed` for details.
     """
 
     @classmethod

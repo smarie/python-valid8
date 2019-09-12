@@ -295,7 +295,7 @@ def test_readme_index_usage_customization():
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
                      'Validation function [is_multiple_of_100] raised ' \
-                     'WrappingFailure: Surface should be a multiple of 100. ' \
+                     'ValidationFailed: Surface should be a multiple of 100. ' \
                      'Function [is_multiple_of_100] raised ' \
                      '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1].'
 
@@ -377,9 +377,9 @@ def test_readme_index_usage_composition():
                      "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
-                     "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
+                     "'(x >= 0) & (x < 10000)': 'ValidationFailed: Surface should be between 0 and 10000. " \
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
-                     "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100. " \
+                     "'is_multiple_of_100': 'ValidationFailed: Surface should be a multiple of 100. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: -1].'}."
 
@@ -399,8 +399,8 @@ def test_readme_index_usage_composition():
                      "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation. " \
                      "Successes: [] / Failures: {" \
-                     "'(x >= 0) & (x < 10000)': 'WrappingFailure: Surface should be between 0 and 10000. " \
+                     "'(x >= 0) & (x < 10000)': 'ValidationFailed: Surface should be between 0 and 10000. " \
                      "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
-                     "'is_multiple_of_100': 'WrappingFailure: Surface should be a multiple of 100, found -1. " \
+                     "'is_multiple_of_100': 'ValidationFailed: Surface should be a multiple of 100, found -1. " \
                      "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
                      "Wrong value: -1].'}."

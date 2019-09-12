@@ -1,7 +1,7 @@
 from itertools import chain
 from sys import version_info
 
-from valid8.base import failure_raiser, WrappingFailure, as_function
+from valid8.base import failure_raiser, ValidationFailed, as_function
 
 try:  # python 3.5+
     # noinspection PyUnresolvedReferences
@@ -18,14 +18,14 @@ try:  # python 3.5+
         # 2. the syntax to optionally transform them into failure raisers by providing a tuple
         ValidationFuncDefinition = Union[ValidationCallableOrLambda,
                                          Tuple[ValidationCallableOrLambda, str],
-                                         Tuple[ValidationCallableOrLambda, Type[WrappingFailure]],
-                                         Tuple[ValidationCallableOrLambda, str, Type[WrappingFailure]]
+                                         Tuple[ValidationCallableOrLambda, Type[ValidationFailed]],
+                                         Tuple[ValidationCallableOrLambda, str, Type[ValidationFailed]]
                                          ]
         """Defines a checker from a base checker function together with optional error message and failure type 
         (in which case a failure raiser is created to wrap that function)"""
 
         # 3. the syntax to describe several validation functions at once
-        VFDefinitionElement = Union[str, Type[WrappingFailure], ValidationCallableOrLambda]
+        VFDefinitionElement = Union[str, Type[ValidationFailed], ValidationCallableOrLambda]
         """This type represents one of the elements that can define a checker"""
 
         OneOrSeveralVFDefinitions = Union[ValidationFuncDefinition,
@@ -79,7 +79,7 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
     If `vf_definition` is a tuple such as (<validation_func>, <err_msg>), (<validation_func>, <failure_type>),
     or (<validation_func>, <err_msg>, <failure_type>), a `failure_raiser` is created.
 
-    >>> class MyFailure(WrappingFailure):
+    >>> class MyFailure(ValidationFailed):
     ...     pass
     >>> vf_with_details = _make_validation_func_callable((vf, 'blah', MyFailure))
     >>> vf_with_details('hello')
@@ -133,7 +133,7 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
             # noinspection PyBroadException
             try:
                 # noinspection PyTypeChecker
-                if issubclass(failure_type, WrappingFailure):
+                if issubclass(failure_type, ValidationFailed):
                     failure_type_ok = True
             except:  # noqa: E722
                 pass
@@ -181,7 +181,7 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
     >>> def is_minus_1(x): return x + 1 == 0
 
     >>> # a custom failure we would like to be raised
-    >>> class MyFailure(WrappingFailure):
+    >>> class MyFailure(ValidationFailed):
     ...     pass
 
     >>> # process both vf1 and v2, reusing vf1 'as is' and enriching vf2 with a custom failure type and error message

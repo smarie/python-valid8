@@ -4,7 +4,7 @@ from sys import version_info
 
 from makefun import with_signature
 
-from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_names, get_callable_name, _none_accepter, _none_rejecter
+from valid8.base import Failure, ValidationFailed, get_callable_names, get_callable_name, _none_accepter, _none_rejecter
 from valid8.common_syntax import _make_validation_func_callables
 
 
@@ -70,7 +70,7 @@ class CompositionFailure(Failure):
         for validator, failure in self.failures.items():
             name = get_callable_name(validator)
             if isinstance(failure, Exception):
-                if isinstance(failure, WrappingFailure) or isinstance(failure, CompositionFailure):
+                if isinstance(failure, ValidationFailed) or isinstance(failure, CompositionFailure):
                     need_to_print_value = False
                 failures_for_print[name] = '{exc_type}: {msg}'.format(exc_type=type(failure).__name__, msg=str(failure))
             else:
@@ -173,7 +173,7 @@ def and_(*validation_func  # type: ValidationFuncs
         return and_v_
 
 
-class DidNotFail(WrappingFailure):
+class DidNotFail(ValidationFailed):
     """ Raised by the not_ operator when the inner validation function did not fail."""
     help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
 

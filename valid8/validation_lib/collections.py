@@ -5,7 +5,7 @@ except ImportError:
     pass
 
 from valid8.composition import and_
-from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_name
+from valid8.base import Failure, ValidationFailed, get_callable_name
 
 
 class Empty(Failure, ValueError):
@@ -270,7 +270,7 @@ def is_superset(reference_set  # type: Set
     return is_superset_of
 
 
-class InvalidItemInSequence(WrappingFailure, ValueError):
+class InvalidItemInSequence(ValidationFailed, ValueError):
     """ Custom Failure raised by on_all_ and on_each_ """
     help_msg = 'Provided sequence contains one value that is invalid.'
 

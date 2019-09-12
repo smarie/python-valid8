@@ -275,7 +275,7 @@ class Failure(HelpMsgMixIn, RootException):
     ```
 
     Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then
-    they should subclass `WrappingFailure` instead of `Failure`. See `WrappingFailure` for details.
+    they should subclass `ValidationFailed` instead of `Failure`. See `ValidationFailed` for details.
     """
 
     def __init__(self,
@@ -334,7 +334,7 @@ class Failure(HelpMsgMixIn, RootException):
             return 'Wrong value: %s' % repr(self.wrong_value)
 
 
-class WrappingFailure(Failure):
+class ValidationFailed(Failure):
     """
     Represents a Failure associated with a wrapped validation function. It contains additional details about which
     validation function it was, and what was the outcome.
@@ -344,7 +344,7 @@ class WrappingFailure(Failure):
 
      * either use the syntax `(<wrapped_callable>, <help_msg>)` when defining validation functions, or explicitly call
      `failure_raiser(<wrapped_callable>, help_msg=<help_msg>)`. Both are equivalent and will create instances of
-     `WrappingFailure` with the provided help message when the wrapped callable fails.
+     `ValidationFailed` with the provided help message when the wrapped callable fails.
 
      * or subclass it explicitly (recommended) and then use the syntax `(<callable>, <subclass>)` or
      `failure_raiser(<wrapped_callable>, failure_type=<subclass>)`. Both are equivalent and will create instances of
@@ -355,7 +355,7 @@ class WrappingFailure(Failure):
     providing details about the failure is to override the 'help_msg' field:
 
     ```python
-    class SurfaceNotInValidRange(WrappingFailure):
+    class SurfaceNotInValidRange(ValidationFailed):
         help_msg = 'Surface should be a positive number less than 10000 (square meter)'
     ```
 
@@ -370,7 +370,7 @@ class WrappingFailure(Failure):
                  help_msg=None,             # type: str
                  **kw_context_args):
         """
-        Creates a WrappingFailure associated with failed validation of `wrong_value` by `wrapped_func`. Additional
+        Creates a ValidationFailed associated with failed validation of `wrong_value` by `wrapped_func`. Additional
         details about the validation outcome (result or exception) can be provided in validation_outcome.
 
         Contextual information may be provided as keyword arguments, and will be stored as fields in the created
@@ -396,7 +396,7 @@ class WrappingFailure(Failure):
         self.validation_outcome = validation_outcome
 
         # call super constructor
-        super(WrappingFailure, self).__init__(wrong_value=wrong_value, help_msg=help_msg, **kw_context_args)
+        super(ValidationFailed, self).__init__(wrong_value=wrong_value, help_msg=help_msg, **kw_context_args)
 
         # automatically set the exception as the cause, so that we can forget to "raise from"
         if isinstance(validation_outcome, Exception):
@@ -431,8 +431,8 @@ class WrappingFailure(Failure):
 
 
 def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
-                   failure_type=None,     # type: Type[WrappingFailure]
                    help_msg=None,         # type: str
+                   failure_type=None,     # type: Type[ValidationFailed]
                    **kw_context_args):
     # type: (...) -> ValidationCallable
     """
@@ -469,7 +469,7 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
 
         # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
         if (res is not None) and (res is not True):
-            typ = failure_type or WrappingFailure
+            typ = failure_type or ValidationFailed
             exc = typ(wrapped_func=validation_callable, wrong_value=x, validation_outcome=res,
                       help_msg=help_msg, **kw_context_args)
             raise exc
@@ -538,7 +538,7 @@ def _none_rejecter(validation_callable  # type: ValidationCallable
     # type: (...) -> ValidationCallable
     """
     Wraps the given validation callable to reject None values. When a None value is received by the wrapper,
-    it is not passed to the validation_callable and instead this function will raise a WrappingFailure. When any other
+    it is not passed to the validation_callable and instead this function will raise a ValidationFailed. When any other
     value is received the validation_callable is called as usual.
 
     Important: mini-lambda expressions are NOT transformed into function. Indeed this function is internal only
