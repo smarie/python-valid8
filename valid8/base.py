@@ -439,7 +439,35 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     Wraps the provided validation function so that in case of failure it raises the given `failure_type` or a
     `WrappingFailure` with the given help message.
 
-    mini-lambda functions are automatically transformed to functions.
+    >>> import sys, pytest
+    >>> if sys.version_info < (3, 0):
+    ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
+
+    >>> def is_big(x): return x > 10
+    >>> is_big_with_details = failure_raiser(is_big, help_msg="x should be big")
+    >>> is_big_with_details(11)
+    >>> is_big_with_details(2)
+    Traceback (most recent call last):
+    ...
+    valid8.base.ValidationFailed: x should be big. Function [is_big] returned [False] for value 2.
+    >>> class MyTooSmall(ValidationFailed):
+    ...     help_msg = "x should be bigger than 10. Found {wrong_value}"
+    >>> is_big_with_details = failure_raiser(is_big, failure_type=MyTooSmall)
+    >>> is_big_with_details(11)
+    >>> is_big_with_details(2)
+    Traceback (most recent call last):
+    ...
+    valid8.base.MyTooSmall: x should be bigger than 10. Found 2. Function [is_big] returned [False] for value 2.
+
+    mini-lambda functions are automatically transformed to functions:
+
+    >>> from mini_lambda import x
+    >>> is_small_with_details = failure_raiser(x < 3, help_msg="x should be smaller than 3")
+    >>> is_small_with_details(2)
+    >>> is_small_with_details(11)
+    Traceback (most recent call last):
+    ...
+    valid8.base.ValidationFailed: x should be smaller than 3. Function [x < 3] returned [False] for value 11.
 
     :param validation_callable:
     :param failure_type: an optional subclass of `WrappingFailure` that should be raised in case of failure, instead of

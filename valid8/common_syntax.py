@@ -73,6 +73,10 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
 
     If `vf_definition` is a single <validation_func> callable, it is returned directly (no wrapping)
 
+    >>> import sys, pytest
+    >>> if sys.version_info < (3, 0):
+    ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
+
     >>> def vf(x): return x + 1 == 0
     >>> assert _make_validation_func_callable(vf) is vf
 
@@ -85,7 +89,7 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
     >>> vf_with_details('hello')
     Traceback (most recent call last):
     ...
-    MyFailure: blah. Function [vf] raised [TypeError: can...
+    valid8.common_syntax.MyFailure: blah. Function [vf] raised [TypeError: can...
 
     Notes:
 
@@ -176,6 +180,10 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
     and a tuple containing the results will be returned. See `_make_validation_func_callable` for details on the
     supported tuples to use.
 
+    >>> import sys, pytest
+    >>> if sys.version_info < (3, 0):
+    ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
+
     >>> # two dummy validation callables
     >>> def is_big(x): return x > 10
     >>> def is_minus_1(x): return x + 1 == 0
@@ -191,7 +199,7 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
     >>> several_vfs[1]('hello')
     Traceback (most recent call last):
     ...
-    MyFailure: not minus 1!. Function [is_minus_1] raised [TypeError: can...
+    valid8.common_syntax.MyFailure: not minus 1!. Function [is_minus_1] raised [TypeError: can...
 
     If a single `vf_definition` is provided AND it is a non-tuple iterable (typically a list),
     `_make_validation_func_callables(vf_definition)` is equivalent to `_make_validation_func_callables(*vf_definition)`
@@ -209,7 +217,7 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
     >>> vfs[0](2)
     Traceback (most recent call last):
     ...
-    WrappingFailure: x should be big. Function [is_big] returned [False] for value 2.
+    valid8.base.ValidationFailed: x should be big. Function [is_big] returned [False] for value 2.
 
     :param vf_definition: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
