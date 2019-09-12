@@ -495,6 +495,39 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     return raiser
 
 
+def as_failure_raiser(failure_type=None,     # type: Type[ValidationFailed]
+                      help_msg=None,         # type: str
+                      **kw_context_args):
+    """
+    A decorator to define a failure raiser. Same functionality then `failure_raiser`:
+
+    >>> import sys, pytest
+    >>> if sys.version_info < (3, 0):
+    ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
+
+    >>> @as_failure_raiser(help_msg="x should be smaller than 4")
+    ... def is_small_with_details(x):
+    ...     return x < 4
+    >>> is_small_with_details(2)
+    >>> is_small_with_details(11)
+    Traceback (most recent call last):
+    ...
+    valid8.base.ValidationFailed: x should be smaller than 4. Function [is_small_with_details] returned [False] for
+        value 11.
+
+    :param failure_type:
+    :param help_msg:
+    :param kw_context_args:
+    :return:
+    """
+    if failure_type is None and help_msg is None and len(kw_context_args) == 0:
+        raise ValueError("at least one argument should be provided in @as_failure_raiser")
+
+    def apply_decorator(f):
+        return failure_raiser(f, failure_type=failure_type, help_msg=help_msg, **kw_context_args)
+    return apply_decorator
+
+
 class ValueIsNone(Failure, TypeError):
     help_msg = "The value must be non-None"
 

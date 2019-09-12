@@ -1,6 +1,6 @@
 from valid8.utils_typing import Boolean, is_pep484_nonable
 
-from valid8.base import Failure, WrappingFailure, failure_raiser
+from valid8.base import Failure, ValidationFailed, failure_raiser, as_failure_raiser
 from valid8.composition import CompositionFailure, AtLeastOneFailed, and_, DidNotFail, not_, AllValidatorsFailed, or_, \
     XorTooManySuccess, xor_, not_all, fail_on_none, skip_on_none
 
@@ -33,7 +33,7 @@ __all__ = [
     # -- utils_typing
     'Boolean', 'is_pep484_nonable',
     # -- base
-    'Failure', 'ValidationFailed', 'failure_raiser',
+    'Failure', 'ValidationFailed', 'failure_raiser', 'as_failure_raiser',
     # -- composition
     'CompositionFailure', 'AtLeastOneFailed', 'and_', 'DidNotFail', 'not_', 'AllValidatorsFailed', 'or_',
     'XorTooManySuccess', 'xor_', 'not_all', 'fail_on_none', 'skip_on_none',
