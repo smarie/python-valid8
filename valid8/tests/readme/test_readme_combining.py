@@ -19,7 +19,8 @@ def test_readme_index_combining_autoclass():
 
     from autoclass import autoclass
     from mini_lambda import s, x, Len
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from valid8 import validate_field, ClassFieldValidationError
+    from valid8.validation_lib import instance_of, is_multiple_of
 
     class InvalidNameError(ClassFieldValidationError):
         help_msg = 'name should be a non-empty string'
@@ -51,7 +52,8 @@ def test_readme_index_combining_autoclass_2():
 
     from autoclass import autoclass
     from mini_lambda import s, x, Len
-    from valid8 import validate_arg, instance_of, is_multiple_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of, is_multiple_of
 
     class InvalidNameError(InputValidationError):
         help_msg = 'name should be a non-empty string'
@@ -82,7 +84,8 @@ def test_readme_index_combining_attrs():
 
     import attr
     from mini_lambda import s, x, Len
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from valid8 import validate_field, ClassFieldValidationError
+    from valid8.validation_lib import instance_of, is_multiple_of
 
     class InvalidNameError(ClassFieldValidationError):
         help_msg = 'name should be a non-empty string'
@@ -117,7 +120,8 @@ def test_unused_pytypes():
     from pytypes import typechecked, InputTypeError
 
     # for value checking
-    from valid8 import validate_io, non_empty, gt
+    from valid8 import validate_io
+    from valid8.validation_lib import non_empty, gt
 
     from ._tests_pep484 import create_for_test_unused_pytypes
     build_house = create_for_test_unused_pytypes()

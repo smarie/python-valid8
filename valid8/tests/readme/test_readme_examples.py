@@ -25,7 +25,8 @@ def test_readme_examples_4():
         validate('l[{}][1]'.format(i), l[i][1], instance_of=str, length=3, equals=l[i][1].lower())
 
     # ---- inline 2
-    from valid8 import validator, instance_of
+    from valid8 import validator
+    from valid8.validation_lib import instance_of
 
     l = [(1, 'ras'), (0.2, 'abc')]
 
@@ -77,7 +78,8 @@ def test_readme_examples_4():
 
 
     # ---- function input
-    from valid8 import validate_arg, instance_of, on_all_, on_each_, has_length, and_, between
+    from valid8 import validate_arg, and_
+    from valid8.validation_lib import instance_of, on_all_, on_each_, has_length, between
 
     @validate_arg('l', instance_of(list), on_all_(
                   instance_of(tuple), has_length(2),  # each item is a tuple of size 2
@@ -93,7 +95,8 @@ def test_readme_examples_4():
     my_function(l)
 
     # much better:
-    from valid8 import validate_arg, instance_of, on_all_, HasWrongType, WrongLength, NotInRange, Failure
+    from valid8 import validate_arg, Failure
+    from valid8.validation_lib import instance_of, on_all_, HasWrongType, WrongLength, NotInRange
 
     def is_valid_tuple(t):
         """ Custom validation function. We could also provide a callable """
@@ -129,7 +132,8 @@ def test_readme_examples_4():
 
 
     # ---- mini_lambda
-    from valid8 import validate_arg, instance_of, on_all_
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of, on_all_
 
     # just for fun: we create our custom mini_lambda variable named 't'
     from mini_lambda import InputVar, Len, Isinstance

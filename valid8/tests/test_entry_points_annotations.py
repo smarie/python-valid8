@@ -2,9 +2,10 @@ import sys
 
 import pytest
 
-from valid8 import validate_io, InputValidationError, is_even, gt, decorate_with_validation, lt, Failure, \
+from valid8 import validate_io, InputValidationError, decorate_with_validation, Failure, \
     validate_arg, NonePolicy, validate_out, OutputValidationError, ValidationError, validate_field, \
     ClassFieldValidationError
+from valid8.validation_lib import is_even, gt, lt
 
 
 def test_validate_field():
@@ -106,7 +107,8 @@ def test_validate_field_property():
 
 def test_validate_field_custom_type():
     """"""
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from valid8 import validate_field, ClassFieldValidationError
+    from valid8.validation_lib import instance_of, is_multiple_of
     from mini_lambda import x, s, Len
 
     class InvalidNameError(ClassFieldValidationError):
@@ -431,7 +433,8 @@ def test_decorate_manually():
 def test_validate_tracebacks():
     """ Tests that the traceback is reduced for instance_of checks """
 
-    from valid8 import validate_arg, instance_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of
     from mini_lambda import x
 
     @validate_arg('foo', instance_of(int), x > 2)

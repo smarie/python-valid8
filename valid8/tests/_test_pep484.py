@@ -3,7 +3,8 @@ from numbers import Integral
 import pytest
 from typing import Optional
 
-from valid8 import validate_arg, is_multiple_of, InputValidationError
+from valid8 import validate_arg, InputValidationError
+from valid8.validation_lib import is_multiple_of
 
 
 def create_for_test_validate_none_enforce():

@@ -1,7 +1,8 @@
 import sys
 
 import pytest
-from valid8 import ValidationError, validate, validator, NotEmpty, Empty
+from valid8 import ValidationError, validate, validator
+from valid8.validation_lib import NotEmpty, Empty
 
 try:
     from math import isfinite

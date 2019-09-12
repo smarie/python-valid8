@@ -1,7 +1,8 @@
 import pytest
 
 from mini_lambda import make_lambda_friendly_method, _, x
-from valid8 import on_each_, is_even, maxlen, on_all_, is_subset, is_superset, is_in, Failure, minlen, TooShort, \
+from valid8 import Failure
+from valid8.validation_lib import on_each_, is_even, maxlen, on_all_, is_subset, is_superset, is_in, minlen, TooShort, \
     TooLong, length_between, LengthNotInRange, lt, contains, has_length, WrongLength, empty, NotEmpty, non_empty, Empty
 
 

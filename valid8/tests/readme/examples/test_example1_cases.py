@@ -14,7 +14,8 @@ def with_validator(x):
 
 
 def function_input_builtin(value):
-    from valid8 import validate_arg, instance_of, gt
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of, gt
 
     @validate_arg('x', instance_of(Integral), gt(0))
     def my_function(x):
@@ -25,7 +26,8 @@ def function_input_builtin(value):
 
 def function_input_mini_lambda(value):
     from mini_lambda import x
-    from valid8 import validate_arg, instance_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of
 
     @validate_arg('x', instance_of(Integral), x >= 0)
     def my_function(x):
@@ -35,7 +37,8 @@ def function_input_mini_lambda(value):
 
 
 def function_output_builtin(value):
-    from valid8 import validate_out, instance_of, gt
+    from valid8 import validate_out
+    from valid8.validation_lib import instance_of, gt
 
     @validate_out(instance_of(Integral), gt(0))
     def my_function2():
@@ -46,7 +49,8 @@ def function_output_builtin(value):
 
 def function_output_mini_lambda(value):
     from mini_lambda import x
-    from valid8 import validate_out, instance_of
+    from valid8 import validate_out
+    from valid8.validation_lib import instance_of
 
     @validate_out(instance_of(Integral), x >= 0)
     def my_function2():
@@ -56,7 +60,8 @@ def function_output_mini_lambda(value):
 
 
 def function_io_builtin(value):
-    from valid8 import validate_io, instance_of, gt
+    from valid8 import validate_io
+    from valid8.validation_lib import instance_of, gt
 
     @validate_io(x=[instance_of(Integral), gt(0)])
     def my_function3(x):
@@ -67,7 +72,8 @@ def function_io_builtin(value):
 
 def function_io_mini_lambda(value):
     from mini_lambda import x
-    from valid8 import validate_io, instance_of
+    from valid8 import validate_io
+    from valid8.validation_lib import instance_of
 
     @validate_io(x=[instance_of(Integral), x >= 0])
     def my_function3(x):
@@ -77,7 +83,8 @@ def function_io_mini_lambda(value):
 
 
 def class_field_builtin_stdlib(value):
-    from valid8 import validate_field, instance_of, gt
+    from valid8 import validate_field
+    from valid8.validation_lib import instance_of, gt
 
     @validate_field('x', instance_of(Integral), gt(0))
     class Foo:
@@ -89,7 +96,8 @@ def class_field_builtin_stdlib(value):
 
 def class_field_mini_lambda(value):
     from mini_lambda import x
-    from valid8 import validate_field, instance_of
+    from valid8 import validate_field
+    from valid8.validation_lib import instance_of
 
     @validate_field('x', instance_of(Integral), x >= 0)
     class Foo:

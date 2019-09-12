@@ -28,7 +28,8 @@ def with_validator(s):
 
 
 def function_input_builtin_stdlib(value):
-    from valid8 import validate_arg, instance_of, minlen
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of, minlen
 
     @validate_arg('s', instance_of(str), minlen(1), str.islower)
     def my_function(s):
@@ -39,7 +40,8 @@ def function_input_builtin_stdlib(value):
 
 def function_input_mini_lambda(value):
     from mini_lambda import s, Len
-    from valid8 import validate_arg, instance_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of
 
     @validate_arg('s', instance_of(str), Len(s) > 0, s.islower())
     def my_function(s):
@@ -49,7 +51,8 @@ def function_input_mini_lambda(value):
 
 
 def class_field_builtin_stdlib(value):
-    from valid8 import validate_field, instance_of, minlen
+    from valid8 import validate_field
+    from valid8.validation_lib import instance_of, minlen
 
     @validate_field('s', instance_of(str), minlen(1), str.islower)
     class Foo:
@@ -61,7 +64,8 @@ def class_field_builtin_stdlib(value):
 
 def class_field_mini_lambda(value):
     from mini_lambda import s, Len
-    from valid8 import validate_field, instance_of
+    from valid8 import validate_field
+    from valid8.validation_lib import instance_of
 
     @validate_field('s', instance_of(str), Len(s) > 0, s.islower())
     class Foo:

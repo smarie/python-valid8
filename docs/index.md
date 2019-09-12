@@ -6,7 +6,10 @@
 
 *"valid8ing is not a crime" ;-)*
 
-`valid8` provides user-friendly tools for 
+!!! warning
+    As of `valid8` version `5.0.0` all functions in the built-in validation library are not exposed anymore at the package root, in order to speed up imports. So instead of `from valid8 import is_even` you should now do `from valid8.validation_lib import is_even`.
+
+`valid8` provides user-friendly tools for 3 kind of "entry points":
 
  * general-purpose inline validation, 
  * function inputs/outputs validation 

@@ -1,7 +1,8 @@
 import pytest
 
 from valid8.composition import _make_checker_callables, or_, AllValidatorsFailed, xor_, XorTooManySuccess, and_
-from valid8 import not_, is_even, gt, AtLeastOneFailed, not_all, is_multiple_of, DidNotFail
+from valid8 import not_, AtLeastOneFailed, not_all, DidNotFail
+from valid8.validation_lib import is_even, gt, is_multiple_of
 
 
 def test_empty_validators_list():

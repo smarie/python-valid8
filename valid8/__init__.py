@@ -11,7 +11,7 @@ from valid8.entry_points_annotations import InvalidNameError, InputValidationErr
 from valid8.entry_points_inline import validate, validation, validator, assert_instance_of
 
 # import all symbols explicitly declared in the validation lib `__all__` list
-from valid8.validation_lib import *
+# from valid8.validation_lib import *
 
 __all__ = [
     # submodules
@@ -36,5 +36,5 @@ __all__ = [
     'validate', 'validation', 'validator', 'assert_instance_of'
 ]
 
-from valid8.validation_lib import __all__ as __vlib_all__
-__all__ += __vlib_all__
+# from valid8.validation_lib import __all__ as __vlib_all__
+# __all__ += __vlib_all__

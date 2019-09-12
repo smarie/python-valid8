@@ -26,7 +26,8 @@ def test_readme_combining_enforce():
 
     # Imports - for value validation
     from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import is_multiple_of
 
     # Define our 2 applicative error types
     class InvalidNameError(InputValidationError):

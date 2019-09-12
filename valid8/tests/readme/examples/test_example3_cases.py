@@ -10,7 +10,9 @@ def inline_validate_1(t):
 
 
 def with_validator_boolean_tester(t):
-    from valid8 import validator, instance_of
+    from valid8 import validator
+    from valid8.validation_lib import instance_of
+
     with validator('t', t, instance_of=tuple) as v:
         v.alid = len(t) == 2 \
                  and instance_of(t[0], Real) and (0 <= t[0] <= 1) \
@@ -43,7 +45,7 @@ def with_validator_failure_raiser(t):
 
 def is_valid_tuple(t):
     """ custom validation function - here in 'boolean tester' style (returning a bool) """
-    from valid8 import instance_of
+    from valid8.validation_lib import instance_of
     return instance_of(t, tuple) and len(t) == 2 \
            and instance_of(t[0], Real) and (0 <= t[0] <= 1) \
            and instance_of(t[1], str) and len(t[1]) == 3 and t[1].islower()
@@ -116,7 +118,8 @@ def class_fields_custom(t, custom):
 
 
 def function_input_builtin_stdlib(value):
-    from valid8 import validate_arg, instance_of, has_length, on_each_, and_, between
+    from valid8 import validate_arg, and_
+    from valid8.validation_lib import instance_of, has_length, on_each_, between
 
     @validate_arg('t', instance_of(tuple), has_length(2), on_each_(
         # the first element is a float between 0 and 1
@@ -132,7 +135,8 @@ def function_input_builtin_stdlib(value):
 
 def function_input_mini_lambda(value):
     from mini_lambda import InputVar, Len
-    from valid8 import validate_arg, instance_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of
     from valid8.validation_lib.mini_lambda_ import Instance_of
 
     # just for fun: we create our custom mini_lambda variable named 't'
@@ -151,7 +155,8 @@ def function_input_mini_lambda(value):
 
 
 def class_field_builtin_stdlib(value):
-    from valid8 import validate_field, instance_of, has_length, on_each_, and_, between
+    from valid8 import validate_field, and_
+    from valid8.validation_lib import instance_of, has_length, on_each_, between
 
     @validate_field('t', instance_of(tuple), has_length(2), on_each_(
         # the first element is a float between 0 and 1
@@ -168,7 +173,8 @@ def class_field_builtin_stdlib(value):
 
 def class_field_mini_lambda(value):
     from mini_lambda import InputVar, Len
-    from valid8 import validate_field, instance_of
+    from valid8 import validate_field
+    from valid8.validation_lib import instance_of
     from valid8.validation_lib.mini_lambda_ import Instance_of
 
     # just for fun: we create our custom mini_lambda variable named 't'

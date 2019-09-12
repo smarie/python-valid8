@@ -131,7 +131,8 @@ def test_readme_usage_customization():
 def test_readme_index_usage_basic():
     """ Tests that the examples provided in the index page under Usage examples/Basic are correct """
 
-    from valid8 import assert_valid, instance_of, is_multiple_of
+    from valid8 import assert_valid
+    from valid8.validation_lib import instance_of, is_multiple_of
 
     surf = -1
 
@@ -156,7 +157,8 @@ def test_readme_index_usage_function():
     """ Tests that the examples provided in the index page under Usage examples/Function are correct """
 
     from mini_lambda import s, Len
-    from valid8 import validate_arg, instance_of
+    from valid8 import validate_arg
+    from valid8.validation_lib import instance_of
 
     @validate_arg('name', instance_of(str), Len(s) > 0,
                   help_msg='name should be a non-empty string')
@@ -177,7 +179,8 @@ def test_readme_index_usage_function():
                      "" % (repr(str), repr(str))
 
     from mini_lambda import s, x, l, Len
-    from valid8 import validate_arg, validate_out, instance_of, is_multiple_of
+    from valid8 import validate_arg, validate_out
+    from valid8.validation_lib import instance_of, is_multiple_of
 
     @validate_arg('name', instance_of(str), Len(s) > 0,
                   help_msg='name should be a non-empty string')
@@ -201,7 +204,8 @@ def test_readme_index_usage_function():
 def test_readme_index_usage_class_fields():
     """ Tests that the examples provided in the index page under Usage examples/class fields are correct"""
 
-    from valid8 import validate_field, instance_of, is_multiple_of, ClassFieldValidationError
+    from valid8 import validate_field, ClassFieldValidationError
+    from valid8.validation_lib import instance_of, is_multiple_of
     from mini_lambda import x, s, Len
 
     @validate_field('name', instance_of(str), Len(s) > 0,
@@ -235,7 +239,8 @@ def test_readme_index_usage_class_fields():
 def test_testing():
     """ """
     from mini_lambda import s, Len
-    from valid8 import assert_valid, Validator, instance_of
+    from valid8 import assert_valid, Validator
+    from valid8.validation_lib import instance_of
 
     name = 'sweet_home'
 
@@ -251,7 +256,7 @@ def test_advanced_composition():
     """ """
 
     from mini_lambda import x
-    from valid8 import Validator, is_multiple_of
+    from valid8 import Validator
 
     class InvalidSurface(ValidationError):
         help_msg = 'Surface should be a multiple of 100 between 0 and 10000'
@@ -269,7 +274,8 @@ def test_advanced_composition():
 def test_readme_index_usage_customization():
     """ Tests that the examples provided in the index page under Usage examples/Customization are correct """
 
-    from valid8 import assert_valid, is_multiple_of, ValidationError
+    from valid8 import assert_valid, ValidationError
+    from valid8.validation_lib import is_multiple_of
     from mini_lambda import x
 
     from valid8 import NonePolicy
@@ -328,7 +334,8 @@ def test_readme_index_usage_customization():
 def test_readme_index_usage_composition():
     """ Tests that the examples provided in the index page under Usage examples/Composition are correct """
 
-    from valid8 import assert_valid, is_multiple_of
+    from valid8 import assert_valid
+    from valid8.validation_lib import is_multiple_of
     from mini_lambda import x
 
     surf = -1

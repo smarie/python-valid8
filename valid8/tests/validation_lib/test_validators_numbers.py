@@ -1,6 +1,6 @@
 import pytest
 
-from valid8 import is_even, is_odd, is_multiple_of, IsNotMultipleOf, IsNotOdd, IsNotEven
+from valid8.validation_lib import is_even, is_odd, is_multiple_of, IsNotMultipleOf, IsNotOdd, IsNotEven
 
 
 def test_is_even():

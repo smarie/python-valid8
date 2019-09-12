@@ -1,6 +1,6 @@
 import pytest
 
-from valid8 import gt, gts, lt, lts, between, NotInRange, TooSmall, TooBig
+from valid8.validation_lib import gt, gts, lt, lts, between, NotInRange, TooSmall, TooBig
 
 
 def test_gt():
@@ -45,8 +45,6 @@ def test_between():
 
 def test_numpy_nan():
     """ Test that a numpy nan is correctly handled """
-
-    from valid8 import validate, gt, TooSmall, lt, TooBig
     import numpy as np
 
     with pytest.raises(TooSmall) as exc_info:

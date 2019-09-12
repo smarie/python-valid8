@@ -1,6 +1,7 @@
 import pytest
 
-from valid8 import instance_of, HasWrongType, subclass_of, IsWrongType, assert_valid
+from valid8 import assert_valid
+from valid8.validation_lib import instance_of, HasWrongType, subclass_of, IsWrongType
 
 
 def test_instance_of():
