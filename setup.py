@@ -14,8 +14,8 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['makefun', 'six', 'future;python_version<"3.3"', 'funcsigs;python_version<"3.3"', 'decopatch']  # 'typing_inspect' is now copied internally so as to be compliant with very old versions of typing module
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'enum34;python_version<"3.4"', 'six']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs', 'numpy', 'autoclass',
-                 'checktypes', 'pytest-cases']
+TESTS_REQUIRE = ['pytest>=4.3.0', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs', 'numpy',
+                 'autoclass', 'checktypes', 'pytest-cases']
 EXTRAS_REQUIRE = {}
 
 # simple check
