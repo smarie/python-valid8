@@ -98,7 +98,12 @@ def _make_validation_func_callable(checker_def  # type: ValidationFuncDefinition
     except (TypeError, FunctionDefinitionError):
         # -- single element
         # handle the special case of a LambdaExpression: automatically convert to a function
-        return as_function(checker_def)
+        validation_func = as_function(checker_def)
+        if not callable(validation_func):
+            raise ValueError('base validation function(s) not compliant with the allowed syntax. Base validation'
+                             ' function(s) can be %s Found %s.' % (supported_syntax, checker_def))
+        else:
+            return validation_func
     else:
         # -- a tuple
         if nb_elts == 1:
@@ -134,12 +139,13 @@ def _make_validation_func_callable(checker_def  # type: ValidationFuncDefinition
         else:
             help_msg_ok = True
 
-        if (not failure_type_ok) or (not help_msg_ok):
-            raise ValueError('base validation function(s) not compliant with the allowed syntax. Base validation'
-                             ' function(s) can be %s. Found %s.' % (supported_syntax, checker_def))
-
         # handle the special case of a LambdaExpression: automatically convert to a function
         validation_func = as_function(validation_func)
+
+        # check that the definition is valid
+        if (not failure_type_ok) or (not help_msg_ok) or (not callable(validation_func)):
+            raise ValueError('base validation function(s) not compliant with the allowed syntax. Base validation'
+                             ' function(s) can be %s Found %s.' % (supported_syntax, checker_def))
 
         # finally create the failure raising callable
         return _failure_raiser(validation_func, help_msg=help_msg, failure_type=failure_type)
