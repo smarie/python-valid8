@@ -15,7 +15,7 @@ from valid8.entry_points_inline import validate, validation, validator, assert_i
 
 __all__ = [
     # submodules
-    'base', 'checkers_syntax', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
+    'base', 'common_syntax', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
     'validation_lib', 'utils_string', 'utils_typing',
 
     # symbols

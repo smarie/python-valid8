@@ -17,12 +17,14 @@ try:  # python 3.5+
         from typing import Type
     except ImportError:
         pass
+    else:
+        from valid8.common_syntax import ValidationFuncs
 except ImportError:
     pass
 
 
 def assert_instance_of(value,
-                       allowed_types  # type: Union[Type, Tuple[Type]]
+                       allowed_types  # type: Union[Type, Tuple[Type, ...]]
                        ):
     """
     An inlined version of instance_of(var_types)(value) without 'return True': it does not return anything in case of
@@ -51,7 +53,7 @@ def assert_instance_of(value,
 
 
 def assert_subclass_of(typ,
-                       allowed_types  # type: Union[Type, Tuple[Type]]
+                       allowed_types  # type: Union[Type, Tuple[Type, ...]]
                        ):
     """
     An inlined version of subclass_of(var_types)(value) without 'return True': it does not return anything in case of
@@ -125,8 +127,8 @@ def validate(name,                   # type: str
              value,                  # type: Any
              enforce_not_none=True,  # type: bool
              equals=None,            # type: Any
-             instance_of=None,       # type: Union[Type, Tuple[Type]]
-             subclass_of=None,       # type: Union[Type, Tuple[Type]]
+             instance_of=None,       # type: Union[Type, Tuple[Type, ...]]
+             subclass_of=None,       # type: Union[Type, Tuple[Type, ...]]
              is_in=None,             # type: Container
              subset_of=None,         # type: Set
              contains = None,        # type: Union[Any, Iterable]
@@ -139,7 +141,7 @@ def validate(name,                   # type: str
              empty=None,             # type: bool
              min_len=None,           # type: int
              max_len=None,           # type: int
-             custom=None,            # type: Callable[[Any], Any]
+             custom=None,            # type: ValidationFuncs
              error_type=None,        # type: Type[ValidationError]
              help_msg=None,          # type: str
              **kw_context_args):
@@ -368,8 +370,8 @@ class validator(Validator):
     def __init__(self,
                  name,              # type: str
                  value,             # type: Any
-                 instance_of=None,  # type: Union[Type, Tuple[Type]]
-                 subclass_of=None,  # type: Union[Type, Tuple[Type]]
+                 instance_of=None,  # type: Union[Type, Tuple[Type, ...]]
+                 subclass_of=None,  # type: Union[Type, Tuple[Type, ...]]
                  error_type=None,   # type: Type[ValidationError]
                  help_msg=None,     # type: str
                  **kw_context_args):

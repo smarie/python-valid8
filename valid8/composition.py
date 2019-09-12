@@ -6,7 +6,7 @@ from makefun import with_signature
 
 from valid8.base import Failure, WrappingFailure, result_is_success, get_callable_names, get_callable_name, \
     _failure_raiser, _none_accepter, _none_rejecter
-from valid8.checkers_syntax import _make_checker_callables
+from valid8.common_syntax import _make_validation_func_callables
 
 
 try:  # python 3.5+
@@ -16,7 +16,7 @@ try:  # python 3.5+
     except ImportError:
         use_typing = False
     else:
-        from valid8.checkers_syntax import ValidationFuncs
+        from valid8.common_syntax import ValidationFuncs
         use_typing = version_info > (3, 0)
 
 except TypeError:
@@ -146,7 +146,7 @@ def and_(*validation_func  # type: ValidationFuncs
         of callables, they will be transformed to functions automatically.
     :return:
     """
-    validation_funcs = _make_checker_callables(*validation_func)
+    validation_funcs = _make_validation_func_callables(*validation_func)
 
     if len(validation_funcs) == 1:
         return validation_funcs[0]  # simplification for single validator case: no wrapper
@@ -242,7 +242,7 @@ def or_(*validation_func  # type: ValidationFuncs
     :return:
     """
 
-    validation_func = _make_checker_callables(*validation_func)
+    validation_func = _make_validation_func_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validator case
@@ -291,7 +291,7 @@ def xor_(*validation_func  # type: ValidationFuncs
     :return:
     """
 
-    validation_func = _make_checker_callables(*validation_func)
+    validation_func = _make_validation_func_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validation function case

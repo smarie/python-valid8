@@ -1,6 +1,6 @@
 import pytest
 
-from valid8.composition import _make_checker_callables, or_, AllValidatorsFailed, xor_, XorTooManySuccess, and_
+from valid8.composition import _make_validation_func_callables, or_, AllValidatorsFailed, xor_, XorTooManySuccess, and_
 from valid8 import not_, AtLeastOneFailed, not_all, DidNotFail
 from valid8.validation_lib import is_even, gt, is_multiple_of
 
@@ -9,19 +9,19 @@ def test_empty_validators_list():
     """ Validates that an empty list of validators leads to a ValueError """
 
     with pytest.raises(ValueError) as exc_info:
-        _make_checker_callables([])
+        _make_validation_func_callables([])
 
 
 def test_either_single_list_or_several_items():
     """ Validates that passing two lists can not work"""
 
     with pytest.raises(ValueError) as exc_info:
-        _make_checker_callables([is_even, gt(5)], [gt(5)])
+        _make_validation_func_callables([is_even, gt(5)], [gt(5)])
 
 
 def test_list_implicit_and():
     """ Asserts that a list of validators leads to a 'and_' and behaves correctly """
-    processed = _make_checker_callables([is_even, gt(1)])
+    processed = _make_validation_func_callables([is_even, gt(1)])
     assert len(processed) == 2
 
 

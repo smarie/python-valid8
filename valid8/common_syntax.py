@@ -11,40 +11,40 @@ try:  # python 3.5+
         use_typing = False
     else:
         # 1. the lowest-level user or 3d party-provided validation functions
-        CheckerCallable = Callable[[Any], Any]
+        ValidationCallable = Callable[[Any], Any]
         try:
             from mini_lambda import x
-            CheckerCallableOrLambda = Union[CheckerCallable, type(x)]
+            ValidationCallableOrLambda = Union[ValidationCallable, type(x)]
             """A base checker function is a callable with signature (val), returning `True` or `None` in case of 
             success. Mini-lambda expressions are supported too."""
         except ImportError:
-            CheckerCallableOrLambda = CheckerCallable
+            ValidationCallableOrLambda = ValidationCallable
             """A base checker function is a callable with signature (val), returning `True` or `None` in case of 
             success"""
 
         # 2. the syntax to optionally transform them into failure raisers by providing a tuple
-        CheckerDefinition = Union[CheckerCallableOrLambda,
-                                  Tuple[CheckerCallableOrLambda, str],
-                                  Tuple[CheckerCallableOrLambda, Type[WrappingFailure]],
-                                  Tuple[CheckerCallableOrLambda, str, Type[WrappingFailure]]
+        ValidationFuncDefinition = Union[ValidationCallableOrLambda,
+                                         Tuple[ValidationCallableOrLambda, str],
+                                         Tuple[ValidationCallableOrLambda, Type[WrappingFailure]],
+                                         Tuple[ValidationCallableOrLambda, str, Type[WrappingFailure]]
         ]
         """Defines a checker from a base checker function together with optional error message and failure type 
         (in which case a failure raiser is created to wrap that function)"""
 
         # 3. the syntax to describe several validation functions at once
-        CheckerDefinitionElement = Union[str, Type[WrappingFailure], CheckerCallableOrLambda]
+        VFDefinitionElement = Union[str, Type[WrappingFailure], ValidationCallableOrLambda]
         """This type represents one of the elements that can define a checker"""
 
-        OneOrSeveralCheckerDefinitions = Union[CheckerDefinition,
-                                               Iterable[CheckerDefinition],
-                                               Mapping[CheckerDefinitionElement, Union[CheckerDefinitionElement,
-                                                                                Tuple[CheckerDefinitionElement, ...]]]]
+        OneOrSeveralVFDefinitions = Union[ValidationFuncDefinition,
+                                          Iterable[ValidationFuncDefinition],
+                                          Mapping[VFDefinitionElement, Union[VFDefinitionElement,
+                                                                                  Tuple[VFDefinitionElement, ...]]]]
         """Several validators can be provided as a singleton, iterable, or dict-like. In that case the value can be a 
         single variable or a tuple, and it will be combined with the key to form the validator. So you can use any of the 
         elements defining a validators as the key."""
 
         # shortcut name used everywhere. Less explicit
-        ValidationFuncs = OneOrSeveralCheckerDefinitions
+        ValidationFuncs = OneOrSeveralVFDefinitions
 
         use_typing = version_info > (3, 0)
 
@@ -71,9 +71,9 @@ supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callabl
                    'callables, they will be transformed to functions automatically.'
 
 
-def _make_checker_callable(checker_def  # type: CheckerDefinition
-                           ):
-    # type: (...) -> CheckerCallable
+def _make_validation_func_callable(checker_def  # type: ValidationFuncDefinition
+                                   ):
+    # type: (...) -> ValidationCallable
     """
     Creates a callable for usage in valid8, from a "validation function" or m together with optional error message
     and failure type.
@@ -145,9 +145,9 @@ def _make_checker_callable(checker_def  # type: CheckerDefinition
         return _failure_raiser(validation_func, help_msg=help_msg, failure_type=failure_type)
 
 
-def _make_checker_callables(*validation_func  # type: OneOrSeveralCheckerDefinitions
-                            ):
-    # type: (...) -> Tuple[CheckerCallable]
+def _make_validation_func_callables(*validation_func  # type: OneOrSeveralVFDefinitions
+                                    ):
+    # type: (...) -> Tuple[ValidationCallable, ...]
     """
     Converts the provided checker definitions into checkers.
 
@@ -201,14 +201,14 @@ def _make_checker_callables(*validation_func  # type: OneOrSeveralCheckerDefinit
             v_iter = iter(validation_func)
         except (TypeError, FunctionDefinitionError):
             # single validator: create a tuple manually
-            all_validators = (_make_checker_callable(validation_func),)
+            all_validators = (_make_validation_func_callable(validation_func),)
         else:
             # iterable
-            all_validators = tuple(_make_checker_callable(v) for v in v_iter)
+            all_validators = tuple(_make_validation_func_callable(v) for v in v_iter)
     else:
         # mapping: be 'smart'
         def _mapping_entry_to_checker(k, v):
-            # type: (...) -> CheckerCallable
+            # type: (...) -> ValidationCallable
             try:
                 # tuple?
                 iter(v)
@@ -233,7 +233,7 @@ def _make_checker_callables(*validation_func  # type: OneOrSeveralCheckerDefinit
                     except TypeError:
                         callabl = _elt
 
-            return _make_checker_callable((callabl, err_msg, err_type))
+            return _make_validation_func_callable((callabl, err_msg, err_type))
 
         all_validators = tuple(_mapping_entry_to_checker(k, v) for k, v in v_items)
 
