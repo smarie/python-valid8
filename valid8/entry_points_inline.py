@@ -160,6 +160,19 @@ def validate(name,                   # type: str
        default and can be set to strict by setting `min_strict`, resp. `max_strict`, to `True`
        * if `min_len` (resp. `max_len`) is provided, `len(value)` should be greater than it. Comparison is not strict.
 
+    Examples:
+
+    >>> import sys, pytest
+    >>> if sys.version_info < (3, 0): pytest.skip('doctest skipped in python 2')
+
+    >>> from valid8 import validate
+    >>> surf = -1
+    >>> validate('surface', surf, instance_of=int, min_value=0)
+    Traceback (most recent call last):
+    ...
+    valid8.entry_points.ValidationError[ValueError]: Error validating [surface=-1]. TooSmall: x >= 0 does not hold
+        for x=-1. Wrong value: -1.
+
     :param name: the applicative name of the checked value, that will be used in error messages
     :param value: the value to check
     :param enforce_not_none: boolean, default True. Whether to enforce that `value` is not None.
