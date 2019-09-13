@@ -22,7 +22,7 @@ except ImportError:
     use_typing = False
 
 from valid8.utils_string import end_with_dot
-from valid8.base import result_is_success, get_callable_name, _none_accepter, _none_rejecter, RootException, \
+from valid8.base import get_callable_name, _none_accepter, _none_rejecter, RootException, \
     HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_
 from valid8.composition import and_, pop_kwargs
 
