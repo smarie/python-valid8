@@ -583,8 +583,8 @@ class Validator(object):
         """ The function doing the final error raising.  """
 
         # first merge the info provided in arguments and in self
-        error_type = error_type or self.error_type
-        help_msg = help_msg or self.help_msg
+        error_type = error_type if error_type is not None else self.error_type
+        help_msg = help_msg if help_msg is not None else self.help_msg
         ctx = copy(self.kw_context_args)
         ctx.update(kw_context_args)
 
