@@ -17,6 +17,7 @@ try:  # python 3.5+
         from valid8.base import ValidationCallable
         # noinspection PyUnresolvedReferences
         from valid8.common_syntax import ValidationFuncs
+
         use_typing = sys.version_info > (3, 0)
 except ImportError:
     use_typing = False
@@ -177,6 +178,9 @@ class ValidationError(HelpMsgMixIn, RootException):
     they should subclass `ValidationFailed` instead of `Failure`. See `ValidationFailed` for details.
     """
 
+    # We do not use slots otherwise `help_msg` cannot easily be overridden by a class attribute
+    # __slots__ = 'validator', 'var_value', 'var_name', 'validation_outcome', 'append_details', 'context'
+
     @classmethod
     def create_manually(cls,
                         validation_function_name,  # type: str
@@ -187,6 +191,7 @@ class ValidationError(HelpMsgMixIn, RootException):
                         # append_details=True,       # type: bool
                         **kw_context_args):
         """
+        TODO remove the method or find a real need.
         Creates an instance without using a Validator.
 
         This method is not the primary way that errors are created - they should rather created by the validation entry
@@ -224,7 +229,7 @@ class ValidationError(HelpMsgMixIn, RootException):
                  append_details=True,      # type: bool
                  **kw_context_args):
         """
-        Creates a ValidationError associated with validation of `var_value` using `validator`. Additional details
+        Creates a `ValidationError` associated with validation of `var_value` using `validator`. Additional details
         about the `var_name` and `validation_outcome` (result or exception) can be provided. All of this
         information is stored in the exception object so as to be managed by a global error handler at application-level
         if needed (for example for internationalization purposes)
@@ -235,11 +240,12 @@ class ValidationError(HelpMsgMixIn, RootException):
         :param validation_outcome: the result of the validation process (either a non-True non-None value, or an
         exception)
         :param help_msg: an optional help message specific to this validation error. If not provided, the class
-        attribute `help_msg` will be used. This behaviour may be redefined by subclasses by overriding `get_help_msg`
+            attribute `help_msg` will be used. This behaviour may be redefined by subclasses by overriding
+            `get_help_msg`
         :param append_details: a boolean indicating if a default message containing the value should be appended to the
-        string representation. Default is True
+            string representation. Default is `True`
         :param kw_context_args: optional context (results, other) to store in this failure and that will be also used
-        for help message formatting
+            for help message formatting
         """
 
         self.display_prefix_for_exc_outcomes = True
@@ -279,8 +285,9 @@ class ValidationError(HelpMsgMixIn, RootException):
                 return self.get_help_msg(**self.__dict__)
         except HelpMsgFormattingException as f:
             return str(f)
+
         except Exception as e:
-            return "Error while formatting help message: {}".format(e)
+            return "Error while formatting help message: %s" % e
 
     def __repr__(self):
         """ Overrides the default exception representation """
@@ -470,6 +477,7 @@ class Validator(object):
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
             to format the help message
         """
+        # pop without setting defaults since we want to check if values were actually provided
         error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
                                                                 ('help_msg', None),
                                                                 ('none_policy', None)], allow_others=True)
@@ -477,12 +485,12 @@ class Validator(object):
         kw_context_args = kwargs
 
         if help_msg is None and error_type is None and len(kw_context_args) > 0:
-            raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
+            raise ValueError("Keyword context arguments have been provided but help_msg and error_type have not: {}"
                              "".format(kw_context_args))
 
         self.none_policy = none_policy if none_policy is not None else NonePolicy.VALIDATE
 
-        self.error_type = error_type or ValidationError
+        self.error_type = error_type if error_type is not None else ValidationError
         if not issubclass(self.error_type, ValidationError):
             raise ValueError('error_type should be a subclass of ValidationError')
 
