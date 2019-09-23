@@ -278,6 +278,9 @@ class Failure(HelpMsgMixIn, RootException):
     they should subclass `ValidationFailed` instead of `Failure`. See `ValidationFailed` for details.
     """
 
+    # We do not use slots otherwise `help_msg` cannot easily be overridden by a class attribute
+    # __slots__ = 'wrong_value', validation_func', 'validation_outcome', 'append_details', 'context'
+
     def __init__(self,
                  wrong_value,           # type: Any
                  help_msg=None,         # type: str
@@ -292,11 +295,11 @@ class Failure(HelpMsgMixIn, RootException):
 
         :param wrong_value: the value that was validated and failed validation
         :param help_msg: an optional help message specific to this failure. If not provided, the class attribute
-        `help_msg` will be used. This behaviour may be redefined by subclasses by overriding `get_help_msg`
+            `help_msg` will be used. This behaviour may be redefined by subclasses by overriding `get_help_msg`
         :param append_details: a boolean indicating if a default message containing the value should be appended to the
         string representation. Default is True
         :param kw_context_args: optional context (results, other) to store in this failure and that will be also used
-        for help message formatting
+            for help message formatting
         """
 
         self.append_details = append_details
@@ -305,7 +308,7 @@ class Failure(HelpMsgMixIn, RootException):
         self.wrong_value = wrong_value
         self.__dict__.update(kw_context_args)
 
-        # store help_msg ONLY if non-None otherwise the (possibly user-overriden) class attribute should be left visible
+        # store help_msg ONLY if non-None otherwise the (possibly user-overridden) class attribute should stay visible
         if help_msg is not None:
             self.help_msg = help_msg
 
