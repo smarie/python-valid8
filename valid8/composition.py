@@ -175,7 +175,7 @@ def and_(*validation_func  # type: ValidationFuncs
 
 class DidNotFail(ValidationFailed):
     """ Raised by the not_ operator when the inner validation function did not fail."""
-    help_msg = '{wrapped_func} validated value {wrong_value} with success, therefore the not() is a failure'
+    help_msg = '{validation_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
 
 def not_(validation_func,  # type: ValidationCallable
@@ -217,7 +217,7 @@ def not_(validation_func,  # type: ValidationCallable
                 return True  # caught exception in 'catch_all' mode: return True
 
         # if we're here that's a failure
-        raise DidNotFail(wrapped_func=validation_func, wrong_value=x, validation_outcome=res)
+        raise DidNotFail(validation_func=validation_func, wrong_value=x, validation_outcome=res)
 
     not_v_.__name__ = 'not({})'.format(get_callable_name(validation_func))
     return not_v_
