@@ -136,10 +136,10 @@ def test_unused_pytypes():
     build_house('test', 12, None)  # Mandatory/Optional validation: Declared 'Optional' with PEP484, no error
 
     with pytest.raises(ValidationError):
-        build_house('test', -1, 2)  # Value validation: @validate_io raises a Failure
+        build_house('test', -1, 2)  # Value validation: @validate_io raises a ValidationFailure
 
     with pytest.raises(ValidationError):
-        build_house('', 12, 2)  # Value validation: @validate_io raises a Failure
+        build_house('', 12, 2)  # Value validation: @validate_io raises a ValidationFailure
 
 
 @pytest.mark.skipif(sys.version_info < (3, 7), reason="checktypes does not seem to work on old python versions "
@@ -159,5 +159,5 @@ def test_readme_combining_checktypes():
         validate('x', x, custom=PositiveInt.validate)
 
     e = exc_info.value
-    assert str(e) == "Error validating [x=-1]. Validation function [validate] raised ValueError: expected " \
-                     "'PositiveInt' but got -1."
+    assert str(e) == "Error validating [x=-1]. InvalidValue: Function [validate] raised " \
+                     "ValueError: expected 'PositiveInt' but got -1"

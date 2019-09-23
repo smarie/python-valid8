@@ -27,8 +27,7 @@ from makefun import with_signature, wraps
 
 from valid8.utils_decoration import apply_on_each_func_args_sig
 from valid8.utils_typing import is_pep484_nonable
-from valid8.base import get_callable_name
-from valid8.composition import pop_kwargs
+from valid8.base import get_callable_name, pop_kwargs
 from valid8.entry_points import ValidationError, Validator, NonePolicy, NoneArgPolicy
 
 

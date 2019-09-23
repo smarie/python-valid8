@@ -4,11 +4,11 @@ try:  # python 3.5+
 except ImportError:
     pass
 
-from valid8.base import Failure
+from valid8.base import ValidationFailure
 
 
-class IsNotEven(Failure, ValueError):
-    """ Custom Failure raised by is_even """
+class IsNotEven(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_even """
     help_msg = 'Value should be even'
 
 
@@ -21,8 +21,8 @@ def is_even(x  # type: Integral
         raise IsNotEven(wrong_value=x)
 
 
-class IsNotOdd(Failure, ValueError):
-    """ Custom Failure raised by is_odd """
+class IsNotOdd(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_odd """
     help_msg = 'Value should be odd'
 
 
@@ -35,8 +35,8 @@ def is_odd(x  # type: Integral
         raise IsNotOdd(wrong_value=x)
 
 
-class IsNotMultipleOf(Failure, ValueError):
-    """ Custom Failure raised by is_multiple_of """
+class IsNotMultipleOf(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_multiple_of """
     help_msg = 'Value should be a multiple of {ref}'
 
 
@@ -47,7 +47,7 @@ def is_multiple_of(ref):
             return True
         else:
             raise IsNotMultipleOf(wrong_value=x, ref=ref)
-            # raise Failure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
+            # raise ValidationFailure('x % {ref} == 0 does not hold for x={val}'.format(ref=ref, val=x))
 
     is_multiple_of_ref.__name__ = 'is_multiple_of_{}'.format(ref)
     return is_multiple_of_ref

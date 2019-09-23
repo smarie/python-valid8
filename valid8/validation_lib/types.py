@@ -1,8 +1,8 @@
-from valid8.base import Failure
+from valid8.base import ValidationFailure
 
 
-class HasWrongType(Failure, TypeError):
-    """ Custom Failure raised by instance_of """
+class HasWrongType(ValidationFailure, TypeError):
+    """ Custom ValidationFailure raised by instance_of """
     help_msg = "Value should be an instance of {ref_type}"
 
     def __init__(self,
@@ -80,8 +80,8 @@ def instance_of(*args):
         raise TypeError('instance_of expected 2 (normal) or 1 (function generator) arguments, got ' + str(len(args)))
 
 
-class IsWrongType(Failure, TypeError):
-    """ Custom Failure raised by subclass_of """
+class IsWrongType(ValidationFailure, TypeError):
+    """ Custom ValidationFailure raised by subclass_of """
     help_msg = 'Value should be a type that is a subclass of {ref_type}'
 
     def __init__(self,

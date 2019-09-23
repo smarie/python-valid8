@@ -5,11 +5,11 @@ except ImportError:
     pass
 
 from valid8.composition import and_
-from valid8.base import Failure, ValidationFailed, get_callable_name
+from valid8.base import ValidationFailure, get_callable_name
 
 
-class Empty(Failure, ValueError):
-    """ Custom Failure raised by non_empty """
+class Empty(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by non_empty """
     help_msg = 'len(x) > 0 does not hold for x={wrong_value}'
 
 
@@ -23,8 +23,8 @@ def non_empty(x):
         raise Empty(wrong_value=x)
 
 
-class NotEmpty(Failure, ValueError):
-    """ Custom Failure raised by non_empty """
+class NotEmpty(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by non_empty """
     help_msg = 'len(x) == 0 does not hold for x={wrong_value}'
 
 
@@ -38,8 +38,8 @@ def empty(x):
         raise NotEmpty(wrong_value=x)
 
 
-class TooShort(Failure, ValueError):
-    """ Custom Failure raised by minlen """
+class TooShort(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by minlen """
     help_msg = 'len(x) >= {min_length} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, min_length, **kwargs):
@@ -65,8 +65,8 @@ def minlen(min_length
     return minlen_
 
 
-class TooLong(Failure, ValueError):
-    """ Custom Failure raised by maxlen """
+class TooLong(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by maxlen """
     help_msg = 'len(x) <= {max_length} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, max_length, **kwargs):
@@ -86,14 +86,14 @@ def maxlen(max_length,
         if len(x) <= max_length:
             return True
         else:
-            # raise Failure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
+            # raise ValidationFailure('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
             raise TooLong(wrong_value=x, max_length=max_length)
 
     maxlen_.__name__ = 'length_lesser_than_%s' % max_length
     return maxlen_
 
 
-class WrongLength(Failure, ValueError):
+class WrongLength(ValidationFailure, ValueError):
     """ Custom failure raised by has_length """
     help_msg = 'len(x) == {ref_length} does not hold for x={wrong_value}'
 
@@ -119,8 +119,8 @@ def has_length(ref_length):
     return has_length_
 
 
-class LengthNotInRange(Failure, ValueError):
-    """ Custom Failure raised by length_between """
+class LengthNotInRange(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by length_between """
     help_msg = '{min_length} <= len(x) <= {max_length} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, min_length, max_length, **kwargs):
@@ -143,7 +143,7 @@ def length_between(min_len,
         if (min_len <= len(x)) and (len(x) <= max_len):
             return True
         else:
-            # raise Failure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len,
+            # raise ValidationFailure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len,
             #  max_len, x))
             raise LengthNotInRange(wrong_value=x, min_length=min_len, max_length=max_len)
 
@@ -151,8 +151,8 @@ def length_between(min_len,
     return length_between_
 
 
-class NotInAllowedValues(Failure, ValueError):
-    """ Custom Failure raised by is_in """
+class NotInAllowedValues(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_in """
     help_msg = 'x in {allowed_values} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, allowed_values, **kwargs):
@@ -173,15 +173,15 @@ def is_in(allowed_values  # type: Set
         if x in allowed_values:
             return True
         else:
-            # raise Failure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
+            # raise ValidationFailure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
             raise NotInAllowedValues(wrong_value=x, allowed_values=allowed_values)
 
     is_in_allowed_values.__name__ = 'is_in_{}'.format(allowed_values)
     return is_in_allowed_values
 
 
-class NotSubset(Failure, ValueError):
-    """ Custom Failure raised by is_subset """
+class NotSubset(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_subset """
     help_msg = 'x subset of {reference_set} does not hold for x={wrong_value}. Unsupported elements: {unsupported}'
 
     def __init__(self, wrong_value, reference_set, unsupported, **kwargs):
@@ -203,7 +203,7 @@ def is_subset(reference_set  # type: Set
         if len(missing) == 0:
             return True
         else:
-            # raise Failure('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
+            # raise ValidationFailure('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
             #                   + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
             #                      'elements ' + str(missing))
             raise NotSubset(wrong_value=x, reference_set=reference_set, unsupported=missing)
@@ -212,8 +212,8 @@ def is_subset(reference_set  # type: Set
     return is_subset_of
 
 
-class DoesNotContainValue(Failure, ValueError):
-    """ Custom Failure raised by contains """
+class DoesNotContainValue(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by contains """
     help_msg = '{ref_value} in x does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, ref_value, **kwargs):
@@ -238,8 +238,8 @@ def contains(ref_value):
     return contains_ref_value
 
 
-class NotSuperset(Failure, ValueError):
-    """ Custom Failure raised by is_superset """
+class NotSuperset(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by is_superset """
     help_msg = 'x superset of {reference_set} does not hold for x={wrong_value}. Missing elements: {missing}'
 
     def __init__(self, wrong_value, reference_set, missing, **kwargs):
@@ -261,7 +261,7 @@ def is_superset(reference_set  # type: Set
         if len(missing) == 0:
             return True
         else:
-            # raise Failure('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
+            # raise ValidationFailure('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
             #               + ' and reference_set=' + str(reference_set) + '. x does not contain required '
             #                       'elements ' + str(missing))
             raise NotSuperset(wrong_value=x, reference_set=reference_set, missing=missing)
@@ -270,8 +270,8 @@ def is_superset(reference_set  # type: Set
     return is_superset_of
 
 
-class InvalidItemInSequence(ValidationFailed, ValueError):
-    """ Custom Failure raised by on_all_ and on_each_ """
+class InvalidItemInSequence(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by on_all_ and on_each_ """
     help_msg = 'Provided sequence contains one value that is invalid.'
 
 
@@ -301,15 +301,15 @@ def on_all_(*validation_func):
             try:
                 res = validation_function_func(x_elt)
             except Exception as e:
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func,
+                raise InvalidItemInSequence(wrong_value=x_elt, validation_func=validation_function_func,
                                             validation_outcome=e)
 
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
             if (res is not None) and (res is not True):
                 # one element of x was not valid > raise
-                # raise Failure('on_all_(' + str(validation_func) + '): failed validation for input '
+                # raise ValidationFailure('on_all_(' + str(validation_func) + '): failed validation for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
-                raise InvalidItemInSequence(wrong_value=x_elt, wrapped_func=validation_function_func,
+                raise InvalidItemInSequence(wrong_value=x_elt, validation_func=validation_function_func,
                                             validation_outcome=res)
         return True
 
@@ -344,7 +344,7 @@ def on_each_(*validation_functions_collection):
     def on_each_val(x  # type: Tuple
                     ):
         if len(validation_function_funcs) != len(x):
-            raise Failure(x, 'on_each_: x does not have the same number of elements than '
+            raise ValidationFailure(x, 'on_each_: x does not have the same number of elements than '
                              '`validation_functions_collection`.')
         else:
             # apply each validation_function on the input with the same position in the collection
@@ -355,14 +355,14 @@ def on_each_(*validation_functions_collection):
                     res = validation_function_func(elt)
                 except Exception as e:
                     raise InvalidItemInSequence(wrong_value=elt,
-                                                wrapped_func=validation_function_func,
+                                                validation_func=validation_function_func,
                                                 validation_outcome=e)
 
                 # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
                 if (res is not None) and (res is not True):
                     # one validation_function was unhappy > raise
                     raise InvalidItemInSequence(wrong_value=elt,
-                                                wrapped_func=validation_function_func,
+                                                validation_func=validation_function_func,
                                                 validation_outcome=res)
             return True
 

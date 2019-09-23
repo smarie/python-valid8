@@ -95,7 +95,7 @@ def test_readme_examples_4():
     my_function(l)
 
     # much better:
-    from valid8 import validate_arg, Failure
+    from valid8 import validate_arg, ValidationFailure
     from valid8.validation_lib import instance_of, on_all_, HasWrongType, WrongLength, NotInRange
 
     def is_valid_tuple(t):
@@ -114,12 +114,12 @@ def test_readme_examples_4():
         # (c) the second element is a lowercase string of size 3
         instance_of(t[1], str)
         if len(t[1]) != 3: raise WrongLength(t[1], ref_length=3)
-        # -- finally you can write custom Failure types
+        # -- finally you can write custom ValidationFailure types
         if not t[1].islower():
             raise NotLowerCase(t[1])
 
-    class NotLowerCase(Failure, ValueError):
-        """ Example custom exception class used in custom validation function. `Failure` base class provides some
+    class NotLowerCase(ValidationFailure, ValueError):
+        """ Example custom exception class used in custom validation function. `ValidationFailure` base class provides some
         mechanisms to easily build the help message (same mechanisms than ValidationError)"""
         help_msg = "Value is not a lowercase string: {wrong_value}"
 

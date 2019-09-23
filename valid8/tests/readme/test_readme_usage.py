@@ -2,6 +2,7 @@ import pytest
 from functools import partial
 
 from valid8 import InputValidationError, ValidationError, assert_valid, is_valid, Validator
+from valid8.base import InvalidValue
 from valid8.tests.helpers.math import isfinite, inf
 
 # This test file corresponds to usage.md that is actually not used anymore. But we leave it as it can do no harm
@@ -14,40 +15,46 @@ def test_tutorial():
         assert isfinite(age)
         print('Hello, {}-years-old fella !'.format(age))
 
+    hello(21)
     with pytest.raises(AssertionError):
         hello(inf)  # AssertionError: assert False \ where False = <built-in function isfinite>(inf)
 
     # v1: age is finite
-    from valid8 import assert_valid
+    # from valid8 import assert_valid
+    from valid8 import validate
 
     def hello(age):
-        assert_valid('age', age, isfinite)
+        # assert_valid('age', age, isfinite)
+        validate('age', age, custom=isfinite)
         print('Hello, {}-years-old fella !'.format(age))
 
+    hello(21)
     with pytest.raises(ValidationError) as exc_info:
         hello(inf)
     e = exc_info.value
-    assert str(e) == "Error validating [age=inf]: validation function [isfinite] returned [False]."
+    assert str(e) == "Error validating [age=inf]. InvalidValue: Function [isfinite] returned [False] for value inf."
     assert str(e.validator) == "Validator<validation_function=isfinite, none_policy=VALIDATE, exc_type=ValidationError>"
     assert e.validator.get_main_function_name() == 'isfinite'
     assert e.validator.main_function.__name__ == 'isfinite'
     assert e.var_name == 'age'
     assert e.var_value == inf
-    assert e.validation_outcome == False
+    assert isinstance(e.failure, InvalidValue)
+    assert e.failure.validation_outcome is False
 
     # v2: age between 0 and 100
-    from valid8 import between
+    from valid8.validation_lib import between
     def hello(age):
         assert_valid('age', age, [isfinite, between(0, 150)])
         print('Hello, {}-years-old fella !'.format(age))
 
+    hello(21)
     with pytest.raises(ValidationError) as exc_info:
         hello(152)
     e = exc_info.value
-    assert str(e) == "Error validating [age=152]. Validation function [and(isfinite, between_0_and_150)] raised " \
+    assert str(e) == "Error validating [age=152]. " \
                      "AtLeastOneFailed: At least one validation function failed validation for value <152>. " \
                      "Successes: ['isfinite'] / Failures: {" \
-                     "'between_0_and_150': 'NotInRange: 0 <= x <= 150 does not hold for x=152. Wrong value: 152'}."
+                     "'between_0_and_150': 'NotInRange: 0 <= x <= 150 does not hold for x=152.'}."
 
     # v3: age is an integer
     # https://stackoverflow.com/questions/3501382/checking-whether-a-variable-is-an-integer-or-not
@@ -60,9 +67,8 @@ def test_tutorial():
         hello(12.5)
     e = exc_info.value
     assert str(e) == "Error validating [age=12.5]. " \
-                     "Validation function [and(isfinite, between_0_and_150, int(x) == x)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value <12.5>. " \
-                     "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'False'}."
+                     "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'Returned False.'}."
 
 
 def test_usage_base_validation_functions():
@@ -182,62 +188,63 @@ def test_usage_validators():
     with pytest.raises(ValidationError) as exc_info:
         validate_is_finite('val', inf)
     e = exc_info.value
-    assert str(e) == 'Error validating [val=inf]: validation function [isfinite] returned [False].'
+    assert str(e) == 'Error validating [val=inf]. InvalidValue: Function [isfinite] returned [False] for value inf.'
 
     validate_is_superclass_of_bool('typ', int)  # ok
     with pytest.raises(ValidationError) as exc_info:
         validate_is_superclass_of_bool('typ', str)
     e = exc_info.value
-    assert str(e) == "Error validating [typ=%s]: validation function [%s] returned [False]." \
-                     "" % (repr(str), repr(_is_subclass_of_bool))
+    assert str(e) == "Error validating [typ=%s]. InvalidValue: Function [%s] returned [False] for value %s." \
+                     "" % (repr(str), repr(_is_subclass_of_bool), repr(str))
 
     validate_is_multiple_of_3('val', 21)  # ok
     with pytest.raises(ValidationError) as exc_info:
         validate_is_multiple_of_3('val', 4)
     e = exc_info.value
-    assert str(e) == "Error validating [val=4]: validation function [is_multiple_of_3] returned [False]."
+    assert str(e) == "Error validating [val=4]. InvalidValue: Function [is_multiple_of_3] returned [False] for value 4."
 
     validate_is_lowercase('txt', 'abc')  # ok
     with pytest.raises(ValidationError) as exc_info:
         validate_is_lowercase('txt','aBc')
     e = exc_info.value
-    assert str(e) == "Error validating [txt=aBc]: validation function [<lambda>] returned [False]."
+    assert str(e) == "Error validating [txt=aBc]. InvalidValue: Function [<lambda>] returned [False] for value 'aBc'."
 
     validate_starts_with_a('txt','Abc')  # ok
     with pytest.raises(ValidationError) as exc_info:
         validate_starts_with_a('txt','bac')
     e = exc_info.value
-    assert str(e) == "Error validating [txt=bac]: validation function [s.lower().startswith('a')] returned [False]."
+    assert str(e) == "Error validating [txt=bac]. InvalidValue: Function [s.lower().startswith('a')] returned [False] " \
+                     "for value 'bac'."
 
     validate_is_multiple_of_5('val',15)  # ok
     with pytest.raises(ValidationError) as exc_info:
         validate_is_multiple_of_5('val',1)
     e = exc_info.value
-    assert str(e) == "Error validating [val=1]: validation function [is_multiple_of_5] returned [False]."
+    assert str(e) == "Error validating [val=1]. InvalidValue: Function [is_multiple_of_5] returned [False] for value 1."
 
     # last batch of functions: with exceptions
-    validate_is_greater_than_0('val',0)
+    validate_is_greater_than_0('val', 0)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_0('val',-0.2)
+        validate_is_greater_than_0('val', -0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=-0.2]. Validation function [gt_0] raised " \
+    assert str(e) == "Error validating [val=-0.2]. InvalidValue: Function [gt_0] raised " \
                      "ValueError: x is not greater than 0, x=-0.2."
-    validate_is_greater_than_1('val',1)
+    validate_is_greater_than_1('val', 1)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_1('val',0.2)
+        validate_is_greater_than_1('val', 0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=0.2]. Validation function [gt_1] raised " \
-                     "Failure: x is not greater than 1, x=0.2. Wrong value: 0.2."
-    validate_is_greater_than_2('val',2)
+    assert str(e) == "Error validating [val=0.2]. ValidationFailure: x is not greater than 1, x=0.2. Wrong value: 0.2."
+    validate_is_greater_than_2('val', 2)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_2('val',0.2)
+        validate_is_greater_than_2('val', 0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=0.2]. Validation function [gt_2] raised AssertionError: assert 0.2 >= 2."
-    validate_is_greater_than_3('val',3)
+    assert str(e) == "Error validating [val=0.2]. InvalidValue: Function [gt_2] raised AssertionError: assert 0.2 >= 2"
+    validate_is_greater_than_3('val', 3)
     with pytest.raises(ValidationError) as exc_info:
-        validate_is_greater_than_3('val',0.2)
+        validate_is_greater_than_3('val', 0.2)
     e = exc_info.value
-    assert str(e) == "Error validating [val=0.2]: validation function [gt_3] returned [x is not greater than 3, x=0.2]."
+    assert str(e) == "Error validating [val=0.2]. InvalidValue: Function [gt_3] returned " \
+                     "[x is not greater than 3, x=0.2] for value 0.2."
 
 
 def create_base_functions():
@@ -286,15 +293,15 @@ def create_base_functions():
 
 
 def create_base_functions_2():
-    from valid8 import Failure
+    from valid8 import ValidationFailure
 
     # (recommended) raising an exception
     def gt_0(x):
         if not (x >= 0):
-            raise ValueError('x is not greater than 0, x={}'.format(x))
+            raise ValueError('x is not greater than 0, x={}.'.format(x))
     def gt_1(x):
         if x < 1:
-            raise Failure(x, 'x is not greater than 1, x={}'.format(x))
+            raise ValidationFailure(x, 'x is not greater than 1, x={}.'.format(x))
 
     # (not recommended) relying on assert, only valid in 'debug' mode
     def gt_2(x):
@@ -320,14 +327,14 @@ def test_usage_validate_annotation():
         myfunc(None, inf, inf)
         pytest.fail("InputValidationError was not raised")
     e = exc_info.value
-    assert str(e) == 'Error validating input [arg2=inf] for function [myfunc]: ' \
-                     'validation function [isfinite] returned [False].'
+    assert str(e) == 'Error validating input [arg2=inf] for function [myfunc]. ' \
+                     'InvalidValue: Function [isfinite] returned [False] for value inf.'
 
 
 def test_usage_custom_validators():
     """ """
 
-    from valid8 import validate_io, ValidationError, Failure
+    from valid8 import validate_io, ValidationError, ValidationFailure
 
     def is_mod_3(x):
         """ A simple validator with no parameters """
@@ -346,7 +353,7 @@ def test_usage_custom_validators():
         if x >= 1:
             return True
         else:
-            raise Failure(x, 'x >= 1 does not hold for x={}'.format(x))
+            raise ValidationFailure(x, 'x >= 1 does not hold for x={}'.format(x))
 
     def gt_assert2(x):
         """(not recommended) relying on assert, only valid in 'debug' mode"""
@@ -360,10 +367,10 @@ def test_usage_custom_validators():
     # -- check that the validation works
     myfunc(21, 15)  # ok
     with pytest.raises(ValidationError):
-        myfunc(4, 21)  # inner Failure: a is not a multiple of 3
+        myfunc(4, 21)  # inner ValidationFailure: a is not a multiple of 3
     with pytest.raises(ValidationError):
-        myfunc(15, 1)  # inner Failure: b is not a multiple of 5
+        myfunc(15, 1)  # inner ValidationFailure: b is not a multiple of 5
     with pytest.raises(ValidationError):
         myfunc(1, 0)  # inner AssertionError: a is not >= 2
     with pytest.raises(ValidationError):
-        myfunc(0, 0)  # inner Failure: a is not >= 1
+        myfunc(0, 0)  # inner ValidationFailure: a is not >= 1

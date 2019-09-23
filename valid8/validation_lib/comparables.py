@@ -4,19 +4,19 @@ try:  # python 3.5+
 except ImportError:
     pass
 
-from valid8.base import Failure
+from valid8.base import ValidationFailure
 
 
-class NotEqual(Failure, ValueError):
-    """ Custom Failure raised by ?? (only by validate for now) """
+class NotEqual(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by ?? (only by validate for now) """
     help_msg = 'x == {ref_value} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, ref_value, **kwargs):
         super(NotEqual, self).__init__(wrong_value=wrong_value, ref_value=ref_value, **kwargs)
 
 
-class TooSmall(Failure, ValueError):
-    """ Custom Failure raised by gt """
+class TooSmall(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by gt """
     help_msg = 'x {symbol} {min_value} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, min_value, strict, **kwargs):
@@ -40,7 +40,7 @@ def gt(min_value,    # type: Any
             if x > min_value:
                 return True
             else:
-                # raise Failure('x > ' + str(min_value) + ' does not hold for x=' + str(x))
+                # raise ValidationFailure('x > ' + str(min_value) + ' does not hold for x=' + str(x))
                 # '{val} is not strictly greater than {ref}'
                 raise TooSmall(wrong_value=x, min_value=min_value, strict=True)
     else:
@@ -48,7 +48,7 @@ def gt(min_value,    # type: Any
             if x >= min_value:
                 return True
             else:
-                # raise Failure('x >= ' + str(min_value) + ' does not hold for x=' + str(x))
+                # raise ValidationFailure('x >= ' + str(min_value) + ' does not hold for x=' + str(x))
                 # '{val} is not greater than {ref}'
                 raise TooSmall(wrong_value=x, min_value=min_value, strict=False)
 
@@ -62,8 +62,8 @@ def gts(min_value_strict  # type: Any
     return gt(min_value_strict, True)
 
 
-class TooBig(Failure, ValueError):
-    """ Custom Failure raised by lt """
+class TooBig(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by lt """
     help_msg = 'x {symbol} {max_value} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, max_value, strict, **kwargs):
@@ -87,7 +87,7 @@ def lt(max_value,    # type: Any
             if x < max_value:
                 return True
             else:
-                # raise Failure('x < ' + str(max_value) + ' does not hold for x=' + str(x))
+                # raise ValidationFailure('x < ' + str(max_value) + ' does not hold for x=' + str(x))
                 # '{val} is not strictly lesser than {ref}'
                 raise TooBig(wrong_value=x, max_value=max_value, strict=True)
     else:
@@ -95,7 +95,7 @@ def lt(max_value,    # type: Any
             if x <= max_value:
                 return True
             else:
-                # raise Failure('x <= ' + str(max_value) + ' does not hold for x=' + str(x))
+                # raise ValidationFailure('x <= ' + str(max_value) + ' does not hold for x=' + str(x))
                 # '{val} is not lesser than {ref}'
                 raise TooBig(wrong_value=x, max_value=max_value, strict=False)
 
@@ -109,8 +109,8 @@ def lts(max_value_strict  # type: Any
     return lt(max_value_strict, True)
 
 
-class NotInRange(Failure, ValueError):
-    """ Custom Failure raised by between """
+class NotInRange(ValidationFailure, ValueError):
+    """ Custom ValidationFailure raised by between """
     help_msg = '{min_value} {left_symbol} x {right_symbol} {max_value} does not hold for x={wrong_value}'
 
     def __init__(self, wrong_value, min_value, left_strict, max_value, right_strict, **kwargs):
@@ -141,7 +141,7 @@ def between(min_val,          # type: Any
             if (min_val < x) and (x < max_val):
                 return True
             else:
-                # raise Failure('{} < x < {} does not hold for x={}'.format(min_val, max_val, x))
+                # raise ValidationFailure('{} < x < {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=True,
                                  max_value=max_val, right_strict=True)
     elif open_left:
@@ -149,7 +149,7 @@ def between(min_val,          # type: Any
             if (min_val < x) and (x <= max_val):
                 return True
             else:
-                # raise Failure('between: {} < x <= {} does not hold for x={}'.format(min_val, max_val, x))
+                # raise ValidationFailure('between: {} < x <= {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=True,
                                  max_value=max_val, right_strict=False)
     elif open_right:
@@ -157,7 +157,7 @@ def between(min_val,          # type: Any
             if (min_val <= x) and (x < max_val):
                 return True
             else:
-                # raise Failure('between: {} <= x < {} does not hold for x={}'.format(min_val, max_val, x))
+                # raise ValidationFailure('between: {} <= x < {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=False,
                                  max_value=max_val, right_strict=True)
     else:
@@ -165,7 +165,7 @@ def between(min_val,          # type: Any
             if (min_val <= x) and (x <= max_val):
                 return True
             else:
-                # raise Failure('between: {} <= x <= {} does not hold for x={}'.format(min_val, max_val, x))
+                # raise ValidationFailure('between: {} <= x <= {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=False,
                                  max_value=max_val, right_strict=False)
 

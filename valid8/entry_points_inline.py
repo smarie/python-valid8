@@ -3,7 +3,7 @@ from warnings import warn
 
 from linecache import getline
 
-from valid8.base import ValueIsNone, raise_
+from valid8.base import ValueIsNone, raise_, ValidationFailure, InvalidType, InvalidValue
 from valid8.entry_points import Validator, ValidationError, NonePolicy, assert_valid
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
@@ -91,6 +91,9 @@ class _QuickValidator(Validator):
     """
 
     def __init__(self):
+        # dummy method with same name
+        def validate(x):
+            pass
         super(_QuickValidator, self).__init__(validate)
 
     def _create_validation_error(self,
@@ -107,9 +110,6 @@ class _QuickValidator(Validator):
 
         # remove all causes - this is a quick validator
         err.__cause__ = None
-
-        # disable displaying the annoying prefix
-        err.display_prefix_for_exc_outcomes = False
         return err
 
     def assert_valid(self,
@@ -352,18 +352,6 @@ class WrappingValidatorEye(object):
             super(WrappingValidatorEye, self).__setattr__('outcome', value)
 
 
-class _DummyCallable(object):
-    """ A dummy callable whose name can be configured """
-    def __init__(self, name):
-        self.name = name
-
-    def __call__(self, *args, **kwargs):
-        pass
-
-    def __str__(self):
-        return self.name
-
-
 class validator(Validator):
     """
     A context manager to wrap validation tasks.
@@ -424,8 +412,11 @@ class validator(Validator):
         if subclass_of is not None:
             assert_subclass_of(value, subclass_of)
 
-        validation_function = _DummyCallable('<wrap_valid_contents>')
-        super(validator, self).__init__(validation_function, error_type=error_type, help_msg=help_msg,
+        def dummy_callable(x):
+            pass
+
+        dummy_callable.__name__ = '<name_not_available: outside of context manager>'
+        super(validator, self).__init__(dummy_callable, error_type=error_type, help_msg=help_msg,
                                         none_policy=NonePolicy.VALIDATE, **kw_context_args)
         self.name = name
         self.value = value
@@ -448,12 +439,13 @@ class validator(Validator):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
 
-        result = exc_val or self.eye.outcome
+        res = exc_val or self.eye.outcome
 
-        if result is not None and result is not True:
-            # *** We should raise a Validation Error ***
+        # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
+        if res is not None and res is not True:
+            # ValidationFailure: *** We should raise a Validation Error ***
 
-            # and where the exit happened
+            # extract the source file and line number where exit happened
             # stack = traceback.extract_stack(limit=2)
             # exit_line_nb = stack[-2][1]
             # noinspection PyProtectedMember
@@ -467,61 +459,14 @@ class validator(Validator):
             else:
                 # read the lines in the source corresponding to the contents
                 try:
-                    if self.entry_file_path.startswith('<'):
-                        # interactive interpreter...
-
-                        # `inspect` doesnt work yet for interactive interpreters see https://bugs.python.org/issue12920
-                        # from inspect import getsourcelines
-                        # lines = getsourcelines(exit_frame.f_code)[0]
-                        # wrapped_block_lines = [l.strip() for l in
-                        #                        lines[(self.entry_line_nb - exit_frame.f_code.co_firstlineno):
-                        #                              (exit_frame.f_lineno - exit_frame.f_code.co_firstlineno + 1)]]
-
-                        # In PyCharm it seems to be a specific console, no idea on how to get it
-                        # from code import InteractiveConsole
-
-                        # On iPython/jupyter there is something...
-                        # try:
-                        #     from IPython.core.history import HistoryAccessor
-                        #     h = HistoryAccessor(profile='default')
-                        #     # lines = h.get_range_by_str("%s-%s" % )
-                        #     print("TO DO %s" % h.get_range_by_str(""))
-                        # except ImportError:
-                        #     pass
-                        # this is supposed to work too on iPython
-                        # code inspired from 'findsource' function in
-                        #    https://github.com/uqfoundation/dill/blob/master/dill/source.py
-                        try:
-                            # noinspection PyUnresolvedReferences
-                            import readline
-                        except ImportError:
-                            err = sys.exc_info()[1].args[0]
-                            if sys.platform[:3] == 'win':
-                                err += ", please install 'pyreadline'"
-                            raise IOError(err)
-                        lbuf = readline.get_current_history_length()
-                        lines = [readline.get_history_item(i) + '\n' for i in range(1, lbuf)]
-                        # print('history! yes {} {}'.format(self.entry_line_nb, lbuf))
-                        # for line in lines:
-                        #     print(line)
-                        exit_line_nb = len(lines)
-
-                        # retrieve the lines wrapped by the context manager, until the line that raises the exception.
-                        # note: it might not be the last line in the block of code wrapped by the context manager
-                        wrapped_block_lines = [line.strip()
-                                               for line in lines[self.entry_line_nb:exit_line_nb]]
-                    else:
-                        # -- that's a normal code file
-                        # with open(self.entry_file_path) as src:
-                        #     lines = list(src)
-
-                        # faster: use linecache https://docs.python.org/3/library/linecache.html
-                        wrapped_block_lines = [getline(self.entry_file_path, i + 1).strip()
-                                               for i in range(self.entry_line_nb, exit_line_nb)]
-
+                    wrapped_block_lines = self._get_wrapped_lines(exit_file_path, exit_line_nb)
+                except Exception as e:
+                    warn('Error while inspecting source code at {}. No details will be added to the resulting '
+                         'exception. Caught {}'.format(exit_file_path, e))
+                else:
                     if exc_val is not None:
                         # -- There was an exception, we dont know where: output the full code in self.main_function.name
-                        self.main_function.name = ' ; '.join(wrapped_block_lines)
+                        self.main_function.__name__ = ' ; '.join(wrapped_block_lines)
 
                     else:
                         # We can put this back ONLY if we find a way to also work properly when the line is a multiline
@@ -537,13 +482,79 @@ class validator(Validator):
                         #     self.main_function.name = found
                         # else:
                         #     # not able to identify... dump the whole block
-                        self.main_function.name = ' ; '.join(wrapped_block_lines)
+                        self.main_function.__name__ = ' ; '.join(wrapped_block_lines)
 
-                except Exception as e:
-                    warn('Error while inspecting source code at {}. No details will be added to the resulting '
-                         'exception. Caught {}'.format(self.entry_file_path, e))
+            if isinstance(res, ValidationFailure):
+                failure = res
+            else:
+                # create a failure around this result
+                if isinstance(res, TypeError) and not isinstance(res, ValueError):
+                    # special case: we want to raise a ValidationFailure that inherits from TypeError
+                    failure_type = InvalidType
+                else:
+                    failure_type = InvalidValue
 
-            raise_(self._create_validation_error(self.name, self.value, validation_outcome=result))
+                # create a failure with validation function = the dummy self.main_function, to benefit from the custom name set above
+                failure = failure_type(wrong_value=self.value, validation_func=self.main_function,
+                                       validation_outcome=res)
+
+            raise_(self._create_validation_error(self.name, self.value, validation_outcome=failure,
+                                                 **self.kw_context_args))
+
+    def _get_wrapped_lines(self, exit_file_path, exit_line_nb):
+        """ Return the lines in the context manager, before the error. Should be called in __exit__ only."""
+        if exit_file_path.startswith('<'):
+            # interactive interpreter...
+
+            # `inspect` doesnt work yet for interactive interpreters see https://bugs.python.org/issue12920
+            # from inspect import getsourcelines
+            # lines = getsourcelines(exit_frame.f_code)[0]
+            # wrapped_block_lines = [l.strip() for l in
+            #                        lines[(self.entry_line_nb - exit_frame.f_code.co_firstlineno):
+            #                              (exit_frame.f_lineno - exit_frame.f_code.co_firstlineno + 1)]]
+
+            # In PyCharm it seems to be a specific console, no idea on how to get it
+            # from code import InteractiveConsole
+
+            # On iPython/jupyter there is something...
+            # try:
+            #     from IPython.core.history import HistoryAccessor
+            #     h = HistoryAccessor(profile='default')
+            #     # lines = h.get_range_by_str("%s-%s" % )
+            #     print("TO DO %s" % h.get_range_by_str(""))
+            # except ImportError:
+            #     pass
+            # this is supposed to work too on iPython
+            # code inspired from 'findsource' function in
+            #    https://github.com/uqfoundation/dill/blob/master/dill/source.py
+            try:
+                # noinspection PyUnresolvedReferences
+                import readline
+            except ImportError:
+                err = sys.exc_info()[1].args[0]
+                if sys.platform[:3] == 'win':
+                    err += ", please install 'pyreadline'"
+                raise IOError(err)
+            lbuf = readline.get_current_history_length()
+            lines = [readline.get_history_item(i) + '\n' for i in range(1, lbuf)]
+            # print('history! yes {} {}'.format(self.entry_line_nb, lbuf))
+            # for line in lines:
+            #     print(line)
+            exit_line_nb = len(lines)
+
+            # retrieve the lines wrapped by the context manager, until the line that raises the exception.
+            # note: it might not be the last line in the block of code wrapped by the context manager
+            wrapped_block_lines = [line.strip()
+                                   for line in lines[self.entry_line_nb:exit_line_nb]]
+        else:
+            # -- that's a normal code file
+            # with open(exit_file_path) as src:
+            #     lines = list(src)
+
+            # faster: use linecache https://docs.python.org/3/library/linecache.html
+            wrapped_block_lines = [getline(exit_file_path, i + 1).strip()
+                                   for i in range(self.entry_line_nb, exit_line_nb)]
+        return wrapped_block_lines
 
 
 validation = validator

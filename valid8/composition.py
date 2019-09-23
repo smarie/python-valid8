@@ -4,8 +4,8 @@ from sys import version_info
 
 from makefun import with_signature
 
-from valid8.base import Failure, ValidationFailed, get_callable_names, get_callable_name, _none_accepter, _none_rejecter
-from valid8.common_syntax import _make_validation_func_callables
+from valid8.base import ValidationFailure, get_callable_names, get_callable_name, _none_accepter, _none_rejecter, pop_kwargs
+from valid8.common_syntax import make_validation_func_callables
 
 
 try:  # python 3.5+
@@ -30,12 +30,13 @@ except ImportError:
     use_typing = False
 
 
-class CompositionFailure(Failure):
+class CompositionFailure(ValidationFailure):
     """ Root failure of all composition operators """
 
     def __init__(self,
                  validators,
                  value,
+                 ctx,
                  cause=None  # type: Exception
                  ):
         """
@@ -47,7 +48,7 @@ class CompositionFailure(Failure):
         :param value:
         :param cause
         """
-        successes, failures = self.play_all_validators(validators, value)
+        successes, failures = self.play_all_validators(validators, value, **ctx)
 
         # store information
         self.validators = validators
@@ -61,38 +62,34 @@ class CompositionFailure(Failure):
         if cause is not None:
             self.__cause__ = cause
 
-    def get_details(self):
+    def get_details(self, compact_mode=False):
         """ Overrides the base method in order to give details on the various successes and failures """
 
         # transform the dictionary of failures into a printable form
-        need_to_print_value = True
         failures_for_print = OrderedDict()
         for validator, failure in self.failures.items():
             name = get_callable_name(validator)
-            if isinstance(failure, Exception):
-                if isinstance(failure, ValidationFailed) or isinstance(failure, CompositionFailure):
-                    need_to_print_value = False
-                failures_for_print[name] = '{exc_type}: {msg}'.format(exc_type=type(failure).__name__, msg=str(failure))
+            while name in failures_for_print:
+                name += '_'
+            if isinstance(failure, ValidationFailure):
+                failures_for_print[name] = failure.get_str_for_composition_errors()
+            elif isinstance(failure, Exception):
+                failures_for_print[name] = '%s: %s' % (type(failure).__name__, failure)
             else:
-                failures_for_print[name] = str(failure)
-
-        if need_to_print_value:
-            value_str = ' for value <%s>' % repr(self.wrong_value)
-        else:
-            value_str = ''
+                # should not happen since all functions are failure raisers now
+                # failures_for_print[name] = str(failure)
+                raise ValueError("Internal error, this should not happen - please report")
 
         # OrderedDict does not pretty print...
         key_values_str = [repr(key) + ': ' + repr(val) for key, val in failures_for_print.items()]
-        failures_for_print_str = '{' + ', '.join(key_values_str) + '}'
+        failures_str = '{' + ', '.join(key_values_str) + '}'
 
         # Note: we do note cite the value in the message since it is most probably available in inner messages [{val}]
-        msg = '{what}{possibly_value}. Successes: {success} / Failures: {fails}' \
-              ''.format(what=self.get_what(), possibly_value=value_str,
-                        success=self.successes, fails=failures_for_print_str)
+        what = self.get_what()
+        possibly_value = "" if compact_mode else (" for value <%s>" % repr(self.wrong_value))
+        return '%s%s. Successes: %s / Failures: %s.' % (what, possibly_value, self.successes, failures_str)
 
-        return msg
-
-    def play_all_validators(self, validators, value):
+    def play_all_validators(self, validators, value, **ctx):
         """
         Utility method to play all the provided validators on the provided value and output the
 
@@ -105,7 +102,7 @@ class CompositionFailure(Failure):
         for validator in validators:
             name = get_callable_name(validator)
             try:
-                res = validator(value)
+                res = validator(value, **ctx)
                 # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
                 if (res is None) or (res is True):
                     successes.append(name)
@@ -150,22 +147,26 @@ def and_(*validation_func  # type: ValidationFuncs
         of callables, they will be transformed to functions automatically.
     :return:
     """
-    validation_funcs = _make_validation_func_callables(*validation_func)
+    validation_funcs = make_validation_func_callables(*validation_func)
+    return _and_(validation_funcs)
 
+
+def _and_(validation_funcs  # type: ValidationFuncs
+          ):
     if len(validation_funcs) == 1:
         return validation_funcs[0]  # simplification for single validator case: no wrapper
     else:
-        def and_v_(x):
+        def and_v_(x, **ctx):
             for validator in validation_funcs:
                 try:
-                    res = validator(x)
+                    res = validator(x, **ctx)
                 except Exception as e:
                     # one validator was unhappy > raise
-                    raise AtLeastOneFailed(validation_funcs, x, cause=e)
+                    raise AtLeastOneFailed(validation_funcs, x, ctx, cause=e)
                 # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
                 if (res is not None) and (res is not True):
                     # one validator was unhappy > raise
-                    raise AtLeastOneFailed(validation_funcs, x)
+                    raise AtLeastOneFailed(validation_funcs, x, ctx)
 
             return True
 
@@ -173,7 +174,7 @@ def and_(*validation_func  # type: ValidationFuncs
         return and_v_
 
 
-class DidNotFail(ValidationFailed):
+class DidNotFail(ValidationFailure):
     """ Raised by the not_ operator when the inner validation function did not fail."""
     help_msg = '{validation_func} validated value {wrong_value} with success, therefore the not() is a failure'
 
@@ -184,30 +185,30 @@ def not_(validation_func,  # type: ValidationCallable
     # type: (...) -> ValidationCallable
     """
     Generates the inverse of the provided validation functions: when the validator returns `False` or raises a
-    `Failure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
+    `ValidationFailure`, this function returns `True`. Otherwise it raises a `DidNotFail` failure.
 
-    By default, exceptions of types other than `Failure` are not caught and therefore fail the validation
+    By default, exceptions of types other than `ValidationFailure` are not caught and therefore fail the validation
     (`catch_all=False`). To change this behaviour you can turn the `catch_all` parameter to `True`, in which case all
-    exceptions will be caught instead of just `Failure`s.
+    exceptions will be caught instead of just `ValidationFailure`s.
 
     Note that the argument is a **single** callable. You may use `not_all(<validation_functions_list>)` as a shortcut
     for `not_(and_(<validation_functions_list>))` to support several validation functions in the 'not'.
 
     :param validation_func: the base validation function. A callable.
-    :param catch_all: an optional boolean flag. By default, only `Failure` error types are silently caught and turned
+    :param catch_all: an optional boolean flag. By default, only `ValidationFailure` error types are silently caught and turned
         into a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
         'ok' result
     :return:
     """
 
-    def not_v_(x):
+    def not_v_(x, **ctx):
         try:
-            res = validation_func(x)
+            res = validation_func(x, **ctx)
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
             if (res is not None) and (res is not True):  # inverse the result
                 return True
 
-        except Failure:
+        except ValidationFailure:
             return True  # caught failure: always return True
 
         except Exception as e:
@@ -248,16 +249,16 @@ def or_(*validation_func  # type: ValidationFuncs
     :return:
     """
 
-    validation_func = _make_validation_func_callables(*validation_func)
+    validation_func = make_validation_func_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validator case
     else:
-        def or_v_(x):
+        def or_v_(x, **ctx):
             for validator in validation_func:
                 # noinspection PyBroadException
                 try:
-                    res = validator(x)
+                    res = validator(x, **ctx)
                     # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
                     if (res is None) or (res is True):
                         # we can return : one validator was happy
@@ -267,7 +268,7 @@ def or_(*validation_func  # type: ValidationFuncs
                     pass
 
             # no validator accepted: gather details and raise
-            raise AllValidatorsFailed(validation_func, x)
+            raise AllValidatorsFailed(validation_func, x, ctx)
 
         or_v_.__name__ = 'or({})'.format(get_callable_names(validation_func))
         return or_v_
@@ -298,17 +299,17 @@ def xor_(*validation_func  # type: ValidationFuncs
     :return:
     """
 
-    validation_func = _make_validation_func_callables(*validation_func)
+    validation_func = make_validation_func_callables(*validation_func)
 
     if len(validation_func) == 1:
         return validation_func[0]  # simplification for single validation function case
     else:
-        def xor_v_(x):
+        def xor_v_(x, **ctx):
             ok_validators = []
             for val_func in validation_func:
                 # noinspection PyBroadException
                 try:
-                    res = val_func(x)
+                    res = val_func(x, **ctx)
                     # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
                     if (res is None) or (res is True):
                         ok_validators.append(val_func)
@@ -322,11 +323,11 @@ def xor_(*validation_func  # type: ValidationFuncs
 
             elif len(ok_validators) > 1:
                 # several validation_func happy : fail
-                raise XorTooManySuccess(validation_func, x)
+                raise XorTooManySuccess(validation_func, x, ctx)
 
             else:
                 # no validation function happy, fail
-                raise AllValidatorsFailed(validation_func, x)
+                raise AllValidatorsFailed(validation_func, x, ctx)
 
         xor_v_.__name__ = 'xor({})'.format(get_callable_names(validation_func))
         return xor_v_
@@ -354,7 +355,7 @@ def not_all(*validation_func,  # type: ValidationFuncs
         Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
-    :param catch_all: an optional boolean flag. By default, only Failure are silently caught and turned into
+    :param catch_all: an optional boolean flag. By default, only ValidationFailure are silently caught and turned into
         a 'ok' result. Turning this flag to True will assume that all exceptions should be caught and turned to a
         'ok' result
     :return:
@@ -405,32 +406,3 @@ def fail_on_none(*validation_func  # type: ValidationFuncs
     """
     validation_func = and_(*validation_func)
     return _none_rejecter(validation_func)
-
-
-def pop_kwargs(kwargs,
-               names_with_defaults,  # type: List[Tuple[str, Any]]
-               allow_others=False
-               ):
-    """
-    Internal utility method to extract optional arguments from kwargs.
-
-    :param kwargs:
-    :param names_with_defaults:
-    :param allow_others: if False (default) then an error will be raised if kwargs still contains something at the end.
-    :return:
-    """
-    all_arguments = []
-    for name, default_ in names_with_defaults:
-        try:
-            val = kwargs.pop(name)
-        except KeyError:
-            val = default_
-        all_arguments.append(val)
-
-    if not allow_others and len(kwargs) > 0:
-        raise ValueError("Unsupported arguments: %s" % kwargs)
-
-    if len(names_with_defaults) == 1:
-        return all_arguments[0]
-    else:
-        return all_arguments

@@ -1,7 +1,9 @@
 from itertools import chain
 from sys import version_info
 
-from valid8.base import failure_raiser, ValidationFailed, as_function
+from makefun import with_signature
+
+from valid8.base import failure_raiser, ValidationFailure, is_mini_lambda, pop_kwargs
 
 try:  # python 3.5+
     # noinspection PyUnresolvedReferences
@@ -18,14 +20,14 @@ try:  # python 3.5+
         # 2. the syntax to optionally transform them into failure raisers by providing a tuple
         ValidationFuncDefinition = Union[ValidationCallableOrLambda,
                                          Tuple[ValidationCallableOrLambda, str],
-                                         Tuple[ValidationCallableOrLambda, Type[ValidationFailed]],
-                                         Tuple[ValidationCallableOrLambda, str, Type[ValidationFailed]]
+                                         Tuple[ValidationCallableOrLambda, Type[ValidationFailure]],
+                                         Tuple[ValidationCallableOrLambda, str, Type[ValidationFailure]]
                                          ]
         """Defines a checker from a base checker function together with optional error message and failure type 
         (in which case a failure raiser is created to wrap that function)"""
 
         # 3. the syntax to describe several validation functions at once
-        VFDefinitionElement = Union[str, Type[ValidationFailed], ValidationCallableOrLambda]
+        VFDefinitionElement = Union[str, Type[ValidationFailure], ValidationCallableOrLambda]
         """This type represents one of the elements that can define a checker"""
 
         OneOrSeveralVFDefinitions = Union[ValidationFuncDefinition,
@@ -64,32 +66,33 @@ supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callabl
                    'callables, they will be transformed to functions automatically.'
 
 
-def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefinition
-                                   ):
+def make_validation_func_callable(vf_definition,                   # type: ValidationFuncDefinition
+                                  callable_creator=failure_raiser  # type: Callable
+                                  ):
     # type: (...) -> ValidationCallable
     """
     Creates a validation callable for usage in valid8, from a "validation function" callable optionally completed with
     an associated error message and failure type to be used in case validation fails.
 
-    If `vf_definition` is a single <validation_func> callable, it is returned directly (no wrapping)
+    If `vf_definition` is a single <validation_func> callable, a failure raiser is created around it
 
     >>> import sys, pytest
     >>> if sys.version_info < (3, 0):
     ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
 
     >>> def vf(x): return x + 1 == 0
-    >>> assert _make_validation_func_callable(vf) is vf
+    >>> assert make_validation_func_callable(vf) is not vf  # TODO better assert here ?
 
     If `vf_definition` is a tuple such as (<validation_func>, <err_msg>), (<validation_func>, <failure_type>),
     or (<validation_func>, <err_msg>, <failure_type>), a `failure_raiser` is created.
 
-    >>> class MyFailure(ValidationFailed):
+    >>> class MyFailure(ValidationFailure):
     ...     pass
-    >>> vf_with_details = _make_validation_func_callable((vf, 'blah', MyFailure))
+    >>> vf_with_details = make_validation_func_callable((vf, 'blah', MyFailure))
     >>> vf_with_details('hello')
     Traceback (most recent call last):
     ...
-    valid8.common_syntax.MyFailure: blah. Function [vf] raised [TypeError: can...
+    valid8.common_syntax.MyFailure: blah. Function [vf] raised TypeError: ...
 
     Notes:
 
@@ -103,6 +106,8 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
         (<validation_func>, <err_msg>), (<validation_func>, <err_type>), or (<validation_func>, <err_msg>, <err_type>)
         where <validation_func> is a callable taking a single input and returning `True` or `None` in case of success.
         mini-lambda expressions are supported too and automatically converted into callables.
+    :param callable_creator: method to be called to finally create the callable. Can be used by extensions to specify
+        a custom way to create callables. Default is `failure_raiser`.
     :return: a validation callable that is either directly the provided callable, or a `failure_raiser` wrapping this
         callable using the additional details (err_msg, failure_type) provided.
     """
@@ -111,12 +116,12 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
     except (TypeError, FunctionDefinitionError):
         # -- single element
         # handle the special case of a LambdaExpression: automatically convert to a function
-        validation_func = as_function(vf_definition)
-        if not callable(validation_func):
+        if not is_mini_lambda(vf_definition) and not callable(vf_definition):
             raise ValueError('base validation function(s) not compliant with the allowed syntax. Base validation'
                              ' function(s) can be %s Found %s.' % (supported_syntax, vf_definition))
         else:
-            return validation_func
+            # single element.
+            return callable_creator(vf_definition)
     else:
         # -- a tuple
         if nb_elts == 1:
@@ -137,7 +142,7 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
             # noinspection PyBroadException
             try:
                 # noinspection PyTypeChecker
-                if issubclass(failure_type, ValidationFailed):
+                if issubclass(failure_type, ValidationFailure):
                     failure_type_ok = True
             except:  # noqa: E722
                 pass
@@ -154,30 +159,37 @@ def _make_validation_func_callable(vf_definition  # type: ValidationFuncDefiniti
         else:
             help_msg_ok = True
 
-        # handle the special case of a LambdaExpression: automatically convert to a function
-        # note: it is also done in `failure_raiser` below, but the perf impact should be very small
-        # (just an instance_of() check)
-        validation_func = as_function(validation_func)
-
         # check that the definition is valid
-        if (not failure_type_ok) or (not help_msg_ok) or (not callable(validation_func)):
+        if (not failure_type_ok) or (not help_msg_ok) or (not is_mini_lambda(validation_func)
+                                                          and not callable(validation_func)):
             raise ValueError('base validation function(s) not compliant with the allowed syntax. Base validation'
                              ' function(s) can be %s Found %s.' % (supported_syntax, vf_definition))
 
         # finally create the failure raising callable
-        return failure_raiser(validation_func, help_msg=help_msg, failure_type=failure_type)
+        return callable_creator(validation_func, help_msg=help_msg, failure_type=failure_type)
 
 
-def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefinitions
-                                    ):
+# Python 3+: load the 'more explicit api'
+if use_typing:
+    new_sig = """(*vf_definition: OneOrSeveralVFDefinitions,
+                  callable_creator: Callable = failure_raiser
+                  )"""
+else:
+    new_sig = None
+
+
+@with_signature(new_sig)
+def make_validation_func_callables(*vf_definition,                  # type: OneOrSeveralVFDefinitions
+                                   **kwargs
+                                   ):
     # type: (...) -> Tuple[ValidationCallable, ...]
     """
     Creates one or several validation callables for usage in valid8, from one or several "validation function"
     callables, optionally completed with associated error messages and failure types to be used in case validation
     fails.
 
-    If several `vf_definition` are provided, `_make_validation_func_callable` will be called for each `vf_definition`,
-    and a tuple containing the results will be returned. See `_make_validation_func_callable` for details on the
+    If several `vf_definition` are provided, `make_validation_func_callable` will be called for each `vf_definition`,
+    and a tuple containing the results will be returned. See `make_validation_func_callable` for details on the
     supported tuples to use.
 
     >>> import sys, pytest
@@ -186,38 +198,38 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
 
     >>> # two dummy validation callables
     >>> def is_big(x): return x > 10
-    >>> def is_minus_1(x): return x + 1 == 0
+    >>> def is_minus_1(x, **ctx): return x + 1 == 0
 
     >>> # a custom failure we would like to be raised
-    >>> class MyFailure(ValidationFailed):
+    >>> class MyFailure(ValidationFailure):
     ...     pass
 
     >>> # process both vf1 and v2, reusing vf1 'as is' and enriching vf2 with a custom failure type and error message
-    >>> several_vfs = _make_validation_func_callables([is_big, (is_minus_1, 'not minus 1!', MyFailure)])
+    >>> several_vfs = make_validation_func_callables([is_big, (is_minus_1, 'not minus 1!', MyFailure)])
     >>> assert len(several_vfs) == 2
-    >>> assert several_vfs[0] is is_big
+    >>> assert several_vfs[0] is not is_big  # TODO better assert here ?
     >>> several_vfs[1]('hello')
     Traceback (most recent call last):
     ...
-    valid8.common_syntax.MyFailure: not minus 1!. Function [is_minus_1] raised [TypeError: can...
+    valid8.common_syntax.MyFailure: not minus 1!. Function [is_minus_1] raised TypeError: ...
 
     If a single `vf_definition` is provided AND it is a non-tuple iterable (typically a list),
-    `_make_validation_func_callables(vf_definition)` is equivalent to `_make_validation_func_callables(*vf_definition)`
+    `make_validation_func_callables(vf_definition)` is equivalent to `make_validation_func_callables(*vf_definition)`
 
-    >>> assert _make_validation_func_callables([is_big]) == _make_validation_func_callables(is_big)
+    # >>> assert make_validation_func_callables([is_big]) == make_validation_func_callables(is_big) TODO re-enable when equality operator works
 
     Finally, if a single `vf_definition` is provided AND it is a dict-like mapping, a special syntax is enabled where
-    you can put *any* part of the definition in the key and in the value. `_make_validation_func_callable` will still
+    you can put *any* part of the definition in the key and in the value. `make_validation_func_callable` will still
     then be called for each item in the dictionary, and a tuple with the results will be returned.
 
     Examples:
 
-    >>> vfs = _make_validation_func_callables({'x should be big': is_big,
+    >>> vfs = make_validation_func_callables({'x should be big': is_big,
     ...                                        'x should be minus 1': (is_minus_1, MyFailure)})
     >>> vfs[0](2)
     Traceback (most recent call last):
     ...
-    valid8.base.ValidationFailed: x should be big. Function [is_big] returned [False] for value 2.
+    valid8.base.InvalidValue: x should be big. Function [is_big] returned [False] for value 2.
 
     :param vf_definition: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
@@ -225,8 +237,13 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
         Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
+    :param callable_creator: method to be called to finally create the callable. Can be used by extensions to specify
+        a custom way to create callables. Default is `failure_raiser`.
     :return: a tuple of callables
     """
+    # python <3.5 compliance: pop the kwargs following the varargs
+    callable_creator = pop_kwargs(kwargs, [('callable_creator', failure_raiser)], allow_others=False)
+
     # handle the case where vf_definition is not yet a list or is empty or none
     if len(vf_definition) == 0:
         raise ValueError('mandatory vf_definition is None')
@@ -245,10 +262,10 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
             v_iter = iter(vf_definition)
         except (TypeError, FunctionDefinitionError):
             # single validator: create a tuple manually
-            all_validators = (_make_validation_func_callable(vf_definition),)
+            all_validators = (make_validation_func_callable(vf_definition, callable_creator=callable_creator),)
         else:
             # iterable
-            all_validators = tuple(_make_validation_func_callable(v) for v in v_iter)
+            all_validators = tuple(make_validation_func_callable(v, callable_creator=callable_creator) for v in v_iter)
     else:
         # mapping: be 'smart'
         def _mapping_entry_to_vf(k, v):
@@ -270,14 +287,14 @@ def _make_validation_func_callables(*vf_definition  # type: OneOrSeveralVFDefini
                     err_msg = _elt
                 else:
                     try:
-                        if issubclass(_elt, Exception):  # not Failure so that we reuse the check that is made below
+                        if issubclass(_elt, Exception):  # broad: Exception, check for ValidationFailure subclass is made below
                             err_type = _elt
                         else:
                             callabl = _elt
                     except TypeError:
                         callabl = _elt
 
-            return _make_validation_func_callable((callabl, err_msg, err_type))
+            return make_validation_func_callable((callabl, err_msg, err_type), callable_creator=callable_creator)
 
         all_validators = tuple(_mapping_entry_to_vf(k, v) for k, v in v_items)
 

@@ -18,6 +18,20 @@ def test_readme_index_usage_quick():
                      "TooSmall: x >= 0 does not hold for x=-1. Wrong value: -1."
 
 
+def test_readme_index_usage_quick2():
+    """ Tests that the example under index/usage/quick works """
+    from valid8 import validate
+    from mini_lambda import x
+
+    surf = 20
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('surface', surf, instance_of=int, min_value=0, custom=[(x ** 2 < 50, 'hai')])
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=20]. InvalidValue: hai. " \
+                     "Function [x ** 2 < 50] returned [False] for value 20."
+
+
 def test_readme_usage_validator():
     """ Tests that the example under index/usage/validation works """
 
@@ -27,8 +41,8 @@ def test_readme_usage_validator():
         with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=-1]: " \
-                     "validation function [v.alid = surf > 0 and isfinite(surf)] returned [False]."
+    assert str(e) == "Error validating [surface=-1]. " \
+                     "InvalidValue: Function [v.alid = surf > 0 and isfinite(surf)] returned [False] for value -1."
 
     surf = 1j
 
@@ -36,9 +50,9 @@ def test_readme_usage_validator():
         with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e).startswith("Error validating [surface=1j]. " \
-                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                             "TypeError:")
+    assert str(e).startswith("Error validating [surface=1j]. "
+                             "InvalidType: Function [v.alid = surf > 0 and isfinite(surf)] raised "
+                             "TypeError:")  # the typeerror exact message varies across python versions
 
     # alternate naming
     surf = -1
@@ -46,8 +60,8 @@ def test_readme_usage_validator():
         with validator('surface', surf) as r:
             r.esults = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=-1]: " \
-                     "validation function [r.esults = surf > 0 and isfinite(surf)] returned [False]."
+    assert str(e) == "Error validating [surface=-1]. " \
+                     "InvalidValue: Function [r.esults = surf > 0 and isfinite(surf)] returned [False] for value -1."
 
     # type validation
     surf = 1j
@@ -65,7 +79,6 @@ def test_readme_usage_validator():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "Validation function [assert_instance_of(surf, int) ; v.alid = surf > 0] raised " \
                      "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
 
 
@@ -86,8 +99,8 @@ def test_readme_usage_customization():
         with validator('surface', surf, help_msg="Surface should be a finite positive integer") as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Surface should be a finite positive integer. Error validating [surface=-1]: " \
-                     "validation function [v.alid = surf > 0 and isfinite(surf)] returned [False]."
+    assert str(e) == "Surface should be a finite positive integer. Error validating [surface=-1]. " \
+                     "InvalidValue: Function [v.alid = surf > 0 and isfinite(surf)] returned [False] for value -1."
 
     # (B) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -142,7 +155,6 @@ def test_readme_index_usage_basic():
         assert_valid('surface', surf, is_multiple_of(100))
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
-                     'Validation function [is_multiple_of_100] raised ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1.'
 
     # (2) native mini_lambda support to define validation functions
@@ -150,7 +162,7 @@ def test_readme_index_usage_basic():
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf, x > 0)
     e = exc_info.value
-    assert str(e) == 'Error validating [surface=-1]: validation function [x > 0] returned [False].'
+    assert str(e) == 'Error validating [surface=-1]. InvalidValue: Function [x > 0] returned [False] for value -1.'
 
 
 def test_readme_index_usage_function():
@@ -173,10 +185,9 @@ def test_readme_index_usage_function():
     e = exc_info.value
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \
-                     "Validation function [and(instance_of_%s, len(s) > 0)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value <''>. " \
-                     "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'False'}." \
-                     "" % (repr(str), repr(str))
+                     "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'Returned False.'}." \
+                     "" % (repr(str), )
 
     from mini_lambda import s, x, l, Len
     from valid8 import validate_arg, validate_out
@@ -286,25 +297,23 @@ def test_readme_index_usage_customization():
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', None, x > 0, none_policy=NonePolicy.FAIL)
     e = exc_info.value
-    assert str(e) == 'Error validating [surface=None]. Validation function [reject_none(x > 0)] raised ' \
-                     'ValueIsNone: The value must be non-None. Wrong value: None.'
+    assert str(e) == 'Error validating [surface=None]. ValueIsNone: The value must be non-None. Wrong value: None.'
 
-    # *** (4) TEST: custom Failure (not ValidationError) message. Does it have any interest ? ***
+    # *** (4) TEST: custom ValidationFailure (not ValidationError) message. Does it have any interest ? ***
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf, (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     assert str(e) == 'Error validating [surface=-1]. ' \
-                     'Validation function [is_multiple_of_100] raised ' \
-                     'ValidationFailed: Surface should be a multiple of 100. ' \
+                     'InvalidValue: Surface should be a multiple of 100. ' \
                      'Function [is_multiple_of_100] raised ' \
-                     '[IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1].'
+                     'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1.'
 
     # (4) custom error message (exception is still a ValidationError)
     with pytest.raises(ValidationError) as exc_info:
         assert_valid('surface', surf, x > 0, help_msg='Surface should be positive')
     e = exc_info.value
     assert str(e) == "Surface should be positive. " \
-                     "Error validating [surface=-1]: validation function [x > 0] returned [False]."
+                     "Error validating [surface=-1]. InvalidValue: Function [x > 0] returned [False] for value -1."
 
     # (5) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -316,7 +325,6 @@ def test_readme_index_usage_customization():
     assert isinstance(e, InvalidSurface)
     assert str(e) == 'Surface should be a positive number. ' \
                      'Error validating [surface=-1]. ' \
-                     'Validation function [is_multiple_of_100] raised ' \
                      'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1.'
 
     # (6) custom error types with templating
@@ -328,7 +336,7 @@ def test_readme_index_usage_customization():
         assert_valid('surface', surf, x > min_value, error_type=InvalidSurface, minimum=min_value)
     e = exc_info.value
     assert str(e) == "Surface should be > 0, found -1. " \
-                     "Error validating [surface=-1]: validation function [x > 0] returned [False]."
+                     "Error validating [surface=-1]. InvalidValue: Function [x > 0] returned [False] for value -1."
 
 
 def test_readme_index_usage_composition():
@@ -345,10 +353,9 @@ def test_readme_index_usage_composition():
         assert_valid('surface', surf, (x >= 0) & (x < 10000), is_multiple_of(100))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
-                     "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'False', " \
-                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
+                     "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'Returned False.', " \
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100.'}."
 
     # (8) ... with a global custom error type. Oh by the way this supports templating
     class InvalidSurface(ValidationError):
@@ -361,11 +368,10 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
-                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
                      "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
                      "Successes: [] / Failures: {" \
-                     "'(x >= 0) & (x < 10000)': 'False', " \
-                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100. Wrong value: -1'}."
+                     "'(x >= 0) & (x < 10000)': 'Returned False.', " \
+                     "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100.'}."
 
     # (9) ... and possible user-friendly intermediate failure messages
     with pytest.raises(ValidationError) as exc_info:
@@ -374,14 +380,12 @@ def test_readme_index_usage_composition():
                      (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
-                     "AtLeastOneFailed: At least one validation function failed validation. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
                      "Successes: [] / Failures: {" \
-                     "'(x >= 0) & (x < 10000)': 'ValidationFailed: Surface should be between 0 and 10000. " \
-                     "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
-                     "'is_multiple_of_100': 'ValidationFailed: Surface should be a multiple of 100. " \
-                     "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
-                     "Wrong value: -1].'}."
+                     "'(x >= 0) & (x < 10000)': 'InvalidValue: Surface should be between 0 and 10000. " \
+                     "Returned False.', " \
+                     "'is_multiple_of_100': 'InvalidValue: Surface should be a multiple of 100. " \
+                     "IsNotMultipleOf: Value should be a multiple of 100.'}."
 
     # *********** other even more complex tests ***********
 
@@ -396,11 +400,9 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
-                     "Validation function [and((x >= 0) & (x < 10000), is_multiple_of_100)] raised " \
-                     "AtLeastOneFailed: At least one validation function failed validation. " \
+                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
                      "Successes: [] / Failures: {" \
-                     "'(x >= 0) & (x < 10000)': 'ValidationFailed: Surface should be between 0 and 10000. " \
-                     "Function [(x >= 0) & (x < 10000)] returned [False] for value -1.', " \
-                     "'is_multiple_of_100': 'ValidationFailed: Surface should be a multiple of 100, found -1. " \
-                     "Function [is_multiple_of_100] raised [IsNotMultipleOf: Value should be a multiple of 100. " \
-                     "Wrong value: -1].'}."
+                     "'(x >= 0) & (x < 10000)': 'InvalidValue: Surface should be between 0 and 10000. " \
+                     "Returned False.', " \
+                     "'is_multiple_of_100': 'InvalidValue: Surface should be a multiple of 100, found -1. " \
+                     "IsNotMultipleOf: Value should be a multiple of 100.'}."

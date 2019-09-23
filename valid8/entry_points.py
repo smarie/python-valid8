@@ -1,6 +1,11 @@
 import sys
 from copy import copy
 
+try:
+    from functools import lru_cache
+except ImportError:
+    from functools32 import lru_cache
+
 from makefun import with_signature
 from six import with_metaclass
 
@@ -23,9 +28,10 @@ except ImportError:
     use_typing = False
 
 from valid8.utils_string import end_with_dot
-from valid8.base import get_callable_name, _none_accepter, _none_rejecter, RootException, \
-    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_
-from valid8.composition import and_, pop_kwargs
+from valid8.base import get_callable_name, _none_accepter, _none_rejecter, RootException, failure_raiser, ValidationFailure, \
+    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_, pop_kwargs
+from valid8.common_syntax import make_validation_func_callables
+from valid8.composition import _and_
 
 
 class NonePolicy(object):
@@ -108,6 +114,39 @@ def _add_none_handler(validation_callable,  # type: ValidationCallable
         raise ValueError('Invalid none_policy : ' + str(none_policy))  # invalid none_policy
 
 
+class MetaReprForValidationError(type):
+    """ Utility metaclass used in add_base_type_dynamically """
+    def __repr__(cls):
+        return repr(cls.__bases__[0])[:-2] + '[' + cls.__bases__[1].__name__ + ']' + repr(cls.__bases__[0])[-2:]
+
+
+@lru_cache(maxsize=32)
+def add_base_type_dynamically(error_type, additional_type):
+    """
+    Utility method to create a new type dynamically, inheriting from both error_type (first) and additional_type
+    (second). The class representation (repr(cls)) of the resulting class reflects this by displaying both names
+    (fully qualified for the first type, __name__ for the second)
+
+    For example
+    ```
+    > new_type = add_base_type_dynamically(ValidationError, ValueError)
+    > repr(new_type)
+    "<class 'valid8.entry_points.ValidationError+ValueError'>"
+    ```
+    :return:
+    """
+    # the new type created dynamically, with the same name
+    class NewErrorType(with_metaclass(MetaReprForValidationError, error_type, additional_type, object)):
+        pass
+
+    NewErrorType.__name__ = error_type.__name__ + '[' + additional_type.__name__ + ']'
+    if sys.version_info >= (3, 0):
+        NewErrorType.__qualname__ = error_type.__qualname__ + '[' + additional_type.__qualname__ + ']'
+    NewErrorType.__module__ = error_type.__module__
+
+    return NewErrorType
+
+
 class ValidationError(HelpMsgMixIn, RootException):
     """
     Represents a Validation error raised by a 'defensive mode' validation entry point such as `validate`,
@@ -119,23 +158,26 @@ class ValidationError(HelpMsgMixIn, RootException):
     There are two ways to use this class:
 
      * either use the syntax `assert_valid(..., help_msg=<help_msg>)` when performing validation, or create your
-     `Validator` instances with argument help_msg=<help_msg>. Both are equivalent and will create instances of
-     `ValidationError` with the provided help message when validation fails.
+       `Validator` instances with argument help_msg=<help_msg>. Both are equivalent and will create instances of
+       `ValidationError` with the provided help message when validation fails.
 
      * or subclass it explicitly (recommended) and then use the syntax `assert_valid(..., error_type=<subclass>)` or
-     create your `Validator` instances with argument `error_type=<subclass>`. Both are equivalent and will create
-     instances of your subclass when validation fails.
+       create your `Validator` instances with argument `error_type=<subclass>`. Both are equivalent and will create
+       instances of your subclass when validation fails.
 
-    This class looks very similar to `Failure` but is very different:
-     - `Failure` is an *optional* base exception type for *base validation functions*. It does not know anything about
-     the validation context or purpose. Besides, many base validation functions do not even raise it (they would raise
-     other exceptions or return a non-True, non-None result). So consider it a goodie when writing validation functions.
+    This class looks very similar to `ValidationFailure` but is very different:
+
+     - `ValidationFailure` is an *optional* base exception type for *base validation functions*. It does not know anything about
+       the validation context or purpose. Besides, many base validation functions do not even raise it (they would raise
+       other exceptions or return a non-True, non-None result). So consider it a goodie when writing validation
+       functions.
+
      - `ValidationError` is the base exception type for validation. When validation fails, the exception raised will
-     *always* be an instance of `ValidationError`. It knows the full context of validation: name of variable being
-     validated, name of function and argument in case of InputValidation, and applicative intent through the help
-     message or a user-created subclass. If a `ValidationError` was caused by a base validation function raising a
-     `Failure`, then this `Failure` will be set as the `__cause__` of the error, and will also be available in the
-     contents of `ValidationError` (in the `validation_outcome` field)
+       *always* be an instance of `ValidationError`. It knows the full context of validation: name of variable being
+       validated, name of function and argument in case of InputValidation, and applicative intent through the help
+       message or a user-created subclass. If a `ValidationError` was caused by a base validation function raising a
+       `ValidationFailure`, then this `ValidationFailure` will be set as the `__cause__` of the error, and will also be available in the
+       contents of `ValidationError` (in the `validation_outcome` field)
 
     It is recommended that Users extend this class to define their own validation errors, so as to provide a unique
     error type for each kind of applicative error (this eases the process of error handling at app-level). An easy way
@@ -168,28 +210,68 @@ class ValidationError(HelpMsgMixIn, RootException):
     equivalent behaviour than above, but with a stricter constructor:
 
     ```python
-    class ConditionWasNotMet(Failure):
+    class ConditionWasNotMet(ValidationFailure):
         help_msg = "x={var_value} does not meet {condition}"
         def __init__(self, var_value, condition, **kwargs):
             super(ConditionWasNotMet, self).__init__(var_value=var_value, condition=condition, **kwargs)
     ```
 
-    Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a Failure raiser, then
-    they should subclass `ValidationFailed` instead of `Failure`. See `ValidationFailed` for details.
+    Note: if users wish to wrap an *existing* function (such as a lambda or mini lambda) with a failure raiser, then
+    they should subclass `ValidationFailure` instead of `ValidationFailure`. See `ValidationFailure` for details.
     """
 
     # We do not use slots otherwise `help_msg` cannot easily be overridden by a class attribute
     # __slots__ = 'validator', 'var_value', 'var_name', 'validation_outcome', 'append_details', 'context'
 
     @classmethod
-    def create_manually(cls,
-                        validation_function_name,  # type: str
-                        var_name,                  # type: str
-                        var_value,
-                        validation_outcome=None,   # type: Any
-                        help_msg=None,             # type: str
-                        # append_details=True,       # type: bool
-                        **kw_context_args):
+    def create_with_dynamic_type(cls, validator, name, value, validation_outcome, help_msg, **ctx):
+        """
+        Creates a `ValidationError`.
+
+         - if `cls` explicitly subclasses `ValueError` or `TypeError` it is used as is
+         - otherwise a dynamically created subclass is created depending on `validation_outcome`, by adding the
+           appropriate `ValueError` or `TypeError` parent class to `cls`. A cache is used to avoid re-creating the
+           same classes over again.
+
+        :param validator:
+        :param name:
+        :param value:
+        :param validation_outcome:
+        :param help_msg:
+        :param ctx:
+        :return:
+        """
+        if issubclass(cls, TypeError) or issubclass(cls, ValueError):
+            # this is most probably a custom error type, it is already annotated with ValueError and/or TypeError
+            # so use it 'as is'
+            new_error_type = cls
+        else:
+            # Add the appropriate TypeError/ValueError base type dynamically
+            additional_type = None
+            if isinstance(validation_outcome, Exception):
+                if is_error_of_type(validation_outcome, TypeError):
+                    additional_type = TypeError
+                elif is_error_of_type(validation_outcome, ValueError):
+                    additional_type = ValueError
+            if additional_type is None:
+                # not much we can do here, let's assume a ValueError, that is more probable
+                additional_type = ValueError
+
+            new_error_type = add_base_type_dynamically(cls, additional_type)
+
+        # then raise the appropriate ValidationError or subclass
+        return new_error_type(validator=validator, var_value=value, var_name=name,
+                              failure=validation_outcome, help_msg=help_msg, **ctx)
+
+    @classmethod
+    def create_without_validator(cls,
+                                 validation_function_name,  # type: str
+                                 var_name,                  # type: str
+                                 var_value,
+                                 validation_outcome=None,   # type: Any
+                                 help_msg=None,             # type: str
+                                 # append_details=True,     # type: bool
+                                 **kw_context_args):
         """
         TODO remove the method or find a real need.
         Creates an instance without using a Validator.
@@ -221,10 +303,10 @@ class ValidationError(HelpMsgMixIn, RootException):
         return e
 
     def __init__(self,
-                 validator,               # type: Validator
+                 validator,                # type: Validator
                  var_value,
                  var_name,                 # type: str
-                 validation_outcome=None,  # type: Any
+                 failure,                  # type: ValidationFailure
                  help_msg=None,            # type: str
                  append_details=True,      # type: bool
                  **kw_context_args):
@@ -237,8 +319,7 @@ class ValidationError(HelpMsgMixIn, RootException):
         :param validator: the Validator that raised this exception
         :param var_value: the value that was validated and failed validation
         :param var_name: the name associated to that value
-        :param validation_outcome: the result of the validation process (either a non-True non-None value, or an
-        exception)
+        :param failure: the `ValidationFailure` that resulted from the validation process
         :param help_msg: an optional help message specific to this validation error. If not provided, the class
             attribute `help_msg` will be used. This behaviour may be redefined by subclasses by overriding
             `get_help_msg`
@@ -247,75 +328,85 @@ class ValidationError(HelpMsgMixIn, RootException):
         :param kw_context_args: optional context (results, other) to store in this failure and that will be also used
             for help message formatting
         """
-
-        self.display_prefix_for_exc_outcomes = True
-
-        self.append_details = append_details
-
         # store everything in self
         self.validator = validator
         self.var_value = var_value
         self.var_name = var_name
-        self.validation_outcome = validation_outcome
+        if failure is not None and not isinstance(failure, ValidationFailure):
+            raise TypeError("`failure` should be an instance of `ValidationFailure`")
+        self.failure = failure
+        # context data
         self.__dict__.update(kw_context_args)
 
         # store help_msg ONLY if non-None otherwise the possibly user-overridden class attribute should be left visible
         if help_msg is not None:
             self.help_msg = help_msg
 
+        # str-related options
+        # self.display_prefix_for_exc_outcomes = True
+        self.append_details = append_details
+
         # call super constructor with nothing, since Exception does not accept keyword arguments and we are redefining
         # __str__ anyway
         super(ValidationError, self).__init__()
 
         # automatically set the exception as the cause, so that we can forget to "raise from" (except when from None)
-        if isinstance(validation_outcome, Exception) and not should_be_hidden_as_cause(validation_outcome):
-            self.__cause__ = validation_outcome
-            # possibly hide the cause of the cause
-            if hasattr(validation_outcome, '__cause__') and should_be_hidden_as_cause(validation_outcome.__cause__):
-                validation_outcome.__cause__ = None
-        else:
+        if should_be_hidden_as_cause(failure):
+            # hide the cause
             self.__cause__ = None
-
-    def __str__(self):
-        """ Overrides the default exception message by relying on HelpMsgMixIn """
-        try:
-            if self.append_details:
-                return self.get_help_msg(dotspace_ending=True, **self.__dict__) + self.get_details()
-            else:
-                return self.get_help_msg(**self.__dict__)
-        except HelpMsgFormattingException as f:
-            return str(f)
-
-        except Exception as e:
-            return "Error while formatting help message: %s" % e
+        else:
+            self.__cause__ = failure
+            # possibly hide the cause of the cause
+            if hasattr(failure, '__cause__') and should_be_hidden_as_cause(failure.__cause__):
+                failure.__cause__ = None
 
     def __repr__(self):
         """ Overrides the default exception representation """
         fields = [name + '=' + str(val) for name, val in self.__dict__.items() if not name.startswith('_')]
         return type(self).__name__ + '(' + ','.join(fields) + ')'
 
+    def __str__(self):
+        """ Overrides the default exception message by relying on HelpMsgMixIn """
+        try:
+            help_msg = self.get_help_msg()
+            if self.append_details:
+                details = self.get_details()
+                help_msg = end_with_dot(help_msg, trailing_space=len(details.rstrip()) > 0)
+                return "%s%s" % (help_msg, details)
+            else:
+                return end_with_dot(help_msg)
+
+        except HelpMsgFormattingException as f:
+            return str(f)
+
+        except Exception as e:
+            return "Error while formatting help message: %s" % e
+
+    def get_context_for_help_msgs(self):
+        """ From `HelpMsgMixIn.get_help_msg(self)` """
+        return self.__dict__
+
     def get_details(self):
         """ The function called to get the details appended to the help message when self.append_details is True """
-
-        # create the exception main message according to the type of result
-        if isinstance(self.validation_outcome, Exception):
-
-            prefix = 'Validation function [{val}] raised ' if self.display_prefix_for_exc_outcomes else ''
-
-            # new: we now remove  "Root validator was [{validator}]", users can get it through e.validator
-            contents = ('Error validating {what}. ' + prefix + '{exception}: {details}').format(
-                what=self.get_what_txt(),
-                val=self.validator.get_main_function_name(),
-                exception=type(self.validation_outcome).__name__,
-                details=end_with_dot(str(self.validation_outcome))
-            )
-
+        what = self.get_what_txt()
+        if self.failure is not None:
+            failure_str = self.failure.get_str_for_errors()
+            return "Error validating %s. %s" % (what, failure_str)
         else:
-            contents = 'Error validating {what}: validation function [{val}] returned [{result}].' \
-                       ''.format(what=self.get_what_txt(), val=self.validator.get_main_function_name(),
-                                 result=self.validation_outcome)
+            validation_func_name = get_callable_name(self.validator.main_function)
+            return "Error validating %s with function [%s] (no failure details available)" \
+                   % (what, validation_func_name)
 
-        return contents
+    def get_what_txt(self):
+        """
+        Called to create the text defining what was validated. It is used in the error message. The current behaviour
+        is to return "[self.var_value]" is self.var_name is none, or [self.var_name=self.var_value] otherwise.
+
+        Subclasses may wish to override this behaviour to add more contextual information about what was being
+        validated.
+        :return:
+        """
+        return '[%s]' % self.get_variable_str()
 
     def get_variable_str(self):
         """
@@ -339,49 +430,6 @@ class ValidationError(HelpMsgMixIn, RootException):
             return prefix + '=' + suffix
         else:
             return prefix + suffix
-
-    def get_what_txt(self):
-        """
-        Called to create the text defining what was validated. It is used in the error message. The current behaviour
-        is to return "[self.var_value]" is self.var_name is none, or [self.var_name=self.var_value] otherwise.
-
-        Subclasses may wish to override this behaviour to add more contextual information about what was being
-        validated.
-        :return:
-        """
-        return '[{var}]'.format(var=self.get_variable_str())
-
-
-class MetaReprForValidator(type):
-    """ Utility metaclass used in add_base_type_dynamically """
-    def __repr__(cls):
-        return repr(cls.__bases__[0])[:-2] + '[' + cls.__bases__[1].__name__ + ']' + repr(cls.__bases__[0])[-2:]
-
-
-def add_base_type_dynamically(error_type, additional_type):
-    """
-    Utility method to create a new type dynamically, inheriting from both error_type (first) and additional_type
-    (second). The class representation (repr(cls)) of the resulting class reflects this by displaying both names
-    (fully qualified for the first type, __name__ for the second)
-
-    For example
-    ```
-    > new_type = add_base_type_dynamically(ValidationError, ValueError)
-    > repr(new_type)
-    "<class 'valid8.entry_points.ValidationError+ValueError'>"
-    ```
-    :return:
-    """
-    # the new type created dynamically, with the same name
-    class NewErrorType(with_metaclass(MetaReprForValidator, error_type, additional_type, object)):
-        pass
-
-    NewErrorType.__name__ = error_type.__name__ + '[' + additional_type.__name__ + ']'
-    if sys.version_info >= (3, 0):
-        NewErrorType.__qualname__ = error_type.__qualname__ + '[' + additional_type.__qualname__ + ']'
-    NewErrorType.__module__ = error_type.__module__
-
-    return NewErrorType
 
 
 # Python 3+: load the 'more explicit api'
@@ -409,6 +457,7 @@ class Validator(object):
     to raise the top-level `ValidationError` or subclass if user-provided (recommended, use constructor argument
     `error_type`). See `ValidationError` for details.
     """
+    __slots__ = 'main_function', 'help_msg', 'error_type', 'none_policy', 'kw_context_args'
 
     @with_signature(new_sig)
     def __init__(self,
@@ -423,7 +472,7 @@ class Validator(object):
         quite different from the standard python truth value test (where None is equivalent to False), but it seems more
         adapted to an intuitive usage, where a function that returns silently without any output means 'no problem
         there, move one'. Users defining their own base validation functions may wish to raise instances or subclasses
-        of `Failure` to provide more user-friendly details and unique failure identifiers. Raw mini_lambda expressions
+        of `ValidationFailure` to provide more user-friendly details and unique failure identifiers. Raw mini_lambda expressions
         are supported and are automatically transformed to functions.
 
         For example:
@@ -437,8 +486,8 @@ class Validator(object):
         from mini_lambda import x
         Validator(x > 0)
 
-        # (c) a user-defined function raising unique Failure
-        class NotFriendly(Failure):
+        # (c) a user-defined function raising unique ValidationFailure
+        class NotFriendly(ValidationFailure):
             help_msg = "The value should be friendly"
 
         def my_validator(x):
@@ -499,10 +548,16 @@ class Validator(object):
         self.kw_context_args = kw_context_args
 
         # replace validation_func lists with explicit 'and_' if needed, and tuples with failure_raiser()
-        main_val_func = and_(*validation_func)
+        validation_funcs = make_validation_func_callables(*validation_func,
+                                                          callable_creator=self.get_callables_creator())
+        main_val_func = _and_(validation_funcs)
 
         # finally wrap in a none handler according to the policy
         self.main_function = _add_none_handler(main_val_func, none_policy=self.none_policy)
+
+    def get_callables_creator(self):
+        """Subclasses may override this """
+        return failure_raiser
 
     def get_main_function_name(self):
         # type: (...) -> str
@@ -563,23 +618,19 @@ class Validator(object):
             to format the help message
         :return: nothing in case of success. Otherwise, raises a ValidationError
         """
+        if len(kw_context_args) > 0:
+            ctx = copy(self.kw_context_args)
+            ctx.update(kw_context_args)
+        else:
+            ctx = self.kw_context_args
         try:
-            # perform validation
-            res = self.main_function(value)
-
-        except Exception as e:
-            # caught any exception: raise ValidationError or subclass with that exception in the details
-            # --old bad idea: first wrap into a failure ==> NO !!! I tried and it was making it far too messy/verbose
-
-            # note: we do not have to 'raise x from e' of `raise_from`since the ValidationError constructor already
-            # sets the __cause__ so we can safely take the same handling than for non-exception failures.
-            res = e
-
-        # check the result
-        # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-        if (res is not None) and (res is not True):
-            raise_(self._create_validation_error(name, value, validation_outcome=res, error_type=error_type,
-                                                 help_msg=help_msg, **kw_context_args))
+            # perform validation with the main function (it will always be a failure raiser, no need to capture output)
+            self.main_function(value, **ctx)
+        except ValidationFailure as f:
+            validation_error = self._create_validation_error(name, value, validation_outcome=f,
+                                                             error_type=error_type, help_msg=help_msg,
+                                                             **ctx)
+            raise_(validation_error)
 
     def _create_validation_error(self,
                                  name,                     # type: str
@@ -590,36 +641,18 @@ class Validator(object):
                                  **kw_context_args):
         """ The function doing the final error raising.  """
 
+        # TODO consider inlining this
+
         # first merge the info provided in arguments and in self
         error_type = error_type if error_type is not None else self.error_type
         help_msg = help_msg if help_msg is not None else self.help_msg
-        ctx = copy(self.kw_context_args)
-        ctx.update(kw_context_args)
 
-        # allow the class to override the name
+        # allow the validator subclass to override the name
         name = self._get_name_for_errors(name)
 
-        if issubclass(error_type, TypeError) or issubclass(error_type, ValueError):
-            # this is most probably a custom error type, it is already annotated with ValueError and/or TypeError
-            # so use it 'as is'
-            new_error_type = error_type
-        else:
-            # Add the appropriate TypeError/ValueError base type dynamically
-            additional_type = None
-            if isinstance(validation_outcome, Exception):
-                if is_error_of_type(validation_outcome, TypeError):
-                    additional_type = TypeError
-                elif is_error_of_type(validation_outcome, ValueError):
-                    additional_type = ValueError
-            if additional_type is None:
-                # not much we can do here, let's assume a ValueError, that is more probable
-                additional_type = ValueError
-
-            new_error_type = add_base_type_dynamically(error_type, additional_type)
-
-        # then raise the appropriate ValidationError or subclass
-        return new_error_type(validator=self, var_value=value, var_name=name, validation_outcome=validation_outcome,
-                              help_msg=help_msg, **ctx)
+        return error_type.create_with_dynamic_type(validator=self, name=name, value=value,
+                                                   validation_outcome=validation_outcome, help_msg=help_msg,
+                                                   **kw_context_args)
 
     def _get_name_for_errors(self,
                              name  # type: str

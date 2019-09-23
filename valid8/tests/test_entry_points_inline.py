@@ -87,8 +87,8 @@ def test_validator_context_manager():
         with validator('surface', surf) as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e) == "Error validating [surface=-1]: " \
-                     "validation function [v.alid = surf > 0 and isfinite(surf)] returned [False]."
+    assert str(e) == "Error validating [surface=-1]. " \
+                     "InvalidValue: Function [v.alid = surf > 0 and isfinite(surf)] returned [False] for value -1."
 
     # wrong type (inner exception)
     with pytest.raises(ValidationError) as exc_info:
@@ -100,7 +100,7 @@ def test_validator_context_manager():
         1j > 0
     t = typ_err_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "Validation function [v.alid = surf > 0 and isfinite(surf)] raised %s: %s." \
+                     "InvalidType: Function [v.alid = surf > 0 and isfinite(surf)] raised %s: %s" \
                      "" % (t.__class__.__name__, t)
 
 
@@ -113,9 +113,9 @@ def test_readme_usage_validator_customization():
         with validator('surface', surf, help_msg="Surface should be a finite positive integer") as v:
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
-    assert str(e).startswith("Surface should be a finite positive integer. Error validating [surface=1j]. " \
-                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
-                             "TypeError:")
+    assert str(e).startswith("Surface should be a finite positive integer. Error validating [surface=1j]. "
+                             "InvalidType: Function [v.alid = surf > 0 and isfinite(surf)] raised "
+                             "TypeError:")  # we do not provide the full string as it changes across python versions
 
     # (B) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -136,8 +136,8 @@ def test_readme_usage_validator_customization():
             v.alid = surf > 0 and isfinite(surf)
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
-    assert str(e).startswith("Surface should be > 0, found 1j. Error validating [surface=1j]. " \
-                             "Validation function [v.alid = surf > 0 and isfinite(surf)] raised " \
+    assert str(e).startswith("Surface should be > 0, found 1j. Error validating [surface=1j]. "
+                             "InvalidType: Function [v.alid = surf > 0 and isfinite(surf)] raised "
                              "TypeError:")
 
 
@@ -178,6 +178,9 @@ def test_validate_auto_disable_display():
         def __str__(self):
             return "x" * 101
 
+        def __repr__(self):
+            return str(self)
+
     o = Foo()
 
     with pytest.raises(ValidationError) as exc_info:
@@ -185,7 +188,7 @@ def test_validate_auto_disable_display():
 
     e = exc_info.value
     assert str(e) == "Error validating [o]. NotEqual: x == 2 does not hold for x=(too big for display). " \
-                     "(Actual value is too big to be printed in this message)."
+                     "Wrong value: (Actual value is too big to be printed in this message)."
 
 
 def test_numpy_nan():
@@ -236,13 +239,13 @@ def test_empty_not_empty():
 
     with pytest.raises(ValidationError) as exc_info:
         validate('x', [1], empty=True)
-    assert isinstance(exc_info.value.validation_outcome, NotEmpty)
+    assert isinstance(exc_info.value.failure, NotEmpty)
 
     validate('x', [1], empty=False)
 
     with pytest.raises(ValidationError) as exc_info:
         validate('x', [], empty=False)
-    assert isinstance(exc_info.value.validation_outcome, Empty)
+    assert isinstance(exc_info.value.failure, Empty)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints not supported in python 2")
