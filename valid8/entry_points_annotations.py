@@ -127,13 +127,13 @@ class FuncValidator(Validator):
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
         :param error_type: a subclass of ValidationError to raise in case of validation failure. By default a
-        ValidationError will be raised with the provided help_msg
+            ValidationError will be raised with the provided help_msg
         :param help_msg: an optional help message to be used in the raised error in case of validation failure.
         :param none_policy: describes how None values should be handled. See `NonePolicy` for the various possibilities.
-        Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and follow
-        the same validation process.
+            Default is `NonePolicy.VALIDATE`, meaning that None values will be treated exactly like other values and
+            will follow the same validation process.
         :param kw_context_args: optional contextual information to store in the exception, and that may be also used
-        to format the help message
+            to format the help message
         """
         error_type, help_msg, none_policy = pop_kwargs(kwargs, [('error_type', None),
                                                                 ('help_msg', None),
