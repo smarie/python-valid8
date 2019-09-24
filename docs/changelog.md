@@ -1,5 +1,55 @@
 # Changelog
 
+### 5.0.0 - More betterness!
+
+**Better syntax for `*validation_func`**:
+ 
+ - you can provide a `tuple` `(<callable>, <help_msg>, <failure_type>)` to define a single failure raiser (before only `(<callable>, <help_msg>)` or `(<callable>, <failure_type>)` were supported). Fixes [#33](https://github.com/smarie/python-valid8/issues/33)
+
+ - you can provide a `dict`-like to define several validation functions, where the key and values can contain `<callable>`, `<help_msg>`, `<failure_type>`. For example `{<help_msg>: (<callable>, <failure_type>)}` is supported. Fixes [#40](https://github.com/smarie/python-valid8/issues/40).
+
+ - nested lists are however not supported anymore
+
+ - the `<callable>` can now either have signature `f(v)`, `f(*args)`, `f(*args, **ctx)` or `f(v, **ctx)`, where `**ctx` can be used to receive contextual information. Fixes [#39](https://github.com/smarie/python-valid8/issues/39)
+
+**`validation_lib` should be imported explicitly**
+
+ - symbols from `valid8.validation_lib` are not imported automatically at package root anymore. You need to import them from `valid8.validation_lib`. This speeds up the library's import especially when you do not use the built-in functions. So instead of `from valid8 import is_even` you should now do `from valid8.validation_lib import is_even` (or `from valid8 import validation_lib as vlib` + `vlib.is_even`). Fixed [#35](https://github.com/smarie/python-valid8/issues/35).
+
+**Major exceptions refactoring**
+
+ - the main validation function in a `Validator` is now always a failure raiser, even if a single callable was provided. This major design choice made many simplifications possible in particular the string representation of exceptions (below). Fixes [#44](https://github.com/smarie/python-valid8/issues/44)
+
+ - The string representation of `ValidationError` and `ValidationFailure` was greatly improved. In particular `ValidationError` does not display the name and outcome of the validation function anymore (since it is always a failure, see above), and `ValidationFailure` now has a "compact" string representation option in a new `to_str()` method, used in composition messages to simplify the result. Composition failures are also represented in a more compact way.
+
+ - `failure_raiser` moved to `base` submodule with its associated type hints `ValidationCallable` and `ValidationCallableOrLambda`. It now only accepts a single validation function argument ; this is more intuitive and separates concerns with the other higher-level functions. If you used it with several inputs in the past, you can use `and_(...)` instead, it will be strictly equivalent to the old behaviour.
+ 
+ - new `@as_failure_raiser` decorator to create a failure raiser by decorating an existing validation function. Fixes [#36](https://github.com/smarie/python-valid8/issues/36).
+
+ - `WrappingFailure` does not exist anymore, it was merged with `Failure` class for architecture simplification. So there are two main exception classes in valid8 now: `ValidationError` and `ValidationFailure`. When the validation callable does not raise an instance of `ValidationFailure` itself, the `Invalid` subclass is used. Fixes [#41](https://github.com/smarie/python-valid8/issues/41)
+
+
+**Misc**
+
+ - `assert_subclass_of` now exposed at root level (for consistency with `assert_instance_of`, to be used in the context manager entry point)
+ 
+ - Added `__version__` attribute to comply with PEP396, following https://smarie.github.io/python-getversion/#package-versioning-best-practices. Fixes [#38](https://github.com/smarie/python-valid8/issues/38).
+
+ - `result_is_success` is now inlined and does not use a set expression anymore. Fixed [#37](https://github.com/smarie/python-valid8/issues/37)
+ - Improved all examples of `Failure` in the validation lib to show how a better practice where the `help_msg` stays at class level but can be overridden failure instance by failure instance.
+ - Removed `length_between` `open_left/right` arguments as it does not make sense, to continue fixing [#29](https://github.com/smarie/python-valid8/issues/29)
+
+ - new subpackage `utils` where all util submodules now live
+ - New submodule `common_syntax` where all the logic to handle the `*validation_func` input syntax resides
+ - some type hints renamed for clarity: 
+ 
+    - before: `ValidationFuncs` / `ValidationFunc` / `CallableType` / `Callable`
+    - now: `OneOrSeveralVFDefinitions` / `ValidationFuncDefinition` / `ValidationCallableOrLamba` / `ValidationCallable`. 
+    - `ValidationFuncs` still exists as a short alias for `OneOrSeveralVFDefinitions`.
+ 
+ - fixed a few type hints too: tuples with unlimited length were not declared correctly. Now using the ellipsis `Tuple[<type>, ...]`.
+
+
 ### 4.2.1 - Minor error message fix
 
 Error messages improvements: removed the brackets in `Wrong value: [...]` for the `Failure` details. Fixed [#32](https://github.com/smarie/python-valid8/issues/32).
@@ -168,7 +218,7 @@ Fixed [#30](https://github.com/smarie/python-valid8/issues/30).
     - base validation function(s) can be provided as a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. 
     - Nested lists are supported and indicate an implicit `and_` (such as the main list). 
     - [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of callables, they will be transformed to functions automatically.
-    - Tuples indicate an implicit `_failure_raiser`. Combined with mini_lambda, this is a very powerful way to create validation functions: `(Len(s) > 0, 'The value should be an empty string')` or `(Len(s) > 0, EmptyStringFailure)`. 
+    - Tuples indicate an implicit `failure_raiser`. Combined with mini_lambda, this is a very powerful way to create validation functions: `(Len(s) > 0, 'The value should be an empty string')` or `(Len(s) > 0, EmptyStringFailure)`. 
 
  * Minor improvements of the base functions library
  
