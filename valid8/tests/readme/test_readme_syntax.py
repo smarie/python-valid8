@@ -52,7 +52,7 @@ def test_syntax_collection():
 
     assert str(exc_info.value) == "Error validating [x=-1]. " \
                                   "At least one validation function failed for value " \
-                                  "<-1>. Successes: ['isfinite'] / Failures: " \
+                                  "-1. Successes: ['isfinite'] / Failures: " \
                                   "{'is_even': 'IsNotEven: Value should be even.', " \
                                   "'i > 0': 'InvalidValue: x should be strictly positive. Returned False.'}."
 
@@ -80,6 +80,6 @@ def test_syntax_dict():
     # NOTE:
     assert str(exc_info.value) == "Error validating [x=-1]. " \
                                   "At least one validation function failed for value " \
-                                  "<-1>. Successes: ['isfinite'] / Failures: " \
+                                  "-1. Successes: ['isfinite'] / Failures: " \
                                   "{'is_even': 'InvalidValue: x should be even. IsNotEven: Value should be even.', " \
                                   "'i > 0': 'InvalidValue: x should be strictly positive. Returned False.'}."

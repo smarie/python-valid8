@@ -52,7 +52,7 @@ def test_tutorial():
         hello(152)
     e = exc_info.value
     assert str(e) == "Error validating [age=152]. " \
-                     "At least one validation function failed for value <152>. " \
+                     "At least one validation function failed for value 152. " \
                      "Successes: ['isfinite'] / Failures: {" \
                      "'between_0_and_150': 'NotInRange: 0 <= x <= 150 does not hold for x=152.'}."
 
@@ -67,7 +67,7 @@ def test_tutorial():
         hello(12.5)
     e = exc_info.value
     assert str(e) == "Error validating [age=12.5]. " \
-                     "At least one validation function failed for value <12.5>. " \
+                     "At least one validation function failed for value 12.5. " \
                      "Successes: ['isfinite', 'between_0_and_150'] / Failures: {'int(x) == x': 'Returned False.'}."
 
 

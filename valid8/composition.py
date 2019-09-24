@@ -91,7 +91,7 @@ class CompositionFailure(ValidationFailure):
 
         # Note: we do note cite the value in the message since it is most probably available in inner messages [{val}]
         what = self.get_what()
-        possibly_value = "" if compact_mode else (" for value <%s>" % repr(self.wrong_value))
+        possibly_value = "" if compact_mode else (" for value %s" % repr(self.wrong_value))
         return '%s%s. Successes: %s / Failures: %s.' % (what, possibly_value, self.successes, failures_str)
 
     def play_all_validators(self, validators, value, **ctx):
