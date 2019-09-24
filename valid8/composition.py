@@ -175,7 +175,7 @@ def _and_(validation_funcs  # type: ValidationFuncs
 
             return True
 
-        and_v_.__name__ = 'and({})'.format(get_callable_names(validation_funcs))
+        and_v_.__name__ = 'and(%s)' % get_callable_names(validation_funcs)
         return and_v_
 
 
@@ -225,7 +225,7 @@ def not_(validation_func,  # type: ValidationCallable
         # if we're here that's a failure
         raise DidNotFail(validation_func=validation_func, wrong_value=x, validation_outcome=res)
 
-    not_v_.__name__ = 'not({})'.format(get_callable_name(validation_func))
+    not_v_.__name__ = 'not(%s)' % get_callable_name(validation_func)
     return not_v_
 
 
@@ -275,7 +275,7 @@ def or_(*validation_func  # type: ValidationFuncs
             # no validator accepted: gather details and raise
             raise AllValidatorsFailed(validation_func, x, ctx)
 
-        or_v_.__name__ = 'or({})'.format(get_callable_names(validation_func))
+        or_v_.__name__ = 'or(%s)' % get_callable_names(validation_func)
         return or_v_
 
 
@@ -334,7 +334,7 @@ def xor_(*validation_func  # type: ValidationFuncs
                 # no validation function happy, fail
                 raise AllValidatorsFailed(validation_func, x, ctx)
 
-        xor_v_.__name__ = 'xor({})'.format(get_callable_names(validation_func))
+        xor_v_.__name__ = 'xor(%s)' % get_callable_names(validation_func)
         return xor_v_
 
 

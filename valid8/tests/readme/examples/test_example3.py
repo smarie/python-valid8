@@ -21,7 +21,7 @@ ex3_custom_raisers = [f for f in cases.values() if isfunction(f) and 'check_vali
 ex3_functions = []
 for ex3_func in ex3_functions_init:
     if 'custom' not in ex3_func.__name__:
-        print('{} does not use custom function'.format(ex3_func.__name__))
+        print('%s does not use custom function' % ex3_func.__name__)
         ex3_functions.append(ex3_func)
     else:
         # create as many functions as there are custom functions to use

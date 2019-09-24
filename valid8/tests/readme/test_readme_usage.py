@@ -13,7 +13,7 @@ def test_tutorial():
     # 1. age: finite
     def hello(age):
         assert isfinite(age)
-        print('Hello, {}-years-old fella !'.format(age))
+        print('Hello, %s-years-old fella !' % age)
 
     hello(21)
     with pytest.raises(AssertionError):
@@ -26,7 +26,7 @@ def test_tutorial():
     def hello(age):
         # assert_valid('age', age, isfinite)
         validate('age', age, custom=isfinite)
-        print('Hello, {}-years-old fella !'.format(age))
+        print('Hello, %s-years-old fella !' % age)
 
     hello(21)
     with pytest.raises(ValidationError) as exc_info:
@@ -45,7 +45,7 @@ def test_tutorial():
     from valid8.validation_lib import between
     def hello(age):
         assert_valid('age', age, [isfinite, between(0, 150)])
-        print('Hello, {}-years-old fella !'.format(age))
+        print('Hello, %s-years-old fella !' % age)
 
     hello(21)
     with pytest.raises(ValidationError) as exc_info:
@@ -61,7 +61,7 @@ def test_tutorial():
     from mini_lambda import x, Int
     def hello(age):
         assert_valid('age', age, [isfinite, between(0, 150), Int(x) == x])
-        print('Hello, {}-years-old fella !'.format(age))
+        print('Hello, %s-years-old fella !' % age)
 
     with pytest.raises(ValidationError) as exc_info:
         hello(12.5)
@@ -281,7 +281,7 @@ def create_base_functions():
         def is_multiple_of_ref(x):
             return x % ref == 0
 
-        is_multiple_of_ref.__doc__ = "Checks that x is a multiple of {}".format(ref)
+        is_multiple_of_ref.__doc__ = "Checks that x is a multiple of %s" % ref
         is_multiple_of_ref.__name__ = "is_multiple_of_" + str(ref)
         return is_multiple_of_ref
 
@@ -298,10 +298,10 @@ def create_base_functions_2():
     # (recommended) raising an exception
     def gt_0(x):
         if not (x >= 0):
-            raise ValueError('x is not greater than 0, x={}.'.format(x))
+            raise ValueError('x is not greater than 0, x=%s.' % x)
     def gt_1(x):
         if x < 1:
-            raise ValidationFailure(x, 'x is not greater than 1, x={}.'.format(x))
+            raise ValidationFailure(x, 'x is not greater than 1, x=%s.' % x)
 
     # (not recommended) relying on assert, only valid in 'debug' mode
     def gt_2(x):
@@ -310,7 +310,7 @@ def create_base_functions_2():
     # returning details
     def gt_3(x):
         if x < 3:
-            return 'x is not greater than 3, x={}'.format(x)
+            return 'x is not greater than 3, x=%s' % x
 
     return gt_0, gt_1, gt_2, gt_3
 
@@ -353,7 +353,7 @@ def test_usage_custom_validators():
         if x >= 1:
             return True
         else:
-            raise ValidationFailure(x, 'x >= 1 does not hold for x={}'.format(x))
+            raise ValidationFailure(x, 'x >= 1 does not hold for x=%s' % x)
 
     def gt_assert2(x):
         """(not recommended) relying on assert, only valid in 'debug' mode"""

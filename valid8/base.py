@@ -576,11 +576,11 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     # they will appear anyway !
     # ---
     # if help_msg or failure_type:
-    #     raiser.__name__ = 'failure_raiser({}, {})'.format(get_callable_name(validation_callable),
-    #                                                       help_msg or failure_type.__name__)
+    #     raiser.__name__ = 'failure_raiser(%s, %s)' % (get_callable_name(validation_callable),
+    #                                                   help_msg or failure_type.__name__)
     # else:
     # ---
-    # raiser.__name__ = 'failure_raiser({})'.format(get_callable_name(validation_callable))
+    # raiser.__name__ = 'failure_raiser(%s)' % get_callable_name(validation_callable)
     raiser.__name__ = get_callable_name(validation_callable)
     # Note: obviously this can hold as long as we do not check the name of this object in any other context than
     # raising errors. If we want to support this, then creating a callable object with everything in the fields will be
@@ -657,7 +657,7 @@ def _none_accepter(validation_callable  # type: ValidationCallable
         #     value is None: skip validation
 
     # set a name so that the error messages are more user-friendly
-    accept_none.__name__ = 'skip_on_none({})'.format(get_callable_name(validation_callable))
+    accept_none.__name__ = 'skip_on_none(%s)' % get_callable_name(validation_callable)
 
     return accept_none
 
@@ -689,7 +689,7 @@ def _none_rejecter(validation_callable  # type: ValidationCallable
             raise ValueIsNone(wrong_value=x)
 
     # set a name so that the error messages are more user-friendly ==> NO ! here we want to see the checker
-    reject_none.__name__ = 'reject_none({})'.format(get_callable_name(validation_callable))
+    reject_none.__name__ = 'reject_none(%s)' % get_callable_name(validation_callable)
 
     return reject_none
 

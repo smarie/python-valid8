@@ -319,8 +319,8 @@ def validate(name,                   # type: str
     else:
         # basic (and not enough) check to verify that there was no typo leading an argument to be put in kw_context_args
         if error_type is None and help_msg is None and len(kw_context_args) > 0:
-            raise ValueError("Keyword context arguments have been provided but help_msg and error_type are not: {}"
-                             "".format(kw_context_args))
+            raise ValueError("Keyword context arguments have been provided but `help_msg` and `error_type` have not: %s"
+                             % kw_context_args)
 
 
 _QUICK_VALIDATOR = _QuickValidator()
@@ -461,8 +461,8 @@ class validator(Validator):
                 try:
                     wrapped_block_lines = self._get_wrapped_lines(exit_file_path, exit_line_nb)
                 except Exception as e:
-                    warn('Error while inspecting source code at {}. No details will be added to the resulting '
-                         'exception. Caught {}'.format(exit_file_path, e))
+                    warn('Error while inspecting source code at %s. No details will be added to the resulting '
+                         'exception. Caught %s' % (exit_file_path, e))
                 else:
                     if exc_val is not None:
                         # -- There was an exception, we dont know where: output the full code in self.main_function.name

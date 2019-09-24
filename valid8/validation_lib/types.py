@@ -16,8 +16,10 @@ class HasWrongType(ValidationFailure, TypeError):
 def instance_of(*args):
     """
     This type validation function can be used in two modes:
+
      * providing two arguments (x, ref_type), it returns `True` if isinstance(x, ref_type) and raises a HasWrongType
      error if not. If ref_type is a set of types, any match with one of the included types will do
+
      * providing a single argument (ref_type), this is a function generator. It returns a validation function to check
      that `instance_of(x, ref_type)`.
 
@@ -74,7 +76,7 @@ def instance_of(*args):
                     raise HasWrongType(wrong_value=x, ref_type=ref_type,
                                        help_msg='Value should be an instance of any of {ref_type}')
 
-        instance_of_ref.__name__ = 'instance_of_{}'.format(ref_type)
+        instance_of_ref.__name__ = 'instance_of_%s' % ref_type
         return instance_of_ref
     else:
         raise TypeError('instance_of expected 2 (normal) or 1 (function generator) arguments, got ' + str(len(args)))
@@ -151,7 +153,7 @@ def subclass_of(*args):
                     raise IsWrongType(wrong_value=x, ref_type=ref_type,
                                       help_msg='Value should be a subclass of any of {ref_type}')
 
-        subclass_of_ref.__name__ = 'subclass_of_{}'.format(ref_type)
+        subclass_of_ref.__name__ = 'subclass_of_%s' % ref_type
         return subclass_of_ref
     else:
         raise TypeError('subclass_of expected 2 (normal) or 1 (function generator) arguments, got ' + str(len(args)))

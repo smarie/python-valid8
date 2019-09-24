@@ -472,8 +472,8 @@ class Validator(object):
         quite different from the standard python truth value test (where None is equivalent to False), but it seems more
         adapted to an intuitive usage, where a function that returns silently without any output means 'no problem
         there, move one'. Users defining their own base validation functions may wish to raise instances or subclasses
-        of `ValidationFailure` to provide more user-friendly details and unique failure identifiers. Raw mini_lambda expressions
-        are supported and are automatically transformed to functions.
+        of `ValidationFailure` to provide more user-friendly details and unique failure identifiers. Raw mini_lambda
+        expressions are supported and are automatically transformed to functions.
 
         For example:
 
@@ -500,10 +500,12 @@ class Validator(object):
         ```
 
         Users may perform composition on base validation functions used in a `Validator`:
+
         - either explicitly using the various operators provided in valid8.composition (`and_`, `or_`, `xor_`,
-        `failure_raiser()`, `skip_on_none()`, `fail_on_none()`...)
+          `failure_raiser()`, `skip_on_none()`, `fail_on_none()`...)
+
         - or implicitly using the syntax defined in `ValidationFuncs`: i.e. a list means an implicit `and_()` and a
-        tuple means an implicit `failure_raiser()`
+          tuple means an implicit `failure_raiser()`
 
         It is possible to provide values for `help_msg` and `error_type` in the constructor so as to reuse them in any
         subsequent call to `assert_valid`. See `assert_valid` for details about those fields
@@ -534,8 +536,8 @@ class Validator(object):
         kw_context_args = kwargs
 
         if help_msg is None and error_type is None and len(kw_context_args) > 0:
-            raise ValueError("Keyword context arguments have been provided but help_msg and error_type have not: {}"
-                             "".format(kw_context_args))
+            raise ValueError("Keyword context arguments have been provided but `help_msg` and `error_type` have not: %s"
+                             % kw_context_args)
 
         self.none_policy = none_policy if none_policy is not None else NonePolicy.VALIDATE
 
@@ -572,14 +574,17 @@ class Validator(object):
         # type: (...) -> str
         """ Overrides the default string representation for Validator instances """
 
-        info = self.get_additional_info_for_repr()
-        return "{validator_type}<{additional_info}validation_function={main_val_function}, none_policy={none_policy}," \
-               " exc_type={exc_type}>" \
-               "".format(additional_info=(info + ', ') if len(info) > 0 else '',
-                         validator_type=type(self).__name__,
-                         main_val_function=self.get_main_function_name(),
-                         none_policy=get_none_policy_text(self.none_policy),
-                         exc_type=self.error_type.__name__)
+        _info = self.get_additional_info_for_repr()
+        additional_info = (_info + ', ') if len(_info) > 0 else ''
+
+        validator_type = type(self).__name__
+        main_val_function = self.get_main_function_name()
+        none_policy = get_none_policy_text(self.none_policy)
+        exc_type = self.error_type.__name__
+
+        return "%s<%s" \
+               "validation_function=%s, none_policy=%s, exc_type=%s>" \
+               % (validator_type, additional_info, main_val_function, none_policy, exc_type)
 
     def get_additional_info_for_repr(self):
         # type: (...) -> str

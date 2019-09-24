@@ -52,7 +52,7 @@ def gt(min_value,    # type: Any
                 # '{val} is not greater than {ref}'
                 raise TooSmall(wrong_value=x, min_value=min_value, strict=False)
 
-    gt_.__name__ = '{}greater_than_{}'.format('strictly_' if strict else '', min_value)
+    gt_.__name__ = '%sgreater_than_%s' % ('strictly_' if strict else '', min_value)
     return gt_
 
 
@@ -99,7 +99,7 @@ def lt(max_value,    # type: Any
                 # '{val} is not lesser than {ref}'
                 raise TooBig(wrong_value=x, max_value=max_value, strict=False)
 
-    lt_.__name__ = '{}lesser_than_{}'.format('strictly_' if strict else '', max_value)
+    lt_.__name__ = '%slesser_than_%s' % ('strictly_' if strict else '', max_value)
     return lt_
 
 
@@ -141,7 +141,6 @@ def between(min_val,          # type: Any
             if (min_val < x) and (x < max_val):
                 return True
             else:
-                # raise ValidationFailure('{} < x < {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=True,
                                  max_value=max_val, right_strict=True)
     elif open_left:
@@ -149,7 +148,6 @@ def between(min_val,          # type: Any
             if (min_val < x) and (x <= max_val):
                 return True
             else:
-                # raise ValidationFailure('between: {} < x <= {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=True,
                                  max_value=max_val, right_strict=False)
     elif open_right:
@@ -157,7 +155,6 @@ def between(min_val,          # type: Any
             if (min_val <= x) and (x < max_val):
                 return True
             else:
-                # raise ValidationFailure('between: {} <= x < {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=False,
                                  max_value=max_val, right_strict=True)
     else:
@@ -165,9 +162,8 @@ def between(min_val,          # type: Any
             if (min_val <= x) and (x <= max_val):
                 return True
             else:
-                # raise ValidationFailure('between: {} <= x <= {} does not hold for x={}'.format(min_val, max_val, x))
                 raise NotInRange(wrong_value=x, min_value=min_val, left_strict=False,
                                  max_value=max_val, right_strict=False)
 
-    between_.__name__ = 'between_{}_and_{}'.format(min_val, max_val)
+    between_.__name__ = 'between_%s_and_%s' % (min_val, max_val)
     return between_

@@ -115,7 +115,7 @@ def has_length(ref_length):
         else:
             raise WrongLength(wrong_value=x, ref_length=ref_length)
 
-    has_length_.__name__ = 'length_equals_{}'.format(ref_length)
+    has_length_.__name__ = 'length_equals_%s' % ref_length
     return has_length_
 
 
@@ -143,11 +143,9 @@ def length_between(min_len,
         if (min_len <= len(x)) and (len(x) <= max_len):
             return True
         else:
-            # raise ValidationFailure('length between: {} <= len(x) <= {} does not hold for x={}'.format(min_len,
-            #  max_len, x))
             raise LengthNotInRange(wrong_value=x, min_length=min_len, max_length=max_len)
 
-    length_between_.__name__ = 'length_between_{}_and_{}'.format(min_len, max_len)
+    length_between_.__name__ = 'length_between_%s_and_%s' % (min_len, max_len)
     return length_between_
 
 
@@ -176,7 +174,7 @@ def is_in(allowed_values  # type: Set
             # raise ValidationFailure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
             raise NotInAllowedValues(wrong_value=x, allowed_values=allowed_values)
 
-    is_in_allowed_values.__name__ = 'is_in_{}'.format(allowed_values)
+    is_in_allowed_values.__name__ = 'is_in_%s' % allowed_values
     return is_in_allowed_values
 
 
@@ -208,7 +206,7 @@ def is_subset(reference_set  # type: Set
             #                      'elements ' + str(missing))
             raise NotSubset(wrong_value=x, reference_set=reference_set, unsupported=missing)
 
-    is_subset_of.__name__ = 'is_subset_of_{}'.format(reference_set)
+    is_subset_of.__name__ = 'is_subset_of_%s' % reference_set
     return is_subset_of
 
 
@@ -234,7 +232,7 @@ def contains(ref_value):
         else:
             raise DoesNotContainValue(wrong_value=x, ref_value=ref_value)
 
-    contains_ref_value.__name__ = 'contains_{}'.format(ref_value)
+    contains_ref_value.__name__ = 'contains_%s' % ref_value
     return contains_ref_value
 
 
@@ -266,7 +264,7 @@ def is_superset(reference_set  # type: Set
             #                       'elements ' + str(missing))
             raise NotSuperset(wrong_value=x, reference_set=reference_set, missing=missing)
 
-    is_superset_of.__name__ = 'is_superset_of_{}'.format(reference_set)
+    is_superset_of.__name__ = 'is_superset_of_%s' % reference_set
     return is_superset_of
 
 
@@ -313,7 +311,7 @@ def on_all_(*validation_func):
                                             validation_outcome=res)
         return True
 
-    on_all_val.__name__ = 'apply_<{}>_on_all_elts'.format(get_callable_name(validation_function_func))
+    on_all_val.__name__ = 'apply_<%s>_on_all_elts' % get_callable_name(validation_function_func)
     return on_all_val
 
 
@@ -366,6 +364,5 @@ def on_each_(*validation_functions_collection):
                                                 validation_outcome=res)
             return True
 
-    on_each_val.__name__ = 'map_<{}>_on_elts' \
-                           ''.format('(' + ', '.join([get_callable_name(f) for f in validation_function_funcs]) + ')')
+    on_each_val.__name__ = 'map_<(%s)>_on_elts' % ', '.join([get_callable_name(f) for f in validation_function_funcs])
     return on_each_val

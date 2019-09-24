@@ -47,8 +47,8 @@ class InputValidationError(ValidationError):
         Overrides the base behaviour defined in ValidationError in order to add details about the function.
         :return:
         """
-        return 'input [{var}] for function [{func}]'.format(var=self.get_variable_str(),
-                                                            func=self.validator.get_validated_func_display_name())
+        return 'input [%s] for function [%s]' % (self.get_variable_str(),
+                                                 self.validator.get_validated_func_display_name())
 
 
 class OutputValidationError(ValidationError):
@@ -67,7 +67,7 @@ class OutputValidationError(ValidationError):
         Overrides the base behaviour defined in ValidationError in order to add details about the function.
         :return:
         """
-        return 'output of function [{func}]'.format(func=self.validator.get_validated_func_display_name())
+        return 'output of function [%s]' % self.validator.get_validated_func_display_name()
 
 
 class ClassFieldValidationError(ValidationError):
@@ -85,8 +85,8 @@ class ClassFieldValidationError(ValidationError):
         Overrides the base behaviour defined in ValidationError in order to add details about the class field.
         :return:
         """
-        return 'field [{field}] for class [{clazz}]'.format(field=self.get_variable_str(),
-                                                            clazz=self.validator.get_validated_class_display_name())
+        return 'field [%s] for class [%s]' % (self.get_variable_str(),
+                                              self.validator.get_validated_class_display_name())
 
     def get_variable_str(self):
         """ Utility method to get the variable value or 'var_name=value' if name is not None """
@@ -147,7 +147,7 @@ class FuncValidator(Validator):
                                             error_type=error_type, help_msg=help_msg, **kw_context_args)
 
     def get_additional_info_for_repr(self):
-        return 'validated_function={func}'.format(func=get_callable_name(self.validated_func))
+        return 'validated_function=%s' % get_callable_name(self.validated_func)
 
     def get_validated_func_display_name(self):
         """
@@ -330,8 +330,8 @@ class ClassFieldValidator(Validator):
         return self.validated_field_name
 
     def get_additional_info_for_repr(self):
-        return 'validated_class_field={clazz}.{field}'.format(clazz=self.get_validated_class_display_name(),
-                                                              field=self.validated_field_name)
+        return 'validated_class_field=%s.%s' % (self.get_validated_class_display_name(),
+                                                self.validated_field_name)
 
     def get_validated_class_display_name(self):
         """
@@ -645,14 +645,14 @@ def decorate_cls_with_validation(cls,
         elif (hasattr(var, '__get__') and callable(var.__get__)) \
                 or (hasattr(var, '__delete__') and callable(var.__delete__)):
             # this is a descriptor but it does not have any setter method: impossible to validate
-            raise ValueError("Class field '{}' is a valid class descriptor for class '{}' but it does not implement "
+            raise ValueError("Class field '%s' is a valid class descriptor for class '%s' but it does not implement "
                              "__set__ so it is not possible to add validation to it. See "
-                             "https://docs.python.org/3.6/howto/descriptor.html".format(field_name, cls.__name__))
+                             "https://docs.python.org/3.6/howto/descriptor.html" % (field_name, cls.__name__))
 
         else:
             # this is not a descriptor: unsupported
-            raise ValueError("Class field '{}.{}' is not a valid class descriptor, see "
-                             "https://docs.python.org/3.6/howto/descriptor.html".format(cls.__name__, field_name))
+            raise ValueError("Class field '%s.%s' is not a valid class descriptor, see "
+                             "https://docs.python.org/3.6/howto/descriptor.html" % (cls.__name__, field_name))
 
     else:
         # ** No class field with that name exist
@@ -682,8 +682,8 @@ def decorate_cls_with_validation(cls,
             # (for __setattr__ see https://stackoverflow.com/questions/15750522/class-properties-and-setattr/15751159)
 
             # finally raise an error
-            raise ValueError("@validate_field definition exception: field '{}' can not be found in class '{}', and it "
-                             "is also not an input argument of the __init__ method.".format(field_name, cls.__name__))
+            raise ValueError("@validate_field definition exception: field '%s' can not be found in class '%s', and it "
+                             "is also not an input argument of the __init__ method." % (field_name, cls.__name__))
 
     return cls
 

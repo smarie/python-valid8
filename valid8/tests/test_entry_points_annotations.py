@@ -288,7 +288,7 @@ def test_validate_custom_validators_with_exception():
     def gt_ex1(x):
         """ A validator raising a custom exception in case of failure """
         if not x >= 1:
-            raise ValidationFailure(x, 'x >= 1 does not hold for x={val}'.format(val=x))
+            raise ValidationFailure(x, 'x >= 1 does not hold for x=%s' % x)
 
     def is_mod(ref):
         """ A validator generator, with parameters and which raises a custom exception """

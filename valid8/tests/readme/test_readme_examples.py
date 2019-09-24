@@ -18,11 +18,11 @@ def test_readme_examples_4():
 
     for i, v in enumerate(l):
         # each item is a tuple of size 2
-        validate('l[{}]'.format(i), l[i], instance_of=tuple, length=2)
+        validate('l[%s]'% i, l[i], instance_of=tuple, length=2)
         # the first element is a float between 0 and 1
-        validate('l[{}][0]'.format(i), l[i][0], instance_of=Real, min_value=0, max_value=1)
+        validate('l[%s][0]'% i, l[i][0], instance_of=Real, min_value=0, max_value=1)
         # the second element is a lowercase string of size 3
-        validate('l[{}][1]'.format(i), l[i][1], instance_of=str, length=3, equals=l[i][1].lower())
+        validate('l[%s][1]'% i, l[i][1], instance_of=str, length=3, equals=l[i][1].lower())
 
     # ---- inline 2
     from valid8 import validator
@@ -71,7 +71,7 @@ def test_readme_examples_4():
     # then validate (and use) the contents
     for i, v in enumerate(l):
         # each item is a valid tuple
-        with validation('l[{}]'.format(i), l[i]):
+        with validation('l[%s]'% i, l[i]):
             check_valid_tuple(l[i])
 
         # here you can actually USE the current item
