@@ -60,7 +60,7 @@ try:
     from typing import Tuple, Any
 
     # for compliance with older versions we cant rely on typing_inspect
-    from valid8._typing_inspect import is_typevar, is_union_type, get_args
+    from valid8.utils.typing_inspect import is_typevar, is_union_type, get_args
 
     def resolve_union_and_typevar(typ):
         # type: (...) -> Tuple[Any, ...]
