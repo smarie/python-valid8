@@ -100,7 +100,7 @@ def make_validation_func_callable(vf_definition,                   # type: Valid
        in case of success. If it is a mini-lambda expression it will automatically be transformed into a function using
        `mini_lambda.as_function`. See `ValidationCallable` type hint.
      - `<err_msg>` should be a string
-     - `<failure_type>` should be a subclass of `WrappingFailure`
+     - `<failure_type>` should be a subclass of `ValidationFailure`
 
     :param vf_definition: the definition for a validation function. One of <validation_func>,
         (<validation_func>, <err_msg>), (<validation_func>, <err_type>), or (<validation_func>, <err_msg>, <err_type>)
@@ -248,7 +248,7 @@ def make_validation_func_callables(*vf_definition,                  # type: OneO
     if len(vf_definition) == 0:
         raise ValueError('mandatory vf_definition is None')
     elif len(vf_definition) == 1:
-        # a single item has been received. If it is not a tuple, unpack it
+        # a single item has been received. If it is not a tuple, use it: it might be a list or dict
         single_entry = vf_definition[0]
         if not isinstance(single_entry, tuple):
             vf_definition = single_entry

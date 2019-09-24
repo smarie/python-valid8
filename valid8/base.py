@@ -484,7 +484,7 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     # type: (...) -> ValidationCallable
     """
     Wraps the provided validation function so that in case of failure it raises the given `failure_type` or a
-    `WrappingFailure` with the given help message.
+    `ValidationFailure` with the given help message.
 
     >>> import sys, pytest
     >>> if sys.version_info < (3, 0):
@@ -517,8 +517,8 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     valid8.base.InvalidValue: x should be smaller than 3. Function [x < 3] returned [False] for value 11.
 
     :param validation_callable:
-    :param failure_type: an optional subclass of `WrappingFailure` that should be raised in case of failure, instead of
-        `WrappingFailure`.
+    :param failure_type: an optional subclass of `ValidationFailure` that should be raised in case of failure, instead
+        of `ValidationFailure`.
     :param help_msg: an optional string help message for the raised failure.
     :param kw_context_args: optional context arguments for the custom failure message
     :return:
