@@ -8,7 +8,7 @@ from valid8.entry_points import NonePolicy, NoneArgPolicy, ValidationError, Vali
 from valid8.entry_points_annotations import InvalidNameError, InputValidationError, InputValidator, \
     OutputValidationError, ClassFieldValidationError, validate_arg, validate_field, validate_io, validate_out, \
     decorate_with_validation, decorate_with_validators
-from valid8.entry_points_inline import validate, validation, validator, assert_instance_of
+from valid8.entry_points_inline import validate, validation, validator, assert_instance_of, assert_subclass_of
 
 # import all symbols explicitly declared in the validation lib `__all__` list
 # from valid8.validation_lib import *
@@ -44,7 +44,7 @@ __all__ = [
     'validate_arg', 'validate_field', 'validate_io', 'validate_out', 'decorate_with_validation',
     'decorate_with_validators',
     # -- entry_points_inline
-    'validate', 'validation', 'validator', 'assert_instance_of'
+    'validate', 'validation', 'validator', 'assert_instance_of', 'assert_subclass_of'
 ]
 
 # from valid8.validation_lib import __all__ as __vlib_all__
