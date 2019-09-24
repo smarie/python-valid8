@@ -7,13 +7,13 @@
 
 *"valid8ing is not a crime" ;-)*
 
-`valid8` provides user-friendly tools for 
+`valid8` provides user-friendly tools for 3 kind of "entry points":
 
- * general-purpose inline validation, 
- * function inputs/outputs validation 
- * class fields validation. 
- 
-All entry points raise consistent `ValidationError` including all contextual details, with dynamic inheritance of `ValueError`/`TypeError` as appropriate. Originally from the [autoclass](https://smarie.github.io/python-autoclass/) project.
+ * general-purpose **inline** validation (=anywhere in your code), 
+ * **function** inputs/outputs validation 
+ * **class fields** validation.
+
+All these entry points raise consistent `ValidationError` including user-friendly details, with inheritance of `ValueError` / `TypeError` as appropriate. You can **customize this error** so as to get unique error types convenient for i18n.
 
 The documentation for users is available here: [https://smarie.github.io/python-valid8/](https://smarie.github.io/python-valid8/)
 

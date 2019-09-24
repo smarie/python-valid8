@@ -1,6 +1,6 @@
 # Changelog
 
-### 5.0.0 - More betterness!
+### 5.0.1 - More betterness!
 
 **Better syntax for `*validation_func`**:
  
