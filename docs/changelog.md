@@ -1,6 +1,10 @@
 # Changelog
 
-### 5.0.1 - More betterness!
+### 5.0.2 - Bug fix
+
+Fixed regression with non-able detection. Fixed [#46](https://github.com/smarie/python-valid8/issues/46).
+
+### 5.0.0 - More betterness!
 
 **Better syntax for `*validation_func`**:
  
