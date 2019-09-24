@@ -14,8 +14,8 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['makefun', 'six', 'future;python_version<"3.3"', 'funcsigs;python_version<"3.3"', 'decopatch',
                     'functools32;python_version<"3.2"']  # 'typing_inspect' is now copied internally so as to be compliant with very old versions of typing module
 DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc', 'enum34;python_version<"3.4"', 'six']
-TESTS_REQUIRE = ['pytest>=4.3.0', 'pytest-logging', 'pytest-cov', 'enforce', 'mini_lambda', 'attrs', 'numpy',
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'enum34;python_version<"3.4"', 'six']
+TESTS_REQUIRE = ['pytest>=4.3.0', 'pytest-logging', 'enforce', 'mini_lambda', 'attrs', 'numpy',
                  'autoclass', 'checktypes', 'pytest-cases']
 EXTRAS_REQUIRE = {}
 
@@ -42,17 +42,9 @@ DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 
 KEYWORDS = 'decorate decorator input arg args argument function contract value check checker valid validate validator' \
            ' validation'
-# --Get the long description from the README file
-# with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-#    LONG_DESCRIPTION = f.read()
-try:
-    import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'docs', 'long_description.md'), 'rst').replace('\r', '')
-except(ImportError):
-    from warnings import warn
-    warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
-         'documentation correctly')
-    LONG_DESCRIPTION = open('README.md').read()
+
+with open(path.join(here, 'docs', 'long_description.md')) as f:
+    LONG_DESCRIPTION = f.read()
 
 # ************* VERSION **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
@@ -65,6 +57,7 @@ setup(
     name=DISTNAME,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -162,5 +155,4 @@ setup(
     #         'sample=sample:main',
     #     ],
     # },
-
 )
