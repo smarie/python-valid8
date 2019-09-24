@@ -1,4 +1,4 @@
-from valid8.utils_typing import Boolean, is_pep484_nonable
+from valid8.utils.typing_tools import Boolean, is_pep484_nonable
 
 from valid8.base import ValidationFailure, failure_raiser, as_failure_raiser, Invalid
 from valid8.composition import CompositionFailure, AtLeastOneFailed, and_, DidNotFail, not_, AllValidatorsFailed, or_, \
@@ -27,7 +27,7 @@ __all__ = [
 
     # submodules
     'base', 'common_syntax', 'composition', 'entry_points', 'entry_points_annotations', 'entry_points_inline',
-    'validation_lib', 'utils_string', 'utils_typing',
+    'validation_lib', 'utils',
 
     # symbols
     # -- utils_typing

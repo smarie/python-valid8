@@ -45,8 +45,8 @@ except ImportError:
         def is_mini_lambda(f):
             return False
 
-from valid8.utils_string import end_with_dot
-from valid8.utils_signatures import getfullargspec, IsBuiltInError
+from valid8.utils.string_tools import end_with_dot
+from valid8.utils.signature_tools import getfullargspec, IsBuiltInError
 
 
 class RootException(Exception):
