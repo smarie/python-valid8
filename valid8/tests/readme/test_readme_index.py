@@ -185,7 +185,7 @@ def test_readme_index_usage_function():
     e = exc_info.value
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <''>. " \
+                     "At least one validation function failed for value <''>. " \
                      "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'Returned False.'}." \
                      "" % (repr(str), )
 
@@ -353,7 +353,7 @@ def test_readme_index_usage_composition():
         assert_valid('surface', surf, (x >= 0) & (x < 10000), is_multiple_of(100))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
+                     "At least one validation function failed for value <-1>. " \
                      "Successes: [] / Failures: {'(x >= 0) & (x < 10000)': 'Returned False.', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100.'}."
 
@@ -368,7 +368,7 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
+                     "At least one validation function failed for value <-1>. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'Returned False.', " \
                      "'is_multiple_of_100': 'IsNotMultipleOf: Value should be a multiple of 100.'}."
@@ -380,7 +380,7 @@ def test_readme_index_usage_composition():
                      (is_multiple_of(100), 'Surface should be a multiple of 100'))
     e = exc_info.value
     assert str(e) == "Error validating [surface=-1]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
+                     "At least one validation function failed for value <-1>. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'InvalidValue: Surface should be between 0 and 10000. " \
                      "Returned False.', " \
@@ -400,7 +400,7 @@ def test_readme_index_usage_composition():
     e = exc_info.value
     assert str(e) == "Surface should be between 0 and 10000 and be a multiple of 100, found -1. " \
                      "Error validating [surface=-1]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <-1>. " \
+                     "At least one validation function failed for value <-1>. " \
                      "Successes: [] / Failures: {" \
                      "'(x >= 0) & (x < 10000)': 'InvalidValue: Surface should be between 0 and 10000. " \
                      "Returned False.', " \

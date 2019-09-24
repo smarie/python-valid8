@@ -62,6 +62,11 @@ class CompositionFailure(ValidationFailure):
         if cause is not None:
             self.__cause__ = cause
 
+    def get_str_for_errors(self):
+        """The method called by `ValidationError` and self.get_details() in case of wrapped failure"""
+        # overridden so that the type is not displayed
+        return self.to_str(with_type=False, compact_mode=False)
+
     def get_details(self, compact_mode=False):
         """ Overrides the base method in order to give details on the various successes and failures """
 
@@ -125,7 +130,7 @@ class AtLeastOneFailed(CompositionFailure):
 
     def get_what(self):
         # type: (...) -> str
-        return 'At least one validation function failed validation'
+        return 'At least one validation function failed'
 
 
 def and_(*validation_func  # type: ValidationFuncs
@@ -229,7 +234,7 @@ class AllValidatorsFailed(CompositionFailure):
 
     def get_what(self):
         # type: (...) -> str
-        return 'No validation function succeeded validation'
+        return 'All validation functions failed'
 
 
 def or_(*validation_func  # type: ValidationFuncs
@@ -279,7 +284,7 @@ class XorTooManySuccess(CompositionFailure):
 
     def get_what(self):
         # type: (...) -> str
-        return 'Too many validation functions (more than 1) succeeded validation'
+        return 'Too many validation functions (more than 1) succeeded'
 
 
 def xor_(*validation_func  # type: ValidationFuncs

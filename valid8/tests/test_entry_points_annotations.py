@@ -264,7 +264,7 @@ def test_validate_custom_validators_basic():
         myfunc(4, 21)  # InputValidationError: a is not a multiple of 3
     e = exc_info.value
     assert str(e) == "Error validating input [a=4] for function [myfunc]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <4>. " \
+                     "At least one validation function failed for value <4>. " \
                      "Successes: ['gt_assert2'] / Failures: {'is_mod_3': 'Returned False.'}."
 
     with pytest.raises(InputValidationError) as exc_info:
@@ -277,7 +277,7 @@ def test_validate_custom_validators_basic():
         myfunc(1, 0)  # InputValidationError caused by AssertionError: a is not >= 2
     e = exc_info.value
     assert str(e) == "Error validating input [a=1] for function [myfunc]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <1>. " \
+                     "At least one validation function failed for value <1>. " \
                      "Successes: [] / " \
                      "Failures: {'gt_assert2': 'AssertionError: assert 1 >= 2', 'is_mod_3': 'Returned False.'}."
 
@@ -309,7 +309,7 @@ def test_validate_custom_validators_with_exception():
         myfunc(0)  # InputValidationError: a >= 1 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=0] for function [myfunc]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <0>. " \
+                     "At least one validation function failed for value <0>. " \
                      "Successes: ['lesser_than_12', 'is_mod'] / " \
                      "Failures: {'gt_ex1': 'ValidationFailure: x >= 1 does not hold for x=0.'}."
 
@@ -318,7 +318,7 @@ def test_validate_custom_validators_with_exception():
         myfunc(3)  # InputValidationError: a % 5 == 0 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=3] for function [myfunc]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <3>. " \
+                     "At least one validation function failed for value <3>. " \
                      "Successes: ['gt_ex1', 'lesser_than_12'] / " \
                      "Failures: {'is_mod': 'ValidationFailure: x % 5 == 0 does not hold for x=3.'}."
 
@@ -327,7 +327,7 @@ def test_validate_custom_validators_with_exception():
         myfunc(15)  # InputValidationError: a < 12 does not hold
     e = exc_info.value
     assert str(e) == "Error validating input [a=15] for function [myfunc]. " \
-                     "AtLeastOneFailed: At least one validation function failed validation for value <15>. " \
+                     "At least one validation function failed for value <15>. " \
                      "Successes: ['gt_ex1', 'is_mod'] / " \
                      "Failures: {'lesser_than_12': 'TooBig: x <= 12 does not hold for x=15.'}."
 

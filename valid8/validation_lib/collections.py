@@ -307,7 +307,7 @@ def on_all_(*validation_func):
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
             if (res is not None) and (res is not True):
                 # one element of x was not valid > raise
-                # raise ValidationFailure('on_all_(' + str(validation_func) + '): failed validation for input '
+                # raise ValidationFailure('on_all_(' + str(validation_func) + '): failed for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
                 raise InvalidItemInSequence(wrong_value=x_elt, validation_func=validation_function_func,
                                             validation_outcome=res)
