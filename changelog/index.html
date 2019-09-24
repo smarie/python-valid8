@@ -469,6 +469,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#500-more-betterness" class="md-nav__link">
+    5.0.0 - More betterness!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#421-minor-error-message-fix" class="md-nav__link">
     4.2.1 - Minor error message fix
   </a>
@@ -689,6 +696,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#500-more-betterness" class="md-nav__link">
+    5.0.0 - More betterness!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#421-minor-error-message-fix" class="md-nav__link">
     4.2.1 - Minor error message fix
   </a>
@@ -897,6 +911,75 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="500-more-betterness">5.0.0 - More betterness!<a class="headerlink" href="#500-more-betterness" title="Permanent link">&para;</a></h3>
+<p><strong>Better syntax for <code>*validation_func</code></strong>:</p>
+<ul>
+<li>
+<p>you can provide a <code>tuple</code> <code>(&lt;callable&gt;, &lt;help_msg&gt;, &lt;failure_type&gt;)</code> to define a single failure raiser (before only <code>(&lt;callable&gt;, &lt;help_msg&gt;)</code> or <code>(&lt;callable&gt;, &lt;failure_type&gt;)</code> were supported). Fixes <a href="https://github.com/smarie/python-valid8/issues/33">#33</a></p>
+</li>
+<li>
+<p>you can provide a <code>dict</code>-like to define several validation functions, where the key and values can contain <code>&lt;callable&gt;</code>, <code>&lt;help_msg&gt;</code>, <code>&lt;failure_type&gt;</code>. For example <code>{&lt;help_msg&gt;: (&lt;callable&gt;, &lt;failure_type&gt;)}</code> is supported. Fixes <a href="https://github.com/smarie/python-valid8/issues/40">#40</a>.</p>
+</li>
+<li>
+<p>nested lists are however not supported anymore</p>
+</li>
+<li>
+<p>the <code>&lt;callable&gt;</code> can now either have signature <code>f(v)</code>, <code>f(*args)</code>, <code>f(*args, **ctx)</code> or <code>f(v, **ctx)</code>, where <code>**ctx</code> can be used to receive contextual information. Fixes <a href="https://github.com/smarie/python-valid8/issues/39">#39</a></p>
+</li>
+</ul>
+<p><strong><code>validation_lib</code> should be imported explicitly</strong></p>
+<ul>
+<li>symbols from <code>valid8.validation_lib</code> are not imported automatically at package root anymore. You need to import them from <code>valid8.validation_lib</code>. This speeds up the library's import especially when you do not use the built-in functions. So instead of <code>from valid8 import is_even</code> you should now do <code>from valid8.validation_lib import is_even</code> (or <code>from valid8 import validation_lib as vlib</code> + <code>vlib.is_even</code>). Fixed <a href="https://github.com/smarie/python-valid8/issues/35">#35</a>.</li>
+</ul>
+<p><strong>Major exceptions refactoring</strong></p>
+<ul>
+<li>
+<p>the main validation function in a <code>Validator</code> is now always a failure raiser, even if a single callable was provided. This major design choice made many simplifications possible in particular the string representation of exceptions (below). Fixes <a href="https://github.com/smarie/python-valid8/issues/44">#44</a></p>
+</li>
+<li>
+<p>The string representation of <code>ValidationError</code> and <code>ValidationFailure</code> was greatly improved. In particular <code>ValidationError</code> does not display the name and outcome of the validation function anymore (since it is always a failure, see above), and <code>ValidationFailure</code> now has a "compact" string representation option in a new <code>to_str()</code> method, used in composition messages to simplify the result. Composition failures are also represented in a more compact way.</p>
+</li>
+<li>
+<p><code>failure_raiser</code> moved to <code>base</code> submodule with its associated type hints <code>ValidationCallable</code> and <code>ValidationCallableOrLambda</code>. It now only accepts a single validation function argument ; this is more intuitive and separates concerns with the other higher-level functions. If you used it with several inputs in the past, you can use <code>and_(...)</code> instead, it will be strictly equivalent to the old behaviour.</p>
+</li>
+<li>
+<p>new <code>@as_failure_raiser</code> decorator to create a failure raiser by decorating an existing validation function. Fixes <a href="https://github.com/smarie/python-valid8/issues/36">#36</a>.</p>
+</li>
+<li>
+<p><code>WrappingFailure</code> does not exist anymore, it was merged with <code>Failure</code> class for architecture simplification. So there are two main exception classes in valid8 now: <code>ValidationError</code> and <code>ValidationFailure</code>. When the validation callable does not raise an instance of <code>ValidationFailure</code> itself, the <code>Invalid</code> subclass is used. Fixes <a href="https://github.com/smarie/python-valid8/issues/41">#41</a></p>
+</li>
+</ul>
+<p><strong>Misc</strong></p>
+<ul>
+<li>
+<p><code>assert_subclass_of</code> now exposed at root level (for consistency with <code>assert_instance_of</code>, to be used in the context manager entry point)</p>
+</li>
+<li>
+<p>Added <code>__version__</code> attribute to comply with PEP396, following https://smarie.github.io/python-getversion/#package-versioning-best-practices. Fixes <a href="https://github.com/smarie/python-valid8/issues/38">#38</a>.</p>
+</li>
+<li>
+<p><code>result_is_success</code> is now inlined and does not use a set expression anymore. Fixed <a href="https://github.com/smarie/python-valid8/issues/37">#37</a></p>
+</li>
+<li>Improved all examples of <code>Failure</code> in the validation lib to show how a better practice where the <code>help_msg</code> stays at class level but can be overridden failure instance by failure instance.</li>
+<li>
+<p>Removed <code>length_between</code> <code>open_left/right</code> arguments as it does not make sense, to continue fixing <a href="https://github.com/smarie/python-valid8/issues/29">#29</a></p>
+</li>
+<li>
+<p>new subpackage <code>utils</code> where all util submodules now live</p>
+</li>
+<li>New submodule <code>common_syntax</code> where all the logic to handle the <code>*validation_func</code> input syntax resides</li>
+<li>
+<p>some type hints renamed for clarity: </p>
+<ul>
+<li>before: <code>ValidationFuncs</code> / <code>ValidationFunc</code> / <code>CallableType</code> / <code>Callable</code></li>
+<li>now: <code>OneOrSeveralVFDefinitions</code> / <code>ValidationFuncDefinition</code> / <code>ValidationCallableOrLamba</code> / <code>ValidationCallable</code>. </li>
+<li><code>ValidationFuncs</code> still exists as a short alias for <code>OneOrSeveralVFDefinitions</code>.</li>
+</ul>
+</li>
+<li>
+<p>fixed a few type hints too: tuples with unlimited length were not declared correctly. Now using the ellipsis <code>Tuple[&lt;type&gt;, ...]</code>.</p>
+</li>
+</ul>
 <h3 id="421-minor-error-message-fix">4.2.1 - Minor error message fix<a class="headerlink" href="#421-minor-error-message-fix" title="Permanent link">&para;</a></h3>
 <p>Error messages improvements: removed the brackets in <code>Wrong value: [...]</code> for the <code>Failure</code> details. Fixed <a href="https://github.com/smarie/python-valid8/issues/32">#32</a>.</p>
 <h3 id="420-validation-lib-improvements">4.2.0 - validation lib improvements<a class="headerlink" href="#420-validation-lib-improvements" title="Permanent link">&para;</a></h3>
@@ -1091,7 +1174,7 @@
 <li>base validation function(s) can be provided as a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), or a list of several such elements. </li>
 <li>Nested lists are supported and indicate an implicit <code>and_</code> (such as the main list). </li>
 <li><a href="https://smarie.github.io/python-mini-lambda/">mini_lambda</a> expressions can be used instead of callables, they will be transformed to functions automatically.</li>
-<li>Tuples indicate an implicit <code>_failure_raiser</code>. Combined with mini_lambda, this is a very powerful way to create validation functions: <code>(Len(s) &gt; 0, 'The value should be an empty string')</code> or <code>(Len(s) &gt; 0, EmptyStringFailure)</code>. </li>
+<li>Tuples indicate an implicit <code>failure_raiser</code>. Combined with mini_lambda, this is a very powerful way to create validation functions: <code>(Len(s) &gt; 0, 'The value should be an empty string')</code> or <code>(Len(s) &gt; 0, EmptyStringFailure)</code>. </li>
 </ul>
 </li>
 <li>
