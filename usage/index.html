@@ -242,11 +242,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
     
     <label class="md-nav__link" for="nav-3">
-      For `valid8` decorators only
+      Validation functions
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-3">
-        For `valid8` decorators only
+        Validation functions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -257,8 +257,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../decorators/accepted/" title="Accepted base validation functions" class="md-nav__link">
-      Accepted base validation functions
+    <a href="../validation_funcs/a_basics/" title="Basics" class="md-nav__link">
+      Basics
     </a>
   </li>
 
@@ -269,8 +269,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../decorators/base_validation_lib/" title="Built-in base validation functions" class="md-nav__link">
-      Built-in base validation functions
+    <a href="../validation_funcs/b_base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
+      Built-in validation functions
     </a>
   </li>
 
@@ -281,8 +281,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../decorators/composition/" title="Composing base validation functions" class="md-nav__link">
-      Composing base validation functions
+    <a href="../validation_funcs/c_simple_syntax/" title="Simple syntax" class="md-nav__link">
+      Simple syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../validation_funcs/d_composition/" title="Composition framework" class="md-nav__link">
+      Composition framework
     </a>
   </li>
 
@@ -418,6 +430,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../api_reference/" title="API reference" class="md-nav__link">
+      API reference
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../changelog/" title="Changelog" class="md-nav__link">
       Changelog
     </a>
@@ -445,8 +469,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#defensive-programming-from-assert-to-assert_valid" class="md-nav__link">
-    Defensive programming - from assert to assert_valid
+  <a href="#defensive-programming-from-assert-to-validate" class="md-nav__link">
+    Defensive programming - from assert to validate
   </a>
   
 </li>
@@ -471,14 +495,14 @@
                 
                 
                 <h1 id="validation-entry-points">Validation entry points<a class="headerlink" href="#validation-entry-points" title="Permanent link">&para;</a></h1>
-<h2 id="defensive-programming-from-assert-to-assert_valid">Defensive programming - from <code>assert</code> to <code>assert_valid</code><a class="headerlink" href="#defensive-programming-from-assert-to-assert_valid" title="Permanent link">&para;</a></h2>
+<h2 id="defensive-programming-from-assert-to-validate">Defensive programming - from <code>assert</code> to <code>validate</code><a class="headerlink" href="#defensive-programming-from-assert-to-validate" title="Permanent link">&para;</a></h2>
 <p>Let's start with a very simple <code>hello</code> function:</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 </pre></div>
 
 
-<p>We would like to protect it against bad data, for one of the reasons listed <a href="./why_validation#purpose-of-validation">here</a>. A first idea would probably be to use <code>assert</code>:</p>
+<p>We would like to protect it against bad data, for one of the reasons listed <a href="../why_validation/">here</a>. A first idea would probably be to use <code>assert</code>:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span><span class="p">,</span> <span class="n">inf</span>
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
@@ -497,12 +521,12 @@
 <li>either the code may be used in an optimized environment and we don't want the assertion to disappear,</li>
 <li>or we think that the type of error raised by <code>assert</code> is not satisfying/user-friendly/consistent/good enough for app-wide error handling/i18n...(pick your favorite)</li>
 </ul>
-<p>Let's replace <code>assert</code> with <code>assert_valid</code> from <code>valid8</code>:</p>
+<p>Let's replace <code>assert</code> with <code>validate</code> from <code>valid8</code>:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span><span class="p">,</span> <span class="n">inf</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-    <span class="n">assert_valid</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="n">age</span><span class="p">)</span>
+    <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">isfinite</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 
 <span class="c1"># let&#39;s test that it works:</span>

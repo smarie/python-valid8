@@ -36,7 +36,7 @@
     
     
       
-        <title>Overview - valid8</title>
+        <title>Composition framework - valid8</title>
       
     
     
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#usage-examples-recipes" tabindex="1" class="md-skip">
+      <a href="#built-in-composition-functions" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -103,7 +103,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Overview
+                Composition framework
               
             </span>
           
@@ -236,10 +236,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
     <label class="md-nav__link" for="nav-3">
       Validation functions
@@ -257,7 +259,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../validation_funcs/a_basics/" title="Basics" class="md-nav__link">
+    <a href="../a_basics/" title="Basics" class="md-nav__link">
       Basics
     </a>
   </li>
@@ -269,7 +271,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../validation_funcs/b_base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
+    <a href="../b_base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
       Built-in validation functions
     </a>
   </li>
@@ -281,7 +283,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../validation_funcs/c_simple_syntax/" title="Simple syntax" class="md-nav__link">
+    <a href="../c_simple_syntax/" title="Simple syntax" class="md-nav__link">
       Simple syntax
     </a>
   </li>
@@ -291,11 +293,91 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../validation_funcs/d_composition/" title="Composition framework" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Composition framework
+      </label>
+    
+    <a href="./" title="Composition framework" class="md-nav__link md-nav__link--active">
       Composition framework
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#not_" class="md-nav__link">
+    not_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#and_" class="md-nav__link">
+    and_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#or_" class="md-nav__link">
+    or_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xor_" class="md-nav__link">
+    xor_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not_all" class="md-nav__link">
+    not_all
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skip_on_none" class="md-nav__link">
+    skip_on_none
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail_on_none" class="md-nav__link">
+    fail_on_none
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -320,12 +402,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
     <label class="md-nav__link" for="nav-5">
       Examples/Recipes
@@ -341,56 +421,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Overview
-      </label>
-    
-    <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../examples/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#common-imports" class="md-nav__link">
-    Common imports
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#examples-list" class="md-nav__link">
-    Examples list
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -400,7 +435,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../example1/" title="Example 1" class="md-nav__link">
+    <a href="../../examples/example1/" title="Example 1" class="md-nav__link">
       Example 1
     </a>
   </li>
@@ -412,7 +447,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../example2/" title="Example 2" class="md-nav__link">
+    <a href="../../examples/example2/" title="Example 2" class="md-nav__link">
       Example 2
     </a>
   </li>
@@ -424,7 +459,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../example3/" title="Example 3" class="md-nav__link">
+    <a href="../../examples/example3/" title="Example 3" class="md-nav__link">
       Example 3
     </a>
   </li>
@@ -436,7 +471,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../example4/" title="Example 4" class="md-nav__link">
+    <a href="../../examples/example4/" title="Example 4" class="md-nav__link">
       Example 4
     </a>
   </li>
@@ -448,7 +483,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../example5/" title="Example 5" class="md-nav__link">
+    <a href="../../examples/example5/" title="Example 5" class="md-nav__link">
       Example 5
     </a>
   </li>
@@ -516,15 +551,50 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#common-imports" class="md-nav__link">
-    Common imports
+  <a href="#not_" class="md-nav__link">
+    not_
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#examples-list" class="md-nav__link">
-    Examples list
+  <a href="#and_" class="md-nav__link">
+    and_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#or_" class="md-nav__link">
+    or_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xor_" class="md-nav__link">
+    xor_
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not_all" class="md-nav__link">
+    not_all
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skip_on_none" class="md-nav__link">
+    skip_on_none
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail_on_none" class="md-nav__link">
+    fail_on_none
   </a>
   
 </li>
@@ -545,28 +615,59 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/examples/overview.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_funcs/d_composition.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="usage-examples-recipes">Usage examples / recipes<a class="headerlink" href="#usage-examples-recipes" title="Permanent link">&para;</a></h1>
-<p>In these pages we try to provide real-world examples so that you may find an answer for most common validation tasks, according to your coding style (several are proposed). Feel free to propose some examples through a <a href="https://github.com/smarie/python-valid8/issues">git issue</a> or <a href="https://github.com/smarie/python-valid8/pulls">pull request</a>!</p>
-<h2 id="common-imports">Common imports<a class="headerlink" href="#common-imports" title="Permanent link">&para;</a></h2>
-<p>In all examples, we use <code>numbers.Integral</code> rather than <code>int</code> so as to support both python primitive <code>int</code> and other compliant types such as <code>numpy</code> <code>int</code>. The same goes for <code>numbers.Real</code> and <code>valid8.Boolean</code> (yes, unfortunately such an equivalent boolean type is not provided by the stdlib).</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
-<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">Boolean</span>
+                <h1 id="built-in-composition-functions">Built-in composition functions<a class="headerlink" href="#built-in-composition-functions" title="Permanent link">&para;</a></h1>
+<p>We have seen in <a href="../c_simple_syntax/">previous section</a> that an implicit "and" can be easily performed. However in some cases you might need additional ways to compose functions. A few tools are provided out of the box:</p>
+<h2 id="not_">not_<a class="headerlink" href="#not_" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="n">not_</span><span class="p">(</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFunc</span><span class="p">,</span> 
+     <span class="n">catch_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
 </pre></div>
 
 
-<h2 id="examples-list">Examples list<a class="headerlink" href="#examples-list" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="./example1">Example 1</a>: <code>x</code> is a positive integer. This is the most simple example.</li>
-<li><a href="./example2">Example 2</a>: <code>s</code> is a lowercase non-empty string. In this example we start to see the limits of built-in functions and parameters, but are still able to find workarounds without writing custom functions.</li>
-<li><a href="./example3">Example 3</a>: <code>t</code> is a custom tuple. In this example it becomes clearly easier/more readable to write a custom function and use it in the validation tools</li>
-<li><a href="./example4">Example 4</a>: <code>l</code> is a list of custom tuples. This is to demonstrate iterative validation on container objects.</li>
-<li><a href="./example5">Example 5</a>: <code>df</code> is a dataframe containing specific columns</li>
-<li><a href="./example6">Example 6</a>: <code>x</code> and <code>y</code> should be such that either <code>x</code> is <code>A</code> or <code>B</code> and <code>y</code> is <code>None</code>, or <code>x</code> is <code>C</code> and <code>y</code> is a positive integer. This example demonstrates how to use the validation tools for combination of variables (<strong>TODO</strong>)</li>
-</ul>
-<p>Note: we deliberately do not use any <code>help_msg</code> or <code>error_type</code> customization in any of the examples to focus on the validation core. See <a href="./index#customizing-the-validationexception">here</a> for details on how to customize these examples.</p>
+<p>Generates the inverse of the provided validation functions: when the validator returns <code>False</code> or raises a <code>ValidationFailure</code>, this function returns <code>True</code>. Otherwise it raises a <code>DidNotFail</code> failure.</p>
+<p>By default, exceptions of types other than <code>ValidationFailure</code> are not caught and therefore fail the validation (<code>catch_all=False</code>). To change this behaviour you can turn the <code>catch_all</code> parameter to <code>True</code>, in which case all exceptions will be caught instead of just <code>ValidationFailure</code>s.</p>
+<p>Note that the argument is a single callable. You may use <code>not_all(&lt;validation_functions_list&gt;)</code> as a shortcut for <code>not_(and_(&lt;validation_functions_list&gt;))</code> to support several validation functions in the 'not'.</p>
+<p>See <code>help(not_)</code></p>
+<h2 id="and_">and_<a class="headerlink" href="#and_" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="n">and_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
+</pre></div>
+
+
+<p>An 'and' validator: it returns <code>True</code> if all of the provided validators return <code>True</code>, or raises a <code>AtLeastOneFailed</code> failure on the first <code>False</code> received or <code>Exception</code> caught.</p>
+<p>Note that an implicit <code>and_</code> is performed if you provide a list of validators to any of the entry points (<code>validator</code>/<code>validation</code>, <code>@validate_arg</code>, <code>@validate_field</code> ...). For <code>validate</code> you need to use an explicit one in <code>custom=&lt;f&gt;</code>.</p>
+<p>See <code>help(and_)</code></p>
+<h2 id="or_">or_<a class="headerlink" href="#or_" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="n">or_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
+</pre></div>
+
+
+<p>An 'or' validator: returns <code>True</code> if at least one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>AllValidatorsFailed</code> failure will be raised, together with details about all validation results.</p>
+<p>See <code>help(or_)</code></p>
+<h2 id="xor_">xor_<a class="headerlink" href="#xor_" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="n">xor_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
+</pre></div>
+
+
+<p>A 'xor' validation function: returns <code>True</code> if exactly one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>XorTooManySuccess</code> or <code>AllValidatorsFailed</code> will be raised, together with details about the various validation results.</p>
+<p>See <code>help(xor_)</code></p>
+<h2 id="not_all">not_all<a class="headerlink" href="#not_all" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="n">not_all</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">,</span> 
+        <span class="n">catch_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+
+<p>An alias for not_(and_(validators)).</p>
+<p>See <code>help(not_all)</code></p>
+<h2 id="skip_on_none">skip_on_none<a class="headerlink" href="#skip_on_none" title="Permanent link">&para;</a></h2>
+<p><code>skip_on_none(*validation_func: ValidationFuncs)</code></p>
+<p>This function is automatically used if you use <code>none_policy=SKIP</code>, you will probably never need to use it explicitly. If wraps the provided function (or implicit <code>and_</code> between provided functions) so that <code>None</code> values are not validated and the code continues executing.</p>
+<p>See <code>help(skip_on_none)</code></p>
+<h2 id="fail_on_none">fail_on_none<a class="headerlink" href="#fail_on_none" title="Permanent link">&para;</a></h2>
+<p><code>fail_on_none(*validation_func: ValidationFuncs)</code></p>
+<p>This function is automatically used if you use <code>none_policy=FAIL</code>, you will probably never need to use it explicitly. If wraps the provided function (or implicit <code>and_</code> between provided functions) so that <code>None</code> values are not validated instead a <code>ValueIsNone</code> failure is raised.</p>
+<p>See <code>help(fail_on_none)</code></p>
                 
                   
                 
@@ -587,7 +688,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../valid8_with_other/" title="valid8 + other tools" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../c_simple_syntax/" title="Simple syntax" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -596,19 +697,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                valid8 + other tools
+                Simple syntax
               </span>
             </div>
           </a>
         
         
-          <a href="../example1/" title="Example 1" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../valid8_with_other/" title="valid8 + other tools" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Example 1
+                valid8 + other tools
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

@@ -6,11 +6,13 @@ site_dir: ../site
 nav:
     - Home and usage: index.md
     - Why validation: why_validation.md
-    #- Usage details: usage.md
-    - For `valid8` decorators only:
-      - Accepted base validation functions: decorators/accepted.md
-      - Built-in base validation functions: decorators/base_validation_lib.md
-      - Composing base validation functions: decorators/composition.md
+    - Validation functions:
+      - Basics: validation_funcs/a_basics.md
+      - Built-in validation functions: validation_funcs/b_base_validation_lib.md
+      - Simple syntax: validation_funcs/c_simple_syntax.md
+      - Composition framework: validation_funcs/d_composition.md
+
+#    - Other usage details: usage.md
     - valid8 + other tools: valid8_with_other.md
     - Examples/Recipes:
       - Overview: examples/overview.md
@@ -20,6 +22,7 @@ nav:
       - Example 4: examples/example4.md
       - Example 5: examples/example5.md
     - Other validation libs: other_libs.md
+    - API reference: api_reference.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs
 

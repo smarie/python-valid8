@@ -1,0 +1,927 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Basics - valid8</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#validation-functions-basics" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="valid8" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              valid8
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Basics
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="valid8" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    valid8
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/smarie/python-valid8/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home and usage" class="md-nav__link">
+      Home and usage
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../why_validation/" title="Why validation" class="md-nav__link">
+      Why validation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Validation functions
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Validation functions
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Basics
+      </label>
+    
+    <a href="./" title="Basics" class="md-nav__link md-nav__link--active">
+      Basics
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-accepted-validation-functions" class="md-nav__link">
+    1. Accepted validation functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-used-in-error-messages" class="md-nav__link">
+    Name used in error messages
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-creating-failure-raisers-for-better-user-experience" class="md-nav__link">
+    2. Creating failure raisers for better user experience
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-writing-your-own" class="md-nav__link">
+    a - Writing your own
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-enriching-an-existing-function" class="md-nav__link">
+    b - Enriching an existing function
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-the-fly-in-the-entry-point" class="md-nav__link">
+    on the fly in the entry point
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permanently-for-reuse" class="md-nav__link">
+    permanently for reuse
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-docstring" class="md-nav__link">
+    c - Docstring
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#failure_raiser" class="md-nav__link">
+    failure_raiser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#as_failure_raiser" class="md-nav__link">
+    @as_failure_raiser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../b_base_validation_lib/" title="Built-in validation functions" class="md-nav__link">
+      Built-in validation functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../c_simple_syntax/" title="Simple syntax" class="md-nav__link">
+      Simple syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../d_composition/" title="Composition framework" class="md-nav__link">
+      Composition framework
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../valid8_with_other/" title="valid8 + other tools" class="md-nav__link">
+      valid8 + other tools
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples/Recipes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples/Recipes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/example1/" title="Example 1" class="md-nav__link">
+      Example 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/example2/" title="Example 2" class="md-nav__link">
+      Example 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/example3/" title="Example 3" class="md-nav__link">
+      Example 3
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/example4/" title="Example 4" class="md-nav__link">
+      Example 4
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/example5/" title="Example 5" class="md-nav__link">
+      Example 5
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../other_libs/" title="Other validation libs" class="md-nav__link">
+      Other validation libs
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../api_reference/" title="API reference" class="md-nav__link">
+      API reference
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-accepted-validation-functions" class="md-nav__link">
+    1. Accepted validation functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-used-in-error-messages" class="md-nav__link">
+    Name used in error messages
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-creating-failure-raisers-for-better-user-experience" class="md-nav__link">
+    2. Creating failure raisers for better user experience
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-writing-your-own" class="md-nav__link">
+    a - Writing your own
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-enriching-an-existing-function" class="md-nav__link">
+    b - Enriching an existing function
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-the-fly-in-the-entry-point" class="md-nav__link">
+    on the fly in the entry point
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permanently-for-reuse" class="md-nav__link">
+    permanently for reuse
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-docstring" class="md-nav__link">
+    c - Docstring
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#failure_raiser" class="md-nav__link">
+    failure_raiser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#as_failure_raiser" class="md-nav__link">
+    @as_failure_raiser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_funcs/a_basics.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="validation-functions-basics">Validation functions - basics<a class="headerlink" href="#validation-functions-basics" title="Permanent link">&para;</a></h1>
+<p>Below you will learn what is required to integrate any user-defined or 3d party function, and how to improve existing functions.</p>
+<h2 id="1-accepted-validation-functions">1. Accepted validation functions<a class="headerlink" href="#1-accepted-validation-functions" title="Permanent link">&para;</a></h2>
+<p>There seem to be two main styles out there when it comes to writing validation functions: </p>
+<ul>
+<li>
+<p><em>boolean testers</em> such as <code>isfinite</code> : they return <code>True</code> in case of success and <code>False</code> in case of failure, and therefore do not provide any details about the failure when they fail. Sometimes they continue to raise exceptions on edge cases (<code>isfinite(None)</code>, <code>isfinite(1+1j)</code>).</p>
+</li>
+<li>
+<p><em>failure raisers</em> such as <code>check_uniform_sampling</code> or <code>assert_series_equal</code>: they do not return anything in case of success, but raise exceptions with details in case of failure.</p>
+</li>
+</ul>
+<p>In order to be as open as possible, the definition of accepted functions in <code>valid8</code> is very large. Is considered a 'valid' validation function any callable that:</p>
+<ul>
+<li>takes a single argument as input</li>
+<li>returns <code>True</code> or <code>None</code> in case of success</li>
+</ul>
+<p>That's the two only requirements. That means that base validation functions <strong>may fail the way they like</strong>: returning <code>False</code> or something else, raising <code>Exception</code>s.</p>
+<h3 id="name-used-in-error-messages">Name used in error messages<a class="headerlink" href="#name-used-in-error-messages" title="Permanent link">&para;</a></h3>
+<p>In validation error messages, the name of the function that will be displayed is obtained from the validation callable <code>v_callable</code> with the following formula:</p>
+<div class="codehilite"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">v_callable</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v_callable</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">v_callable</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="2-creating-failure-raisers-for-better-user-experience">2. Creating <em>failure raisers</em> for better user experience<a class="headerlink" href="#2-creating-failure-raisers-for-better-user-experience" title="Permanent link">&para;</a></h2>
+<p>As explained above, nothing else than returning <code>True</code> or <code>None</code> in case of success is required by <code>valid8</code>. </p>
+<p>However, you might wish to use <em>failure raisers</em> rather than <em>boolean testers</em> because in case of failure they can provide <strong>many useful details in the raised exception</strong>. This is how you can do it:</p>
+<h3 id="a-writing-your-own">a - Writing your own<a class="headerlink" href="#a-writing-your-own" title="Permanent link">&para;</a></h3>
+<p>You may wish to create a custom validation function that directly raises an instance or subclass of the <code>valid8.ValidationFailure</code> class: it provides a simple way to define help messages as class members, with a templating mechanism. All functions in the built-in library are done that way.</p>
+<p>For example this is the code for the <code>non_empty</code> validation function:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">ValidationFailure</span>
+
+<span class="k">class</span> <span class="nc">Empty</span><span class="p">(</span><span class="n">ValidationFailure</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Custom ValidationFailure raised by non_empty &quot;&quot;&quot;</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;len(x) &gt; 0 does not hold for x={wrong_value}&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">non_empty</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &#39;non empty&#39; validation function. Raises a `Empty` error in case of failure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Empty</span><span class="p">(</span><span class="n">wrong_value</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+
+<p>You can find some inspiration <a href="https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py">here</a>.</p>
+<p>Sometimes it might be easier for a quick test, to add the "failure raiser" facet to one of your existing functions. For this you can use the <code>@as_failure_raiser</code> decorator:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">as_failure_raiser</span>
+
+<span class="nd">@as_failure_raiser</span><span class="p">(</span><span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;x should be strictly positive&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_strictly_positive</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+
+
+<h3 id="b-enriching-an-existing-function">b - Enriching an existing function<a class="headerlink" href="#b-enriching-an-existing-function" title="Permanent link">&para;</a></h3>
+<p>An alternative is to transform existing functions into failure raisers by adding help messages or custom <code>ValidationFailure</code> subtypes. Indeed, often the validation functions that you want to reuse are designed to be efficient, therefore their outcome in case of failure might be cryptic for the end user.</p>
+<h4 id="on-the-fly-in-the-entry-point">on the fly in the entry point<a class="headerlink" href="#on-the-fly-in-the-entry-point" title="Permanent link">&para;</a></h4>
+<p>Most <code>valid8</code> entry points and composition operators support the <em>simple validation function definition syntax</em> explained <a href="../c_simple_syntax/">here</a>. Thanks to this syntax, you can transform existing functions into failure raisers on the fly, when you use them. </p>
+<p>For example you can add a custom message to <code>isfinite</code>:</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">isfinite</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">inf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x is not finite&#39;</span><span class="p">:</span> <span class="n">isfinite</span><span class="p">})</span>
+
+<span class="n">valid8</span><span class="o">.</span><span class="n">entry_points</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">[</span><span class="ne">ValueError</span><span class="p">]:</span> \
+  <span class="n">Error</span> <span class="n">validating</span> <span class="p">[</span><span class="n">x</span><span class="o">=</span><span class="n">inf</span><span class="p">]</span><span class="o">.</span> <span class="n">InvalidValue</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">finite</span><span class="o">.</span> \ 
+    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
+</pre></div>
+
+
+<p>You can also specify a custom failure class that should be raised:</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationFailure</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">isfinite</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">NotFinite</span><span class="p">(</span><span class="n">ValidationFailure</span><span class="p">):</span>
+<span class="o">...</span>     <span class="n">help_msg</span> <span class="o">=</span> <span class="s2">&quot;x is not finite&quot;</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">inf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">{</span><span class="n">NotFinite</span><span class="p">:</span> <span class="n">isfinite</span><span class="p">})</span>
+
+<span class="n">valid8</span><span class="o">.</span><span class="n">entry_points</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">[</span><span class="ne">ValueError</span><span class="p">]:</span> \
+  <span class="n">Error</span> <span class="n">validating</span> <span class="p">[</span><span class="n">x</span><span class="o">=</span><span class="n">inf</span><span class="p">]</span><span class="o">.</span> <span class="n">NotFinite</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">finite</span><span class="o">.</span> \ 
+    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
+</pre></div>
+
+
+<h4 id="permanently-for-reuse">permanently for reuse<a class="headerlink" href="#permanently-for-reuse" title="Permanent link">&para;</a></h4>
+<p>If you wish to reuse a validation function in many places, it might be simpler to convert it to a failure raiser once.
+You can transform an existing validation function in a failure raiser with <code>failure_raiser()</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">failure_raiser</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span>
+
+<span class="c1"># custom message only</span>
+<span class="n">new_func</span> <span class="o">=</span> <span class="n">failure_raiser</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;x is not finite&#39;</span><span class="p">)</span>
+
+<span class="c1"># custom failure type</span>
+<span class="n">new_func</span> <span class="o">=</span> <span class="n">failure_raiser</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">failure_type</span><span class="o">=</span><span class="n">NotFinite</span><span class="p">)</span>
+</pre></div>
+
+
+<p>You can do the same with the <code>@as_failure_raiser</code> decorator already presented above.</p>
+<h3 id="c-docstring">c - Docstring<a class="headerlink" href="#c-docstring" title="Permanent link">&para;</a></h3>
+<h4 id="failure_raiser">failure_raiser<a class="headerlink" href="#failure_raiser" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">failure_raiser</span><span class="p">(</span><span class="n">validation_callable</span><span class="p">,</span>   <span class="c1"># type: ValidationCallableOrLambda</span>
+                   <span class="n">help_msg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
+                   <span class="n">failure_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailed]</span>
+                  <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
+    <span class="c1"># type: (...) -&gt; ValidationCallable</span>
+</pre></div>
+
+
+<p>Wraps the provided validation function so that in case of failure it raises the given <code>failure_type</code> or a
+<code>WrappingFailure</code>ValidationFailed help message.</p>
+<p>mini-lambda functions are automatically transformed to functions.</p>
+<p>See <code>help(failure_raiser)</code></p>
+<h4 id="as_failure_raiser">@as_failure_raiser<a class="headerlink" href="#as_failure_raiser" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">as_failure_raiser</span><span class="p">(</span><span class="n">failure_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailure]</span>
+                      <span class="n">help_msg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
+                      <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
+</pre></div>
+
+
+<p>A decorator to define a failure raiser. Same functionality then <code>failure_raiser</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">as_failure_raiser</span>
+
+<span class="nd">@as_failure_raiser</span><span class="p">(</span><span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;x should be smaller than 4&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_small_with_details</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; is_small_with_details(2)
+&gt;&gt;&gt; is_small_with_details(11)
+Traceback (most recent call last):
+...
+valid8.base.InvalidValue: x should be smaller than 4. Function [is_small_with_details] returned [False] for
+    value 11.
+</pre></div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../why_validation/" title="Why validation" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Why validation
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../b_base_validation_lib/" title="Built-in validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Built-in validation functions
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

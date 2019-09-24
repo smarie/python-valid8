@@ -36,7 +36,7 @@
     
     
       
-        <title>Built-in base validation functions - valid8</title>
+        <title>Built-in validation functions - valid8</title>
       
     
     
@@ -103,7 +103,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Built-in base validation functions
+                Built-in validation functions
               
             </span>
           
@@ -244,11 +244,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
     <label class="md-nav__link" for="nav-3">
-      For `valid8` decorators only
+      Validation functions
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-3">
-        For `valid8` decorators only
+        Validation functions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -259,8 +259,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../accepted/" title="Accepted base validation functions" class="md-nav__link">
-      Accepted base validation functions
+    <a href="../a_basics/" title="Basics" class="md-nav__link">
+      Basics
     </a>
   </li>
 
@@ -280,11 +280,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Built-in base validation functions
+        Built-in validation functions
       </label>
     
-    <a href="./" title="Built-in base validation functions" class="md-nav__link md-nav__link--active">
-      Built-in base validation functions
+    <a href="./" title="Built-in validation functions" class="md-nav__link md-nav__link--active">
+      Built-in validation functions
     </a>
     
       
@@ -520,8 +520,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../composition/" title="Composing base validation functions" class="md-nav__link">
-      Composing base validation functions
+    <a href="../c_simple_syntax/" title="Simple syntax" class="md-nav__link">
+      Simple syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../d_composition/" title="Composition framework" class="md-nav__link">
+      Composition framework
     </a>
   </li>
 
@@ -647,6 +659,18 @@
   <li class="md-nav__item">
     <a href="../../other_libs/" title="Other validation libs" class="md-nav__link">
       Other validation libs
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../api_reference/" title="API reference" class="md-nav__link">
+      API reference
     </a>
   </li>
 
@@ -905,13 +929,15 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/decorators/base_validation_lib.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/smarie/python-valid8/edit/master/docs/validation_funcs/b_base_validation_lib.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="base-validation-functions-library">Base validation functions library<a class="headerlink" href="#base-validation-functions-library" title="Permanent link">&para;</a></h1>
-<p>Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by <code>valid8</code>. See <a href="../../usage/">Usage</a> for details.</p>
+<p>Several base validation functions are bundled in the package so as to be reused inside any of the validation entry points provided by <code>valid8</code>.</p>
 <p>A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal</p>
-<div class="codehilite"><pre><span></span><span class="c1"># get the list of submodules containing base validation functions</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">valid8.validation_lib</span>
+
+<span class="c1"># get the list of submodules containing base validation functions</span>
 <span class="n">help</span><span class="p">(</span><span class="n">valid8</span><span class="o">.</span><span class="n">validation_lib</span><span class="p">)</span>
 
 <span class="c1"># get the list of base validation functions for each submodule</span>
@@ -927,7 +953,9 @@
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
 <h3 id="instance_ofref_type">instance_of(ref_type)<a class="headerlink" href="#instance_ofref_type" title="Permanent link">&para;</a></h3>
 <p>'instance of' validation function generator. Returns a validation function to check that <code>is_instance(x, ref_type)</code>. If ref_type is a set of types, any match with one of the included types will do.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span>
+<span class="kn">from</span> <span class="nn">valid8.validation_lib</span> <span class="kn">import</span> <span class="n">instance_of</span>
+
 <span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
 </pre></div>
 
@@ -935,7 +963,9 @@
 <p>Note that this function can also be used directly in inline codes, by using its 2-args version: <code>instance_of(x, str)</code>.</p>
 <h3 id="subclass_ofref_type">subclass_of(ref_type)<a class="headerlink" href="#subclass_ofref_type" title="Permanent link">&para;</a></h3>
 <p>'subclass of' validation function generator. Returns a validation function to check that <code>is_subclass(x, ref_type)</code>.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span><span class="p">,</span> <span class="n">subclass_of</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_valid</span>
+<span class="kn">from</span> <span class="nn">valid8.validation_lib</span> <span class="kn">import</span> <span class="n">subclass_of</span>
+
 <span class="n">assert_valid</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">subclass_of</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
 </pre></div>
 
@@ -1006,7 +1036,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../accepted/" title="Accepted base validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../a_basics/" title="Basics" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1015,19 +1045,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Accepted base validation functions
+                Basics
               </span>
             </div>
           </a>
         
         
-          <a href="../composition/" title="Composing base validation functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../c_simple_syntax/" title="Simple syntax" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Composing base validation functions
+                Simple syntax
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
