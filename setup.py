@@ -15,7 +15,7 @@ INSTALL_REQUIRES = ['makefun', 'six', 'future;python_version<"3.3"', 'funcsigs;p
                     'functools32;python_version<"3.2"']  # 'typing_inspect' is now copied internally so as to be compliant with very old versions of typing module
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'enum34;python_version<"3.4"', 'six']
-TESTS_REQUIRE = ['pytest>=4.3.0', 'pytest-logging', 'enforce', 'mini_lambda', 'attrs', 'numpy',
+TESTS_REQUIRE = ['pytest>=4.4.0', 'pytest-logging', 'enforce', 'mini_lambda', 'attrs', 'numpy',
                  'autoclass', 'checktypes', 'pytest-cases']
 EXTRAS_REQUIRE = {}
 
