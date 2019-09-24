@@ -75,6 +75,10 @@ Unfortunately no equivalent type is provided in the stdlib for booleans, so in `
 
 ## For classes
 
+### pyfields
+
+**TODO**
+
 ### autoclass
 
 `valid8` plays well with [autoclass](https://smarie.github.io/python-autoclass/) to quickly create small but validated classes: 

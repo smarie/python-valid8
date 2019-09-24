@@ -25,6 +25,7 @@ The following frameworks provide both type and value validation, and for most of
 ## Value validation
 
 I recently found these two elegant frameworks:
+
  * [expects](https://expects.readthedocs.io/en/stable/)
  * [grappa](http://grappa.readthedocs.io/en/latest/)
 

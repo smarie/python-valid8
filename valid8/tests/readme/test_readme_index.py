@@ -26,10 +26,23 @@ def test_readme_index_usage_quick2():
     surf = 20
 
     with pytest.raises(ValidationError) as exc_info:
-        validate('surface', surf, instance_of=int, min_value=0, custom=[(x ** 2 < 50, 'hai')])
+        validate('surface', surf, instance_of=int, min_value=0, custom=[x ** 2 < 50])
     e = exc_info.value
-    assert str(e) == "Error validating [surface=20]. InvalidValue: hai. " \
+    assert str(e) == "Error validating [surface=20]. InvalidValue: " \
                      "Function [x ** 2 < 50] returned [False] for value 20."
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('surface', surf, instance_of=int, min_value=0, custom=[(x ** 2 < 50, 'x should be fairly small')])
+    e = exc_info.value
+    assert str(e) == "Error validating [surface=20]. InvalidValue: x should be fairly small. " \
+                     "Function [x ** 2 < 50] returned [False] for value 20."
+
+    surf = 2
+
+    with pytest.raises(ValidationError) as exc_info:
+        validate('surface', surf, instance_of=int, min_value=0,
+                 custom={'x should be fairly small': x ** 2 < 50,
+                         'x should be a multiple of 3': x % 3 == 0})
 
 
 def test_readme_usage_validator():
@@ -181,7 +194,7 @@ def test_readme_index_usage_function():
     build_house('sweet home', 200)
 
     with pytest.raises(InputValidationError) as exc_info:
-        build_house('', 100)  # name is invalid
+        build_house('', 200)  # name is invalid
     e = exc_info.value
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \

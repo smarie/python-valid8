@@ -65,6 +65,10 @@ def test_syntax_dict():
     class NotFinite(ValidationFailure):
         help_msg = "x is not finite"
 
+    x = 2
+    validate('x', x, custom={'x should be fairly small': i ** 2 < 50,
+                             'x should be a multiple of 3': i % 3 == 0})
+
     x = -1
     with pytest.raises(ValidationError):
         validate('x', x, custom={'x should be finite': (isfinite, NotFinite),

@@ -149,13 +149,11 @@ def is_valid_tuple(t):
     # (c) the second element is a lowercase string of size 3
     instance_of(t[1], str)
     if len(t[1]) != 3: raise WrongLength(t[1], ref_length=3)
-    # -- finally you can write custom Failure types
+    ValidationFailurelure types
     if not t[1].islower():
         raise NotLowerCase(t[1])
 
-class NotLowerCase(Failure, ValueError):
-    """ Example custom exception class used in custom validation function. `Failure` base class provides some 
-    mechanisms to easily build the help message (same mechanisms than ValidationError)"""
+class NotLowerCase(ValidationFailurValidationFailurenisms than ValidationError)"""
     help_msg = "Value is not a lowercase string: {wrong_value}"
 ```
 

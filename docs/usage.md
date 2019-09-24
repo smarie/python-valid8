@@ -1,6 +1,6 @@
 # Validation entry points
 
-## Defensive programming - from `assert` to `assert_valid`
+## Defensive programming - from `assert` to `validate`
 
 Let's start with a very simple `hello` function:
 
@@ -9,7 +9,7 @@ def hello(age):
     print('Hello, {}-years-old fella !'.format(age))
 ```
 
-We would like to protect it against bad data, for one of the reasons listed [here](./why_validation#purpose-of-validation). A first idea would probably be to use `assert`:
+We would like to protect it against bad data, for one of the reasons listed [here](./why_validation.md). A first idea would probably be to use `assert`:
  
 ```python
 from math import isfinite, inf
@@ -29,14 +29,14 @@ But as explained [here](./why_validation#how-do-you-do-today) this is maybe not 
  - either the code may be used in an optimized environment and we don't want the assertion to disappear,
  - or we think that the type of error raised by `assert` is not satisfying/user-friendly/consistent/good enough for app-wide error handling/i18n...(pick your favorite)
 
-Let's replace `assert` with `assert_valid` from `valid8`:
+Let's replace `assert` with `validate` from `valid8`:
 
 ```python
 from math import isfinite, inf
-from valid8 import assert_valid
+from valid8 import validate
 
 def hello(age):
-    assert_valid(isfinite, age=age)
+    validate('age', age, custom=isfinite)
     print('Hello, {}-years-old fella !'.format(age))
 
 # let's test that it works:

@@ -1,6 +1,8 @@
-# Requirements
+# Validation functions - basics
 
-## Accepted validation functions
+Below you will learn what is required to integrate any user-defined or 3d party function, and how to improve existing functions.
+
+## 1. Accepted validation functions
 
 There seem to be two main styles out there when it comes to writing validation functions: 
 
@@ -23,11 +25,14 @@ In validation error messages, the name of the function that will be displayed is
 name = v_callable.__name__ if hasattr(v_callable, '__name__') else str(v_callable)
 ```
 
-## Creating *failure raisers* for better user experience
+## 2. Creating *failure raisers* for better user experience
 
-As explained above, nothing else than returning `True` or `None` in case of success is required by `valid8`. However when creating your own base functions you might wish to create *failure raisers* rather than *boolean testers* because in case of failure they can provide **many useful details in the raised exception**. This is how you can do it:
+As explained above, nothing else than returning `True` or `None` in case of success is required by `valid8`. 
 
-### 1. Writing your own
+However, you might wish to use *failure raisers* rather than *boolean testers* because in case of failure they can provide **many useful details in the raised exception**. This is how you can do it:
+
+
+### a - Writing your own
 
 You may wish to create a custom validation function that directly raises an instance or subclass of the `valid8.ValidationFailure` class: it provides a simple way to define help messages as class members, with a templating mechanism. All functions in the built-in library are done that way.
 
@@ -64,13 +69,13 @@ def is_strictly_positive(x):
 ```
 
 
-### 2. Enriching an existing function
+### b - Enriching an existing function
 
-An alternative is to transform existing functions into failure raisers by adding help messages or custom `ValidationFailure` subtypes. 
+An alternative is to transform existing functions into failure raisers by adding help messages or custom `ValidationFailure` subtypes. Indeed, often the validation functions that you want to reuse are designed to be efficient, therefore their outcome in case of failure might be cryptic for the end user.
 
-#### a - on the fly in the entry point
+#### on the fly in the entry point
 
-Most `valid8` entry points and composition operators support the *simple validation function definition syntax* explained [here](./b_simple_syntax.md). Thanks to this syntax, you can transform existing functions into failure raisers on the fly, when you use them. 
+Most `valid8` entry points and composition operators support the *simple validation function definition syntax* explained [here](c_simple_syntax.md). Thanks to this syntax, you can transform existing functions into failure raisers on the fly, when you use them. 
 
 For example you can add a custom message to `isfinite`:
 
@@ -101,7 +106,7 @@ valid8.entry_points.ValidationError[ValueError]: \
     Function [isfinite] returned [False] for value inf.
 ```
 
-#### b - permanently for reuse
+#### permanently for reuse
 
 If you wish to reuse a validation function in many places, it might be simpler to convert it to a failure raiser once.
 You can transform an existing validation function in a failure raiser with `failure_raiser()`:
@@ -120,7 +125,7 @@ new_func = failure_raiser(isfinite, failure_type=NotFinite)
 You can do the same with the `@as_failure_raiser` decorator already presented above.
 
 
-### Docstring
+### c - Docstring
 
 #### failure_raiser
 

@@ -1,10 +1,12 @@
 # Base validation functions library
 
-Several base validation functions are bundled in the package so as to be reused. It is not recommended to use them "as is" but rather to use them inside any of the validation entry points provided by `valid8`. See [Usage](../usage.md) for details.
+Several base validation functions are bundled in the package so as to be reused inside any of the validation entry points provided by `valid8`.
 
 A quick way to get the up-to-date list of validation functions provided in this package is to execute the following help commands from within a terminal
 
 ```python
+import valid8.validation_lib
+
 # get the list of submodules containing base validation functions
 help(valid8.validation_lib)
 
@@ -27,7 +29,9 @@ In parallel, if your function is very specific but writes quite well in plain ol
 'instance of' validation function generator. Returns a validation function to check that `is_instance(x, ref_type)`. If ref_type is a set of types, any match with one of the included types will do.
 
 ```python
-from valid8 import assert_valid, instance_of
+from valid8 import assert_valid
+from valid8.validation_lib import instance_of
+
 assert_valid('Foo', 'r', instance_of(str))
 ```
 
@@ -39,7 +43,9 @@ Note that this function can also be used directly in inline codes, by using its 
 'subclass of' validation function generator. Returns a validation function to check that `is_subclass(x, ref_type)`.
 
 ```python
-from valid8 import assert_valid, subclass_of
+from valid8 import assert_valid
+from valid8.validation_lib import subclass_of
+
 assert_valid('Foo', bool, subclass_of(int))
 ```
 
