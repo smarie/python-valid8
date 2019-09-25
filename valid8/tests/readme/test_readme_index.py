@@ -83,7 +83,7 @@ def test_readme_usage_validator():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
+                     "HasWrongType: Value should be an instance of %r. Wrong value: 1j." % int
 
     from valid8 import assert_instance_of
     with pytest.raises(ValidationError) as exc_info:
@@ -92,7 +92,7 @@ def test_readme_usage_validator():
             v.alid = surf > 0
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
+                     "HasWrongType: Value should be an instance of %r. Wrong value: 1j." % int
 
 
 def test_readme_usage_customization():
@@ -199,8 +199,8 @@ def test_readme_index_usage_function():
     assert str(e) == "name should be a non-empty string. " \
                      "Error validating input [name=''] for function [build_house]. " \
                      "At least one validation function failed for value ''. " \
-                     "Successes: [\"instance_of_%s\"] / Failures: {'len(s) > 0': 'Returned False.'}." \
-                     "" % (repr(str), )
+                     "Successes: [\"instance_of_%r\"] / Failures: {'len(s) > 0': 'Returned False.'}." \
+                     "" % str
 
     from mini_lambda import s, x, l, Len
     from valid8 import validate_arg, validate_out

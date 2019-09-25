@@ -35,7 +35,7 @@ def test_validate_():
         validate('surface', surf, instance_of=(int, ), min_value=0)
     e = exc_info.value
     assert str(e) == "Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
+                     "HasWrongType: Value should be an instance of %r. Wrong value: 1j." % int
 
 
 def test_readme_usage_validate__customization():
@@ -49,7 +49,7 @@ def test_readme_usage_validate__customization():
                  help_msg="Surface should be a positive integer")
     e = exc_info.value
     assert str(e) == "Surface should be a positive integer. Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
+                     "HasWrongType: Value should be an instance of %r. Wrong value: 1j." % int
 
     # (B) custom error types (recommended to provide unique applicative errors)
     class InvalidSurface(ValidationError):
@@ -70,7 +70,7 @@ def test_readme_usage_validate__customization():
     e = exc_info.value
     assert isinstance(e, InvalidSurface)
     assert str(e) == "Surface should be > 0, found 1j. Error validating [surface=1j]. " \
-                     "HasWrongType: Value should be an instance of %s. Wrong value: 1j." % repr(int)
+                     "HasWrongType: Value should be an instance of %r. Wrong value: 1j." % int
 
 
 def test_validator_context_manager():

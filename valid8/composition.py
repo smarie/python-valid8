@@ -86,12 +86,12 @@ class CompositionFailure(ValidationFailure):
                 raise ValueError("Internal error, this should not happen - please report")
 
         # OrderedDict does not pretty print...
-        key_values_str = [repr(key) + ': ' + repr(val) for key, val in failures_for_print.items()]
+        key_values_str = ['%r: %r' % (key, val) for key, val in failures_for_print.items()]
         failures_str = '{' + ', '.join(key_values_str) + '}'
 
         # Note: we do note cite the value in the message since it is most probably available in inner messages [{val}]
         what = self.get_what()
-        possibly_value = "" if compact_mode else (" for value %s" % repr(self.wrong_value))
+        possibly_value = "" if compact_mode else (" for value %r" % self.wrong_value)
         return '%s%s. Successes: %s / Failures: %s.' % (what, possibly_value, self.successes, failures_str)
 
     def play_all_validators(self, validators, value, **ctx):

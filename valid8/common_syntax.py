@@ -193,8 +193,8 @@ def make_validation_func_callables(*vf_definition,                  # type: OneO
     supported tuples to use.
 
     >>> import sys, pytest
-    >>> if sys.version_info < (3, 0):
-    ...     pytest.skip('doctest skipped in python 2 because exception namespace is different but details matter')
+    >>> if sys.version_info < (3, 6):
+    ...     pytest.skip('doctest skipped for old python versions')
 
     >>> # two dummy validation callables
     >>> def is_big(x): return x > 10

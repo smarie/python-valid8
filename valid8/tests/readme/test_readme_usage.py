@@ -194,8 +194,8 @@ def test_usage_validators():
     with pytest.raises(ValidationError) as exc_info:
         validate_is_superclass_of_bool('typ', str)
     e = exc_info.value
-    assert str(e) == "Error validating [typ=%s]. InvalidValue: Function [%s] returned [False] for value %s." \
-                     "" % (repr(str), repr(_is_subclass_of_bool), repr(str))
+    assert str(e) == "Error validating [typ=%r]. InvalidValue: Function [%r] returned [False] for value %r." \
+                     "" % (str, _is_subclass_of_bool, str)
 
     validate_is_multiple_of_3('val', 21)  # ok
     with pytest.raises(ValidationError) as exc_info:
