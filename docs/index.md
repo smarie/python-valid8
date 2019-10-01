@@ -504,7 +504,7 @@ If you create a custom subclass but do not inherit from `TypeError` nor `ValueEr
 
  * **Plays well with [pyfields](valid8_with_other.md#pyfields), [autoclass](valid8_with_other.md#autoclass) and [attrs](valid8_with_other.md#attrs)**. Declare validation once by annotating the class with `@validate_field`, and you're good to go!
 
-### validation functions
+**validation functions**
  
  * **Compliant with [most](accepted) base validation functions out there**. You may use base validation functions from anywhere including your own, and including `functools.partial`, `lambda` or even callable objects implementing the `__call__` magic method. The *only* requirement is that they return `True` or `None` in case of success ! The way they fail is not important, `valid8` tolerates all. If you wish to create your own, you can leverage the three [exception classes](accepted#built-in-exceptions) provided. 
 
