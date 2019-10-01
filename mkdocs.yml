@@ -24,7 +24,9 @@ nav:
     - Other validation libs: other_libs.md
     - API reference: api_reference.md
     - Changelog: changelog.md
-theme: material  # readthedocs  mkdocs
+
+theme:
+  name: 'material'  # readthedocs  mkdocs
 
 markdown_extensions:
   - admonition  # to add notes such as http://squidfunk.github.io/mkdocs-material/extensions/admonition/
