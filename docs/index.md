@@ -22,7 +22,7 @@ Now **what can you validate** ? Pretty much anything: you define validators by c
 
 So with a bird eye's view:
 
-![architecture_overview](imgs/architecture_overview6.png)
+![architecture_overview](./imgs/architecture_overview.png)
 
 ## Do I need validation ?
 
