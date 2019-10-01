@@ -63,6 +63,7 @@ after_success:
   #- pylint valid8  # note that at the moment the report is simply lost, we dont transform the result into anything
 # ***documentation***
   - mkdocs build -f docs/mkdocs.yml
+  - cat ./site/search/search_index.json  # trying to debug search
   - mv reports/junit site/
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
