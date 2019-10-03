@@ -531,11 +531,13 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
     should_wrap_failures = (failure_type is not None) or (help_msg is not None) or (len(kw_context_args) > 0)
     typ = failure_type if failure_type is not None else InvalidValue
 
+    is_mini = False
     if is_mini_lambda(validation_callable):
+        is_mini = True
         validation_callable = validation_callable.as_function()
 
     # general case - adapt to the signature required (val, ctx), (*args) or (val, **ctx)
-    call_it = make_callable(validation_callable)
+    call_it = make_callable(validation_callable, is_mini_lambda=is_mini)
 
     def raiser(x, **ctx):
         """ Wraps validation_callable to raise a failure_type_or_help_msg in case of failure """
@@ -723,24 +725,31 @@ def pop_kwargs(kwargs,
         return all_arguments
 
 
-def make_callable(f):
+def make_callable(f, is_mini_lambda=False):
     # inspect the signature to determine if the **kw_context_args should be passed along
     # Here we do not want to use inspect.signature but getfullargspec to be faster, but the counterpart is that we have
     # a lot of portability-related code to handle.... :(
-    try:
-        args, varargs, varkwargs, defaults = getfullargspec(f, skip_bound_arg=True)[0:4]
 
-        nbargs = len(args) if args is not None else 0
-        nbvarargs = 1 if varargs is not None else 0
-        nbkwargs = 1 if varkwargs is not None else 0
-        nbdefaults = len(defaults) if defaults is not None else 0
-    except IsBuiltInError:
-        # built-ins: TypeError: <built-in function isinstance> is not a Python function
-        # assume signature with a single positional argument
+    if is_mini_lambda:
         nbargs = 1
         nbvarargs = 0
         nbkwargs = 0
         nbdefaults = 0
+    else:
+        try:
+            args, varargs, varkwargs, defaults = getfullargspec(f, skip_bound_arg=True)[0:4]
+
+            nbargs = len(args) if args is not None else 0
+            nbvarargs = 1 if varargs is not None else 0
+            nbkwargs = 1 if varkwargs is not None else 0
+            nbdefaults = len(defaults) if defaults is not None else 0
+        except IsBuiltInError:
+            # built-ins: TypeError: <built-in function isinstance> is not a Python function
+            # assume signature with a single positional argument
+            nbargs = 1
+            nbvarargs = 0
+            nbkwargs = 0
+            nbdefaults = 0
 
     if (nbargs == 1) or (nbvarargs >= 1) or (nbargs >= 2 and nbdefaults >= (nbargs - 1)):  # can it receive 1 positional argument ?
         if nbkwargs == 0:  # can it also receive var-keyword arguments ?
