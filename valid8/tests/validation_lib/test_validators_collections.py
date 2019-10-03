@@ -13,6 +13,9 @@ def test_is_in():
     with pytest.raises(ValidationFailure):
         is_in({'+', '-'})('*')
 
+    # also test non-set iterable types
+    is_in(('+', '-'))('+')
+
 
 def test_contains():
     """ Checks that contains works """

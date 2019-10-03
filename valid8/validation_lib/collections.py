@@ -1,6 +1,6 @@
 try:  # python 3.5+
     # noinspection PyUnresolvedReferences
-    from typing import Set, Tuple
+    from typing import Set, Tuple, Container
 except ImportError:
     pass
 
@@ -158,7 +158,7 @@ class NotInAllowedValues(ValidationFailure, ValueError):
                                                  **kwargs)
 
 
-def is_in(allowed_values  # type: Set
+def is_in(allowed_values  # type: Container
           ):
     """
     'Values in' validation_function generator.
@@ -174,7 +174,7 @@ def is_in(allowed_values  # type: Set
             # raise ValidationFailure('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
             raise NotInAllowedValues(wrong_value=x, allowed_values=allowed_values)
 
-    is_in_allowed_values.__name__ = 'is_in_%s' % allowed_values
+    is_in_allowed_values.__name__ = 'is_in_%s' % (allowed_values, )
     return is_in_allowed_values
 
 
