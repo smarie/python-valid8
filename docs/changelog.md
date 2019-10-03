@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.0.3 - bug fixes
+
+Fixed bug with mini-lambda < 2.2. Fixed [#48](https://github.com/smarie/python-valid8/issues/48).
+
+Fixed bug in `is_in` when the reference object was a non-set container. Fixed [#47](https://github.com/smarie/python-valid8/issues/47).
+
 ### 5.0.2 - Bug fix
 
 Fixed regression with non-able detection. Fixed [#46](https://github.com/smarie/python-valid8/issues/46).
