@@ -28,7 +28,7 @@ try:  # python 3.5+
 
         # 3. the syntax to describe several validation functions at once
         VFDefinitionElement = Union[str, Type[ValidationFailure], ValidationCallableOrLambda]
-        """This type represents one of the elements that can define a checker"""
+        """This type represents one of the elements that can define a checker: help msg, failure type, callable"""
 
         OneOrSeveralVFDefinitions = Union[ValidationFuncDefinition,
                                           Iterable[ValidationFuncDefinition],
@@ -61,7 +61,7 @@ except ImportError:
 
 supported_syntax = 'a callable, a tuple(callable, help_msg_str), a tuple(callable, failure_type), ' \
                    'tuple(callable, help_msg_str, failure_type), or a list of ' \
-                   'several such elements. Tuples indicate an implicit `failure_raiser`. ' \
+                   'several such elements. Dicts are supported too. Tuples indicate an implicit `failure_raiser`. ' \
                    '[mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead of ' \
                    'callables, they will be transformed to functions automatically.'
 
@@ -233,7 +233,7 @@ def make_validation_func_callables(*vf_definition,                  # type: OneO
 
     :param vf_definition: the base validation function or list of base validation functions to use. A callable, a
         tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
-        or a list of several such elements.
+        or a list of several such elements. A dict can also be used (see doc).
         Tuples indicate an implicit `failure_raiser`.
         [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
         of callables, they will be transformed to functions automatically.
@@ -246,7 +246,7 @@ def make_validation_func_callables(*vf_definition,                  # type: OneO
 
     # handle the case where vf_definition is not yet a list or is empty or none
     if len(vf_definition) == 0:
-        raise ValueError('mandatory vf_definition is None')
+        raise ValueError('No validation function definition was provided')
     elif len(vf_definition) == 1:
         # a single item has been received. If it is not a tuple, use it: it might be a list or dict
         single_entry = vf_definition[0]

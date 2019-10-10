@@ -515,7 +515,7 @@ class Validator(object):
 
         :param validation_func: the base validation function or list of base validation functions to use. A callable, a
             tuple(callable, help_msg_str), a tuple(callable, failure_type), tuple(callable, help_msg_str, failure_type)
-            or a list of several such elements.
+            or a list of several such elements. A dict can also be used (see doc).
             Tuples indicate an implicit `failure_raiser`.
             [mini_lambda](https://smarie.github.io/python-mini-lambda/) expressions can be used instead
             of callables, they will be transformed to functions automatically.
