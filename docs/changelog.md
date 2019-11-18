@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.4 - `pyproject.toml`
+
+Added `pyproject.toml`.
+
 ### 5.0.3 - bug fixes
 
 Fixed bug with mini-lambda < 2.2. Fixed [#48](https://github.com/smarie/python-valid8/issues/48).
