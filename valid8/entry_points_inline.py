@@ -3,7 +3,7 @@ from warnings import warn
 
 from linecache import getline
 
-from valid8.base import ValueIsNone, raise_, ValidationFailure, InvalidType, InvalidValue
+from valid8.base import ValueIsNone, raise_, ValidationFailure, InvalidType, InvalidValue, NP_TRUE
 from valid8.entry_points import Validator, ValidationError, NonePolicy, assert_valid
 from valid8.validation_lib.types import HasWrongType, IsWrongType
 from valid8.validation_lib.collections import NotInAllowedValues, TooLong, TooShort, WrongLength, DoesNotContainValue, \
@@ -442,7 +442,7 @@ class validator(Validator):
         res = exc_val or self.eye.outcome
 
         # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-        if res is not None and res is not True:
+        if (res is not None) and (res is not True) and (res is not NP_TRUE):
             # ValidationFailure: *** We should raise a Validation Error ***
 
             # extract the source file and line number where exit happened

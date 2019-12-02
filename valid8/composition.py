@@ -4,7 +4,8 @@ from sys import version_info
 
 from makefun import with_signature
 
-from valid8.base import ValidationFailure, get_callable_names, get_callable_name, _none_accepter, _none_rejecter, pop_kwargs
+from valid8.base import ValidationFailure, get_callable_names, get_callable_name, _none_accepter, _none_rejecter, \
+    pop_kwargs, NP_TRUE
 from valid8.common_syntax import make_validation_func_callables
 
 
@@ -109,7 +110,7 @@ class CompositionFailure(ValidationFailure):
             try:
                 res = validator(value, **ctx)
                 # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-                if (res is None) or (res is True):
+                if (res is None) or (res is True) or (res is NP_TRUE):
                     successes.append(name)
                 else:
                     failures[validator] = res
@@ -169,7 +170,7 @@ def _and_(validation_funcs  # type: ValidationFuncs
                     # one validator was unhappy > raise
                     raise AtLeastOneFailed(validation_funcs, x, ctx, cause=e)
                 # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-                if (res is not None) and (res is not True):
+                if (res is not None) and (res is not True) and (res is not NP_TRUE):
                     # one validator was unhappy > raise
                     raise AtLeastOneFailed(validation_funcs, x, ctx)
 
@@ -210,7 +211,7 @@ def not_(validation_func,  # type: ValidationCallable
         try:
             res = validation_func(x, **ctx)
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-            if (res is not None) and (res is not True):  # inverse the result
+            if (res is not None) and (res is not True) and (res is not NP_TRUE):  # inverse the result
                 return True
 
         except ValidationFailure:
@@ -265,7 +266,7 @@ def or_(*validation_func  # type: ValidationFuncs
                 try:
                     res = validator(x, **ctx)
                     # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-                    if (res is None) or (res is True):
+                    if (res is None) or (res is True) or (res is NP_TRUE):
                         # we can return : one validator was happy
                         return True
                 except Exception:
@@ -316,7 +317,7 @@ def xor_(*validation_func  # type: ValidationFuncs
                 try:
                     res = val_func(x, **ctx)
                     # if result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-                    if (res is None) or (res is True):
+                    if (res is None) or (res is True) or (res is NP_TRUE):
                         ok_validators.append(val_func)
                 except Exception:
                     pass

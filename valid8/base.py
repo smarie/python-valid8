@@ -99,23 +99,48 @@ def get_callable_names(validation_callables  # type: Iterable[ValidationCallable
 SUCCESS_CONDITIONS = 'in {None, True}'  # was used in some error messages
 
 
-def result_is_success(validation_result  # type: Any
-                      ):
-    # type: (...) -> bool
-    """
-    Helper function to check if some results returned by a validation function mean success or failure.
+try:
+    import numpy as np
+except ImportError:
+    NP_TRUE = None  # not available - use None as it is already a success condition
 
-    The result should be True or None for a validation to be considered valid. Note that this is
-    quite different from the standard python truth value test (where None is equivalent to False), but it seems
-    more adapted to an intuitive usage, where a function that returns silently without any output means a
-    successful validation.
+    def result_is_success(validation_result  # type: Any
+                          ):
+        # type: (...) -> bool
+        """
+        Helper function to check if some results returned by a validation function mean success or failure.
 
-    :param validation_result:
-    :return:
-    """
-    # WARNING: if you change this definition, do not forget to do a search on all occurences of `result_is_success` in
-    # the code base, and replace all inlined versions accordingly
-    return (validation_result is None) or (validation_result is True)
+        The result should be True or None for a validation to be considered valid. Note that this is
+        quite different from the standard python truth value test (where None is equivalent to False), but it seems
+        more adapted to an intuitive usage, where a function that returns silently without any output means a
+        successful validation.
+
+        :param validation_result:
+        :return:
+        """
+        # WARNING: if you change this definition, do not forget to do a search on all occurences of `result_is_success`
+        # in the code base, and replace all inlined versions accordingly
+        return (validation_result is None) or (validation_result is True)
+else:
+    NP_TRUE = np.bool_(True)
+
+    def result_is_success(validation_result  # type: Any
+                          ):
+        # type: (...) -> bool
+        """
+        Helper function to check if some results returned by a validation function mean success or failure.
+
+        The result should be True or None for a validation to be considered valid. Note that this is
+        quite different from the standard python truth value test (where None is equivalent to False), but it seems
+        more adapted to an intuitive usage, where a function that returns silently without any output means a
+        successful validation.
+
+        :param validation_result:
+        :return:
+        """
+        # WARNING: if you change this definition, do not forget to do a search on all occurences of `result_is_success`
+        # in the code base, and replace all inlined versions accordingly
+        return (validation_result is None) or (validation_result is True) or (validation_result is NP_TRUE)
 
 
 def is_error_of_type(exc, ref_type):
@@ -546,7 +571,7 @@ def failure_raiser(validation_callable,   # type: ValidationCallableOrLambda
             # perform validation
             res = call_it(x, **ctx)
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-            success = (res is None) or (res is True)
+            success = (res is None) or (res is True) or (res is NP_TRUE)
 
         except ValidationFailure as f:
             # failures should be raised "as is"

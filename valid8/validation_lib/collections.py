@@ -5,7 +5,7 @@ except ImportError:
     pass
 
 from valid8.composition import and_
-from valid8.base import ValidationFailure, get_callable_name
+from valid8.base import ValidationFailure, get_callable_name, NP_TRUE
 
 
 class Empty(ValidationFailure, ValueError):
@@ -303,7 +303,7 @@ def on_all_(*validation_func):
                                             validation_outcome=e)
 
             # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-            if (res is not None) and (res is not True):
+            if (res is not None) and (res is not True) and (res is not NP_TRUE):
                 # one element of x was not valid > raise
                 # raise ValidationFailure('on_all_(' + str(validation_func) + '): failed for input '
                 #                       'element [' + str(idx) + ']: ' + str(x_elt))
@@ -357,7 +357,7 @@ def on_each_(*validation_functions_collection):
                                                 validation_outcome=e)
 
                 # if not result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-                if (res is not None) and (res is not True):
+                if (res is not None) and (res is not True) and (res is not NP_TRUE):
                     # one validation_function was unhappy > raise
                     raise InvalidItemInSequence(wrong_value=elt,
                                                 validation_func=validation_function_func,

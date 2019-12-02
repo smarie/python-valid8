@@ -28,8 +28,9 @@ except ImportError:
     use_typing = False
 
 from valid8.utils.string_tools import end_with_dot
-from valid8.base import get_callable_name, _none_accepter, _none_rejecter, RootException, failure_raiser, ValidationFailure, \
-    HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_, pop_kwargs
+from valid8.base import get_callable_name, _none_accepter, _none_rejecter, RootException, failure_raiser, \
+    ValidationFailure, HelpMsgMixIn, is_error_of_type, HelpMsgFormattingException, should_be_hidden_as_cause, raise_, \
+    pop_kwargs, NP_TRUE
 from valid8.common_syntax import make_validation_func_callables
 from valid8.composition import _and_
 
@@ -702,7 +703,7 @@ class Validator(object):
 
             # return a boolean indicating if success or failure
             # return result_is_success(res): <= DO NOT REMOVE THIS COMMENT
-            return (res is None) or (res is True)
+            return (res is None) or (res is True) or (res is NP_TRUE)
 
         except Exception:
             # caught exception means failure > return False
