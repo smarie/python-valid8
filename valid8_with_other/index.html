@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.1">
     
     
       
@@ -685,9 +685,9 @@
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
               <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> \
+<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
 </pre></div>
 
@@ -725,7 +725,7 @@
                 <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
 <span class="nd">@autoclass</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -757,7 +757,7 @@
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
     <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> 
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -786,10 +786,10 @@
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidNameError</span><span class="p">)</span>
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
                 <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurfaceError</span><span class="p">)</span>
-<span class="nd">@attr.s</span>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
-    <span class="n">surface</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+    <span class="n">surface</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
 
@@ -871,7 +871,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="../assets/javascripts/application.8e03edeb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       

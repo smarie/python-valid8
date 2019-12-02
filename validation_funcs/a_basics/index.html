@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.1">
     
     
       
@@ -742,7 +742,7 @@
 
 <span class="k">class</span> <span class="nc">Empty</span><span class="p">(</span><span class="n">ValidationFailure</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Custom ValidationFailure raised by non_empty &quot;&quot;&quot;</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;len(x) &gt; 0 does not hold for x={wrong_value}&#39;</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;len(x) &gt; 0 does not hold for x=</span><span class="si">{wrong_value}</span><span class="s1">&#39;</span>
 
 
 <span class="k">def</span> <span class="nf">non_empty</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -750,7 +750,7 @@
 <span class="sd">    &#39;non empty&#39; validation function. Raises a `Empty` error in case of failure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">Empty</span><span class="p">(</span><span class="n">wrong_value</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -778,7 +778,7 @@
 
 <span class="n">valid8</span><span class="o">.</span><span class="n">entry_points</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">[</span><span class="ne">ValueError</span><span class="p">]:</span> \
   <span class="n">Error</span> <span class="n">validating</span> <span class="p">[</span><span class="n">x</span><span class="o">=</span><span class="n">inf</span><span class="p">]</span><span class="o">.</span> <span class="n">InvalidValue</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">finite</span><span class="o">.</span> \ 
-    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
+    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
 </pre></div>
 
 
@@ -793,7 +793,7 @@
 
 <span class="n">valid8</span><span class="o">.</span><span class="n">entry_points</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">[</span><span class="ne">ValueError</span><span class="p">]:</span> \
   <span class="n">Error</span> <span class="n">validating</span> <span class="p">[</span><span class="n">x</span><span class="o">=</span><span class="n">inf</span><span class="p">]</span><span class="o">.</span> <span class="n">NotFinite</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">finite</span><span class="o">.</span> \ 
-    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
+    <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
 </pre></div>
 
 
@@ -815,8 +815,8 @@ You can transform an existing validation function in a failure raiser with <code
 <h3 id="c-docstring">c - Docstring<a class="headerlink" href="#c-docstring" title="Permanent link">&para;</a></h3>
 <h4 id="failure_raiser">failure_raiser<a class="headerlink" href="#failure_raiser" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">failure_raiser</span><span class="p">(</span><span class="n">validation_callable</span><span class="p">,</span>   <span class="c1"># type: ValidationCallableOrLambda</span>
-                   <span class="n">help_msg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
-                   <span class="n">failure_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailed]</span>
+                   <span class="n">help_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
+                   <span class="n">failure_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailed]</span>
                   <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
     <span class="c1"># type: (...) -&gt; ValidationCallable</span>
 </pre></div>
@@ -827,8 +827,8 @@ You can transform an existing validation function in a failure raiser with <code
 <p>mini-lambda functions are automatically transformed to functions.</p>
 <p>See <code>help(failure_raiser)</code></p>
 <h4 id="as_failure_raiser">@as_failure_raiser<a class="headerlink" href="#as_failure_raiser" title="Permanent link">&para;</a></h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">as_failure_raiser</span><span class="p">(</span><span class="n">failure_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailure]</span>
-                      <span class="n">help_msg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">as_failure_raiser</span><span class="p">(</span><span class="n">failure_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># type: Type[ValidationFailure]</span>
+                      <span class="n">help_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>         <span class="c1"># type: str</span>
                       <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
 </pre></div>
 
@@ -918,7 +918,7 @@ valid8.base.InvalidValue: x should be smaller than 4. Function [is_small_with_de
       
     </div>
     
-      <script src="../../assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="../../assets/javascripts/application.8e03edeb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

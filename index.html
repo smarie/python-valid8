@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.1">
     
     
       
@@ -1021,7 +1021,7 @@
 <p>If you rely on <strong>functions that may raise exceptions</strong> (<em>"failure raisers"</em>), <code>validator</code> will catch them and append them as the inner <code>failure</code> of the resulting <code>ValidationError</code>: </p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span>
 
-<span class="n">surf</span> <span class="o">=</span> <span class="mi">1j</span>
+<span class="n">surf</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span>
 
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
@@ -1081,8 +1081,8 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> 
               <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;name should be a non-empty string&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
 </pre></div>
 
@@ -1113,8 +1113,8 @@ InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: 
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
               <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;Surface should be a multiple of 100 between 0 and 10000.&#39;</span><span class="p">)</span>
 <span class="nd">@validate_out</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">Len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
 </pre></div>
 
@@ -1180,7 +1180,7 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
                 <span class="n">help_msg</span><span class="o">=</span><span class="s1">&#39;Surface should be a multiple of100 between 0 and 10000&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span>
 
@@ -1188,8 +1188,8 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
     <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__surface</span>
 
-    <span class="nd">@surface.setter</span>
-    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@surface</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__surface</span> <span class="o">=</span> <span class="n">surface</span>
 </pre></div>
 
@@ -1278,7 +1278,7 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
 <h3 id="c-message-templating">c - message templating<a class="headerlink" href="#c-message-templating" title="Permanent link">&para;</a></h3>
 <p>Finally, the <code>help_msg</code> field acts as a string template that will receive any additional keyword argument thrown at the validation method. So you can define reusable error classes without too much hassle:</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
-    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be &gt; {minimum}, found {var_value}&#39;</span>
+    <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be &gt; </span><span class="si">{minimum}</span><span class="s1">, found </span><span class="si">{var_value}</span><span class="s1">&#39;</span>
 
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
          <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1441,7 +1441,7 @@ ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
       
     </div>
     
-      <script src="assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="assets/javascripts/application.8e03edeb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"."}})</script>
       

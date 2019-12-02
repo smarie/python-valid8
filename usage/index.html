@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.1">
     
     
       
@@ -498,7 +498,7 @@
 <h2 id="defensive-programming-from-assert-to-validate">Defensive programming - from <code>assert</code> to <code>validate</code><a class="headerlink" href="#defensive-programming-from-assert-to-validate" title="Permanent link">&para;</a></h2>
 <p>Let's start with a very simple <code>hello</code> function:</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, </span><span class="si">{}</span><span class="s1">-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 </pre></div>
 
 
@@ -507,7 +507,7 @@
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
     <span class="k">assert</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, </span><span class="si">{}</span><span class="s1">-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 
 <span class="c1"># let&#39;s test that it works:</span>
 <span class="n">hello</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span>   <span class="c1"># &#39;Hello, 33-years-old fella !&#39;</span>
@@ -527,7 +527,7 @@
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
     <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">isfinite</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, {}-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, </span><span class="si">{}</span><span class="s1">-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 
 <span class="c1"># let&#39;s test that it works:</span>
 <span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>   <span class="c1"># ValidationError: Error validating [age=inf]: \</span>
@@ -548,7 +548,7 @@
 
 <p>We will come back later to the notion of <code>Validator</code> object that appears here in <code>e.validator</code>.</p>
 <p>One of the great features of <code>valid8</code> is that it will fail consistently, whatever the way the inner validation function fails:</p>
-<div class="codehilite"><pre><span></span><span class="n">hello</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
+<div class="codehilite"><pre><span></span><span class="n">hello</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
 </pre></div>
 
 
@@ -587,7 +587,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="../assets/javascripts/application.8e03edeb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       

@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.1">
     
     
       
@@ -715,14 +715,14 @@
                 <h1 id="example-5-df-is-a-dataframe-containing-specific-columns">Example 5 - <code>df</code> is a dataframe containing specific columns<a class="headerlink" href="#example-5-df-is-a-dataframe-containing-specific-columns" title="Permanent link">&para;</a></h1>
 <p>For example we want to check that 'foo' and 'bar' are present.</p>
 <h2 id="1-example-values-to-validate">1- Example values to validate<a class="headerlink" href="#1-example-values-to-validate" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Valid</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
 
 <span class="c1"># Invalid</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in name</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in name</span>
 </pre></div>
 
 
@@ -741,14 +741,14 @@
 <span class="c1"># columns validation</span>
 <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
-         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;DataFrame should contain mandatory columns {c}. </span>
+         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;DataFrame should contain mandatory columns </span><span class="si">{c}</span><span class="s2">. </span>
          <span class="n">Found</span> <span class="p">{</span><span class="n">var_value</span><span class="p">}</span><span class="s2">&quot;, c=required_cols)</span>
 </pre></div>
 
 
 <p>Note: you see in this example a reminder that the help message is formatted by <code>valid8</code> using <a href="https://docs.python.org/3.5/library/string.html#custom-string-formatting">str.format()</a>. You can use in this help message any custom keyword argument (such as <code>c</code> above) or any of the already-available variables. The best way to see what is available is to write a wrong help message with an unexistent variable name in the string template:</p>
 <div class="codehilite"><pre><span></span><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
-         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Just kidding {hoho}&quot;</span><span class="p">)</span>
+         <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Just kidding </span><span class="si">{hoho}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -942,7 +942,7 @@ Context elements available: <span class="o">{</span>
       
     </div>
     
-      <script src="../../assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="../../assets/javascripts/application.8e03edeb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
