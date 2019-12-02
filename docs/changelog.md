@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.5 - bugfix - support for numpy True
+
+Numpy `True` can be used (again) as a success condition in validation functions. Fixed [#53](https://github.com/smarie/python-valid8/issues/53)
+
 ### 5.0.4 - `pyproject.toml`
 
 Added `pyproject.toml`.
