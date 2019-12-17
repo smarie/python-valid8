@@ -38,6 +38,12 @@ try:
                     # also be True for regular python classes
                     obj in (type, object))
 
+    def _is_builtin_value_error(e):
+        try:
+            return (e.__class__ is ValueError) and ('builtin' in e.args[0])
+        except:
+            return False
+
     def getfullargspec(f, skip_bound_arg=False, follow_wrapped=True):
         """
         This method adds `skip_bound_arg` argument to `getfullargspec` so that it is capable of skipping the 'self'
@@ -60,6 +66,8 @@ try:
                 if _signature_is_builtin(f):
                     raise IsBuiltInError(f)
                 elif isinstance(f, partial) and _signature_is_builtin(f.func):
+                    raise IsBuiltInError(f)
+                elif _is_builtin_value_error(e):
                     raise IsBuiltInError(f)
                 else:
                     raise
