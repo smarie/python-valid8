@@ -23,7 +23,7 @@ try:
 except ImportError:
     from funcsigs import signature, Signature
 
-from makefun import with_signature, wraps
+from makefun import wraps
 
 from valid8.utils.decoration_tools import apply_on_each_func_args_sig
 from valid8.utils.typing_tools import is_pep484_nonable
@@ -93,25 +93,11 @@ class ClassFieldValidationError(ValidationError):
         return self.validator.validated_field_name + '=' + str(self.var_value)
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(self,
-                  validated_func: Callable, 
-                  *validation_func: ValidationFuncs,
-                  error_type: 'Type[ValidationError]' = None,
-                  help_msg: str = None,
-                  none_policy: int = None,
-                  **kw_context_args):"""
-else:
-    new_sig = None
-
-
 class FuncValidator(Validator):
     """
     Represents a special kind of `Validator` responsible to validate a function input or output
     """
 
-    @with_signature(new_sig)
     def __init__(self,
                  validated_func,    # type: Callable
                  *validation_func,  # type: ValidationFuncs
@@ -162,7 +148,6 @@ class InputValidator(FuncValidator):
     Represents a special kind of `Validator` responsible to validate a function input.
     """
 
-    @with_signature(new_sig)
     def __init__(self,
                  validated_func,    # type: Callable,
                  *validation_func,  # type: ValidationFuncs
@@ -203,7 +188,6 @@ class InputValidator(FuncValidator):
 class OutputValidator(FuncValidator):
     """ Represents a special kind of `Validator` responsible to validate a function output. """
 
-    @with_signature(new_sig)
     def __init__(self,
                  validated_func,    # type: Callable
                  *validation_func,  # type: ValidationFuncs
@@ -260,27 +244,12 @@ class OutputValidator(FuncValidator):
                                                   **kw_context_args)
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(self,
-                  validated_class: Callable,
-                  validated_field_name: str,
-                  *validation_func: ValidationFuncs,
-                  error_type: 'Type[ClassFieldValidationError]' = None,
-                  help_msg: str = None,
-                  none_policy: int = None,
-                  **kw_context_args):"""
-else:
-    new_sig = None
-
-
 class ClassFieldValidator(Validator):
     """
     Represents a special kind of `Validator` responsible to validate a class field.
     As opposed to other validators, the name of the field is hardcoded.
     """
 
-    @with_signature(new_sig)
     def __init__(self,
                  validated_class,       # type: Callable,
                  validated_field_name,  # type: str
@@ -341,21 +310,7 @@ class ClassFieldValidator(Validator):
         return self.validated_class.__name__
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(cls, 
-                  field_name,
-                  *validation_func: ValidationFuncs,
-                  help_msg: str = None,
-                  error_type: 'Type[InputValidationError]' = None,
-                  none_policy: int = None,
-                  **kw_context_args) -> 'Type':"""
-else:
-    new_sig = None
-
-
 @class_decorator(flat_mode_decorated_name='cls')
-@with_signature(new_sig)
 def validate_field(cls,
                    field_name,
                    *validation_func,  # type: ValidationFuncs
@@ -439,21 +394,7 @@ def validate_io(f=DECORATED,
     return decorate_several_with_validation(f, none_policy=none_policy, _out_=_out_, **kw_validation_funcs)
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(f, 
-                  arg_name, 
-                  *validation_func: ValidationFuncs, 
-                  help_msg: str = None,
-                  error_type: 'Type[InputValidationError]' = None, 
-                  none_policy: int = None, 
-                  **kw_context_args) -> Callable:"""
-else:
-    new_sig = None
-
-
 @function_decorator(flat_mode_decorated_name='f')
-@with_signature(new_sig)
 def validate_arg(f,
                  arg_name,
                  *validation_func,  # type: ValidationFuncs
@@ -485,18 +426,6 @@ def validate_arg(f,
     return decorate_with_validation(f, arg_name, *validation_func, **kwargs)
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(*validation_func: ValidationFuncs, 
-                  help_msg: str = None,
-                  error_type: 'Type[OutputValidationError]' = None, 
-                  none_policy: int = None, 
-                  **kw_context_args) -> Callable:"""
-else:
-    new_sig = None
-
-
-@with_signature(new_sig)
 def validate_out(*validation_func,  # type: ValidationFuncs
                  **kwargs):
     # type: (...) -> Callable
@@ -530,20 +459,6 @@ _OUT_KEY = '_out_'
 """ The reserved key for output validation """
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(cls, 
-                  field_name: str, 
-                  *validation_func: ValidationFuncs, 
-                  help_msg: str = None,
-                  error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
-                  none_policy: int = None, 
-                  **kw_context_args) -> Callable:"""
-else:
-    new_sig = None
-
-
-@with_signature(new_sig)
 def decorate_cls_with_validation(cls,
                                  field_name,        # type: str
                                  *validation_func,  # type: ValidationFuncs
@@ -721,21 +636,6 @@ def decorate_several_with_validation(func,
     return func
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(func, 
-                  arg_name: str, 
-                  *validation_func: ValidationFuncs, 
-                  help_msg: str = None,
-                  error_type: 'Union[Type[InputValidationError], Type[OutputValidationError]]' = None,
-                  none_policy: int = None, 
-                  _constructor_of_cls_: 'Type'=None, 
-                  **kw_context_args) -> Callable:"""
-else:
-    new_sig = None
-
-
-@with_signature(new_sig)
 def decorate_with_validation(func,
                              arg_name,          # type: str
                              *validation_func,  # type: ValidationFuncs
@@ -826,23 +726,6 @@ class InvalidNameError(ValueError):
     pass
 
 
-# Python 3+: load the 'more explicit api'
-if use_typing:
-    new_sig = """(validated_func: Callable, 
-                  s: Signature, 
-                  arg_name: str,
-                  *validation_func: ValidationFuncs,
-                  help_msg: str = None,
-                  error_type: 'Type[InputValidationError]' = None, 
-                  none_policy: int = None,
-                  validated_class: 'Type'=None, 
-                  validated_class_field_name: str=None,
-                  **kw_context_args):"""
-else:
-    new_sig = None
-
-
-@with_signature(new_sig)
 def _create_function_validator(validated_func,    # type: Callable
                                s,                 # type: Signature
                                arg_name,          # type: str
@@ -895,10 +778,11 @@ def _create_function_validator(validated_func,    # type: Callable
                                    error_type=error_type, help_msg=help_msg, **kw_context_args)
 
 
-def decorate_with_validators(func,
+def decorate_with_validators(func,                 # type: Callable
                              func_signature=None,  # type: Signature
                              **validators          # type: Union[Validator, List[Validator]]
                              ):
+    # type: (...) -> Callable
     """
     Utility method to decorate the provided function with the provided input and output Validator objects. Since this
     method takes Validator objects as argument, it is for advanced users.
