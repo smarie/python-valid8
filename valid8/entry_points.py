@@ -550,7 +550,7 @@ class Validator(object):
 
         self.kw_context_args = kw_context_args
 
-        # replace validation_func lists with explicit 'and_' if needed, and tuples with failure_raiser()
+        # replace validation_func dicts / lists / tuples with explicit 'and' and failure raiser
         validation_funcs = make_validation_func_callables(*validation_func,
                                                           callable_creator=self.get_callables_creator())
         main_val_func = _and_(validation_funcs)
