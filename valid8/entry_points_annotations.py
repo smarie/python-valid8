@@ -5,7 +5,7 @@ from decopatch import class_decorator, function_decorator, DECORATED
 
 try:  # python 3.5+
     # noinspection PyUnresolvedReferences
-    from typing import Callable, Any, List, Union
+    from typing import Callable, Any, List, Union, TypeVar
     try:  # python 3.5.3-
         # noinspection PyUnresolvedReferences
         from typing import Type
@@ -14,6 +14,10 @@ try:  # python 3.5+
     else:
         # noinspection PyUnresolvedReferences
         from valid8.composition import ValidationFuncs
+
+        DecoratedClass = TypeVar("DecoratedClass", bound=Type[Any])
+        DecoratedFunc = TypeVar("DecoratedFunc", bound=Callable)
+
         use_typing = sys.version_info > (3, 0)
 except ImportError:
     use_typing = False
@@ -311,11 +315,11 @@ class ClassFieldValidator(Validator):
 
 
 @class_decorator(flat_mode_decorated_name='cls')
-def validate_field(cls,
+def validate_field(cls,               # type: DecoratedClass
                    field_name,
                    *validation_func,  # type: ValidationFuncs
                    **kwargs):
-    # type: (...) -> Callable
+    # type: (...) -> DecoratedClass
     """
     A class decorator. It goes through all class variables and for all of those that are descriptors with a __set__,
     it wraps the descriptors' setter function with a `validate_arg` annotation
@@ -340,11 +344,12 @@ def validate_field(cls,
 
 
 @function_decorator
-def validate_io(f=DECORATED,
+def validate_io(f=DECORATED,           # type: DecoratedFunc
                 none_policy=None,      # type: int
                 _out_=None,            # type: ValidationFuncs
                 **kw_validation_funcs  # type: ValidationFuncs
                 ):
+    # type: (...) -> DecoratedFunc
     """
     A function decorator to add input validation prior to the function execution. It should be called with named
     arguments: for each function arg name, provide a single validation function or a list of validation functions to
@@ -395,12 +400,12 @@ def validate_io(f=DECORATED,
 
 
 @function_decorator(flat_mode_decorated_name='f')
-def validate_arg(f,
+def validate_arg(f,                 # type: DecoratedFunc
                  arg_name,
                  *validation_func,  # type: ValidationFuncs
                  **kwargs
                  ):
-    # type: (...) -> Callable
+    # type: (...) -> DecoratedFunc
     """
     A decorator to apply function input validation for the given argument name, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -428,7 +433,7 @@ def validate_arg(f,
 
 def validate_out(*validation_func,  # type: ValidationFuncs
                  **kwargs):
-    # type: (...) -> Callable
+    # type: (...) -> Callable[[DecoratedFunc], DecoratedFunc]
     """
     A decorator to apply function output validation to this function's output, with the provided base validation
     function(s). You may use several such decorators on a given function as long as they are stacked on top of each
@@ -459,11 +464,11 @@ _OUT_KEY = '_out_'
 """ The reserved key for output validation """
 
 
-def decorate_cls_with_validation(cls,
+def decorate_cls_with_validation(cls,               # type: DecoratedClass
                                  field_name,        # type: str
                                  *validation_func,  # type: ValidationFuncs
                                  **kwargs):
-    # type: (...) -> Type[Any]
+    # type: (...) -> DecoratedClass
     """
     This method is equivalent to decorating a class with the `@validate_field` decorator but can be used a posteriori.
 
@@ -603,12 +608,12 @@ def decorate_cls_with_validation(cls,
     return cls
 
 
-def decorate_several_with_validation(func,
+def decorate_several_with_validation(func,               # type: DecoratedFunc
                                      _out_=None,         # type: ValidationFuncs
                                      none_policy=None,   # type: int
                                      **validation_funcs  # type: ValidationFuncs
                                      ):
-    # type: (...) -> Callable
+    # type: (...) -> DecoratedFunc
     """
     This method is equivalent to applying `decorate_with_validation` once for each of the provided arguments of
     the function `func` as well as output `_out_`. validation_funcs keyword arguments are validation functions for each
@@ -636,11 +641,11 @@ def decorate_several_with_validation(func,
     return func
 
 
-def decorate_with_validation(func,
+def decorate_with_validation(func,              # type: DecoratedFunc
                              arg_name,          # type: str
                              *validation_func,  # type: ValidationFuncs
                              **kwargs):
-    # type: (...) -> Callable
+    # type: (...) -> DecoratedFunc
     """
     This method is the inner method used in `@validate_io`, `@validate_arg` and `@validate_out`.
     It can be used if you with to perform decoration manually without a decorator.
@@ -697,7 +702,7 @@ def decorate_with_validation(func,
 
 def _get_final_none_policy_for_validator(is_nonable,   # type: bool
                                          none_policy   # type: NoneArgPolicy
-                                         ):
+                                         ) -> NoneArgPolicy:
     """
     Depending on none_policy and of the fact that the target parameter is nonable or not, returns a corresponding
     NonePolicy
@@ -731,7 +736,7 @@ def _create_function_validator(validated_func,    # type: Callable
                                arg_name,          # type: str
                                *validation_func,  # type: ValidationFuncs
                                **kwargs):
-
+    # type: (...) -> Union[ClassFieldValidator, InputValidator, OutputValidator]
     error_type, help_msg, none_policy, validated_class, validated_class_field_name = \
         pop_kwargs(kwargs, [('error_type', None), ('help_msg', None), ('none_policy', None),
                             ('validated_class', None), ('validated_class_field_name', None)], allow_others=True)
@@ -778,11 +783,11 @@ def _create_function_validator(validated_func,    # type: Callable
                                    error_type=error_type, help_msg=help_msg, **kw_context_args)
 
 
-def decorate_with_validators(func,                 # type: Callable
+def decorate_with_validators(func,                 # type: DecoratedFunc
                              func_signature=None,  # type: Signature
                              **validators          # type: Union[Validator, List[Validator]]
                              ):
-    # type: (...) -> Callable
+    # type: (...) -> DecoratedFunc
     """
     Utility method to decorate the provided function with the provided input and output Validator objects. Since this
     method takes Validator objects as argument, it is for advanced users.
