@@ -1,5 +1,13 @@
 # Changelog
 
+### 5.1.0 - PEP561 compliance
+
+ - Package was made PEP561 compatible. Fixed [#55](https://github.com/smarie/python-valid8/issues/55)
+ 
+ - Improved type hints for decorators so that they do not make the decorated item loose its type hints. Fixed [#56](https://github.com/smarie/python-valid8/issues/56)
+ 
+ - Removed usage of `@with_signature` in favour of stub file in the `entry_points_annotations.py`. Fixed [#50](https://github.com/smarie/python-valid8/issues/50)
+
 ### 5.0.6 - Minor improvements
 
 Improved `getfullargspec` so as to cover more builtins in python 3.
