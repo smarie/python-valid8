@@ -702,7 +702,8 @@ def decorate_with_validation(func,              # type: DecoratedFunc
 
 def _get_final_none_policy_for_validator(is_nonable,   # type: bool
                                          none_policy   # type: NoneArgPolicy
-                                         ) -> NoneArgPolicy:
+                                         ):
+    # type: (...) -> NoneArgPolicy
     """
     Depending on none_policy and of the fact that the target parameter is nonable or not, returns a corresponding
     NonePolicy
