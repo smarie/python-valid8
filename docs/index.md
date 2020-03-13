@@ -6,6 +6,7 @@
 
 *"valid8ing is not a crime" ;-)*
 
+!!! success "New [`vtypes`](https://smarie.github.io/python-vtypes/) and [`pyfields`](https://smarie.github.io/python-pyfields/) libraries leverage `valid8` to provide higher-level value, check them out !"
 !!! warning "Major API changes in version `5.0.0`. See [changelog](changelog.md#500-more-betterness) for details."
 
 ## Overview
