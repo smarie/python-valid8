@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#example-3-t-is-a-custom-tuple" tabindex="1" class="md-skip">
+      <a href="#example-3-t-is-a-custom-tuple" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -86,7 +86,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../.." title="valid8" class="md-header-nav__button md-logo">
+        <a href="../.." title="valid8" aria-label="valid8" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +117,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -783,7 +783,7 @@
                 <h1 id="example-3-t-is-a-custom-tuple">Example 3 - <code>t</code> is a custom tuple<a class="headerlink" href="#example-3-t-is-a-custom-tuple" title="Permanent link">&para;</a></h1>
 <p>For example <code>t</code> is a tuple that contains a float between 0 and 1 and a lowercase trigram (three-letter lowercase string).</p>
 <h2 id="1-example-values-to-validate">1- Example values to validate<a class="headerlink" href="#1-example-values-to-validate" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><span class="c1"># Valid</span>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Valid</span>
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span>
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>  <span class="c1"># we accept integers</span>
@@ -796,17 +796,17 @@
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>        <span class="c1"># wrong type (False is not a string)</span>
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>          <span class="c1"># wrong value (&#39;a&#39; is not of size 3)</span>
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;AAA&#39;</span><span class="p">)</span>        <span class="c1"># wrong value (&#39;AAA&#39; is not lowercase)</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
 <h3 id="validate-built-ins"><code>validate</code> + built-ins<a class="headerlink" href="#validate-built-ins" title="Permanent link">&para;</a></h3>
 <p><code>validate</code> can not perform everything at once without a <a href="#better-custom-function">custom validation function</a>, but you can easily validate each element:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span>    <span class="n">t</span><span class="p">,</span>    <span class="n">instance_of</span><span class="o">=</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t[0]&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span>  <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t[1]&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>   <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">islower</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Note that we prefer to user <code>custom=str.islower</code> to check if a string is lowercase, rather than <code>equals=s.lower()</code>, as explained in <a href="./example2">previous example 2</a>.</p>
@@ -815,18 +815,18 @@
 <ul>
 <li>either with a pure "boolean test" approach (where we use <code>instance_of</code> instead of <code>isinstance</code> so that <code>valid8</code> can distinguish between <code>TypeError</code> and <code>ValueError</code>):</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>\
              <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>\
              <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>  <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 
 
 <ul>
 <li>or with a "failure raising" approach, less compact but with more explicit error messages:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">tuple</span><span class="p">):</span>
     <span class="c1"># the tuple should be of length 2</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
@@ -844,7 +844,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second elt should be a lowercase string of length 3,&#39;</span>
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
@@ -857,7 +857,7 @@
 <p>We will not show all combinations here (please refer to example 1 for all kind of decorators), only a few examples:</p>
 <h3 id="function-input">Function input<a class="headerlink" href="#function-input" title="Permanent link">&para;</a></h3>
 <p>With pure built-in and stdlib. Note: we have to use <code>on_each_</code> to map validation functions to each element of the tuple:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">has_length</span><span class="p">,</span> <span class="n">on_each_</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">between</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">has_length</span><span class="p">,</span> <span class="n">on_each_</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">between</span>
 
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">has_length</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">on_each_</span><span class="p">(</span>
                   <span class="c1"># the first element is a float between 0 and 1</span>
@@ -867,11 +867,11 @@
               <span class="p">))</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>With pure mini-lambda. Note that mini-lambda allows you to directly access the inner elements inside the tuple with traditional indexing: </p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">valid8.validation_lib.mini_lambda</span> <span class="kn">import</span> <span class="n">Instance_of</span>
 
@@ -887,14 +887,14 @@
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Also note that here as in all previous examples we want to use <code>instance_of</code> instead of <code>isinstance</code> in order to raise the correct <code>TypeError</code>. But <code>instance_of</code> is a standard function, it is not composable with mini-lambda expressions such as <code>t[0]</code>. Therefore we use the mini-lambda version of <code>instance_of</code> provided in this package, named <code>Instance_of</code>. This allows us to write type tests for sub-elements in the tuple, for example <code>Instance_of(t[0], Real)</code>.</p>
 <h3 id="class-fields">Class fields<a class="headerlink" href="#class-fields" title="Permanent link">&para;</a></h3>
 <p>In the examples below the class fields are defined as constructor arguments but this also works if they are defined as class descriptors/properties, and is compliant with <a href="valid8_with_other#for-classes">autoclass and attrs</a></p>
 <p>with pure built-in and stdlib:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> 
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> 
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">has_length</span><span class="p">,</span> <span class="n">on_each_</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">between</span>
 
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">tuple</span><span class="p">),</span> <span class="n">has_length</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">on_each_</span><span class="p">(</span>
@@ -906,11 +906,11 @@
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with pure mini-lambda</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">valid8.validation_lib.mini_lambda</span> <span class="kn">import</span> <span class="n">Instance_of</span>
 
@@ -927,12 +927,12 @@
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
 <p>In the above code samples the type was checked by <code>instance_of(str)</code> in the decorator, but you could also rather declare a type hint in the function/class signature and rely on a PEP484 checker <a href="./other_libs#pep484-type-checkers">library</a>, that makes the decorator much more compact and focused on value validation only:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">pytypes</span> <span class="kn">import</span> <span class="n">typechecked</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
@@ -948,7 +948,7 @@
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>However note that in this particular case, a tuple of wrong size will appear as a <code>TypeError</code> instead of a <code>ValueError</code> as we obtained previously.</p>
@@ -958,20 +958,20 @@
 <ul>
 <li>a simple <strong>boolean checker</strong>. Note that we use <code>instance_of</code> instead of <code>isinstance</code> so that <code>valid8</code> can distinguish between <code>TypeError</code> and <code>ValueError</code>:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">instance_of</span>
 
 <span class="k">def</span> <span class="nf">is_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; custom function - &#39;boolean tester&#39; style (returning a bool) &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>\
            <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>\
            <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>  <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 
 
 <ul>
 <li>or, better for our users (and even for our debug sessions), a <strong>failure raiser</strong>. In this case we do not need to use <code>instance_of</code> since we raise <code>TypeError</code> and <code>ValueError</code> explicitly:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">check_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; custom function - &#39;failure raiser&#39; style (returning nothing) &quot;&quot;&quot;</span>
 
     <span class="c1"># item should be a tuple of length 2</span>
@@ -992,95 +992,95 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second elt should be a lowercase string of length 3,&#39;</span>
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>We can then use either function with the <code>valid8</code> tools.</p>
 <h3 id="validate"><code>validate</code><a class="headerlink" href="#validate" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">is_valid_tuple</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">check_valid_tuple</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>It is exactly the same usage.</p>
 <h3 id="validation-validator"><code>validation</code> / <code>validator</code><a class="headerlink" href="#validation-validator" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester) we need to return the flag in the context manager, so it is more natural to use the <code>validator</code> alias:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">is_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>whereas with <code>check_valid_tuple</code> (failure raiser) we do not need to return anything, and the <code>validation</code> alias seems more natural:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
     <span class="n">check_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="function-inputs">function inputs<a class="headerlink" href="#function-inputs" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
 
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">is_valid_tuple</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
 
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">check_valid_tuple</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>it is exactly the same usage</p>
 <h3 id="classes-fields">classes fields<a class="headerlink" href="#classes-fields" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
 
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">is_valid_tuple</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
 
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">check_valid_tuple</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>it is exactly the same usage</p>
 <h3 id="more-compact-with-pep484">more compact with pep484<a class="headerlink" href="#more-compact-with-pep484" title="Permanent link">&para;</a></h3>
 <p>Note that if you choose to use a PEP484 type checker such as <a href="https://github.com/Stewori/pytypes">pytypes</a>, your custom validation function can be much more compact, as the tuple length and tuple elements types can be already described in the PEP484 type hint <code>Tuple[Real, str]</code>:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">pytypes</span> <span class="kn">import</span> <span class="n">typechecked</span>
 
 <span class="nd">@typechecked</span>
 <span class="k">def</span> <span class="nf">is_valid_tuple_pep</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot; custom validation function - note the PEP484 type hint above &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">pytypes</span> <span class="kn">import</span> <span class="n">typechecked</span>
 
 <span class="nd">@typechecked</span>
@@ -1095,7 +1095,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second elt should be a lowercase string of length 3,&#39;</span>
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>However note that in this particular case, a tuple of wrong size will appear as a <code>TypeError</code> instead of a <code>ValueError</code> as we obtained previously.</p>
@@ -1159,9 +1159,9 @@
       <div class="md-footer-copyright">
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
@@ -1171,9 +1171,9 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
     
   </body>

@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.adb8469c.css">
       
       
     
     
-      <script src="../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#why-would-i-need-a-validation-library" tabindex="1" class="md-skip">
+      <a href="#why-would-i-need-a-validation-library" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -86,7 +86,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href=".." title="valid8" class="md-header-nav__button md-logo">
+        <a href=".." title="valid8" aria-label="valid8" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +117,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -725,7 +725,7 @@
 <p>If you are an experienced coder, you probably <em>already</em> implement validation in a number of ways, whether to check the variables' types and/or values. Below we present the main styles.</p>
 <h3 id="implicit-pythonic-way">Implicit / 'pythonic' way<a class="headerlink" href="#implicit-pythonic-way" title="Permanent link">&para;</a></h3>
 <p>The good old <em>"better ask for forgiveness than for permission"</em>: do not validate, just try to use the variable and see if it works. If something goes wrong, wrap it with a more appropriate user-friendly exception.</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pythonic_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pythonic_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># try to use x as if it were valid</span>
         <span class="o">...</span>
@@ -738,7 +738,7 @@
         <span class="c1"># yes this is a valid construct :) you can use it to distinguish the lines</span>
         <span class="c1"># of code that may raise an error from those that may not. In practice it</span>
         <span class="c1"># is rarely used, you would put everything in the try block. </span>
-</pre></div>
+</code></pre></div>
 
 
 <p>This style has the advantage of being compact but has two major drawbacks:</p>
@@ -760,7 +760,7 @@
 </li>
 </ul>
 <p>Blending all of the above to get a consistent validation process is 'the art of the master blender', a case-by-case story, where you typically wrap everything in a master try/except since even boolean testers and custom validation statements can raise exceptions (<code>sqrt(x) &gt; 0.5</code> raises an exception if x is <code>-1</code>). For example:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>  <span class="c1"># &lt;- even these can raise exceptions!</span>
@@ -774,11 +774,11 @@
 
     <span class="c1"># here we can use x safely</span>
     <span class="o">...</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Also note that it is <strong>not easy</strong> to combine <em>failure raisers</em> together, or with <em>boolean testers</em>, in a boolean logic style. For example below we perform a virtual <code>or</code> between two <em>failure raisers</em>:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">check_uniform_sampling</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -792,17 +792,17 @@
 
     <span class="c1"># here we can use x safely</span>
     <span class="o">...</span>
-</pre></div>
+</code></pre></div>
 
 
 <h4 id="special-case-of-assert">Special case of <code>assert</code><a class="headerlink" href="#special-case-of-assert" title="Permanent link">&para;</a></h4>
 <p><code>assert</code> could be thought of as a good tool to perform validation:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">function_with_assert</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">function_with_assert</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
     <span class="k">assert</span> <span class="o">&lt;</span><span class="n">validation_statement_on_x</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;invalid x : ...&quot;</span>
 
     <span class="c1"># here we can use x safely</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>However it has three major drawbacks that make it unusable in practice:</p>
@@ -897,9 +897,9 @@ optimization flags [...]"</em>. In addition here again, note that if the <code>&
       <div class="md-footer-copyright">
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
@@ -909,9 +909,9 @@ optimization flags [...]"</em>. In addition here again, note that if the <code>&
       
     </div>
     
-      <script src="../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:".."}})</script>
       
     
   </body>

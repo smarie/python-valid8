@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#example-5-df-is-a-dataframe-containing-specific-columns" tabindex="1" class="md-skip">
+      <a href="#example-5-df-is-a-dataframe-containing-specific-columns" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -86,7 +86,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../.." title="valid8" class="md-header-nav__button md-logo">
+        <a href="../.." title="valid8" aria-label="valid8" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +117,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -715,7 +715,7 @@
                 <h1 id="example-5-df-is-a-dataframe-containing-specific-columns">Example 5 - <code>df</code> is a dataframe containing specific columns<a class="headerlink" href="#example-5-df-is-a-dataframe-containing-specific-columns" title="Permanent link">&para;</a></h1>
 <p>For example we want to check that 'foo' and 'bar' are present.</p>
 <h2 id="1-example-values-to-validate">1- Example values to validate<a class="headerlink" href="#1-example-values-to-validate" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Valid</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>
@@ -723,7 +723,7 @@
 
 <span class="c1"># Invalid</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in name</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
@@ -735,7 +735,7 @@
 <p>Since this validation is simple, we show below how it can be done with <code>valid8</code> alone. But to go further we rather recommend <a href="#with-validator-dedicated validation lib">to combine it with another library</a></p>
 <h3 id="validate-built-ins"><code>validate</code> + built-ins<a class="headerlink" href="#validate-built-ins" title="Permanent link">&para;</a></h3>
 <p><code>validate</code> provides both type and superset validation built-in, but they do not apply to the same element so we have to call it twice:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="c1"># type validation</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
 <span class="c1"># columns validation</span>
@@ -743,17 +743,17 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
          <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;DataFrame should contain mandatory columns </span><span class="si">{c}</span><span class="s2">. </span>
          <span class="n">Found</span> <span class="p">{</span><span class="n">var_value</span><span class="p">}</span><span class="s2">&quot;, c=required_cols)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Note: you see in this example a reminder that the help message is formatted by <code>valid8</code> using <a href="https://docs.python.org/3.5/library/string.html#custom-string-formatting">str.format()</a>. You can use in this help message any custom keyword argument (such as <code>c</code> above) or any of the already-available variables. The best way to see what is available is to write a wrong help message with an unexistent variable name in the string template:</p>
-<div class="codehilite"><pre><span></span><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
+<div class="codehilite"><pre><span></span><code><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
          <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Just kidding </span><span class="si">{hoho}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields:</p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error <span class="k">while</span> formatting <span class="nb">help</span> msg, 
+<div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error <span class="k">while</span> formatting <span class="nb">help</span> msg, 
 keyword <span class="o">[</span>hoho<span class="o">]</span> was not found in the validation context. 
 Help message to format was <span class="s1">&#39;Just kidding {hoho}&#39;</span>. 
 Context elements available: <span class="o">{</span>
@@ -765,7 +765,7 @@ Context elements available: <span class="o">{</span>
    <span class="s1">&#39;validation_outcome&#39;</span>: NotSuperset<span class="o">(</span><span class="nv">append_details</span><span class="o">=</span>True,wrong_value<span class="o">={</span><span class="s1">&#39;fo&#39;</span>, <span class="s1">&#39;bar&#39;</span><span class="o">}</span>,reference_set<span class="o">={</span><span class="s1">&#39;foo&#39;</span>, <span class="s1">&#39;bar&#39;</span><span class="o">}</span>,missing<span class="o">={</span><span class="s1">&#39;foo&#39;</span><span class="o">}</span>,help_msg<span class="o">=</span>x superset of <span class="o">{</span>reference_set<span class="o">}</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">={</span>wrong_value<span class="o">}</span>. Missing elements: <span class="o">{</span>missing<span class="o">})</span>, 
    <span class="s1">&#39;help_msg&#39;</span>: <span class="s1">&#39;Just kidding {hoho}&#39;</span>
 <span class="o">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="with-validator-built-ins"><code>with validator</code> + built-ins<a class="headerlink" href="#with-validator-built-ins" title="Permanent link">&para;</a></h3>
@@ -773,20 +773,20 @@ Context elements available: <span class="o">{</span>
 <ul>
 <li>either with a pure "boolean test" approach:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 
 <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
 
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-</pre></div>
+</code></pre></div>
 
 
 <ul>
 <li>or with a "failure raising" approach, less compact (and not really more explicit error messages):</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 
 <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
 
@@ -794,12 +794,12 @@ Context elements available: <span class="o">{</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;missing dataFrame columns: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">missing</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="with-validator-dedicated-validation-lib"><code>with validator</code> + dedicated validation lib<a class="headerlink" href="#with-validator-dedicated-validation-lib" title="Permanent link">&para;</a></h3>
 <p>Of course in real world examples you will want to validate much more things. So you will typically rely on a dedicated library for dataframe validation, and you will use <code>valid8</code> only for its primary target: having a strong control about exceptions readability and exceptions types (for i18n). For example:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">my_pandas_validator</span> <span class="kn">import</span> <span class="n">assert_df_minimum_size</span><span class="p">,</span> <span class="n">assert_index_is_unique</span><span class="p">,</span> \
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">my_pandas_validator</span> <span class="kn">import</span> <span class="n">assert_df_minimum_size</span><span class="p">,</span> <span class="n">assert_index_is_unique</span><span class="p">,</span> \
     <span class="n">assert_index_is_sorted</span><span class="p">,</span> <span class="n">assert_column_present_with_correct_type</span> 
 
 <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
@@ -808,13 +808,13 @@ Context elements available: <span class="o">{</span>
     <span class="n">assert_index_is_unique</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_index_is_sorted</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_column_present_with_correct_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
 <h3 id="function-input">Function input<a class="headerlink" href="#function-input" title="Permanent link">&para;</a></h3>
 <p>with built-in validation functions it is not possible, we have to create our custom function:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
 
 <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
 
@@ -826,11 +826,11 @@ Context elements available: <span class="o">{</span>
 <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> <span class="n">has_required_cols</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with mini-lambda</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">mini_lambda.pandas_</span> <span class="kn">import</span> <span class="n">df</span>
 
@@ -838,7 +838,7 @@ Context elements available: <span class="o">{</span>
               <span class="n">Len</span><span class="p">(</span><span class="n">required_cols</span> <span class="o">-</span> <span class="n">Set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">pass</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="function-output">Function output<a class="headerlink" href="#function-output" title="Permanent link">&para;</a></h3>
@@ -848,17 +848,17 @@ Context elements available: <span class="o">{</span>
 <h3 id="class-fields">Class fields<a class="headerlink" href="#class-fields" title="Permanent link">&para;</a></h3>
 <p>In the examples below the class fields are defined as constructor arguments but this also works if they are defined as class descriptors/properties, and is compliant with <a href="valid8_with_other#for-classes">autoclass and attrs</a></p>
 <p>using custom function:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
 
 <span class="nd">@validate_field</span><span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">),</span> <span class="n">has_required_cols</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>or with mini-lambda</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">mini_lambda.pandas_</span> <span class="kn">import</span> <span class="n">df</span>
 
@@ -867,7 +867,7 @@ Context elements available: <span class="o">{</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
@@ -931,9 +931,9 @@ Context elements available: <span class="o">{</span>
       <div class="md-footer-copyright">
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
@@ -943,9 +943,9 @@ Context elements available: <span class="o">{</span>
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
     
   </body>

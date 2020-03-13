@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="assets/stylesheets/application.adb8469c.css">
       
       
     
     
-      <script src="assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#python-validate-valid8" tabindex="1" class="md-skip">
+      <a href="#python-validate-valid8" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -86,7 +86,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="." title="valid8" class="md-header-nav__button md-logo">
+        <a href="." title="valid8" aria-label="valid8" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +117,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -890,6 +890,9 @@
 <p><a href="https://pypi.python.org/pypi/valid8/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/valid8.svg" /></a> <a href="https://travis-ci.org/smarie/python-valid8"><img alt="Build Status" src="https://travis-ci.org/smarie/python-valid8.svg?branch=master" /></a> <a href="https://smarie.github.io/python-valid8/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-valid8/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-valid8"><img alt="codecov" src="https://codecov.io/gh/smarie/python-valid8/branch/master/graph/badge.svg" /></a></p>
 <p><a href="https://smarie.github.io/python-valid8/"><img alt="Documentation" src="https://img.shields.io/badge/doc-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/valid8/"><img alt="PyPI" src="https://img.shields.io/pypi/v/valid8.svg" /></a> <a href="https://pepy.tech/project/valid8"><img alt="Downloads" src="https://pepy.tech/badge/valid8" /></a> <a href="https://pepy.tech/project/valid8"><img alt="Downloads per week" src="https://pepy.tech/badge/valid8/week" /></a> <a href="https://github.com/smarie/python-valid8/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/smarie/python-valid8.svg" /></a></p>
 <p><em>"valid8ing is not a crime" ;-)</em></p>
+<div class="admonition success">
+<p class="admonition-title">New <a href="https://smarie.github.io/python-vtypes/"><code>vtypes</code></a> and <a href="https://smarie.github.io/python-pyfields/"><code>pyfields</code></a> libraries leverage <code>valid8</code> to provide higher-level value, check them out !</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Major API changes in version <code>5.0.0</code>. See <a href="changelog/#500-more-betterness">changelog</a> for details.</p>
 </div>
@@ -915,8 +918,8 @@
 <p>I searched and found tons of good and less good libraries <a href="other_libs/">out there</a>, but did not find any that would provide a somehow generic answer covering 80% of the needs - especially the particular needs I had for class attributes validation in <a href="valid8_with_other/#autoclass"><code>autoclass</code></a>, <a href="valid8_with_other/#attrs"><code>attrs</code></a> and now in <a href="https://smarie.github.io/python-pyfields/"><code>pyfields</code></a>.</p>
 <p><code>valid8</code> provides tools to perform validation in a minimum number of lines and with built-in consistency, so that it hopefully becomes fun and easy to include in your code. </p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span>&gt; pip install valid8
-</pre></div>
+<div class="codehilite"><pre><span></span><code>&gt; pip install valid8
+</code></pre></div>
 
 
 <p>Optional but recommended:</p>
@@ -957,37 +960,37 @@
 <li>one or several <strong>other</strong> validation functions (custom, 3d party)</li>
 </ul>
 <p>For example:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>results in</p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
-</pre></div>
+</code></pre></div>
 
 
 <p>Note that the resulting exception object contains much of the available information (<code>var_name</code>, <code>var_value</code>, <code>failure</code>) as fields.</p>
 <p>All functions from the built-in validation library are supported as explicit arguments as shown above, so that the method execution is the fastest possible. In addition you can add any other validation function with the <code>custom</code> argument:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">[</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">])</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields</p>
-<div class="codehilite"><pre><span></span>ValidationError[ValueError]: Error validating [surface=20]: \
+<div class="codehilite"><pre><span></span><code>ValidationError[ValueError]: Error validating [surface=20]: \
     validation function [x ** 2 &lt; 50] returned [False].
-</pre></div>
+</code></pre></div>
 
 
 <p>Here the custom validation function is implemented using <code>mini-lambda</code>, but any function will do ; the only requirement is that your function accepts one positional input and returns <code>True</code> or <code>None</code> in case of success.</p>
 <p>You can easily define <em>custom validation functions</em> with composition, custom failure messages or even custom failure types. For example these are accepted:</p>
-<div class="codehilite"><pre><span></span><span class="c1"># custom failure message</span>
+<div class="codehilite"><pre><span></span><code><span class="c1"># custom failure message</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
          <span class="n">custom</span><span class="o">=</span><span class="p">[(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;x should be fairly small&#39;</span><span class="p">)])</span>
 
@@ -995,44 +998,44 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
          <span class="n">custom</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x should be fairly small&#39;</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">,</span>
                  <span class="s1">&#39;x should be a multiple of 3&#39;</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">})</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>See <a href="api_reference/">API reference</a> for usage details, and below <a href="#2-validation-functions">validation functions</a> and <a href="#3-custom-exceptions">validation errors</a> to explore the various customization possibilities. </p>
 <h4 id="validatorvalidation"><code>validator</code>/<code>validation</code><a class="headerlink" href="#validatorvalidation" title="Permanent link">&para;</a></h4>
 <p>The <code>validator</code> (alias <code>validation</code>) context manager allows you to define the validation procedure yourself, with any statement or function of your choice.</p>
 <p>If you rely on <strong>functions that output a boolean flag indicating success</strong> (<em>"boolean testers"</em>), you simply have to plug that flag on the object provided by the context manager, as shown below:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Which yields</p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
    validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span><span class="o">]</span> returned <span class="o">[</span>False<span class="o">]</span>.
-</pre></div>
+</code></pre></div>
 
 
 <p>Note that the text of the error displays the source code that led to that failure. </p>
 <p>If you rely on <strong>functions that may raise exceptions</strong> (<em>"failure raisers"</em>), <code>validator</code> will catch them and append them as the inner <code>failure</code> of the resulting <code>ValidationError</code>: </p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span>
 
 <span class="n">surf</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span>
 
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields</p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>TypeError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>TypeError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
    InvalidType: Function <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> raised <span class="se">\</span>
        TypeError: <span class="s1">&#39;&gt;&#39;</span> not supported between instances of <span class="s1">&#39;complex&#39;</span> and <span class="s1">&#39;int&#39;</span>.
-</pre></div>
+</code></pre></div>
 
 
 <p>With <code>validator</code> you are therefore <strong>guaranteed</strong> that any exception happening in the inner code block will be caught and turned into a friendly <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual <a href="why_validation/#explicit-traditional-way">if/else/try/except wrappers</a> to handle all cases.</p>
@@ -1045,10 +1048,10 @@
 <p>there is no <em>need</em> to feed any result to the validator. If you rely on <em>failure raiser</em>-style base functions, for example a <code>check_uniform_sampling</code> or an <code>assert_series_equal</code>, you can just call them and the wrapper will assume that no exception means success. In such case the <code>validation</code> alias might make more sense in terms of readability:</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;dataframe&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;dataframe&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
     <span class="n">check_uniform_sampling</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_series_equal</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ref_series</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p><strong>Note on type checking with <code>isinstance</code></strong>
@@ -1056,26 +1059,26 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <ul>
 <li>using the <code>instance_of</code> parameter of <code>validation</code>:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
-</pre></div>
+</code></pre></div>
 
 
 <ul>
 <li>or using the <code>assert_instance_of</code> validation method provided for this purpose:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_instance_of</span><span class="p">,</span> <span class="n">assert_subclass_of</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">assert_instance_of</span><span class="p">,</span> <span class="n">assert_subclass_of</span>
 
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">assert_instance_of</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>See <a href="api_reference/">API reference</a> for usage details, and below <a href="#2-validation-functions">validation functions</a> and <a href="#3-custom-exceptions">custom exceptions</a> to explore the various customization possibilities. </p>
 <h3 id="b-functions">b - functions<a class="headerlink" href="#b-functions" title="Permanent link">&para;</a></h3>
 <p>The <code>@validate_arg</code> decorator adds input validation to a function. Here is an example where we decorate a <code>build_house</code> function:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
 <span class="kn">from</span> <span class="nn">valid8.validation_lib</span> <span class="kn">import</span> <span class="n">instance_of</span>
 
@@ -1084,12 +1087,12 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>As you can see above, any number of base validation functions can be provided to the decorator - this will correspond to an implicit <code>and_</code> being performed, equivalent to one that you would have done with the built-in <a href="validation_funcs/d_composition/">composition framework</a>. Here we validate the input argument <code>name</code> by chaining the function <code>instance_of(str)</code> (from the built-in <a href="validation_funcs/b_base_validation_lib/">validation functions library</a>) with a custom lambda function <code>Len(s) &gt; 0</code> created using the <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> syntax. </p>
 <p>Let's try it:</p>
-<div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, <span class="m">200</span><span class="o">)</span>    <span class="c1"># Valid</span>
+<div class="codehilite"><pre><span></span><code>&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, <span class="m">200</span><span class="o">)</span>    <span class="c1"># Valid</span>
 
 &gt; build_house<span class="o">(</span><span class="s1">&#39;&#39;</span>, <span class="m">200</span><span class="o">)</span>
 InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
@@ -1097,14 +1100,14 @@ InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: 
    At least one validation <span class="k">function</span> failed <span class="k">for</span> value <span class="s1">&#39;&#39;</span>. <span class="se">\</span>
      Successes: <span class="o">[</span><span class="s2">&quot;instance_of_&lt;class &#39;str&#39;&gt;&quot;</span><span class="o">]</span> <span class="se">\</span>
       / Failures: <span class="o">{</span><span class="s1">&#39;len(s) &gt; 0&#39;</span>: <span class="s1">&#39;Returned False.&#39;</span><span class="o">}</span>.
-</pre></div>
+</code></pre></div>
 
 
 <p>We can see in this verbose exception all details of interest: first the custom <code>help_msg</code>; then the validated function and input name; and finally the composition failure resulting from one of the two base functions failing (<code>len(s) &gt; 0</code> as stated). <em>Note that since <code>Len</code> is <code>mini_lambda</code>'s equivalent of <code>len</code>, the string representation is lowercase</em></p>
 <p>The <code>@validate_out</code> function decorator works the same way for output validation, except that you don't provide it with any name. </p>
 <h4 id="nonable-inputsoutputs">nonable inputs/outputs<a class="headerlink" href="#nonable-inputsoutputs" title="Permanent link">&para;</a></h4>
 <p>Here is a more complete example with both input and output validation:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">Len</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">validate_out</span>
 <span class="kn">from</span> <span class="nn">valid8.validation_lib</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
 
@@ -1116,26 +1119,26 @@ InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: 
 <span class="k">def</span> <span class="nf">build_house</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building house... DONE !&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Something surprising happens:</p>
-<div class="codehilite"><pre><span></span>&gt; build_house<span class="o">(</span>None<span class="o">)</span>
+<div class="codehilite"><pre><span></span><code>&gt; build_house<span class="o">(</span>None<span class="o">)</span>
 InputValidationError<span class="o">[</span>TypeError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
    Error validating input <span class="o">[</span><span class="nv">name</span><span class="o">=</span>None<span class="o">]</span> ...
 
 &gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>         <span class="c1"># No error !</span>
 &gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, None<span class="o">)</span>   <span class="c1"># No error !</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>No error is raised when <code>surface</code> is <code>None</code>, while our base validation functions should both fail in presence of <code>None</code>:</p>
-<div class="codehilite"><pre><span></span>&gt; is_multiple_of<span class="o">(</span><span class="m">100</span><span class="o">)(</span>None<span class="o">)</span>   
+<div class="codehilite"><pre><span></span><code>&gt; is_multiple_of<span class="o">(</span><span class="m">100</span><span class="o">)(</span>None<span class="o">)</span>   
 TypeError: unsupported operand type<span class="o">(</span>s<span class="o">)</span> <span class="k">for</span> %: <span class="s1">&#39;NoneType&#39;</span> and <span class="s1">&#39;int&#39;</span>
 
 &gt; <span class="o">(</span>Len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)</span>.evaluate<span class="o">(</span>None<span class="o">)</span>
 TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType&#39;</span> has no len<span class="o">()</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Indeed, by default <code>None</code> values have a special validation procedure depending on the function signature: </p>
@@ -1171,7 +1174,7 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
 </li>
 </ul>
 <p>Here is an example where we add validation to a <code>House</code> class with two fields:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
 <span class="kn">from</span> <span class="nn">valid8.validation_lib</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">is_multiple_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
 
@@ -1191,11 +1194,11 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
     <span class="nd">@surface</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__surface</span> <span class="o">=</span> <span class="n">surface</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>Let's try it:</p>
-<div class="codehilite"><pre><span></span>&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>  <span class="c1"># valid</span>
+<div class="codehilite"><pre><span></span><code>&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>  <span class="c1"># valid</span>
 
 &gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">)</span>
 ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
@@ -1211,7 +1214,7 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
         / Failures: <span class="o">{</span><span class="s1">&#39;(x &gt;= 0) &amp; (x &lt; 10000)&#39;</span>: <span class="s1">&#39;False&#39;</span><span class="o">}</span>.
 
 &gt; h.name <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1"># WARNING: does not raise ValidationError (no setter!)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>For classes using <code>attrs</code> or <code>autoclass</code>, it <a href="valid8_with_other/#for-classes">works too</a>.</p>
@@ -1240,74 +1243,74 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
 <p>Various options are provided to customize the raised exception. These options are available on all entry points: both on <code>validate</code>, <code>validator</code>/<code>validation</code>, <code>@validate_arg</code>, <code>@validate_out</code>, <code>@validate_io</code> and <code>@validate_field</code>. </p>
 <h3 id="a-custom-message">a - custom message<a class="headerlink" href="#a-custom-message" title="Permanent link">&para;</a></h3>
 <p>You can specify a custom error message that will be displayed at the beginning of the default message:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 
 <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> 
                 <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Surface should be a finite positive integer&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields for <code>surf = -1</code></p>
-<div class="codehilite"><pre><span></span>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a finite positive integer. <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a finite positive integer. <span class="se">\</span>
     Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>: <span class="se">\</span>
     validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="b-custom-type">b - custom type<a class="headerlink" href="#b-custom-type" title="Permanent link">&para;</a></h3>
 <p>Or even better, a custom error type, which is a good practice to ease internationalization (unique applicative error codes). The base <code>ValidationError</code> class provides default behaviours allowing you to define subclasses in a quite compact form:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">validate</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">validate</span>
 
 <span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be a positive integer&#39;</span>
 
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields for <code>surf = -1</code></p>
-<div class="codehilite"><pre><span></span>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a positive integer. <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a positive integer. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
-</pre></div>
+</code></pre></div>
 
 
 <p>Note that for function entry points, the custom type should inherit from <code>InputValidationError</code> or <code>OutputValidationError</code> respectively. For class entry points, the custom type should inherit from <code>ClassFieldValidationError</code>.</p>
 <h3 id="c-message-templating">c - message templating<a class="headerlink" href="#c-message-templating" title="Permanent link">&para;</a></h3>
 <p>Finally, the <code>help_msg</code> field acts as a string template that will receive any additional keyword argument thrown at the validation method. So you can define reusable error classes without too much hassle:</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s1">&#39;Surface should be &gt; </span><span class="si">{minimum}</span><span class="s1">, found </span><span class="si">{var_value}</span><span class="s1">&#39;</span>
 
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
          <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>yields</p>
-<div class="codehilite"><pre><span></span>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
+<div class="codehilite"><pre><span></span><code>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
-</pre></div>
+</code></pre></div>
 
 
 <p>Note: as shown in that last example, the value being validated is already sent to the help message string to format under the <code>'var_value'</code> key, so you do not need to pass it. </p>
 <p>Obviously you can further customize your exception subclasses if you wish.</p>
 <h4 id="d-typeerror-or-valueerror">d - <code>TypeError</code> or <code>ValueError</code><a class="headerlink" href="#d-typeerror-or-valueerror" title="Permanent link">&para;</a></h4>
 <p><code>ValidationError</code> does not by default inherit from <code>TypeError</code> or <code>ValueError</code>, because in the general case, <code>valid8</code> has no means of knowing. But you may have noticed in all of the output message examples shown above that one of the two is still appearing each time in the resulting exception. This is because <code>valid8</code> automatically guesses: when a validation error happens, it recursively looks at the type of the failure cause for a <code>TypeError</code> or <code>ValueError</code> (default if nothing is found). It then <strong>dynamically</strong> creates an appropriate exception type inheriting both from <code>ValidationError</code> and from either <code>TypeError</code> or <code>ValueError</code> according to what has been found. This dynamic type is cached for speed considerations. It has some custom display methods that make it appear as follows:</p>
-<div class="codehilite"><pre><span></span>&gt; validate<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -1, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+<div class="codehilite"><pre><span></span><code>&gt; validate<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, -1, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
 ValidationError<span class="o">[</span>ValueError<span class="o">]</span>
 
 &gt; validate<span class="o">(</span><span class="s1">&#39;surface&#39;</span>, 1j, <span class="nv">instance_of</span><span class="o">=</span>int, <span class="nv">min_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
 ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>If you do not wish the automatic guessing to happen, you can always declare the inheritance explicitly by creating custom subclasses inheriting from the one of your choice, or both:</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>If you create a custom subclass but do not inherit from <code>TypeError</code> nor <code>ValueError</code>, the automatic guessing will take place as usual.</p>
@@ -1430,9 +1433,9 @@ ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
       <div class="md-footer-copyright">
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
@@ -1442,9 +1445,9 @@ ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
       
     </div>
     
-      <script src="assets/javascripts/application.808e90bb.js"></script>
+      <script src="assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"."}})</script>
       
     
   </body>
