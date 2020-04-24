@@ -3,27 +3,23 @@ See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
-from six import raise_from
 from os import path
-
+import pkg_resources
 from setuptools import setup, find_packages
 
-here = path.abspath(path.dirname(__file__))
+pkg_resources.require("setuptools>=39.2")
+pkg_resources.require("setuptools_scm")
+
+from setuptools_scm import get_version  # noqa: E402
 
 # *************** Dependencies *********
 INSTALL_REQUIRES = ['makefun', 'six', 'future;python_version<"3.3"', 'funcsigs;python_version<"3.3"', 'decopatch',
                     'functools32;python_version<"3.2"']  # 'typing_inspect' is now copied internally so as to be compliant with very old versions of typing module
 DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'enum34;python_version<"3.4"', 'six']
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'enum34;python_version<"3.4"']
 TESTS_REQUIRE = ['pytest>=4.4.0', 'pytest-logging', 'enforce', 'mini_lambda', 'attrs', 'numpy',
                  'autoclass', 'checktypes', 'pytest-cases']
 EXTRAS_REQUIRE = {}
-
-# simple check
-try:
-    from setuptools_scm import get_version
-except Exception as e:
-    raise_from(Exception('Required packages for setup not found. Please install `setuptools_scm`'), e)
 
 # ************** ID card *****************
 DISTNAME = 'valid8'
@@ -34,23 +30,16 @@ DESCRIPTION = 'Yet another validation lib ;). Provides tools for general-purpose
 MAINTAINER = 'Sylvain Marié'
 MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
 URL = 'https://github.com/smarie/python-valid8'
+DOWNLOAD_URL = URL + '/tarball/' + get_version()
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
-
-version_for_download_url = get_version()
-DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
-
 KEYWORDS = 'decorate decorator input arg args argument function contract value check checker valid validate validator' \
            ' validation'
 
+here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'docs', 'long_description.md')) as f:
     LONG_DESCRIPTION = f.read()
 
-# ************* VERSION **************
-# --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
-# THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
-# with open(path.join(here, 'VERSION')) as version_file:
-#    VERSION = version_file.read().strip()
 # OBSOLETES = []
 
 setup(
@@ -96,7 +85,9 @@ setup(
         # 'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.7',
+
+        # 'Framework :: Pytest'
     ],
 
     # What does your project relate to?
@@ -104,7 +95,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', '*tests*']),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -139,6 +130,9 @@ setup(
     # have to be included in MANIFEST.in as well.
     # Note: we use the empty string so that this also works with submodules
     package_data={"": ['py.typed', '*.pyi']},
+    # IMPORTANT: DO NOT set the `include_package_data` flag !! It triggers inclusion of all git-versioned files
+    # see https://github.com/pypa/setuptools_scm/issues/190#issuecomment-351181286
+    # include_package_data=True,
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
