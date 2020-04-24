@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.1.1 - packaging improvements
+
+ - packaging improvements: set the "universal wheel" flag to 1, and cleaned up the `setup.py`. In particular removed dependency to `six` for setup. Fixes [#57](https://github.com/smarie/python-valid8/issues/57)
+
 ### 5.1.0 - PEP561 compliance
 
  - Package was made PEP561 compatible. Fixed [#55](https://github.com/smarie/python-valid8/issues/55)
