@@ -739,7 +739,6 @@
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fo&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">]})</span>  <span class="c1"># typo in name</span>
 </code></pre></div>
 
-
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
 <p>Principles: </p>
 <ul>
@@ -759,12 +758,10 @@
          <span class="n">Found</span> <span class="p">{</span><span class="n">var_value</span><span class="p">}</span><span class="s2">&quot;, c=required_cols)</span>
 </code></pre></div>
 
-
 <p>Note: you see in this example a reminder that the help message is formatted by <code>valid8</code> using <a href="https://docs.python.org/3.5/library/string.html#custom-string-formatting">str.format()</a>. You can use in this help message any custom keyword argument (such as <code>c</code> above) or any of the already-available variables. The best way to see what is available is to write a wrong help message with an unexistent variable name in the string template:</p>
 <div class="codehilite"><pre><span></span><code><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;df columns&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">superset_of</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> 
          <span class="n">help_msg</span><span class="o">=</span><span class="s2">&quot;Just kidding </span><span class="si">{hoho}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>yields:</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error <span class="k">while</span> formatting <span class="nb">help</span> msg, 
@@ -781,7 +778,6 @@ Context elements available: <span class="o">{</span>
 <span class="o">}</span>
 </code></pre></div>
 
-
 <h3 id="with-validator-built-ins"><code>with validator</code> + built-ins<a class="headerlink" href="#with-validator-built-ins" title="Permanent link">&para;</a></h3>
 <p>It is relatively straightforward to validate both <code>df</code> and its columns</p>
 <ul>
@@ -796,7 +792,6 @@ Context elements available: <span class="o">{</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
 </code></pre></div>
 
-
 <ul>
 <li>or with a "failure raising" approach, less compact (and not really more explicit error messages):</li>
 </ul>
@@ -810,7 +805,6 @@ Context elements available: <span class="o">{</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;missing dataFrame columns: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">missing</span><span class="p">))</span>
 </code></pre></div>
 
-
 <h3 id="with-validator-dedicated-validation-lib"><code>with validator</code> + dedicated validation lib<a class="headerlink" href="#with-validator-dedicated-validation-lib" title="Permanent link">&para;</a></h3>
 <p>Of course in real world examples you will want to validate much more things. So you will typically rely on a dedicated library for dataframe validation, and you will use <code>valid8</code> only for its primary target: having a strong control about exceptions readability and exceptions types (for i18n). For example:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">my_pandas_validator</span> <span class="kn">import</span> <span class="n">assert_df_minimum_size</span><span class="p">,</span> <span class="n">assert_index_is_unique</span><span class="p">,</span> \
@@ -823,7 +817,6 @@ Context elements available: <span class="o">{</span>
     <span class="n">assert_index_is_sorted</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">assert_column_present_with_correct_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
 </code></pre></div>
-
 
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
 <h3 id="function-input">Function input<a class="headerlink" href="#function-input" title="Permanent link">&para;</a></h3>
@@ -842,7 +835,6 @@ Context elements available: <span class="o">{</span>
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
@@ -853,7 +845,6 @@ Context elements available: <span class="o">{</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h3 id="function-output">Function output<a class="headerlink" href="#function-output" title="Permanent link">&para;</a></h3>
 <p>identical but with <code>validate_out</code>, see other examples.</p>
@@ -870,7 +861,6 @@ Context elements available: <span class="o">{</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
 <span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Len</span>
@@ -882,7 +872,6 @@ Context elements available: <span class="o">{</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
 </code></pre></div>
-
 
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
 <p>See other examples</p>
@@ -954,7 +943,7 @@ Context elements available: <span class="o">{</span>
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

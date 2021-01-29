@@ -745,7 +745,6 @@
 <div class="codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="n">v_callable</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v_callable</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">v_callable</span><span class="p">)</span>
 </code></pre></div>
 
-
 <h2 id="2-creating-failure-raisers-for-better-user-experience">2. Creating <em>failure raisers</em> for better user experience<a class="headerlink" href="#2-creating-failure-raisers-for-better-user-experience" title="Permanent link">&para;</a></h2>
 <p>As explained above, nothing else than returning <code>True</code> or <code>None</code> in case of success is required by <code>valid8</code>. </p>
 <p>However, you might wish to use <em>failure raisers</em> rather than <em>boolean testers</em> because in case of failure they can provide <strong>many useful details in the raised exception</strong>. This is how you can do it:</p>
@@ -769,7 +768,6 @@
         <span class="k">raise</span> <span class="n">Empty</span><span class="p">(</span><span class="n">wrong_value</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>You can find some inspiration <a href="https://github.com/smarie/python-valid8/blob/master/valid8/validation_lib/collections.py">here</a>.</p>
 <p>Sometimes it might be easier for a quick test, to add the "failure raiser" facet to one of your existing functions. For this you can use the <code>@as_failure_raiser</code> decorator:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">as_failure_raiser</span>
@@ -778,7 +776,6 @@
 <span class="k">def</span> <span class="nf">is_strictly_positive</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </code></pre></div>
-
 
 <h3 id="b-enriching-an-existing-function">b - Enriching an existing function<a class="headerlink" href="#b-enriching-an-existing-function" title="Permanent link">&para;</a></h3>
 <p>An alternative is to transform existing functions into failure raisers by adding help messages or custom <code>ValidationFailure</code> subtypes. Indeed, often the validation functions that you want to reuse are designed to be efficient, therefore their outcome in case of failure might be cryptic for the end user.</p>
@@ -795,7 +792,6 @@
     <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
 </code></pre></div>
 
-
 <p>You can also specify a custom failure class that should be raised:</p>
 <div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationFailure</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">isfinite</span>
@@ -810,7 +806,6 @@
     <span class="n">Function</span> <span class="p">[</span><span class="n">isfinite</span><span class="p">]</span> <span class="n">returned</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="k">for</span> <span class="n">value</span> <span class="n">inf</span><span class="o">.</span>
 </code></pre></div>
 
-
 <h4 id="permanently-for-reuse">permanently for reuse<a class="headerlink" href="#permanently-for-reuse" title="Permanent link">&para;</a></h4>
 <p>If you wish to reuse a validation function in many places, it might be simpler to convert it to a failure raiser once.
 You can transform an existing validation function in a failure raiser with <code>failure_raiser()</code>:</p>
@@ -824,7 +819,6 @@ You can transform an existing validation function in a failure raiser with <code
 <span class="n">new_func</span> <span class="o">=</span> <span class="n">failure_raiser</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">failure_type</span><span class="o">=</span><span class="n">NotFinite</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>You can do the same with the <code>@as_failure_raiser</code> decorator already presented above.</p>
 <h3 id="c-docstring">c - Docstring<a class="headerlink" href="#c-docstring" title="Permanent link">&para;</a></h3>
 <h4 id="failure_raiser">failure_raiser<a class="headerlink" href="#failure_raiser" title="Permanent link">&para;</a></h4>
@@ -834,7 +828,6 @@ You can transform an existing validation function in a failure raiser with <code
                   <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
     <span class="c1"># type: (...) -&gt; ValidationCallable</span>
 </code></pre></div>
-
 
 <p>Wraps the provided validation function so that in case of failure it raises the given <code>failure_type</code> or a
 <code>WrappingFailure</code>ValidationFailed help message.</p>
@@ -846,7 +839,6 @@ You can transform an existing validation function in a failure raiser with <code
                       <span class="o">**</span><span class="n">kw_context_args</span><span class="p">):</span>
 </code></pre></div>
 
-
 <p>A decorator to define a failure raiser. Same functionality then <code>failure_raiser</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">as_failure_raiser</span>
 
@@ -854,7 +846,6 @@ You can transform an existing validation function in a failure raiser with <code
 <span class="k">def</span> <span class="nf">is_small_with_details</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span>
 </code></pre></div>
-
 
 <div class="codehilite"><pre><span></span><code>&gt;&gt;&gt; is_small_with_details(2)
 &gt;&gt;&gt; is_small_with_details(11)
@@ -930,7 +921,7 @@ valid8.base.InvalidValue: x should be smaller than 4. Function [is_small_with_de
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

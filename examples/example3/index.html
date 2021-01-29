@@ -812,7 +812,6 @@
 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;AAA&#39;</span><span class="p">)</span>        <span class="c1"># wrong value (&#39;AAA&#39; is not lowercase)</span>
 </code></pre></div>
 
-
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
 <h3 id="validate-built-ins"><code>validate</code> + built-ins<a class="headerlink" href="#validate-built-ins" title="Permanent link">&para;</a></h3>
 <p><code>validate</code> can not perform everything at once without a <a href="#better-custom-function">custom validation function</a>, but you can easily validate each element:</p>
@@ -821,7 +820,6 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t[0]&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span>  <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t[1]&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>   <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">islower</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>Note that we prefer to user <code>custom=str.islower</code> to check if a string is lowercase, rather than <code>equals=s.lower()</code>, as explained in <a href="./example2">previous example 2</a>.</p>
 <h3 id="with-validator-built-ins"><code>with validator</code> + built-ins<a class="headerlink" href="#with-validator-built-ins" title="Permanent link">&para;</a></h3>
@@ -835,7 +833,6 @@
              <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>\
              <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>  <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
 </code></pre></div>
-
 
 <ul>
 <li>or with a "failure raising" approach, less compact but with more explicit error messages:</li>
@@ -860,7 +857,6 @@
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </code></pre></div>
 
-
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
 <h3 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h3>
 <ul>
@@ -883,7 +879,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>With pure mini-lambda. Note that mini-lambda allows you to directly access the inner elements inside the tuple with traditional indexing: </p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -903,7 +898,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>Also note that here as in all previous examples we want to use <code>instance_of</code> instead of <code>isinstance</code> in order to raise the correct <code>TypeError</code>. But <code>instance_of</code> is a standard function, it is not composable with mini-lambda expressions such as <code>t[0]</code>. Therefore we use the mini-lambda version of <code>instance_of</code> provided in this package, named <code>Instance_of</code>. This allows us to write type tests for sub-elements in the tuple, for example <code>Instance_of(t[0], Real)</code>.</p>
 <h3 id="class-fields">Class fields<a class="headerlink" href="#class-fields" title="Permanent link">&para;</a></h3>
 <p>In the examples below the class fields are defined as constructor arguments but this also works if they are defined as class descriptors/properties, and is compliant with <a href="valid8_with_other#for-classes">autoclass and attrs</a></p>
@@ -921,7 +915,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
 </code></pre></div>
-
 
 <p>or with pure mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">InputVar</span><span class="p">,</span> <span class="n">Len</span>
@@ -943,7 +936,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
 </code></pre></div>
 
-
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
 <p>In the above code samples the type was checked by <code>instance_of(str)</code> in the decorator, but you could also rather declare a type hint in the function/class signature and rely on a PEP484 checker <a href="./other_libs#pep484-type-checkers">library</a>, that makes the decorator much more compact and focused on value validation only:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
@@ -964,7 +956,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>However note that in this particular case, a tuple of wrong size will appear as a <code>TypeError</code> instead of a <code>ValueError</code> as we obtained previously.</p>
 <h2 id="4-much-easier-custom-function">4- Much easier: custom function<a class="headerlink" href="#4-much-easier-custom-function" title="Permanent link">&para;</a></h2>
 <p>The examples above demonstrate that even if you <em>can</em> validate complex types directly, at some point you will naturally want to create a dedicated custom validation function for each complex type to validate. Thus separating the validation <strong>means</strong> (the custom function) from the validation <strong>intent</strong> (naming, context, error message customization that you provide to <code>validate</code> or <code>validator</code>/<code>validation</code>). That's exactly what <code>valid8</code> is meant for! </p>
@@ -980,7 +971,6 @@
            <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>\
            <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span>  <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
 </code></pre></div>
-
 
 <ul>
 <li>or, better for our users (and even for our debug sessions), a <strong>failure raiser</strong>. In this case we do not need to use <code>instance_of</code> since we raise <code>TypeError</code> and <code>ValueError</code> explicitly:</li>
@@ -1008,7 +998,6 @@
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </code></pre></div>
 
-
 <p>We can then use either function with the <code>valid8</code> tools.</p>
 <h3 id="validate"><code>validate</code><a class="headerlink" href="#validate" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester):</p>
@@ -1016,12 +1005,10 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">is_valid_tuple</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">check_valid_tuple</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>It is exactly the same usage.</p>
 <h3 id="validation-validator"><code>validation</code> / <code>validator</code><a class="headerlink" href="#validation-validator" title="Permanent link">&para;</a></h3>
@@ -1031,13 +1018,11 @@
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">is_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>whereas with <code>check_valid_tuple</code> (failure raiser) we do not need to return anything, and the <code>validation</code> alias seems more natural:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validation</span>
 <span class="k">with</span> <span class="n">validation</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
     <span class="n">check_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 </code></pre></div>
-
 
 <h3 id="function-inputs">function inputs<a class="headerlink" href="#function-inputs" title="Permanent link">&para;</a></h3>
 <p>With <code>is_valid_tuple</code> (boolean tester):</p>
@@ -1048,7 +1033,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span>
 
@@ -1056,7 +1040,6 @@
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <p>it is exactly the same usage</p>
 <h3 id="classes-fields">classes fields<a class="headerlink" href="#classes-fields" title="Permanent link">&para;</a></h3>
@@ -1069,7 +1052,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
 </code></pre></div>
 
-
 <p>or with <code>check_valid_tuple</code> (failure raiser):</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span>
 
@@ -1078,7 +1060,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
 </code></pre></div>
-
 
 <p>it is exactly the same usage</p>
 <h3 id="more-compact-with-pep484">more compact with pep484<a class="headerlink" href="#more-compact-with-pep484" title="Permanent link">&para;</a></h3>
@@ -1091,7 +1072,6 @@
     <span class="sd">&quot;&quot;&quot; custom validation function - note the PEP484 type hint above &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
 </code></pre></div>
-
 
 <p>or</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
@@ -1110,7 +1090,6 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second elt should be a lowercase string of length 3,&#39;</span>
                          <span class="s1">&#39;found &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </code></pre></div>
-
 
 <p>However note that in this particular case, a tuple of wrong size will appear as a <code>TypeError</code> instead of a <code>ValueError</code> as we obtained previously.</p>
 <h2 id="4-variants">4- Variants<a class="headerlink" href="#4-variants" title="Permanent link">&para;</a></h2>
@@ -1182,7 +1161,7 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

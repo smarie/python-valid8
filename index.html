@@ -935,7 +935,6 @@
 <div class="codehilite"><pre><span></span><code>&gt; pip install valid8
 </code></pre></div>
 
-
 <p>Optional but recommended:</p>
 <ul>
 <li>
@@ -980,12 +979,10 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>results in</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
 </code></pre></div>
-
 
 <p>Note that the resulting exception object contains much of the available information (<code>var_name</code>, <code>var_value</code>, <code>failure</code>) as fields.</p>
 <p>All functions from the built-in validation library are supported as explicit arguments as shown above, so that the method execution is the fastest possible. In addition you can add any other validation function with the <code>custom</code> argument:</p>
@@ -995,12 +992,10 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">[</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">])</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError[ValueError]: Error validating [surface=20]: \
     validation function [x ** 2 &lt; 50] returned [False].
 </code></pre></div>
-
 
 <p>Here the custom validation function is implemented using <code>mini-lambda</code>, but any function will do ; the only requirement is that your function accepts one positional input and returns <code>True</code> or <code>None</code> in case of success.</p>
 <p>You can easily define <em>custom validation functions</em> with composition, custom failure messages or even custom failure types. For example these are accepted:</p>
@@ -1014,7 +1009,6 @@
                  <span class="s1">&#39;x should be a multiple of 3&#39;</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">})</span>
 </code></pre></div>
 
-
 <p>See <a href="api_reference/">API reference</a> for usage details, and below <a href="#2-validation-functions">validation functions</a> and <a href="#3-custom-exceptions">validation errors</a> to explore the various customization possibilities. </p>
 <h4 id="validatorvalidation"><code>validator</code>/<code>validation</code><a class="headerlink" href="#validatorvalidation" title="Permanent link">&para;</a></h4>
 <p>The <code>validator</code> (alias <code>validation</code>) context manager allows you to define the validation procedure yourself, with any statement or function of your choice.</p>
@@ -1027,12 +1021,10 @@
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </code></pre></div>
 
-
 <p>Which yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>:  <span class="se">\</span>
    validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span><span class="o">]</span> returned <span class="o">[</span>False<span class="o">]</span>.
 </code></pre></div>
-
 
 <p>Note that the text of the error displays the source code that led to that failure. </p>
 <p>If you rely on <strong>functions that may raise exceptions</strong> (<em>"failure raisers"</em>), <code>validator</code> will catch them and append them as the inner <code>failure</code> of the resulting <code>ValidationError</code>: </p>
@@ -1044,13 +1036,11 @@
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>TypeError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>1j<span class="o">]</span>. <span class="se">\</span>
    InvalidType: Function <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> raised <span class="se">\</span>
        TypeError: <span class="s1">&#39;&gt;&#39;</span> not supported between instances of <span class="s1">&#39;complex&#39;</span> and <span class="s1">&#39;int&#39;</span>.
 </code></pre></div>
-
 
 <p>With <code>validator</code> you are therefore <strong>guaranteed</strong> that any exception happening in the inner code block will be caught and turned into a friendly <code>ValidationError</code>, whatever the cause (<code>None</code> handling, known validation failures, unknown other errors). You therefore do not have to write the usual <a href="why_validation/#explicit-traditional-way">if/else/try/except wrappers</a> to handle all cases.</p>
 <p>A couple important things to note:</p>
@@ -1067,7 +1057,6 @@
     <span class="n">assert_series_equal</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">ref_series</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p><strong>Note on type checking with <code>isinstance</code></strong>
 Although you <em>can</em> use the built-in <code>isinstance</code> method inside your validation code block, if you do it <code>valid8</code> will not be able to distinguish between <code>TypeError</code> and <code>ValueError</code>. Instead, please consider either </p>
 <ul>
@@ -1076,7 +1065,6 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
 <div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </code></pre></div>
-
 
 <ul>
 <li>or using the <code>assert_instance_of</code> validation method provided for this purpose:</li>
@@ -1087,7 +1075,6 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
     <span class="n">assert_instance_of</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </code></pre></div>
-
 
 <p>See <a href="api_reference/">API reference</a> for usage details, and below <a href="#2-validation-functions">validation functions</a> and <a href="#3-custom-exceptions">custom exceptions</a> to explore the various customization possibilities. </p>
 <h3 id="b-functions">b - functions<a class="headerlink" href="#b-functions" title="Permanent link">&para;</a></h3>
@@ -1103,7 +1090,6 @@ Although you <em>can</em> use the built-in <code>isinstance</code> method inside
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
 </code></pre></div>
 
-
 <p>As you can see above, any number of base validation functions can be provided to the decorator - this will correspond to an implicit <code>and_</code> being performed, equivalent to one that you would have done with the built-in <a href="validation_funcs/d_composition/">composition framework</a>. Here we validate the input argument <code>name</code> by chaining the function <code>instance_of(str)</code> (from the built-in <a href="validation_funcs/b_base_validation_lib/">validation functions library</a>) with a custom lambda function <code>Len(s) &gt; 0</code> created using the <a href="https://smarie.github.io/python-mini-lambda/"><code>mini_lambda</code></a> syntax. </p>
 <p>Let's try it:</p>
 <div class="codehilite"><pre><span></span><code>&gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, <span class="m">200</span><span class="o">)</span>    <span class="c1"># Valid</span>
@@ -1115,7 +1101,6 @@ InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: 
      Successes: <span class="o">[</span><span class="s2">&quot;instance_of_&lt;class &#39;str&#39;&gt;&quot;</span><span class="o">]</span> <span class="se">\</span>
       / Failures: <span class="o">{</span><span class="s1">&#39;len(s) &gt; 0&#39;</span>: <span class="s1">&#39;Returned False.&#39;</span><span class="o">}</span>.
 </code></pre></div>
-
 
 <p>We can see in this verbose exception all details of interest: first the custom <code>help_msg</code>; then the validated function and input name; and finally the composition failure resulting from one of the two base functions failing (<code>len(s) &gt; 0</code> as stated). <em>Note that since <code>Len</code> is <code>mini_lambda</code>'s equivalent of <code>len</code>, the string representation is lowercase</em></p>
 <p>The <code>@validate_out</code> function decorator works the same way for output validation, except that you don't provide it with any name. </p>
@@ -1135,7 +1120,6 @@ InputValidationError<span class="o">[</span>ValueError<span class="o">]</span>: 
     <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span>
 </code></pre></div>
 
-
 <p>Something surprising happens:</p>
 <div class="codehilite"><pre><span></span><code>&gt; build_house<span class="o">(</span>None<span class="o">)</span>
 InputValidationError<span class="o">[</span>TypeError<span class="o">]</span>: name should be a non-empty string. <span class="se">\</span>
@@ -1145,7 +1129,6 @@ InputValidationError<span class="o">[</span>TypeError<span class="o">]</span>: n
 &gt; build_house<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span>, None<span class="o">)</span>   <span class="c1"># No error !</span>
 </code></pre></div>
 
-
 <p>No error is raised when <code>surface</code> is <code>None</code>, while our base validation functions should both fail in presence of <code>None</code>:</p>
 <div class="codehilite"><pre><span></span><code>&gt; is_multiple_of<span class="o">(</span><span class="m">100</span><span class="o">)(</span>None<span class="o">)</span>   
 TypeError: unsupported operand type<span class="o">(</span>s<span class="o">)</span> <span class="k">for</span> %: <span class="s1">&#39;NoneType&#39;</span> and <span class="s1">&#39;int&#39;</span>
@@ -1153,7 +1136,6 @@ TypeError: unsupported operand type<span class="o">(</span>s<span class="o">)</s
 &gt; <span class="o">(</span>Len<span class="o">(</span>s<span class="o">)</span> &gt; <span class="m">0</span><span class="o">)</span>.evaluate<span class="o">(</span>None<span class="o">)</span>
 TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType&#39;</span> has no len<span class="o">()</span>
 </code></pre></div>
-
 
 <p>Indeed, by default <code>None</code> values have a special validation procedure depending on the function signature: </p>
 <ul>
@@ -1210,7 +1192,6 @@ TypeError: object of <span class="nb">type</span> <span class="s1">&#39;NoneType
         <span class="bp">self</span><span class="o">.</span><span class="n">__surface</span> <span class="o">=</span> <span class="n">surface</span>
 </code></pre></div>
 
-
 <p>Let's try it:</p>
 <div class="codehilite"><pre><span></span><code>&gt; <span class="nv">h</span> <span class="o">=</span> House<span class="o">(</span><span class="s1">&#39;sweet home&#39;</span><span class="o">)</span>  <span class="c1"># valid</span>
 
@@ -1229,7 +1210,6 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
 
 &gt; h.name <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1"># WARNING: does not raise ValidationError (no setter!)</span>
 </code></pre></div>
-
 
 <p>For classes using <code>attrs</code> or <code>autoclass</code>, it <a href="valid8_with_other/#for-classes">works too</a>.</p>
 <p>As for functions, the default none policy is <code>SKIP_IF_NONABLE_ELSE_VALIDATE</code> but can be changed similarly to what we described in <a href="#b-functions">previous section</a></p>
@@ -1264,13 +1244,11 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">surf</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>yields for <code>surf = -1</code></p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a finite positive integer. <span class="se">\</span>
     Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>: <span class="se">\</span>
     validation <span class="k">function</span> <span class="o">[</span>v.alid <span class="o">=</span> surf &gt; <span class="m">0</span> and isfinite<span class="o">(</span>surf<span class="o">)]</span> returned <span class="o">[</span>False<span class="o">]</span>.
 </code></pre></div>
-
 
 <h3 id="b-custom-type">b - custom type<a class="headerlink" href="#b-custom-type" title="Permanent link">&para;</a></h3>
 <p>Or even better, a custom error type, which is a good practice to ease internationalization (unique applicative error codes). The base <code>ValidationError</code> class provides default behaviours allowing you to define subclasses in a quite compact form:</p>
@@ -1283,13 +1261,11 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
             <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>yields for <code>surf = -1</code></p>
 <div class="codehilite"><pre><span></span><code>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be a positive integer. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
 </code></pre></div>
-
 
 <p>Note that for function entry points, the custom type should inherit from <code>InputValidationError</code> or <code>OutputValidationError</code> respectively. For class entry points, the custom type should inherit from <code>ClassFieldValidationError</code>.</p>
 <h3 id="c-message-templating">c - message templating<a class="headerlink" href="#c-message-templating" title="Permanent link">&para;</a></h3>
@@ -1301,13 +1277,11 @@ ClassFieldValidationError<span class="o">[</span>ValueError<span class="o">]</sp
          <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>InvalidSurface<span class="o">[</span>ValueError<span class="o">]</span>: Surface should be &gt; <span class="m">0</span>, found -1. <span class="se">\</span>
    Error validating <span class="o">[</span><span class="nv">surface</span><span class="o">=</span>-1<span class="o">]</span>. <span class="se">\</span>
    TooSmall: x &gt;<span class="o">=</span> <span class="m">0</span> does not hold <span class="k">for</span> <span class="nv">x</span><span class="o">=</span>-1. Wrong value: -1.
 </code></pre></div>
-
 
 <p>Note: as shown in that last example, the value being validated is already sent to the help message string to format under the <code>'var_value'</code> key, so you do not need to pass it. </p>
 <p>Obviously you can further customize your exception subclasses if you wish.</p>
@@ -1320,12 +1294,10 @@ ValidationError<span class="o">[</span>ValueError<span class="o">]</span>
 ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
 </code></pre></div>
 
-
 <p>If you do not wish the automatic guessing to happen, you can always declare the inheritance explicitly by creating custom subclasses inheriting from the one of your choice, or both:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">InvalidSurface</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
     <span class="n">help_msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 </code></pre></div>
-
 
 <p>If you create a custom subclass but do not inherit from <code>TypeError</code> nor <code>ValueError</code>, the automatic guessing will take place as usual.</p>
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
@@ -1456,7 +1428,7 @@ ValidationError<span class="o">[</span>TypeError<span class="o">]</span>
     </div>
     
       <script src="assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

@@ -636,7 +636,6 @@
     <span class="c1"># here you can actually USE the current item</span>
 </code></pre></div>
 
-
 <h3 id="b-inline-with-validator">(b) Inline - <code>with validator</code><a class="headerlink" href="#b-inline-with-validator" title="Permanent link">&para;</a></h3>
 <p>You <em>can</em> perform the whole validation at once with <code>validator</code> as shown here:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -650,7 +649,6 @@
                 <span class="ow">and</span> <span class="n">instance_of</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
              <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>But it might not really make sense if you actually wish to <strong>use</strong> the tuples :). In that case it is much more readable and convenient to write a custom validation function <code>check_valid_tuple</code> first. Below is an example in "failure raiser" mode: the function does not return False in case of failure but rather raises more informative errors.</p>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_valid_tuple</span><span class="p">(</span><span class="n">tup</span><span class="p">):</span>
@@ -675,7 +673,6 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second element should be a lowercase string of length 3&#39;</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>We can then use it with a <code>validation</code> context manager:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">validation</span>
 
@@ -690,7 +687,6 @@
 
     <span class="c1"># here you can actually USE the current item</span>
 </code></pre></div>
-
 
 <p>Note that if you choose to use a PEP484 type checker such as <a href="https://github.com/Stewori/pytypes">pytypes</a>, your custom validation function can be much more compact, as the tuple length and tuple elements types are described in the compact PEP484 type hint <code>Tuple[Real, str]</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
@@ -708,7 +704,6 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">()):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;second element should be a lowercase string of length 3&#39;</span><span class="p">)</span>
 </code></pre></div>
-
 
 <h3 id="c-decorators-built-in-lib">(c) Decorators - built-in lib<a class="headerlink" href="#c-decorators-built-in-lib" title="Permanent link">&para;</a></h3>
 <p>For readability we only show one decorator here, see <a href="#c-decorators-built-in-lib">this previous example</a> for other decorators and additional comments.</p>
@@ -729,7 +724,6 @@ The best we can do is </p>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <p>Although this proves that the provided built-in library can tackle complex cases, it also shows the limits of performing all validation directly in the decorator. In this case it is much more readable to create a custom function <code>is_valid_tuple</code>, and it allows you to actually check the lowercase part:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">is_valid_tuple</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
@@ -756,13 +750,11 @@ The best we can do is </p>
 <span class="s2">    help_msg = &quot;Value is not a lowercase string: </span><span class="si">{wrong_value}</span><span class="s2">&quot;</span>
 </code></pre></div>
 
-
 <p>And finally you would use your custom function in the decorator:</p>
 <div class="codehilite"><pre><span></span><code><span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">instance_of</span><span class="p">(</span><span class="nb">list</span><span class="p">),</span> <span class="n">on_all_</span><span class="p">(</span><span class="n">is_valid_tuple</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h3 id="d-decorators-mini_lambda">(d) Decorators - mini_lambda<a class="headerlink" href="#d-decorators-mini_lambda" title="Permanent link">&para;</a></h3>
 <p>For readability we only show one decorator here, see <a href="#c-decorators-built-in-lib">this previous example</a> for other decorators and additional comments.</p>
@@ -850,7 +842,7 @@ The best we can do is </p>
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

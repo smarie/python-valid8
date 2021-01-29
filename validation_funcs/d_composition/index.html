@@ -639,7 +639,6 @@
      <span class="n">catch_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>Generates the inverse of the provided validation functions: when the validator returns <code>False</code> or raises a <code>ValidationFailure</code>, this function returns <code>True</code>. Otherwise it raises a <code>DidNotFail</code> failure.</p>
 <p>By default, exceptions of types other than <code>ValidationFailure</code> are not caught and therefore fail the validation (<code>catch_all=False</code>). To change this behaviour you can turn the <code>catch_all</code> parameter to <code>True</code>, in which case all exceptions will be caught instead of just <code>ValidationFailure</code>s.</p>
 <p>Note that the argument is a single callable. You may use <code>not_all(&lt;validation_functions_list&gt;)</code> as a shortcut for <code>not_(and_(&lt;validation_functions_list&gt;))</code> to support several validation functions in the 'not'.</p>
@@ -648,7 +647,6 @@
 <div class="codehilite"><pre><span></span><code><span class="n">and_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>An 'and' validator: it returns <code>True</code> if all of the provided validators return <code>True</code>, or raises a <code>AtLeastOneFailed</code> failure on the first <code>False</code> received or <code>Exception</code> caught.</p>
 <p>Note that an implicit <code>and_</code> is performed if you provide a list of validators to any of the entry points (<code>validator</code>/<code>validation</code>, <code>@validate_arg</code>, <code>@validate_field</code> ...). For <code>validate</code> you need to use an explicit one in <code>custom=&lt;f&gt;</code>.</p>
 <p>See <code>help(and_)</code></p>
@@ -656,13 +654,11 @@
 <div class="codehilite"><pre><span></span><code><span class="n">or_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>An 'or' validator: returns <code>True</code> if at least one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>AllValidatorsFailed</code> failure will be raised, together with details about all validation results.</p>
 <p>See <code>help(or_)</code></p>
 <h2 id="xor_">xor_<a class="headerlink" href="#xor_" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="n">xor_</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>A 'xor' validation function: returns <code>True</code> if exactly one of the provided validators returns <code>True</code>. All exceptions will be silently caught. In case of failure, a global <code>XorTooManySuccess</code> or <code>AllValidatorsFailed</code> will be raised, together with details about the various validation results.</p>
 <p>See <code>help(xor_)</code></p>
@@ -670,7 +666,6 @@
 <div class="codehilite"><pre><span></span><code><span class="n">not_all</span><span class="p">(</span><span class="o">*</span><span class="n">validation_func</span><span class="p">:</span> <span class="n">ValidationFuncs</span><span class="p">,</span> 
         <span class="n">catch_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>An alias for not_(and_(validators)).</p>
 <p>See <code>help(not_all)</code></p>
@@ -749,7 +744,7 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

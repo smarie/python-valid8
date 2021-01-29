@@ -515,7 +515,6 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, </span><span class="si">{}</span><span class="s1">-years-old fella !&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>
 </code></pre></div>
 
-
 <p>We would like to protect it against bad data, for one of the reasons listed <a href="../why_validation/">here</a>. A first idea would probably be to use <code>assert</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isfinite</span><span class="p">,</span> <span class="n">inf</span>
 
@@ -528,7 +527,6 @@
 <span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>  <span class="c1"># AssertionError: assert False \</span>
             <span class="c1">#                 where False = &lt;built-in function isfinite&gt;(inf)</span>
 </code></pre></div>
-
 
 <p>But as explained <a href="./why_validation#how-do-you-do-today">here</a> this is maybe not satisfying: </p>
 <ul>
@@ -548,7 +546,6 @@
              <span class="c1">#                  root validator [isfinite] returned [False].</span>
 </code></pre></div>
 
-
 <p>As you can see above, our code is very similar to the one with <code>assert</code>, but the exception raised is now a <code>ValidationError</code> (and would be so even if <code>isfinite</code> had raised an exception), displaying all details about the validation context and the failure. We can inspect the exception to check that all this information is also available in the object itself:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="n">hello</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>
@@ -559,12 +556,10 @@
     <span class="n">e</span><span class="o">.</span><span class="n">validation_outcome</span>                  <span class="c1"># False</span>
 </code></pre></div>
 
-
 <p>We will come back later to the notion of <code>Validator</code> object that appears here in <code>e.validator</code>.</p>
 <p>One of the great features of <code>valid8</code> is that it will fail consistently, whatever the way the inner validation function fails:</p>
 <div class="codehilite"><pre><span></span><code><span class="n">hello</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
 </code></pre></div>
-
 
 <p><strong><em>*</em></strong><strong><em>* WORK IN PROGRESS : TODO CONTINUE </em></strong><strong><em>*</em></strong><strong>*</strong></p>
                 
@@ -599,7 +594,7 @@
     </div>
     
       <script src="../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

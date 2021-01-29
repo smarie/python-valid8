@@ -710,7 +710,6 @@
 <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;fOO&#39;</span>  <span class="c1"># not-lowercase</span>
 </code></pre></div>
 
-
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
 <h3 id="validate"><code>validate</code><a class="headerlink" href="#validate" title="Permanent link">&para;</a></h3>
 <p>We use a trick here since <code>validate</code> does not provide built-in parameters to check that a string is lowercase. We therefore can check equality with the lowercase version of the string (<code>equals=s.lower()</code>). This will not lead to a very friendly error message, but remember that you can <a href="./index#customizing-the-validationexception">customize it</a>.</p>
@@ -719,13 +718,11 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">equals</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
 </code></pre></div>
 
-
 <p>You can remark in the above that we have to split the validation in two steps. If we don't do this, then <code>s.lower()</code> may raise an exception such as a <code>AttributeError</code>, that won't be captured and wrapped correctly by <code>ValidationError</code>. In that case users will not get contextual information (name, custom error message...).</p>
 <p>A much better way to do this is to use the unbound class function <code>str.islower</code> as a custom function, it will be more readable:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">islower</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>Remember that most functions available on objects can be used as unbound class functions like this! This opens a lot of possibilities to <code>validate</code>. Also note that you can provide a list of functions to the <code>custom=</code> argument, and that it accepts lambda functions like the decorators:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
@@ -737,13 +734,11 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">txt</span><span class="o">.</span><span class="n">islower</span><span class="p">())</span>
 </code></pre></div>
 
-
 <h3 id="with-validator"><code>with validator</code><a class="headerlink" href="#with-validator" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
 </code></pre></div>
-
 
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
 <h3 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h3>
@@ -762,7 +757,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>or with pure mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -771,7 +765,6 @@
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h3 id="class-fields">Class fields<a class="headerlink" href="#class-fields" title="Permanent link">&para;</a></h3>
 <p>In the examples below the class fields are defined as constructor arguments but this also works if they are defined as class descriptors/properties, and is compliant with <a href="valid8_with_other#for-classes">autoclass and attrs</a></p>
@@ -784,7 +777,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
 </code></pre></div>
 
-
 <p>or with pure mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">s</span><span class="p">,</span> <span class="n">Len</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -794,7 +786,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
 </code></pre></div>
-
 
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
 <p>In the above code samples the type was checked by <code>instance_of(str)</code> in the decorator, but you could also rather declare a type hint in the function/class signature and rely on a PEP484 checker <a href="./other_libs#pep484-type-checkers">library</a>, that makes the decorator much more compact and focused on value validation only:</p>
@@ -807,7 +798,6 @@
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># &lt;- type hint in signature</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h2 id="4-variants">4- Variants<a class="headerlink" href="#4-variants" title="Permanent link">&para;</a></h2>
 <p>This example could be easily modified with regular expression validation for the string. To that end you could either 
@@ -889,7 +879,7 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

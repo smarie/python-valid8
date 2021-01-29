@@ -584,13 +584,11 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="s1">&#39;x is not finite&#39;</span><span class="p">))</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>valid8.entry_points.ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: <span class="se">\</span>
   Error validating <span class="o">[</span><span class="nv">x</span><span class="o">=</span>inf<span class="o">]</span>. InvalidValue: x is not finite. <span class="se">\ </span>
     Function <span class="o">[</span>isfinite<span class="o">]</span> returned <span class="o">[</span>False<span class="o">]</span> <span class="k">for</span> value inf.
 </code></pre></div>
-
 
 <p>or if you prefer defining a reusable failure class:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationFailure</span>
@@ -603,12 +601,10 @@
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">NotFinite</span><span class="p">))</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">x</span><span class="o">=</span>inf<span class="o">]</span>. 
   NotFinite: x is not finite. Function <span class="o">[</span>isfinite<span class="o">]</span> returned <span class="o">[</span>False<span class="o">]</span> <span class="k">for</span> value inf.
 </code></pre></div>
-
 
 <p>This syntax also works in <code>@validate_arg</code>, <code>@validate_out</code>, <code>@validate_ios</code>, <code>@validate_field</code>, and in the composition operators such as <code>and_()</code>. </p>
 <h2 id="2-several-validation-functions">2. Several validation functions<a class="headerlink" href="#2-several-validation-functions" title="Permanent link">&para;</a></h2>
@@ -627,14 +623,12 @@
                          <span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">NotFinite</span><span class="p">)])</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">x</span><span class="o">=</span><span class="m">2</span><span class="o">]</span>. 
    At least one validation <span class="k">function</span> failed <span class="k">for</span> value <span class="m">2</span>. 
    Successes: <span class="o">[</span><span class="s1">&#39;i ** 2 &lt; 50&#39;</span>, <span class="s1">&#39;isfinite&#39;</span><span class="o">]</span> / 
       Failures: <span class="o">{</span><span class="s1">&#39;i % 3 == 0&#39;</span>: <span class="s1">&#39;Returned False.&#39;</span><span class="o">}</span>.
 </code></pre></div>
-
 
 <p>Alternately you can <strong>provide a dictionary</strong>. In that case the key should be one of <code>&lt;callable&gt;</code>, <code>&lt;error_msg&gt;</code>, or <code>&lt;failure_type&gt;</code>, and the value should be one of them or a tuple of them.</p>
 <p>For example:</p>
@@ -651,7 +645,6 @@
                          <span class="s1">&#39;x should be finite&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">isfinite</span><span class="p">,</span> <span class="n">NotFinite</span><span class="p">)})</span>
 </code></pre></div>
 
-
 <p>yields</p>
 <div class="codehilite"><pre><span></span><code>ValidationError<span class="o">[</span>ValueError<span class="o">]</span>: Error validating <span class="o">[</span><span class="nv">x</span><span class="o">=</span><span class="m">2</span><span class="o">]</span>. 
    At least one validation <span class="k">function</span> failed <span class="k">for</span> value <span class="m">2</span>. 
@@ -659,7 +652,6 @@
    Failures: <span class="o">{</span><span class="s1">&#39;i % 3 == 0&#39;</span>: <span class="s1">&#39;InvalidValue: x should be a multiple of 3. </span>
 <span class="s1">                             Returned False.&#39;</span><span class="o">}</span>.
 </code></pre></div>
-
 
 <p>Here again, this syntax also works in <code>@validate_arg</code>, <code>@validate_out</code>, <code>@validate_ios</code>, <code>@validate_field</code>, and in the composition operators such as <code>and_()</code>.</p>
                 
@@ -729,7 +721,7 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

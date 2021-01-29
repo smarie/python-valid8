@@ -754,7 +754,6 @@
         <span class="c1"># is rarely used, you would put everything in the try block. </span>
 </code></pre></div>
 
-
 <p>This style has the advantage of being compact but has two major drawbacks:</p>
 <ul>
 <li><strong>useless long-running operations</strong>: if the exception happens late in the code, that my lead to a long waiting time for the caller before it gets notified</li>
@@ -790,7 +789,6 @@
     <span class="o">...</span>
 </code></pre></div>
 
-
 <p>Also note that it is <strong>not easy</strong> to combine <em>failure raisers</em> together, or with <em>boolean testers</em>, in a boolean logic style. For example below we perform a virtual <code>or</code> between two <em>failure raisers</em>:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">conservative_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
@@ -808,7 +806,6 @@
     <span class="o">...</span>
 </code></pre></div>
 
-
 <h4 id="special-case-of-assert">Special case of <code>assert</code><a class="headerlink" href="#special-case-of-assert" title="Permanent link">&para;</a></h4>
 <p><code>assert</code> could be thought of as a good tool to perform validation:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">function_with_assert</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -817,7 +814,6 @@
 
     <span class="c1"># here we can use x safely</span>
 </code></pre></div>
-
 
 <p>However it has three major drawbacks that make it unusable in practice:</p>
 <ul>
@@ -920,7 +916,7 @@ optimization flags [...]"</em>. In addition here again, note that if the <code>&
     </div>
     
       <script src="../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

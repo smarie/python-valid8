@@ -738,20 +738,17 @@
 <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>     <span class="c1"># negative</span>
 </code></pre></div>
 
-
 <h2 id="2-inline-validation">2- Inline validation<a class="headerlink" href="#2-inline-validation" title="Permanent link">&para;</a></h2>
 <h3 id="validate"><code>validate</code><a class="headerlink" href="#validate" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Integral</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
 
-
 <h3 id="with-validator"><code>with validator</code><a class="headerlink" href="#with-validator" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validator</span>
 <span class="k">with</span> <span class="n">validator</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Integral</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
     <span class="n">v</span><span class="o">.</span><span class="n">alid</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span>
 </code></pre></div>
-
 
 <h2 id="3-functionsclasses-validation">3- Functions/classes validation<a class="headerlink" href="#3-functionsclasses-validation" title="Permanent link">&para;</a></h2>
 <h3 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h3>
@@ -765,7 +762,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_arg</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -774,7 +770,6 @@
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h3 id="function-output">Function output<a class="headerlink" href="#function-output" title="Permanent link">&para;</a></h3>
 <p>with built-in:</p>
@@ -785,7 +780,6 @@
     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_out</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -794,7 +788,6 @@
 <span class="k">def</span> <span class="nf">my_function2</span><span class="p">():</span>
     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 </code></pre></div>
-
 
 <h3 id="function-ios">Function ios<a class="headerlink" href="#function-ios" title="Permanent link">&para;</a></h3>
 <p>With <code>validate_io</code> you can check several inputs+output in the same decorator, but no customization is possible.</p>
@@ -806,7 +799,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_io</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -815,7 +807,6 @@
 <span class="k">def</span> <span class="nf">my_function3</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h3 id="class-fields">Class fields<a class="headerlink" href="#class-fields" title="Permanent link">&para;</a></h3>
 <p>In the examples below the class fields are defined as constructor arguments but this also works if they are defined as class descriptors/properties, and is compliant with <a href="valid8_with_other#for-classes">autoclass and attrs</a></p>
@@ -828,7 +819,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
 </code></pre></div>
 
-
 <p>or with mini-lambda</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">mini_lambda</span> <span class="kn">import</span> <span class="n">x</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate_field</span><span class="p">,</span> <span class="n">instance_of</span>
@@ -838,7 +828,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
 </code></pre></div>
-
 
 <h3 id="with-pep484">With PEP484<a class="headerlink" href="#with-pep484" title="Permanent link">&para;</a></h3>
 <p>In the above code samples the type was checked by <code>instance_of(Integral)</code> in the decorators, but you could also rather declare a type hint in the function/class signature and rely on a PEP484 checker <a href="./other_libs#pep484-type-checkers">library</a>, that makes the decorator much more compact and focused on value validation only. For example for to check a function input:</p>
@@ -851,7 +840,6 @@
 <span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Integral</span><span class="p">):</span>  <span class="c1"># &lt;- type hint in signature</span>
     <span class="k">pass</span>
 </code></pre></div>
-
 
 <h2 id="4-variants">4- Variants<a class="headerlink" href="#4-variants" title="Permanent link">&para;</a></h2>
 <p>This example could be easily modified so that floating point integers are accepted, such as <code>1.0</code>. The way to do it is very similar to <a href="./example2">example 2</a>: you should validate that type is <code>Real</code> instead of <code>Integral</code>, and that <code>x == int(x)</code>. You can also do it with a custom function like in <a href="./example3">example 3</a>.</p>
@@ -922,7 +910,7 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.53cc9318.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"search.config.separator": "[\\s\\-]+", "clipboard.copy": "Copy to clipboard", "search.result.term.missing": "Missing", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.none": "No matching documents", "search.config.pipeline": "trimmer, stopWordFilter", "search.result.more.other": "# more on this page", "search.result.one": "1 matching document", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.config.lang": "en", "clipboard.copied": "Copied to clipboard"}</script>
+      <script src="../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
