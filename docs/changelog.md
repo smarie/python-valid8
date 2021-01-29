@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.1.2 - Bugfix with custom error formatting
+
+Fixed issue: custom help messages in `ValidationError` using several variables were not rendering to string correctly and instead were displaying `Error while formatting the help message`. Fixes [#58](https://github.com/smarie/python-valid8/issues/58)
+
 ### 5.1.1 - packaging improvements
 
  - packaging improvements: set the "universal wheel" flag to 1, and cleaned up the `setup.py`. In particular removed dependency to `six` for setup. Fixes [#57](https://github.com/smarie/python-valid8/issues/57)
