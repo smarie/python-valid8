@@ -223,7 +223,8 @@ class HelpMsgMixIn(object):
             # first format if needed
             try:
                 is_context_a_copy = False
-                variables = re.findall("{\\S+}", help_msg)
+                # note: use question mark so as to be non-greedy
+                variables = re.findall("{\\S+?}", help_msg)
                 for var_name_ in set(variables):
                     # extract the variable name
                     var_name_ = var_name_[1:-1]
