@@ -12,22 +12,15 @@ cleanup() {
 
 trap "cleanup" INT TERM EXIT
 
-#if hash pytest 2>/dev/null; then
-#    echo "pytest found"
-#else
-#    echo "pytest not found. Trying py.test"
-#fi
-
-# First the raw for coverage
-echo -e "\n\n****** Running tests ******\n\n"
-if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
-   # copy the conftest.py file before executing.
-   # cp ci_tools/conftest.py valid8/
-   # Note: an alternative could be to add ci_tools/ at the end of the below command but not sure it will be applied on all tests.
-
-   coverage run --source valid8 -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html -v valid8/
-   # python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/
+if [ "${DEPLOY_ENV}" = "true" ]; then
+   # full
+   # Run tests with "python -m pytest" to use the correct version of pytest
+   echo -e "\n\n****** Running tests with coverage ******\n\n"
+   coverage run --source valid8 -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html -v valid8/tests/
+   # buggy
+   # python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
 else
-   # faster - skip coverage and html report
-   python -m pytest --junitxml=reports/junit/junit.xml -v valid8/
+   # faster - skip coverage and html report but keep junit (because used in validity threshold)
+    echo -e "\n\n****** Running tests******\n\n"
+    python -m pytest --junitxml=reports/junit/junit.xml -v valid8/tests/
 fi

@@ -5,10 +5,19 @@ cache: pip
 matrix:
   fast_finish: true
   include:
-    - python: 2.7
-    - python: 3.5
-    - python: 3.6
-    - python: 3.7
+    - name: "Python 2.7"
+      python: 2.7
+    - name: "Python 3.5"
+      python: 3.5
+    - name: "Python 3.6"
+      python: 3.6
+    - name: "Python 3.7 - DEPLOY WebSite+Coverage+PyPi"
+      python: 3.7
+      env: DEPLOY_ENV="true"
+      dist: xenial
+      sudo: true
+    - name: "Python 3.8"
+      python: 3.8
       dist: xenial
       sudo: true
 
@@ -23,10 +32,11 @@ before_install:
 
 install:
   - pip list
-  - pip install six setuptools_scm  # apparently python 2 requires this
+  # Install all requirements using pip
+  - pip install six setuptools_scm  # apparently python 2 requires this done beforehand
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
   # this does not work anymore on python 2 so lets only do it when needed
-  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then pip install mkdocs-material mkdocs; fi;
+  - if [ "${DEPLOY_ENV}" = "true" ]; then pip install mkdocs-material mkdocs pymdown-extensions pygments; fi;
   - |
     if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then
       echo "No need to install enforce pytypes checktypes BUT need to install future"
@@ -44,20 +54,19 @@ install:
   - pip list
 
 script:
-#  - coverage run tests.py
+  # Local installation test
   - pip install .
   - python -c "import os; os.chdir('..'); import valid8"
-# ***tests***
-#  - coverage run tests.py
-#  - pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./valid8 -v valid8/tests/
-# now done in a dedicated script to capture exit code 1 and transform it to 0
+  - pip uninstall -y valid8  # so that the setuptools_scm test can be executed
+  # ***tests+coverage*** done in a dedicated script to capture exit code 1 and transform it to 0
   - chmod a+x ./ci_tools/run_tests.sh
   - sh ./ci_tools/run_tests.sh
-  - python ci_tools/generate-junit-badge.py 100  # generates the badge for the test results and fail build if less than x%
+  # generate the badge for the test results and fail build if less than x%
+  - python ci_tools/generate-junit-badge.py 100
 
 after_success:
-# ***reporting***
-#  - junit2html junit.xml testrun.html  output is really not nice
+  # ***reporting***
+  # - junit2html junit.xml testrun.html  output is really not nice
   - ant -f ci_tools/generate-junit-html.xml  # generates the html for the test results. Actually we dont use it anymore
   - codecov
   #- pylint valid8  # note that at the moment the report is simply lost, we dont transform the result into anything
@@ -78,7 +87,8 @@ after_success:
       git remote add gh-remote "${GH_REF}";
       git fetch gh-remote && git fetch gh-remote gh-pages:gh-pages;  # make sure we have the latest gh-remote
       # push but only if this is not a build triggered by a pull request
-      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=valid8/ mkdocs gh-deploy -v -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
+      # note: do not use the --dirty flag as it breaks client-side search
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${DEPLOY_ENV}" = "true" ]; then echo "Pushing to github"; PYTHONPATH=valid8/ mkdocs gh-deploy -v -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
     else
       echo "File 'ci_tools/github_travis_rsa' has not been created, please check your encrypted repo token in .travis.yml, on the line starting with 'openssl aes-256-cbc...'"
     fi
@@ -93,7 +103,8 @@ deploy:
       secure: "qQqjDAx4pD5V+U3ruuWqu3xldmNs6Q+XAi7yfgT8E5l47mYEZ0jFNz+SpDgQpgYbQzGRjAKRHWzJejhncv5wJYMqPa70B7DNMRgNL7GEpsT8mYQJYtG5ZUDx2NbNFzcVRTyzl7dJj6LzPVQt6z/2yZ/9KqBXsxvwGBjZCOGXtgFhqUJscFy51jwgo2IWuVUNRCnVJtaUkjudWPxH86RviKpyvDAxzCW2ZMXVOlpFxyeOu1oTSVIq9hPwOcUn9Roukl491YSK6vF9b6zZYzTEGhMp/+t+gccgrMRmcjdbXQnVSKsBlfzWI1hNmclqzKXjNCzFZIH3uELVhlRAmwLPDbdby2RMVARKfnMEGW+mqbM3gET8cXoxqz+hKXp6ZdJtm9+McO2ECa6+zVn/8V/QSlCT5HRf1a7/jyL/Ytv5LPEYnaU4dH52BfSgjaFzsOS/5DEa0CJb034LDCwc2L6yZfmVo7Rx6n2YcakE2UrQ7xDizlS6c0Ukcj/7U2fji3O7CjXBoccKotxJ9Eml2isMjq4rwW5Uizo2P1CbSgn05fdWeLl04drbE0ENze1Ac0bMaWkvDItJYW7ZqT1pBGRh6c1/AYgF/g34l2Uz6yDQyA5FBCgVSbeVz5u9Hzs7x0XQmk0z6L0L/bi9SDC93m7bon60gwNM6YAeT6N8wpt/jrw="
     on:
       tags: true
-      python: 3.5  #only one of the builds have to be deployed
+      # python: 3.5  #only one of the builds have to be deployed
+      condition: $DEPLOY_ENV = "true"
     # server: https://test.pypi.org/legacy/
     distributions: "sdist bdist_wheel"
 
@@ -103,7 +114,8 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      python: 3.5  #only one of the builds have to be deployed
+      # only one of the builds have to be deployed
+      condition: $DEPLOY_ENV = "true"
 
 notifications:
   email:
