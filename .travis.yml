@@ -16,10 +16,10 @@ matrix:
       env: DEPLOY_ENV="true"
       dist: xenial
       sudo: true
-    - name: "Python 3.8"
-      python: 3.8
-      dist: xenial
-      sudo: true
+#    - name: "Python 3.8"  need autoclass issue solved https://github.com/smarie/python-autoclass/issues/43
+#      python: 3.8
+#      dist: xenial
+#      sudo: true
 
 env:
   global:
